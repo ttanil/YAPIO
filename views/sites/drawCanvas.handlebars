@@ -1,0 +1,821 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Bina Görünüm</title>  
+
+    <!-- Bootstrap CSS -->  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">  
+    <link rel="stylesheet" href="css/index.css">
+
+    <style>  
+        /* Genel Stiller */  
+        body {  
+            margin: 0;  
+            padding: 0; 
+            background-image: url('img/sample3.png');
+            background-size: cover;  
+            background-repeat: no-repeat;  
+            background-position: center;  
+            height: 100vh;  
+            font-family: Arial, sans-serif;  
+        }
+
+        .container-navbar {  
+            display: flex;  
+            flex: 0 0 100%;  
+            flex-wrap: nowrap;  
+            align-items: center;  
+            justify-content: center;  
+            margin: 0px;
+        }  
+        .container-fluid {  
+            display: flex;  
+            flex: 0 0 100%;  
+            flex-wrap: nowrap;  
+            align-items: center;  
+        }  
+        #projectName {  
+            flex: 0 0 90%;  
+            white-space: nowrap;  
+            overflow: hidden;  
+            text-overflow: ellipsis;  
+            font-family: Arial, sans-serif;  
+            font-size: 36px;
+        }  
+        .img-fluid {  
+            flex: 0 0 auto;  
+            height: 30px;  
+            width: 30px;  
+            margin-right: 10px;  
+        }
+        .custom-btn {  
+            background-color: #847539;
+            color: white; /* Yazı rengi */  
+            border: none; /* Kenarlığın kaldırılması */  
+            border-radius: 10px; /* Kenarlıkları yuvarlaklaştırma */  
+            padding: 10px 20px; /* İç boşluklar */  
+            font-family: "Varela Round";  
+            font-size: 16px; /* Yazı boyutu */  
+            font-weight: bold; /* Kalın yazı */  
+            letter-spacing: 2px;
+            cursor: pointer; /* Fare imlecini işaretçi yapma */  
+            transition: background-color 0.3s ease; /* Hover geçiş efekti */
+            margin-right: 40px;
+        }
+
+        /* Bina Konteyneri */  
+        #building-container {  
+            width: 350px;
+            margin: 0 auto; 
+            margin-top: 30px; 
+            padding-bottom: 50px;
+            padding-top: 30px;
+            background-color: #FFFFFF;  
+            position: relative;  
+            display: flex;  
+            flex-direction: column; /* Katları yukarıdan aşağı sıralar */  
+            border-radius: 10px; /* Köşelerin yuvarlatılması */  
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Hafif gölge efekti */
+            z-index: 100;
+        }  
+        /* Çatı görünümü için üçgen */  
+        .roof-svg{
+            margin: auto;
+            margin-bottom: -20px;
+        }
+        /* Her bir katın stili */  
+        .floor {  
+            border: 1px solid #6c757d;  
+            background-color: #c2c5c9;  
+            display: flex;  
+            flex-direction: column; /* Kat ismini ve pencere grubunu alt alta koy */  
+            align-items: center; /* Kat numarasını ve pencereleri ortalar */  
+            font-weight: bold;  
+            font-size: 14px;  
+            color: #F8F9FA;  
+            height: 100px; /* Sabit kat yüksekliği */  
+            box-sizing: border-box;  
+            position: relative;  
+            margin: auto;
+            
+        }  
+        /* Kat üzerindeki kat ismi */  
+        .floor-name {  
+            font-size: 14px;  
+            font-weight: bold;  
+            color: white;  
+            position: absolute;
+            top: 78%;
+            justify-content: center;
+        }  
+        /* Pencere Alanı (Hizalamayı kontrol eder) */  
+        .window-container {  
+            display: flex; /* Pencereleri yatay hizalar */  
+            justify-content: center; /* Pencereleri ortalar */  
+            gap: 10px; /* Pencereler arasındaki boşluk */  
+            margin-top: 7px;
+        }  
+        /* Pencere Stili */  
+        .window {
+            border: 2px solid #ffffff;  
+            background-color: #eaebec;  
+            display: inline-block;  
+            border-radius: 4px;  
+            cursor: pointer;
+        }  
+
+        /* Buton Stilleri */  
+        .btn-orange {  
+            background-color: #265df5; /* Turuncu renk */  
+            color: white; /* Yazı rengini beyaz yap */  
+            border: none; /* Çerçeve kaldır */  
+        }  
+
+        .btn-orange:hover {  
+            background-color: #1744c2; /* Daha koyu turuncu (hover efekti) */  
+            color: white;
+        }  
+        .disabled {  
+            pointer-events: none; /* Tıklamayı tamamen devre dışı bırakır */  
+            opacity: 0.5; /* Görünümü gri ve bastırılmış yapar */  
+        } 
+
+        .modal {  
+            z-index: 1055 !important; /* Bootstrap modal z-index */  
+        }  
+
+        .modal-backdrop {  
+            z-index: 1050 !important; /* Modalın karartma arka planı */  
+        }
+
+        .modal-body{
+            display: flex;
+            flex-direction: column;
+        }
+        
+
+        /* Responsive Tasarım */  
+        @media (max-width: 768px) {  
+            body {  
+                background-image: url('img/sample4.png'); 
+            }
+            .container-navbar {  
+                flex-wrap: wrap;  
+                justify-content: flex-end;  
+            }  
+            #projectName {
+                flex: 0 0 70%;  
+                overflow: hidden;  
+                text-overflow: ellipsis;  
+                white-space: nowrap;  
+                text-align: left;  
+                font-size: 14px !important;  
+                max-width: 65%;     /* Taşmayı önler */  
+                min-width: 0;       /* flex shrink için gerekli */  
+                margin-right: 0;    /* İstenirse gap için elle ekleyin */
+            }  
+            #buttonHome {
+                flex: 0 0 30px;     /* Eğer 30px'lik bir kutu ise tam sabitlenir */  
+                padding: 0;         /* Ekstra boşlukları engeller */  
+                margin-left: 0;     /* İstenirse 5px gibi küçük bir boşluk eklenebilir */  
+                display: flex;  
+                align-items: center;
+            }
+            .img-fluid {  
+                height: 25px;  
+                width: 25px;  
+                margin-right: 0;    /* Sağdan boşluğu kaldırır */  
+                margin-left: 0;     /* Soldan boşluğu kaldırır */
+            }  
+            .custom-btn {  
+                font-size: 12px; /* Yazı boyutu */
+                padding: 5px 10px;      /* Yan boşlukları biraz artırdım */
+                border-radius: 6px;      /* Köşeler hafif yuvarlatıldı */
+                color: #fff;
+                border: none;
+                margin-right: 12px;
+                display: inline-block; 
+                font-weight: 500;     
+            }
+            .navbar-toggler {  
+               /* background-color: rgb(89, 125, 234);  */
+                background-color: #c2c5c9;  
+                flex: 0 0 auto;  
+                margin-left: auto;  
+                justify-content: flex-end;
+            }
+            .container-fluid {  
+                flex-wrap: wrap;  
+            } 
+            .dropdown-item{
+                display: flex;
+                margin-left: auto;  
+                
+            }
+            .mobile-navbar-menu {  
+                justify-content: flex-end !important;  
+                text-align: right !important;  
+                margin-top: 10px;
+                margin-bottom: 5px;
+            }  
+            .mobile-navbar-menu .nav-item, .mobile-navbar-menu .dropdown-item-mobile {
+                display: flex;
+                align-items: center;
+                justify-content: space-between !important;  
+                text-align: right !important;
+                font-size: 1.1rem;
+                font-style: bold !important;
+                height: 22px;
+                margin-top: 2px;
+                justify-self: end;
+            }
+            .dropdown-item-mobile {
+                width: 34%;
+                font-family: Arial, sans-serif !important; 
+                color: rgb(94, 93, 93) !important;      /* Varsayılan metin rengini kullan */  
+                text-decoration: none !important; /* Altı çizgiyi kaldır */  
+                font-weight: 400 !important;
+            }
+
+            
+            /* Bina Konteyneri */  
+            #building-container {  
+                width: 88%;
+                margin-top: 15px; 
+                padding-bottom: 20px;
+                padding-top: 10px;
+            }  
+            /* Çatı görünümü için üçgen */  
+            .roof-svg{
+                margin-bottom: -20px;
+            }
+            /* Her bir katın stili */  
+            .floor {  
+                font-size: 14px;
+                height: 90px; /* Sabit kat yüksekliği */
+            }  
+            /* Kat üzerindeki kat ismi */  
+            .floor-name {  
+                display: flex;  
+                font-size: 14px; 
+                position: absolute;
+                top: 78%;
+                justify-content: center;
+            }  
+            /* Pencere Alanı (Hizalamayı kontrol eder) */  
+            .window-container {
+                gap: 10px; /* Pencereler arasındaki boşluk */  
+                margin-top: 7px;
+            }
+            /* Çatı görünümü için üçgen */  
+            .roof {  
+                width: 0; /* Dinamik olarak ayarlanacak */  
+                height: 0;  
+                border-left: 100px solid transparent;  
+                border-right: 100px solid transparent;  
+                border-bottom: 50px solid #ff5733; /* Çatı rengi */  
+                margin: 0 auto;
+            }
+
+
+            .sold-button, .owner-button{
+                padding-right: 10px;
+            }
+            .owner-button{
+                margin-left: -10px;
+            }
+            .btn-secondary, .btn-warning, .btn-danger{
+                font-size: 13px;
+            }
+            #sellButton{
+                padding: 2px !important;
+            }
+        }  
+    </style>  
+</head>  
+<body>  
+
+    <!-- Responsive Header -->  
+    <nav class="header d-flex justify-content-between align-items-center px-3">
+        <span>Yapıo</span>
+        <button class="btn custom-btn" id="loginButton" style="display: none;">PROJELER</button>  
+    </nav>
+
+    <!-- Navbar -->  
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm mt-4 container-navbar">  
+        <div class="container-fluid">  
+            <!-- Proje Adı -->  
+            <h4 class="navbar-brand" id="projectName">Proje Adı</h4>  
+            <!-- Ana Sayfa Butonu -->  
+            <button class="btn d-flex navbar-home-button" id="buttonHome">  
+                <img src="img/home1_1.png" alt="Katlar Görseli" class="img-fluid rounded">  
+            </button>  
+            <!-- Hamburger Menü -->  
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"  
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">  
+                <span class="navbar-toggler-icon"></span>  
+            </button>  
+        
+            <!-- Menu: Mobilde sağdan, büyük ekranda klasik dropdown -->  
+            <div class="collapse navbar-collapse" id="navbarNav">  
+                <!-- Masaüstü: Dropdown Menüsü -->  
+                <ul class="navbar-nav ms-auto d-none d-lg-flex">  
+                    <li class="nav-item dropdown">  
+                        <button class="btn nav-link dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">  
+                        Menü  
+                        </button>  
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">  
+                            <li id="regulation-button-area">  
+                                <a class="dropdown-item d-flex align-items-center" id="regulation-button" href="#">  
+                                  <img src="img/edit.png" alt="" style="width:16px; height:16px; margin-right:8px;">  
+                                  Düzenle  
+                                </a>  
+                            </li>  
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" id="quatation-button" href="#">
+                                    <img src="img/pay1_1.png" alt="" style="width:19px; height:19px; margin-right:8px;">
+                                    Giderler
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" id="graphs-button" href="#">
+                                    <img src="img/growth_1.png" alt="" style="width:19px; height:19px; margin-right:8px;">
+                                    Analizler
+                                </a>
+                            </li> 
+                        </ul>  
+                    </li>  
+                </ul>  
+                <!-- Mobilde: Menü Seçenekleri En Sağa Yaslı -->  
+                <ul class="navbar-nav ms-auto d-lg-none justify-content-end text-end mobile-navbar-menu">     
+                    <li id="regulation-button-mobile-area">  
+                        <a class="dropdown-item-mobile d-flex align-items-center" id="regulation-button-mobile">  
+                          <img src="img/edit.png" alt="" style="width:16px; height:16px;">  
+                          Düzenle  
+                        </a>  
+                    </li>
+                    <li>
+                        <a class="dropdown-item-mobile d-flex align-items-center" id="quatation-button-mobile" href="#">
+                            <img src="img/pay1_1.png" alt="" style="width:19px; height:19px; ">
+                            Giderler
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item-mobile d-flex align-items-center" id="graphs-button-mobile" href="#">
+                            <img src="img/growth_1.png" alt="" style="width:19px; height:19px; ">
+                            Analizler
+                        </a>
+                    </li>
+                </ul>  
+            </div>  
+        </div>  
+    </nav>
+
+    <!-- Bina Alanı -->  
+    <div class="building-container-area" id="building-container"></div>
+
+    <!-- Modal -->  
+    <div class="modal fade" id="roomModal" tabindex="-1" aria-labelledby="roomModalTitle" aria-hidden="true">  
+        <div class="modal-dialog">  
+            <div class="modal-content">  
+                <div class="modal-header">  
+                    <h5 class="modal-title" id="roomModalTitle" style="font-size:1.4rem;">Oda Detayları</h5>  
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>  
+                </div>
+                <!-- Subtitle burada başlar -->  
+                <div id="roomModalSubtitle"> 
+                    <!-- Apartman ya da ekstra bilgi JS ile buraya yazılacak -->  
+                </div>
+                <div id="roomModalImage"> 
+                    <!-- Dairenin resmi için -->  
+                </div>
+                <p class="d-flex justify-content-center mt-3" style="font-size:1.2rem;" id="roomModalDesc">Seçilen oda adı buraya gelecek.</p>
+
+                <div class="modal-body">
+                    <!-- Aksiyon butonları -->  
+                    <div class="row flex-nowrap" id="buttonGroup">  
+                        <div class="col-3 d-flex justify-content-start sold-button">  
+                            <button id="sellButton" class="btn btn-danger w-100" style="color: #ffffff; font-weight: 400;">Sat</button>  
+                        </div>  
+                        <div class="col-4 d-flex justify-content-start owner-button">
+                            <button id="ownerButton" class="btn btn-warning w-100" style="background-color: #3e87e6; color: #ffffff;">Yer Sahibi</button>  
+                        </div> 
+                        <div class="col-5 d-flex justify-content-end notSold-button">  
+                            <button id="removeSellButton" class="btn btn-secondary">Kaldır</button>  
+                        </div>
+                    </div>
+                </div>  
+
+                <!-- Form Bölümü: BAŞLANGIÇTA GİZLİ -->  
+                <div id="roomInfoForm" class="my-3" style="width:60%; margin:0 auto; display:none;">  
+                    <form id="infoForm">  
+                        <div class="info-form mb-2">  
+                            <label for="price" class="form-label">Satış Fiyatı</label>  
+                            <input type="number" class="form-control" id="itemPrice" required>  
+                        </div>  
+                        <div class="mb-2">  
+                            <label for="userInfo" class="form-label">Ad, Soyad</label>  
+                            <input type="text" class="form-control" id="buyerInfo" required>  
+                        </div>  
+                        <button type="submit" class="btn btn-primary w-100" id="okButton">Tamam</button>  
+                    </form>  
+                </div>
+            </div>  
+        </div>  
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script type="module">
+        import { getModal } from '/js/modal.js';
+        import { isBodrumFloorDb, getRoomNumbers } from '/js/building.js';
+        import { showWarningMessage } from '/js/showMessage.js';
+        
+        const navbarCollapse = document.getElementById('navbarNav');  
+        const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
+        const regulationButton = document.getElementById("regulation-button");
+        const regulationButtonArea = document.getElementById("regulation-button-area");
+        const regulationButtonMobile = document.getElementById("regulation-button-mobile"); 
+        const regulationButtonMobileArea = document.getElementById("regulation-button-mobile-area"); 
+        const quatationButton = document.getElementById("quatation-button"); 
+        const quatationButtonMobile = document.getElementById("quatation-button-mobile");
+        const graphsButton = document.getElementById("graphs-button"); 
+        const graphsButtonMobile = document.getElementById("graphs-button-mobile");
+        const buildingContainer = document.getElementById("building-container");
+        const projectNameString = document.getElementById("projectName");  
+        const modalTitle = document.getElementById("roomModalTitle");  
+        const modalSubtitle = document.getElementById("roomModalSubtitle");  
+        const roomModalImage = document.getElementById("roomModalImage");  
+        const modalDesc = document.getElementById("roomModalDesc");
+        const buildingContainerArea = document.querySelector(".building-container-area");
+        const buttonHome = document.getElementById("buttonHome");
+        const roof = document.createElement("div"); 
+        const loginButton = document.getElementById("loginButton");
+
+        const buttonGroup = document.getElementById("buttonGroup");  
+        const sellButton = document.getElementById("sellButton");  
+        const removeSellButton = document.getElementById("removeSellButton");  
+        const ownerButton = document.getElementById("ownerButton");  
+        const roomInfoForm = document.getElementById("roomInfoForm");  
+        const itemPrice = document.getElementById("itemPrice");  
+        const buyerInfo = document.getElementById("buyerInfo");  
+        const okButton = document.getElementById("okButton");  
+
+        let SCALE = 0;
+        let screenWidth = null;
+        let screenHeight = null;
+        let floorsData = null;
+        let selectedFloor = 0;
+
+        // Dinamik çatı genişliği için max pencere sayılarını kontrol etmek için değişken  
+        let maxWidth = 0;
+
+        let fromControl = false;
+
+        let userId = null;
+        let projectName = null;
+        let building = null;
+        let floorsDataFromDb = null;
+
+        // DOM yüklendiğinde işlem başlat  
+        document.addEventListener("DOMContentLoaded", () => {  
+            event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle  
+
+             window.user = {{#if user}}
+                { "email": "{{user.email}}", "role": "{{user.role}}", "userId": "{{user.id}}", "project": {{{json project}}} }
+            {{else}}
+                { "role": "{{role}}" }
+            {{/if}};
+
+            userId = window.user.userId;
+            const projectNameDb = window.user.project.projectName;
+            projectName = projectNameDb;
+            if(projectName){
+                const projectNameText = projectNameDb.toUpperCase();
+                projectNameString.textContent = projectNameText;
+            }
+            if(userId){
+                loginButton.style.display = "block";
+            } else{
+                loginButton.style.display = "none";
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);  
+            const cameFrom = urlParams.get('from');  
+            if (cameFrom) {  
+                fromControl = true;
+                regulationButtonMobileArea.style.display = "none";
+                regulationButtonArea.style.display = "none";
+            }
+
+            // 1- Menü dışındaki herhangi bir yere tıklanınca  
+            document.addEventListener('click', function (event) {  
+                if (navbarCollapse.classList.contains('show')) {  
+                    // Eğer tıklanan yer menü veya hamburger değilse menüyü kapat  
+                    if (  
+                        !navbarCollapse.contains(event.target) &&  
+                        event.target !== document.querySelector('.navbar-toggler')  
+                    ) {  
+                        bsCollapse.hide();  
+                    }  
+                }  
+            });  
+
+            // 2- Menü içerisindeki bir bağlantıya tıklanırsa kapansın
+            navbarCollapse.querySelectorAll('.nav-link').forEach(function (link) {  
+                link.addEventListener('click', function () {  
+                if (navbarCollapse.classList.contains('show')) {  
+                    bsCollapse.hide();  
+                }  
+                });  
+            });
+
+            setBuildingFromDb();  
+
+            // Çatı genişliğini en geniş kata ayarla  
+            updateRoofWidth(roof, Math.max(200, maxWidth));  
+        });
+
+        loginButton.addEventListener("click", () => {
+            //window.location.href = `/?userId=${encodeURIComponent(userId)}`;
+            window.location.href = "/";
+        });
+
+        async function setBuildingFromDb(){
+            const dataToDb = {
+                userId: userId,             // kullanıcı id'si
+                projectName: projectName    // proje adı
+            };
+
+            try {  
+                // Kullanıcı giriş bilgilerini backend'e gönder  
+                const response = await fetch('/draw', {  
+                    method: 'POST',  
+                    headers: {  
+                        'Content-Type': 'application/json'  
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(dataToDb)
+                });
+        
+                const result = await response.json();
+                if (!response.ok && !result.success) {
+                    // Sunucu response.json ile hata mesajı döndüyse
+                    showWarningMessage(result.message, "tamam", true);
+                } else{
+                    floorsData = result.floorsData;
+                    building = result.building;
+                    //console.log("floorsData ",floorsData);
+                }
+
+            } catch (error) {
+                // Ağ hatası, sunucuya istek ulaşmazsa
+                showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+                console.log('Hata:', error);
+            }
+
+            // Veriler
+            const floorNumber = floorsData.length;  
+            const hasBasement = isBodrumFloorDb(floorsData); // Bodrum var mı?
+            const windowsPerFloor = getRoomNumbers(floorsData); // Her kattaki pencere sayısı  
+
+            setBuilding(floorNumber, hasBasement, windowsPerFloor);
+        }
+
+        buttonHome.addEventListener("click", () => {  
+            if (buildingContainerArea.classList.contains("d-none")) {  
+                buildingContainerArea.classList.remove("d-none");  
+            }
+        });
+
+        // Pencere Ekleme Fonksiyonu  
+        function addWindows(floorNumber, floorElement, windowCount) {
+            const windowContainer = document.createElement("div");  
+            windowContainer.className = "window-container"; // Pencereler için yatay alan  
+
+            // Belirtilen pencere sayısı kadar döngüyle pencere oluştur  
+            for (let i = 0; i < windowCount; i++) {  
+                const windowDiv = document.createElement("div");
+                windowDiv.className = "window";  
+                windowDiv.style.position = "relative";  
+                windowDiv.style.display = "flex";  
+                windowDiv.style.justifyContent = "center";  
+                windowDiv.style.alignItems = "center";  
+
+                const isSold = floorsData[floorNumber].rooms[i].isSold;  
+                const roomName = floorsData[floorNumber].rooms[i].roomName;  
+
+                // Eğer önce yazı gözüksün, img alta gelsin istiyorsan zIndex değerleriyle oynayabilirsin.  
+                const textSpan = document.createElement("span");  
+                textSpan.textContent = roomName;  
+                textSpan.style.position = "absolute";  
+                textSpan.style.left = "50%";  
+                textSpan.style.top = (isSold === "true" || isSold === "owner") ? "60%" : "50%";
+                textSpan.style.transform = "translate(-50%, -50%)";  
+                textSpan.style.fontWeight = "bold";  
+                textSpan.style.fontSize = "12px";  
+                textSpan.style.color = "#6c757d"; // Renk, arkası koyuysa rahat okunsun diye  
+                textSpan.style.zIndex = "2"; // Yazı en önde olsun  
+
+                windowDiv.appendChild(textSpan);  // Önce yazıyı ekle  
+
+                // Eğer img olması gereken durumdaysa ekle  
+                if(  
+                    (windowCount == 1  && (isSold === "true" || isSold === "owner")) ||  
+                    (windowCount == 2  && (isSold === "true" || isSold === "owner")) ||  
+                    (windowCount == 3  && (isSold === "true" || isSold === "owner")) ||  
+                    (windowCount == 4  && (isSold === "true" || isSold === "owner")) ||  
+                    (windowCount == 5  && (isSold === "true" || isSold === "owner")) ||  
+                    (windowCount == 6  && (isSold === "true" || isSold === "owner")) ||  
+                    (windowCount == 7  && (isSold === "true" || isSold === "owner")) ||  
+                    (windowCount == 8  && (isSold === "true" || isSold === "owner")) 
+                    
+                ){  
+                    setImg(windowDiv, isSold);  
+                }  
+
+                // Boyutlar aynı  
+                if(windowCount == 1) {  
+                    windowDiv.style.height = "65px";  
+                    windowDiv.style.width = "280px";  
+                } else if (windowCount == 2) {  
+                    windowDiv.style.height = "65px";  
+                    windowDiv.style.width = "135px";  
+                } else if(windowCount == 3){  
+                    windowDiv.style.height = "65px";  
+                    windowDiv.style.width = "90px";  
+                } else if(windowCount == 4){  
+                    windowDiv.style.height = "65px";  
+                    windowDiv.style.width = "65px";  
+                } else if(windowCount == 5){  
+                    windowDiv.style.height = "50px";  
+                    windowDiv.style.width = "50px";  
+                } else if(windowCount == 6){  
+                    windowDiv.style.height = "40px";  
+                    windowDiv.style.width = "40px";  
+                } else if(windowCount == 7){  
+                    windowDiv.style.height = "35px";  
+                    windowDiv.style.width = "33px";  
+                } else if(windowCount == 8){  
+                    windowDiv.style.height = "35px";  
+                    windowDiv.style.width = "28px";  
+                }  
+                // Tıklama olayı ekle
+                windowDiv.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const roomData = floorsData[floorNumber].rooms[i];
+                    getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, sellButton, removeSellButton, 
+                            ownerButton, floorsData[floorNumber].floorName, roomData.roomName, roomData.rowNumber, buttonGroup, roomInfoForm, okButton,
+                            buyerInfo, itemPrice, fromControl, userId, projectName, building, floorsData)
+                        .then((updatedFloorData) => {
+                            setBuildingFromDb();
+                            if (fromControl) {  
+                                const previousUrl = window.location.href; 
+                                window.location.href = 
+                                    'quatation?from=' + encodeURIComponent(previousUrl) + 
+                                    '&projectName=' + encodeURIComponent(projectName);  
+                            }
+                        })  
+                        .catch((error) => {
+                            if (fromControl) {  
+                                const previousUrl = window.location.href; 
+                                    'quatation?from=' + encodeURIComponent(previousUrl) + 
+                                    '&projectName=' + encodeURIComponent(projectName); 
+                            }
+                            //console.error("Modal kapatma hatası:", error);  
+                        });
+                });
+
+                windowContainer.appendChild(windowDiv);  
+            }  
+
+            function setImg(windowDiv, isSold) {  
+                const img = new Image();  
+                if(isSold === "true"){  
+                    img.src = "img/sold_3.png";  
+                    img.alt = "Sold";  
+                } else if(isSold === "owner"){  
+                    img.src = "img/owner_3.png";  
+                    img.alt = "Owner";  
+                }  
+                img.style.position = "absolute";  
+                img.style.left = "50%";  
+                img.style.top = "25%";  
+                img.style.transform = "translate(-50%, -50%)";  
+                img.style.width = "100%";  
+                img.style.height = "100%";
+                img.style.objectFit = "contain"; 
+                img.style.zIndex = "1"; // Görsel yazının arkasında 
+                windowDiv.appendChild(img);  
+            }
+
+            // Pencere grubunu kat içine ekle  
+            floorElement.appendChild(windowContainer);  
+            return windowContainer; // Dinamik çatı genişliği için  
+        }  
+
+        // Çatı Genişliğini Güncelleme Fonksiyonu  
+        function updateRoofWidth(roofElement, width) {
+            roofElement.style.borderLeft = `${width / 2}px solid transparent`;  
+            roofElement.style.borderRight = `${width / 2}px solid transparent`;  
+        }
+
+        function setBuilding(floorNumber, hasBasement, windowsPerFloor) {  
+            // Bina içeriğini temizle ve yeniden oluştur  
+            buildingContainer.innerHTML = "";  
+
+            // Tuğla desenli çatı için SVG kodu  
+            const roofSVG = `  
+                <svg class="roof-svg" viewBox="0 0 300 90" style="display:block; width:300px; height:130px;">  
+                <defs>  
+                    <pattern id="brick" patternUnits="userSpaceOnUse" width="18" height="15">  
+                    <image href="/img/brick.png" width="18" height="15"/>  
+                    <line x1="0" y1="15" x2="18" y2="15" stroke="#fff" stroke-width="2"/>  
+                    <line x1="9" y1="0" x2="9" y2="15" stroke="#fff" stroke-width="2"/>  
+                    <line x1="0" y1="0" x2="0" y2="15" stroke="#fff" stroke-width="2"/>  
+                    <line x1="18" y1="0" x2="18" y2="15" stroke="#fff" stroke-width="2"/>  
+                    </pattern>  
+                </defs>  
+                <polygon points="0,90 150,0 300,90" fill="url(#brick)" />  
+                </svg>
+            `;
+
+            // ----- ÇATI EKLE (SVG TUĞLALI) -----  
+            buildingContainer.insertAdjacentHTML('beforeend', roofSVG);  
+
+            windowsPerFloor.forEach(windowCount => {  
+                const width = Math.max(300, windowCount * 30); // Minimum genişlik 300px  
+                if (width > maxWidth) {  
+                    maxWidth = width; // Maksimum genişliği güncelle  
+                }  
+            });  
+
+            // Katları ekleme  
+            for (let i = floorNumber - 1; i >= 0; i--) {  
+                const floor = document.createElement("div");  
+                floor.className = "floor";  
+
+                // Pencereleri ekle
+                addWindows(i, floor, windowsPerFloor[i]); 
+
+
+                // Kat isim etiketi  
+                const floorName = document.createElement("div");  
+                floorName.className = "floor-name";  
+
+                // Kat isimlendirmesi  
+                if (hasBasement === true) {  
+                    if (i === 0) {  
+                        floorName.textContent = "Bodrum Kat";  
+                        floor.style.backgroundColor = "#404448";
+                    } else if (i === 1) {  
+                        floorName.textContent = "Zemin Kat";  
+                    } else {  
+                        floorName.textContent = `${i - 1}. Kat`;  
+                    }  
+                } else {  
+                    if (i === 0) {  
+                        floorName.textContent = "Zemin Kat";  
+                    } else {  
+                        floorName.textContent = `${i}. Kat`;  
+                    }  
+                }  
+
+                // Kat ismini katın üstüne ekleme  
+                floor.appendChild(floorName);  
+
+                // Katların genişliğini en geniş katın genişliğine eşit yap  
+                floor.style.width = `${maxWidth}px`;  
+
+                // Katları bina konteynerine ekle  
+                buildingContainer.appendChild(floor);
+            }
+        }
+
+        regulationButton.addEventListener("click", () => {
+            window.location.href = `/bina?projectName=${encodeURIComponent(projectName)}`;
+        });
+        regulationButtonMobile.addEventListener("click", () => {
+            window.location.href = `/bina?projectName=${encodeURIComponent(projectName)}`;
+        });
+
+        quatationButton.addEventListener("click", () => {
+            window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
+        });
+        quatationButtonMobile.addEventListener("click", () => {
+            window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
+        });
+
+        graphsButton.addEventListener("click", () => {
+           window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
+        });
+        graphsButtonMobile.addEventListener("click", () => {
+            window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
+        });
+
+      </script>
+
+</body>  
+</html>

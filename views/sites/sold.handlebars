@@ -1,0 +1,1087 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Durum</title>
+    <!-- Bootstrap CSS -->  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/index.css"> 
+     
+    <style> 
+        body {  
+            margin: 0;  
+            padding: 0; 
+            background-image: url('/img/bck7_7.png');
+            background-repeat: no-repeat;  
+            background-size: 90%; 
+            background-position: bottom;  
+            background-color: #f4f2f2;
+            height: 120vh;  
+            font-family: Arial, sans-serif;  
+        }
+
+        .container-navbar {  
+            display: flex;  
+            flex: 0 0 100%;  
+            flex-wrap: nowrap;  
+            align-items: center;  
+            justify-content: center;  
+            margin: 0px;
+        }  
+        .container-fluid {  
+            display: flex;  
+            flex: 0 0 100%;  
+            flex-wrap: nowrap;  
+            align-items: center;  
+        }  
+        #projectName {  
+            flex: 0 0 90%;  
+            white-space: nowrap;  
+            overflow: hidden;  
+            text-overflow: ellipsis;  
+            font-family: Arial, sans-serif;  
+            font-size: 36px;
+        }  
+        .img-fluid {  
+            flex: 0 0 auto;  
+            height: 30px;  
+            width: 30px;  
+            margin-right: 10px;  
+        }
+        .custom-btn {  
+            background-color: #847539;
+            color: white; /* Yazı rengi */  
+            border: none; /* Kenarlığın kaldırılması */  
+            border-radius: 10px; /* Kenarlıkları yuvarlaklaştırma */  
+            padding: 10px 20px; /* İç boşluklar */  
+            font-family: "Varela Round";  
+            font-size: 16px; /* Yazı boyutu */  
+            font-weight: bold; /* Kalın yazı */  
+            letter-spacing: 2px;
+            cursor: pointer; /* Fare imlecini işaretçi yapma */  
+            transition: background-color 0.3s ease; /* Hover geçiş efekti */
+            margin-right: 40px;
+        }
+        .container{
+            width: 70% !important;
+        }
+        .container-arsa-giderleri {
+            margin-top: 30px !important;
+        }
+        .container-arsa-giderleri h3{
+            font-size: 26px;
+        }
+        .custom-flex {  
+            display: flex;  
+            flex-direction: column;  
+            gap: 0.5rem;  
+            justify-content: center; /* Ortala */  
+            align-items: flex-start;  /* Sola yasla */  
+        }
+        .custom-width{
+            width: 50%;
+        }
+
+
+        .container-list {
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+        .btn img{
+            width:30px; 
+            height:30px; 
+        }
+        .btn-detail,
+        .btn-detail:focus,
+        .btn-detail:active,
+        .btn-detail:focus-visible,
+        .btn-detail img,
+        .btn-detail img:focus,
+        .btn-detail img:active {
+            outline: none !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+
+
+        .modal {  
+            z-index: 1055 !important; /* Bootstrap modal z-index */  
+        }  
+
+        .modal-backdrop {  
+            z-index: 1050 !important; /* Modalın karartma arka planı */  
+        }
+
+        .modal-body{
+            display: flex;
+            flex-direction: column;
+        }
+        #roomModalSubtitle{
+            color:blue; 
+            font-size:2.1rem; 
+            font-family: Quicksand, sans-serif; 
+            font-weight: 500; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #roomModalDesc{
+            padding: 5px;
+        }
+
+        .my-custom-btn {
+            display: inline-block;
+            font-weight: 400;
+            text-align: center;
+            vertical-align: middle;
+            user-select: none;
+            border: 1px solid transparent;
+            padding: 0.25rem 0.5rem; /* btn-sm */
+            font-size: 0.875rem;     /* btn-sm */
+            line-height: 1.5;
+            border-radius: 0.2rem;
+            color: #fff;
+            background-color: #6c757d; /* btn-secondary */
+            border-color: #6c757d;
+            transition: color 0.15s, background-color 0.15s;
+        }
+       
+
+
+        /* Mobil cihazlar için duyarlılık (%75 genişlik) */  
+        @media (max-width: 768px) {
+            body {  
+                background-image: url('/img/bck7_6.png');
+                height: 100vh;
+                background-size: 100%;
+                background-repeat:no-repeat; 
+                background-position:bottom;
+            }
+
+            .container-navbar {  
+                flex-wrap: wrap;  
+                justify-content: flex-end;  
+            }  
+            #projectName {
+                flex: 0 0 70%;  
+                overflow: hidden;  
+                text-overflow: ellipsis;  
+                white-space: nowrap;  
+                text-align: left;  
+                font-size: 14px !important;  
+                max-width: 65%;     /* Taşmayı önler */  
+                min-width: 0;       /* flex shrink için gerekli */  
+                margin-right: 0;    /* İstenirse gap için elle ekleyin */
+            }  
+            #buttonHome {
+                flex: 0 0 30px;     /* Eğer 30px'lik bir kutu ise tam sabitlenir */  
+                padding: 0;         /* Ekstra boşlukları engeller */  
+                margin-left: 0;     /* İstenirse 5px gibi küçük bir boşluk eklenebilir */  
+                display: flex;  
+                align-items: center;
+            }
+            .img-fluid {  
+                height: 25px;  
+                width: 25px;  
+                margin-right: 0;    /* Sağdan boşluğu kaldırır */  
+                margin-left: 0;     /* Soldan boşluğu kaldırır */
+            }  
+            .custom-btn {  
+                font-size: 12px; /* Yazı boyutu */
+                padding: 5px 10px;      /* Yan boşlukları biraz artırdım */
+                border-radius: 6px;      /* Köşeler hafif yuvarlatıldı */
+                color: #fff;
+                border: none;
+                margin-right: 12px;
+                display: inline-block; 
+                font-weight: 500;     
+            }
+            .navbar-toggler {  
+                /* background-color: rgb(89, 125, 234);  */
+                background-color: #c2c5c9;
+                flex: 0 0 auto;  
+                margin-left: auto;  
+                justify-content: flex-end;  
+            }
+            .container-fluid {  
+                flex-wrap: wrap;  
+            } 
+            .dropdown-item{
+                display: flex;
+                margin-left: auto;  
+                justify-content: flex-end;
+            }
+            .mobile-navbar-menu {  
+                justify-content: flex-end !important;  
+                text-align: right !important;  
+                margin-top: 10px;
+                margin-bottom: 5px;
+            }  
+            .mobile-navbar-menu .nav-item, .mobile-navbar-menu .dropdown-item-mobile {
+                display: flex;
+                align-items: center;
+                justify-content: space-between !important;  
+                text-align: right !important;
+                font-size: 1.1rem;
+                font-style: bold !important;
+                height: 22px;
+                margin-top: 2px;
+                justify-self: end;
+            }
+            .dropdown-item-mobile {
+                width: 34%;
+                font-family: Arial, sans-serif !important; 
+                color: rgb(94, 93, 93) !important;      /* Varsayılan metin rengini kullan */  
+                text-decoration: none !important; /* Altı çizgiyi kaldır */  
+                font-weight: 400 !important;
+            }
+
+            .container-list {
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+                padding-left: 6px;
+                padding-right: 6px;
+            }
+            .card-header h5{
+                font-size: 1.1rem;
+            }
+            .card-body th, .card-body td{
+                font-size: 0.75rem;
+
+            }
+            .btn img{
+                width:25px; 
+                height:25px; 
+            }
+
+            #roomModalSubtitle{
+                font-size:1.55rem;
+            }
+
+
+            
+            #roomInfoForm .fs-5,
+            #roomInfoForm .fs-6 {
+                font-size: 1rem !important; /* Yazı boyutları küçüldü */
+            }
+            #roomInfoForm .small,
+            #roomInfoForm .text-muted {
+                font-size: 0.90em !important;
+            }
+            #roomInfoForm .p-2 { padding: 0.3rem !important; }
+            #roomInfoForm .mb-2 { margin-bottom: .4rem !important; }
+            #roomInfoForm .px-3 { padding-left: .6rem !important; padding-right: .6rem !important; }
+            #roomInfoForm .py-3 { padding-top: .6rem !important; padding-bottom: .6rem !important; }
+            .text-buyer{
+                font-family: "Ariel", sans-serif;
+                font-size: 1rem;
+                color: #000000;
+                font-style: bold;
+            }
+
+            .my-custom-btn {
+                font-size: 0.7rem;
+                font-weight: 200;
+                border: 1px solid transparent;
+                padding: 0.15rem 0.3rem; /* btn-sm */
+                line-height: 1.3;
+                border-radius: 0.1rem;
+            }
+            .delete-btn, #saveEditBtn, #cancelEditBtn{
+                font-size: 0.7rem;
+            }
+
+        }
+
+    </style>  
+</head> 
+
+
+<body>  
+    <!-- Responsive Header -->  
+  <nav class="header d-flex justify-content-between align-items-center px-3">
+    <span>Yapıo</span>
+    <button class="btn custom-btn" id="loginButton" style="display: none;">PROJELER</button> 
+  </nav>
+
+  <!-- Navbar -->  
+  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm mt-4 container-navbar">  
+    <div class="container-fluid">  
+      <!-- Proje Adı -->  
+      <h4 class="navbar-brand" id="projectName">Proje Adı</h4>  
+      <!-- Ana Sayfa Butonu -->  
+      <button class="btn d-flex navbar-home-button" id="buttonHome">  
+        <img src="/img/home1_1.png" alt="Katlar Görseli" class="img-fluid rounded">  
+      </button>  
+      <!-- Hamburger Menü -->  
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"  
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">  
+        <span class="navbar-toggler-icon"></span>  
+      </button>  
+  
+      <!-- Menu: Mobilde sağdan, büyük ekranda klasik dropdown -->  
+      <div class="collapse navbar-collapse" id="navbarNav">  
+        <!-- Masaüstü: Dropdown Menüsü -->  
+        <ul class="navbar-nav ms-auto d-none d-lg-flex">  
+            <li class="nav-item dropdown">  
+                <button class="btn nav-link dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">  
+                Menü  
+                </button>  
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">  
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" id="graphs-button" href="#">
+                            <img src="/img/growth_1.png" alt="" style="width:19px; height:19px; margin-right:8px;">
+                            Analizler
+                        </a>
+                    </li>
+                </ul> 
+              </li>
+        </ul>
+        <!-- Mobilde: Menü Seçenekleri En Sağa Yaslı -->  
+        <ul class="navbar-nav ms-auto d-lg-none justify-content-end text-end mobile-navbar-menu">     
+            <li>
+                <a class="dropdown-item-mobile d-flex align-items-center" id="graphs-button-mobile" href="#">
+                    <img src="/img/growth_1.png" alt="" style="width:19px; height:19px; ">
+                    Analizler
+                </a>
+            </li>
+        </ul>  
+      </div>  
+    </div>  
+  </nav>
+
+  <div class="container-list mt-5 mb-5">
+    <div class="card shadow border-0">
+      <div class="card-header bg-warning text-dark">
+        <h5 class="mb-0 d-flex justify-content-center fw-bold">Konut Durum Tablosu</h5>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th scope="col">Kat</th>
+                <th scope="col">Daire Adı</th>
+                <th scope="col">Tipi</th>
+                <th scope="col">m²</th>
+                <th scope="col">Durum</th>
+                <th scope="col">Detaylar</th>
+              </tr>
+            </thead>
+            <tbody id="daire-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->  
+  <div class="modal fade" id="roomModal" tabindex="-1" aria-labelledby="roomModalTitle" aria-hidden="true">  
+    <div class="modal-dialog">  
+        <div class="modal-content">  
+            <div class="modal-header">  
+                <h5 class="modal-title" id="roomModalTitle" style="font-size:1.4rem;">Oda Detayları</h5>  
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>  
+            </div>
+            <!-- Subtitle burada başlar -->  
+            <div class="d-flex justify-center" id="roomModalSubtitle"> 
+                <!-- Apartman ya da ekstra bilgi JS ile buraya yazılacak -->  
+            </div>
+            <div id="roomModalImage"> 
+                <!-- Dairenin resmi için -->  
+            </div>
+            <!-- Oda Bilgileri Modern Kart Görünümü -->
+            <div class="d-flex justify-content-center align-items-center gap-4 bg-light border rounded pt-3 pb-2 mt-3">
+                <div class="text-center px-2">
+                <div class="fw-semibold fs-5" id="odaMetreKare">120 m²</div>
+                <div class="text-muted small">Brüt Alan</div>
+                </div>
+                <div class="vr"></div>
+                <div class="text-center px-2">
+                <div class="fw-semibold fs-5" id="odaTipi">4+1</div>
+                <div class="text-muted small" id="odaTipiText">Oda Sayısı</div>
+                </div>
+                <div class="vr"></div>
+                <div class="text-center px-2">
+                <div class="fw-semibold fs-5" id="odaDurum" style="color: green;">Satıldı</div>
+                <div class="text-muted small">Durum</div>
+                </div>
+            </div>
+            <!-- Opsiyonel: Maliyet bilgisi ayrı bir satırda -->
+            <div class="text-center text-secondary mt-3 mb-3" style="font-size:1.1rem;" id="odaMaliyet">
+                Maliyet: 2.500.000₺
+            </div>
+
+            <!-- Alıcı Bilgisi Yan Yana Kart -->
+            <div class="row justify-content-center mb-3 mx-auto" id="roomInfoForm" style="width:96%">
+                <div class="col-12 col-md-auto">
+                  <div class="d-flex flex-nowrap align-items-center bg-light border rounded-3 shadow-sm gap-2 px-3 py-3 justify-content-center">
+                    <!-- Alıcı -->
+                    <div class="text-center" style="width:33%; min-width:0;">
+                      <div class="text-muted small">Alıcı</div>
+                      <div id="aliciAdSoyad" class="fw-semibold fs-6">Yusuf Demir</div>
+                    </div>
+                    <!-- Ayırıcı -->
+                    <div class="vr d-md-block"></div>
+                    <!-- Tarih -->
+                    <div class="text-center" style="width:33%; min-width:0;">
+                      <div class="text-muted small">Satış Tarihi</div>
+                      <div id="satisTarihi" class="fw-semibold fs-6">05.05.2025</div>
+                    </div>
+                    <!-- Ayırıcı -->
+                    <div class="vr d-md-block"></div>
+                    <!-- Satış Fiyatı -->
+                    <div class="text-center" style="width:33%; min-width:0;">
+                      <div class="text-muted small">Satış Fiyatı</div>
+                      <div id="satisFiyati" class="fw-semibold fs-6">2.500.000₺</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <!-- Ödeme Al Butonu Sol Tarafta -->
+            <div class="row justify-content-start mb-3 ms-2 d-none payment-button" id="paymentButton">
+                <div class="col-auto">
+                <button type="button" class="btn btn-success" id="paymentBtnInner">
+                    Ödeme Al
+                </button>
+                </div>
+            </div>
+
+            <div id="paymentModalBody"></div>
+
+            <div class="saved-entries" data-type="Payments Area"></div>
+
+
+            <!-- Form Bölümü: BAŞLANGIÇTA GİZLİ -->  
+            <div  class="my-3" style="width:60%; margin:0 auto; display:none;">  
+                <form id="infoForm">  
+                    <div class="info-form mb-2">  
+                        <label for="price" class="form-label">Satış Fiyatı</label>  
+                        <input type="number" class="form-control" id="itemPrice" required>  
+                    </div>  
+                    <div class="mb-2">  
+                        <label for="userPhone" class="form-label">Ad, Soyad</label>  
+                        <input type="tel" class="form-control" id="buyerInfo" required>  
+                    </div>  
+                    <button type="submit" class="btn btn-primary w-100" id="okButton">Tamam</button>  
+                </form>  
+            </div>
+        </div>  
+    </div>  
+</div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module">  
+    import { saveData, readData, deleteData } from '/js/localDb.js';
+    import { showWarningMessage } from '/js/showMessage.js';
+    
+    const projectNameString = document.getElementById("projectName");
+    const navbarCollapse = document.getElementById('navbarNav');  
+    const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
+    const buttonHome = document.getElementById("buttonHome");
+    const graphsButton = document.getElementById("graphs-button"); 
+    const graphsButtonMobile = document.getElementById("graphs-button-mobile");
+    const modalTitle = document.getElementById("roomModalTitle");
+    const modalSubtitle = document.getElementById("roomModalSubtitle");
+    const roomModalImage = document.getElementById("roomModalImage");
+    const odaMetreKare = document.getElementById("odaMetreKare");
+    const odaTipi = document.getElementById("odaTipi");
+    const odaTipiText = document.getElementById("odaTipiText");
+    const odaDurum = document.getElementById("odaDurum");
+    const odaMaliyet = document.getElementById("odaMaliyet");
+    const roomInfoForm = document.getElementById("roomInfoForm");  
+    const aliciAdSoyad = document.getElementById("aliciAdSoyad");  
+    const satisTarihi = document.getElementById("satisTarihi");  
+    const satisFiyati = document.getElementById("satisFiyati");  
+    const paymentButton = document.querySelector(".payment-button");
+    const paymentModalBody = document.getElementById('paymentModalBody');
+    const loginButton = document.getElementById("loginButton");
+
+    let userId = null;
+    let projectName = null;
+
+    let dataBuilding = null;
+    let dataFloors = null;
+    let dataSoldItems = null;
+    let yerSahibiIleAnlasma = null;
+    let paymentDb = null;
+    let maliyet = null;
+
+    // DOM yüklendiğinde işlem başlat  
+    document.addEventListener("DOMContentLoaded", async () => {  
+      event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle  
+
+      // 1- Menü dışındaki herhangi bir yere tıklanınca  
+      document.addEventListener('click', function (event) {  
+          if (navbarCollapse.classList.contains('show')) {  
+            // Eğer tıklanan yer menü veya hamburger değilse menüyü kapat  
+            if (!navbarCollapse.contains(event.target) &&  
+                event.target !== document.querySelector('.navbar-toggler')  
+                ) { bsCollapse.hide(); }  
+          }  
+      });  
+
+      // 2- Menü içerisindeki bir bağlantıya tıklanırsa kapansın
+      navbarCollapse.querySelectorAll('.nav-link').forEach(function (link) {  
+          link.addEventListener('click', function () {  
+          if (navbarCollapse.classList.contains('show')) {  
+              bsCollapse.hide();  
+          }  
+          });  
+      });
+
+      window.user = {{#if user}}
+            { "email": "{{user.email}}", "role": "{{user.role}}", "userId": "{{user.id}}", "project": {{{json project}}} }
+        {{else}}
+            { "role": "{{role}}" }
+        {{/if}};
+
+        userId = window.user.userId;
+        projectName = window.user.project.projectName;
+
+        if(userId){
+            loginButton.style.display = "block";
+        } else{
+            loginButton.style.display = "none";
+        }
+        if(projectName){
+            const projectNameText = projectName.toUpperCase();
+            projectNameString.textContent = projectNameText;
+        }
+
+        //await saveDataDb("payment", {tarih: "20.05.2025", not : "ilk ödeme", rowNumber : "2", tutar:"100000"});
+
+        dataBuilding = await readDataDb("building") || [];
+        dataFloors = await readDataDb("floorsData") || [];
+        dataSoldItems = await readDataDb("soldItems") || [];
+        paymentDb = await readDataDb("payment") || [];
+        const maliyetObj = await readDataDb("metreMaliyet");
+        maliyet = String(maliyetObj[0].metreMaliyeti);
+        const raw = await readDataDb("yerSahibiIleAnlasma");
+        yerSahibiIleAnlasma = Array.isArray(raw) ? raw.map(e => ({ ...e, buyerInfo: "owner" })) : [];
+        const allItems = [...dataSoldItems, ...yerSahibiIleAnlasma];
+
+        // Kat planı ismine göre room listesi haritası
+        const floorsMap = Object.fromEntries(
+            dataFloors.map(floor => [
+                floor.floorName.replace(/ Planı$/, ""),
+                floor.rooms
+            ])
+        );
+
+        // Satış kaydı rowNumber map'i (bulmayı hızlandırır)
+        const soldMap = Object.fromEntries(
+            allItems.map(item => [String(item.rowNumber), item])
+        );
+
+        // Sonuç dizisi direkt olarak oluşturuluyor
+        const daireler = dataBuilding.map(element => {
+            const kat = element.kat;
+            const rowNumber = element.rowNumber;
+            const ad = element.Ad || null;
+
+            const oda =
+                (floorsMap[kat] && floorsMap[kat].find(room => room.rowNumber === rowNumber)) || {};
+                
+
+                // Satış bilgileri
+                const found = soldMap[String(rowNumber)];
+                let durum = "Müsait";
+                if (found) {
+                    if (found.buyerInfo === "owner") {
+                        durum = "Yer Sahibi";
+                    } else if (found.buyerInfo) {
+                        durum = "Satıldı";
+                    }
+                }
+
+                const paymentsForThisDaire = paymentDb.filter(
+                    payment => String(payment.rowNumber) === String(rowNumber)
+                );
+
+                const num = parseFloat(maliyet.replace(/\./g, '').replace(',', '.'));
+                const totalMaliyet = num*parseInt(element.genelBrutAlan);
+
+                return {
+                    kat,
+                    ad,
+                    tip: element.alanTipi,
+                    tipi: element.tipi,
+                    m2: element.genelBrutAlan,
+                    durum,
+                    detay: "/img/detail.png",
+                    rowNumber,
+                    itemPrice: found ? found.itemPrice : null,
+                    soldDate: found ? found.date : null,
+                    buyerInfo: found ? found.buyerInfo : null,
+                    maliyet: totalMaliyet,
+                    payment: paymentsForThisDaire
+                };
+        });
+        tabloyuGuncelle(daireler);
+    });
+
+    loginButton.addEventListener("click", () => {
+        window.location.href = "/";
+    });
+
+    graphsButton.addEventListener("click", () => {
+      window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
+    });
+    graphsButtonMobile.addEventListener("click", () => {
+      window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
+    });
+    buttonHome.addEventListener("click", () => {  
+      window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
+    });
+
+    // Ana tabloyu güncelleyen fonksiyon
+        function tabloyuGuncelle(daireler) {
+            const tbody = document.getElementById("daire-tbody");
+            tbody.innerHTML = "";
+            daireler.forEach((daire, i) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${daire.kat ?? ""}</td>
+                    <td>${daire.ad ?? ""}</td>
+                    <td>${daire.tip ?? ""}</td>
+                    <td>${daire.m2 ?? ""}</td>
+                    <td 
+                        style="
+                            color:
+                            ${daire.durum === "Satıldı" ? "green" : ""}
+                            ${daire.durum === "Yer Sahibi" ? "red" : ""}
+                        "
+                    >
+                        ${daire.durum ?? ""}
+                    </td>
+                    <td>
+                        <button class="btn btn-detail" data-index="${i}">
+                            <img src="${daire.detay ?? ""}" alt="detail" style="width:20px;height:20px;">
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.querySelectorAll('.btn-detail').forEach(button => {
+                button.addEventListener('click', function () {
+                    document.querySelectorAll('.btn-detail img').forEach(img => {
+                        img.src = "/img/detail.png";
+                    });
+                    // Sadece tıklananın img'si aktif olsun
+                    const img = this.querySelector('img');
+                    img.src = "/img/detail_1.png";
+
+                    const index = this.getAttribute('data-index');
+                    const detayDaire = daireler[index];
+
+                    const roomModal = new bootstrap.Modal(document.getElementById("roomModal"));
+                    roomModal.show(); 
+
+                    const modalEl = document.getElementById('roomModal');
+                    modalEl.addEventListener('hidden.bs.modal', function () {
+                        document.querySelectorAll('.btn-detail img').forEach(img => {
+                            img.src = "/img/detail.png";
+                        });
+                        paymentModalBody.innerHTML = "";
+                    });
+
+                    modalTitle.textContent = (detayDaire.kat || "") + ", " + (detayDaire.tip || "");
+                    modalSubtitle.textContent = detayDaire.ad || "";
+
+                    // ... (görsel ve diğer alanların set edilmesi) ...
+
+                    odaMetreKare.textContent = (detayDaire.m2 || "") + " m²";
+                    odaDurum.textContent = detayDaire.durum;
+                    if (detayDaire.durum === "Satıldı") {
+                        odaDurum.style.color = "green";
+                    } else if (detayDaire.durum === "Yer Sahibi") {
+                        odaDurum.style.color = "red";
+                    } else {
+                        odaDurum.style.color = "black";
+                    }
+                    odaMaliyet.textContent = "Maliyet : " + formatTL(detayDaire.maliyet) + " ₺";
+
+                    // Eğer satılmışsa Ödeme Bilgileri Göster
+                    if (detayDaire.buyerInfo && detayDaire.buyerInfo !== 'owner') {
+                        roomInfoForm.style.display = "block";
+                        aliciAdSoyad.textContent = detayDaire.buyerInfo;
+                        satisTarihi.textContent = detayDaire.soldDate;
+                        satisFiyati.textContent = formatTL(detayDaire.itemPrice) + " ₺";
+                        paymentButton.classList.remove("d-none");
+
+                        updatePaymentList(detayDaire, detayDaire.rowNumber, daireler);
+                    } else {
+                        roomInfoForm.style.display = "none";
+                        paymentButton.classList.add("d-none");
+                        document.querySelector('.saved-entries').innerHTML = "";
+                    }
+
+                    // Ödeme ekleme modalı
+                    let isCancel = true;
+                    paymentButton.onclick = function () {
+                        if (!isCancel) {
+                            paymentModalBody.innerHTML = "";
+                            isCancel = true;
+                            const paymentBtn = document.getElementById('paymentBtnInner');
+                            paymentBtn.className = "btn btn-success";
+                            paymentBtn.textContent = isCancel ? "Ödeme Al" : "İptal";
+                        } else {
+                            paymentModalBody.innerHTML = `
+                                <div class="container-payment mx-auto" style="width:90%;">
+                                    <div class="d-flex gap-2 align-items-end mb-2 mt-3">
+                                        <div class="flex-fill">
+                                            <input type="number" class="form-control" id="modalInput" placeholder="Tutarı giriniz">
+                                        </div>
+                                        <div>
+                                            <input type="date" class="form-control" id="modalDate">
+                                        </div>
+                                    </div>
+                                    <textarea class="form-control" id="modalNote" placeholder="Açıklama (Opsiyonel)"></textarea>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" id="saveModalButton" data-rowNumber="${detayDaire.rowNumber}">
+                                            Kaydet
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                            document.getElementById('modalDate').value = getTodayDate();
+                            isCancel = false;
+                            const paymentBtn = document.getElementById('paymentBtnInner');
+                            paymentBtn.className = "btn btn-success";
+                            paymentBtn.textContent = isCancel ? "Ödeme Al" : "İptal";
+
+                            // Kaydet butonu
+                            document.getElementById('saveModalButton').onclick = async function () {
+                                const tutar = document.getElementById('modalInput').value;
+                                const tarih = document.getElementById('modalDate').value;
+                                const not = document.getElementById('modalNote').value;
+                                const rowNumber = this.getAttribute('data-rowNumber');
+
+                                if (!tutar || !tarih) {
+                                    showWarningMessage("Eksik Giriş Yaptınız! Lütfen kontrol edip tekrar giriniz.", "tamam", false);
+                                    return;
+                                }
+
+                                paymentDb.push({
+                                    rowNumber: rowNumber,
+                                    tutar: tutar,
+                                    tarih: formatDate(tarih),
+                                    not: not || ""
+                                });
+
+                                await saveDataDb("payment", paymentDb);
+                                const yenilenmisDaireler = await createDaireler();
+                                tabloyuGuncelle(yenilenmisDaireler);
+                                updatePaymentList(detayDaire, detayDaire.rowNumber, yenilenmisDaireler);
+                                const paymentBtn = document.getElementById('paymentBtnInner');
+                                paymentBtn.className = "btn btn-success";
+                                paymentBtn.textContent = isCancel ? "Ödeme Al" : "İptal";
+                                paymentModalBody.innerHTML = "";
+                                isCancel = true;
+                            };
+                        }
+                    }
+                });
+            });
+        }
+
+        // Ödeme listesini güncelleyen fonksiyon
+        function updatePaymentList(detayDaire, rowNumber, daireler) {
+            const div = document.querySelector('.saved-entries');
+            const detay = daireler.find(d => d.rowNumber == rowNumber);
+            const list = detay && Array.isArray(detay.payment) ? detay.payment : [];
+            if (!list.length) {
+                div.innerHTML = '<div class="text-center text-muted py-2">Hiç ödeme yok</div>';
+                return;
+            }
+
+            // Toplam ve kalan ödemeler
+            const toplamOdeme = list.reduce((acc, item) => acc + parseInt(item.tutar || '0'), 0);
+            const kalanOdeme = parseInt(detayDaire.itemPrice) - toplamOdeme;
+
+            div.innerHTML = `
+                <div class="mb-2 savedQuatations d-flex justify-content-center fw-semibold fs-6" id="savedQuatationsSold">ÖDEMELER</div>
+                <div class="card bg-light mb-2 p-2" style="width:60%; margin:0 auto;">
+                    <div class="fw">Toplam ödeme : ${formatTL(toplamOdeme)}  ₺</div>
+                </div>
+                <div class="card bg-light mb-4 p-2" style="width:60%; margin:0 auto;">
+                    <div class="fw">Kalan ödeme : ${formatTL(kalanOdeme)}  ₺</div>
+                </div>
+                ${list.map((item, idx) => `
+                    <div class="card bg-light mb-2 p-2">
+                        <div class="fw">${item.tarih} tarihinde, ${formatTL(item.tutar)} ₺</div>
+                        ${item.not ? `<div class="text-muted">${item.not}</div>` : ""}
+                        <div class="mt-2 d-flex gap-1 justify-content-end">
+                            <button class="my-custom-btn edit-btn"
+                                data-idx="${idx}"
+                                data-not="${item.not || ''}"
+                                data-tutar="${item.tutar || ''}"
+                                data-tarih="${item.tarih || ''}"
+                                data-rowNumber="${item.rowNumber || ''}">Düzenle</button>
+                            <button class="btn btn-sm btn-danger delete-btn"
+                                data-idx="${idx}"
+                                data-not="${item.not || ''}"
+                                data-tutar="${item.tutar || ''}"
+                                data-tarih="${item.tarih || ''}"
+                                data-rowNumber="${item.rowNumber || ''}">Sil</button>
+                        </div>
+                    </div>
+                `).join('')}
+            `;
+
+            // Silme işlemi
+            div.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.onclick = async function () {
+                    const not = this.getAttribute('data-not');
+                    const tutar = this.getAttribute('data-tutar');
+                    const tarih = this.getAttribute('data-tarih');
+                    const rowNumber = this.getAttribute('data-rowNumber');
+                    const i = paymentDb.findIndex(item =>
+                        String(item.rowNumber) === String(rowNumber) &&
+                        String(item.not) === String(not) &&
+                        String(item.tutar) === String(tutar) &&
+                        String(item.tarih) === String(tarih)
+                    );
+                    if (i !== -1) {
+                        paymentDb.splice(i, 1);
+                        await saveDataDb("payment", paymentDb);
+                        const yenilenmisDaireler = await createDaireler();
+                        tabloyuGuncelle(yenilenmisDaireler);
+                        updatePaymentList(detayDaire, detayDaire.rowNumber, yenilenmisDaireler);
+                    }
+                };
+            });
+
+            // Düzenleme işlemi (inline edit)
+            div.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.onclick = function () {
+                    const idx = this.getAttribute('data-idx');
+                    const oldData = list[idx];
+                    const kit = this.closest('.card.bg-light.mb-2.p-2');
+
+                    // Önce varsa eski formu kaldır
+                    const oldForm = div.querySelector('.edit-form-inline');
+                    if (oldForm) oldForm.remove();
+
+                    // Inline form oluştur
+                    const formDiv = document.createElement('div');
+                    formDiv.className = 'edit-form-inline';
+                    formDiv.innerHTML = `
+                        <div class="p-2 mt-2 rounded" style="background:#f8f9fa; border:1px solid #d1d5db;">
+                            <label>Tutar: <input type="number" class="form-control" id="editTutar" value="${oldData.tutar || ''}"></label><br>
+                            <label>Tarih: <input type="date" class="form-control" id="editTarih" value="${oldData.tarih || ''}"></label><br>
+                            <label>Not: <input type="text" class="form-control" id="editNot" value="${oldData.not || ''}"></label><br>
+                            <button class="btn btn-sm btn-success mt-2" id="saveEditBtn">Kaydet</button>
+                            <button class="btn btn-sm btn-secondary mt-2" id="cancelEditBtn">İptal</button>
+                        </div>
+                    `;
+                    kit.parentNode.insertBefore(formDiv, kit.nextSibling);
+
+                    // Kaydet ve iptal
+                    formDiv.querySelector('#saveEditBtn').onclick = async function () {
+                        const newTutar = formDiv.querySelector('#editTutar').value;
+                        const newTarih = formDiv.querySelector('#editTarih').value;
+                        const newNot = formDiv.querySelector('#editNot').value;
+
+                        if (!newTutar || !newTarih) {
+                            showWarningMessage("Eksik Giriş Yaptınız!", "tamam", false);
+                            return;
+                        }
+
+                        const i = paymentDb.findIndex(item =>
+                            String(item.rowNumber) === String(oldData.rowNumber) &&
+                            String(item.not) === String(oldData.not) &&
+                            String(item.tutar) === String(oldData.tutar) &&
+                            String(item.tarih) === String(oldData.tarih)
+                        );
+                        if (i !== -1) {
+                            paymentDb[i].not = newNot;
+                            paymentDb[i].tutar = newTutar;
+                            paymentDb[i].tarih = newTarih;
+                            await saveDataDb("payment", paymentDb);
+                            const yenilenmisDaireler = await createDaireler();
+                            tabloyuGuncelle(yenilenmisDaireler);
+                            updatePaymentList(detayDaire, detayDaire.rowNumber, yenilenmisDaireler);
+                        }
+                        formDiv.remove();
+                    };
+                    formDiv.querySelector('#cancelEditBtn').onclick = function () {
+                        formDiv.remove();
+                    };
+                };
+            });
+        }
+
+        async function createDaireler() {
+            dataBuilding = await readDataDb("building") || [];
+            dataFloors = await readDataDb("floorsData") || [];
+            dataSoldItems = await readDataDb("soldItems") || [];
+            paymentDb = await readDataDb("payment") || [];
+            const maliyetObj = await readDataDb("metreMaliyet");
+            maliyet = String(maliyetObj[0].metreMaliyeti);
+            const raw = await readDataDb("yerSahibiIleAnlasma");
+            yerSahibiIleAnlasma = Array.isArray(raw) ? raw.map(e => ({ ...e, buyerInfo: "owner" })) : [];
+            const allItems = [...dataSoldItems, ...yerSahibiIleAnlasma];
+
+            // Kat planı ismine göre room listesi haritası
+            const floorsMap = Object.fromEntries(
+                dataFloors.map(floor => [
+                    floor.floorName.replace(/ Planı$/, ""),
+                    floor.rooms
+                ])
+            );
+
+            // Satış kaydı rowNumber map'i (bulmayı hızlandırır)
+            const soldMap = Object.fromEntries(
+                allItems.map(item => [String(item.rowNumber), item])
+            );
+
+            // Sonuç dizisi direkt olarak oluşturuluyor
+            const daireler = dataBuilding.map(element => {
+                const kat = element.kat;
+                const rowNumber = element.rowNumber;
+                const ad = element.Ad || null;
+
+                const oda =
+                    (floorsMap[kat] && floorsMap[kat].find(room => room.rowNumber === rowNumber)) || {};
+
+                    // Satış bilgileri
+                    const found = soldMap[String(rowNumber)];
+                    let durum = "Müsait";
+                    if (found) {
+                        if (found.buyerInfo === "owner") {
+                            durum = "Yer Sahibi";
+                        } else if (found.buyerInfo) {
+                            durum = "Satıldı";
+                        }
+                    }
+
+                    const paymentsForThisDaire = paymentDb.filter(
+                        payment => String(payment.rowNumber) === String(rowNumber)
+                    );
+
+                    const num = parseFloat(maliyet.replace(/\./g, '').replace(',', '.'));
+                    const totalMaliyet = num*parseInt(element.genelBrutAlan);
+
+                    return {
+                        kat,
+                        ad,
+                        tip: element.alanTipi,
+                        tipi: element.tipi,
+                        m2: element.genelBrutAlan,
+                        durum,
+                        detay: "/img/detail.png",
+                        rowNumber,
+                        itemPrice: found ? found.itemPrice : null,
+                        soldDate: found ? found.date : null,
+                        buyerInfo: found ? found.buyerInfo : null,
+                        maliyet: totalMaliyet,
+                        payment: paymentsForThisDaire
+                    };
+            });
+            return daireler;
+        }
+
+        // Türk Lirası örneği için (nokta: binlik ayırıcı)  
+        function formatTL(number) {
+            let num = Number(String(number).replace(",", "."));
+            if (isNaN(num)) return "";
+            num = Math.round(num);
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        function getTodayDate() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        }
+        function formatDate(dateString) {  
+            // "yyyy-mm-dd" -> "dd.mm.yyyy"  
+            const [year, month, day] = dateString.split("-");  
+            return `${day}.${month}.${year}`;  
+        }
+    
+    async function readDataDb (activeType){
+        let array = [];
+        const dataToDb = {
+            userId: userId,
+            projectName: projectName,
+            activeType: activeType,
+            process: "read"
+        };
+
+        try {  
+            // Kullanıcı giriş bilgilerini backend'e gönder  
+            const response = await fetch('/analiz', {  
+                method: 'POST',  
+                headers: {  
+                    'Content-Type': 'application/json'  
+                },
+                credentials: 'include',
+                body: JSON.stringify(dataToDb)
+            });
+        
+            const result = await response.json();
+            if (!response.ok && !result.success) {
+                // Sunucu response.json ile hata mesajı döndüyse
+                showWarningMessage(result.message, "tamam", true);
+            } else{
+                array = result.activeType;
+            }
+        } catch (error) {
+            // Ağ hatası, sunucuya istek ulaşmazsa
+            showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+            console.log('Hata:', error);
+        }
+        return array;
+    }
+
+    async function saveDataDb (activeType, saves){
+        const dataToDb = {
+            userId: userId,
+            projectName: projectName,
+            activeType: activeType,
+            saves: saves,
+            process: "save"
+        };
+
+        try {  
+            // Kullanıcı giriş bilgilerini backend'e gönder  
+            const response = await fetch('/analiz', {  
+                method: 'POST',  
+                headers: {  
+                    'Content-Type': 'application/json'  
+                },
+                credentials: 'include',
+                body: JSON.stringify(dataToDb)
+            });
+        
+            const result = await response.json();
+            if (!response.ok && !result.success) {
+                // Sunucu response.json ile hata mesajı döndüyse
+                showWarningMessage(result.message, "tamam", true);
+            }
+        } catch (error) {
+            // Ağ hatası, sunucuya istek ulaşmazsa
+            showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+            console.log('Hata:', error);
+        }
+    }
+
+    
+
+    </script>
+
+</body>  
+</html>

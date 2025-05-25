@@ -1,0 +1,1040 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Bina Planı</title>  
+
+    <!-- Bootstrap CSS -->  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">  
+    <link rel="stylesheet" href="css/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>  
+
+    <style>  
+        body {  
+            margin: 0;  
+            padding: 0;
+            background-image: url('img/bck5.png'); 
+            background-size: cover; /* Resmi tam ekran boyutlandır */  
+            background-repeat: no-repeat; /* Resmin tekrar etmesini engeller */  
+            background-position: center; /* Resmi ortalar */  
+            height: 100vh; /* Sayfa yüksekliğini tam ekran yapar */  
+        }
+
+        table thead th {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .container-fluid {  
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: space-between; /* Elemanlar arasında boşluk bırakır */  
+        }
+        #projectNameBina {  
+            flex: 0 0 90%; /* Genişliğin %90'ini kaplar */  
+            white-space: nowrap; /* Uzun metin taşarsa satır başı yapmaz */  
+            overflow: hidden; /* Taşma durumunda gizler */  
+            text-overflow: ellipsis; /* Uzun metin yerine "..." gösterir (istenirse) */  
+            font-family: Arial, sans-serif;
+            font-size: 36px;
+            font-weight: 450;
+        }
+        .img-fluid {  
+            flex: 0 0 auto; /* Görselin genişliği otomatik olarak korunur */  
+            height: 30px; /* Görselin yüksekliği */  
+            width: 30px; /* Görselin genişliği */  
+            margin-right: 10px; /* Diğer elemanlardan biraz boşluk bırakır */  
+        }
+        .custom-btn {  
+            background-color: #847539;
+            color: white; /* Yazı rengi */  
+            border: none; /* Kenarlığın kaldırılması */  
+            border-radius: 10px; /* Kenarlıkları yuvarlaklaştırma */  
+            padding: 10px 20px; /* İç boşluklar */  
+            font-family: "Varela Round";  
+            font-size: 16px; /* Yazı boyutu */  
+            font-weight: bold; /* Kalın yazı */  
+            letter-spacing: 2px;
+            cursor: pointer; /* Fare imlecini işaretçi yapma */  
+            transition: background-color 0.3s ease; /* Hover geçiş efekti */
+            margin-right: 40px;
+        }  
+
+        .container-project-name {  
+            position: relative; /* Konumlandırma için gerekli */  
+            top: 40vh; /* Ekranın üstünden %40 aşağıya getirir (viewport height - dikey yüzdelik) */  
+            transform: translateY(-50%); /* Orta hizalama (daha iyi bir merkezleme) */  
+            margin: 0 auto; /* Yatayda ortalamak için */  
+            padding: 20px; /* İçerik ile kenarlar arasındaki boşluk */  
+            background-color: #ffffff; /* Beyaz arka plan */  
+            border-radius: 10px; /* Köşelerin yuvarlatılması */  
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Hafif gölge efekti */  
+            max-width: 400px; /* Formun genişliğini sınırla */  
+            border: 1px solid #ddd; /* İnce bir dış kenarlık */ 
+        }
+        #projectName {  
+            display: flex;  
+            flex-direction: column; /* Elemanları dikey sırala */  
+            align-items: center; /* Hepsini yatayda merkezle */  
+            width: 100%; /* Form genişliği, konteynerin genişliğine uyumlu */  
+        }  
+        #projectName input {  
+            width: 100%; /* Girdiyi tam genişlikte yap */  
+            margin-bottom: 16px; /* Girdi ve diğer elemanlar arasında dikey boşluk */  
+            padding: 12px; /* İçerik iç boşlukları */  
+            border: 1px solid #ddd; /* İnce kenarlık */  
+            border-radius: 6px; /* Köşeleri yuvarla */  
+            text-align: center; /* Kullanıcının metnini ortala */  
+        }  
+        #projectName button {  
+            padding: 12px 20px; /* Buton iç boşlukları */  
+            background-color: #007bff; /* Mavi arka plan rengi */  
+            color: white; /* Yazı rengi */  
+            font-size: 16px; /* Yazı boyutu */  
+            border: none; /* Kenarlık kaldırıldı */  
+            border-radius: 6px; /* Yuvarlatılmış köşeler */  
+            cursor: pointer; /* Fare gösterimi (pointer) */  
+            transition: 0.3s ease; /* Yumuşak animasyon geçişi */  
+        }  
+        #projectName button:hover {  
+            background-color: #0056b3; /* Hover durumunda koyu mavi arka plan */  
+        }
+
+        .container-table{  
+            margin: 20px auto; /* Ortalansın ve tüm cihazlarda düzgün gözükmesi için dış boşluk */  
+            padding: 20px; /* İçerik ile kenarlar arasındaki boşluk */  
+            background-color: #ffffff; /* Beyaz arka plan */  
+            border-radius: 10px; /* Köşelerin yuvarlatılması */  
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Hafif gölge efekti */  
+            max-width: 1200px; /* Geniş bir tablo için maksimum genişlik ayarı */  
+            border: 1px solid #ddd; /* İnce bir dış kenarlık */  
+            overflow: hidden; /* İç taşmayı gizler */  
+        } 
+        .container-bina, .container-room {  
+            width: 33.333%; /* Genişliği ekranın 3'te 1'i kadar yapar */  
+            margin: 50px auto 0 auto; /* Üstten 50px boşluk, yatayda ortala */
+            background-color: #ffffff; /* Beyaz arka plan */  
+            border-radius: 12px; /* Hafif köşe yuvarlatma */  
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Gölge ekler (Derinlik hissi) */  
+            padding: 25px; /* Kenar ile içerik arasına boşluk bırakır */  
+        } 
+        form .btn-success-table {  
+            background-color: #28a745 !important; /* Arka plan rengi */  
+            font-size: 16px !important; /* Font boyutu */  
+            padding: 10px 10px !important; /* İç boşluk (padding) */  
+            border-radius: 8px !important; /* Köşe yuvarlatma */  
+            color: white !important; /* Yazı rengi */  
+            border: none !important; /* Kenarlık kaldırma */  
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2) !important; /* Butona gölge ekleme */  
+        }
+        /* Bina Konteyneri */  
+        #building-container {  
+            margin: 0 auto;  
+            background-color: #FFFFFF;  
+            position: relative;  
+            display: flex;  
+            flex-direction: column; /* Kat sıralamasını yukarı doğru oluştur */ 
+        }  
+    
+        /* Her bir katın stili */  
+        .floor {  
+            border: 1px solid #6c757d;  
+            background-color: #adb5bd;  
+            display: flex;  
+            align-items: center;  
+            justify-content: center;  
+            font-weight: bold;  
+            font-size: 14px;  
+            color: #F8F9FA;  
+            height: 150px; /* Sabit kat yüksekliği */  
+            box-sizing: border-box;  
+        }  
+    
+        /* Çatı görünümü için üçgen   
+        .roof {  
+            width: 0;  
+            height: 0;  
+            border-left: 100px solid transparent;  
+            border-right: 100px solid transparent;  
+            border-bottom: 50px solid #ff5733;  
+            margin: 0 auto;  
+        }  */
+
+
+        #reset-btn {  
+            background-color: #dc3545; /* Reset Butonu Rengi */  
+            color: #fff;  
+        }
+
+        /* Mobil cihazlar için duyarlılık (%75 genişlik) */  
+        @media (max-width: 768px) {
+            #projectNameBina {  
+                flex: 0 0 57%; /* Boyutunu içeriğe göre belirle */  
+                overflow: hidden; /* Uzun metin taşarsa gizle */  
+                text-overflow: ellipsis; /* Uzun metinleri "..." ile göster */  
+                white-space: nowrap; /* Satır başı yapılmaz */  
+                text-align: left; /* Sol hizala */  
+                font-size: 14px; /* Mobilde daha küçük bir font */  
+            } 
+            .img-fluid {  
+                height: 25px; /* Görselin yüksekliği */  
+                width: 25px; /* Görselin genişliği */  
+                margin-right: 5px; /* Diğer elemanlardan biraz boşluk bırakır */  
+            }
+            .custom-btn {  
+                font-size: 10px; /* Yazı boyutu */
+                padding: 5px 34px;      /* Yan boşlukları biraz artırdım */
+                border-radius: 6px;      /* Köşeler hafif yuvarlatıldı */
+                color: #fff;
+                border: none;
+                margin-right: 12px;
+                display: inline-block; 
+                font-weight: 500;     
+            }
+
+            .container-table, .container-project-name {  
+                width: 90%;
+                padding: 10px; /* Daha dar alanlarda padding küçültülür */  
+                box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Hafifletilmiş gölge */  
+            }
+            .container-bina, .container-room {  
+                width: 75%; /* Mobil ekranlar için %75 genişlik */  
+            }
+
+            #building-container {  
+                max-width: 220px;  
+            }
+            .roof-svg{
+                max-width: 220px;
+                max-height: 95px;
+            }
+            .floor{
+                margin-top: -15px;
+                height: 110px;
+            }
+
+            form .btn-success-table, #projectName button {  
+                font-size: 0.75rem !important;
+            }
+
+            /* Çok küçük genişlikleri büyüt */
+            table th, table td {
+                min-width: 90px;
+                padding: 5px;
+                font-size: 0.75rem !important;
+                text-overflow: ellipsis;
+            }
+            /* Form, butonlar, select ve input'lar için de küçültme uygula: */
+            input.form-control, select.form-select {
+                font-size: 0.75rem !important;
+                color: #6c757d;
+                padding: 8px;
+                text-overflow: ellipsis;
+            }
+            /* ID sütununu biraz küçük bırakabilirsin */
+            table th:nth-child(1), table td:nth-child(1) {
+                min-width: 40px;
+            }
+            table th:nth-child(5), table td:nth-child(5),
+            table th:nth-child(6), table td:nth-child(6),
+            table th:nth-child(7), table td:nth-child(7)
+            {
+                min-width: 60px;
+            }
+            /* 'Ad' sütunu için biraz daha genişlik ver */
+            table th:nth-child(8), table td:nth-child(8) {
+                min-width: 100px;
+            }
+            /* Sil butonunun fazla dar olmasına gerek yok */
+            table th:last-child, table td:last-child {
+                min-width: 50px;
+            }  
+
+            /* Düğmeler mobilde küçültülür */  
+            .btn {  
+                padding: 5px 10px;  
+                font-size: 12px;  
+            }  
+
+            /* Satır hover efekti için */  
+            table tbody tr:hover {  
+                background-color: #f9f9f9;  
+            }
+        }
+    </style>  
+</head>  
+<body class="bg-light">  
+
+    <!-- Responsive Header -->  
+    <nav class="header d-flex justify-content-between align-items-center px-3">
+        <span>Yapıo</span>
+        <!-- Sağ Taraf Giriş Butonu -->
+        <button class="btn custom-btn" id="loginButton">PROJELER</button>  
+    </nav>
+
+    <!-- Navbar -->  
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm mt-4" id="projectBar">  
+        <div class="container-fluid">  
+            <!-- Sol Kısım: Proje Adı -->  
+            <h4 class="navbar-brand mb-0" id="projectNameBina">Proje Adı</h4>  
+    
+            <!-- Orta Kısım: Ana Sayfa Butonu -->  
+            <button class="btn d-flex align-items-center justify-content-center p-0 mx-3" id="buttonHome">  
+                <img src="img/home1_1.png" alt="Katlar Görseli" class="img-fluid rounded">  
+            </button>  
+        </div>  
+    </nav>
+
+    <div class="container-project-name">  
+        <form id="projectName">  
+            <h2 class="projectInput">Proje Adını Giriniz</h2>  
+            <input type="text" id="projectInput" placeholder="Proje adını buraya yazınız" required />  
+            <button   
+                type="submit"  
+                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded w-auto">  
+                Kaydet  
+            </button> 
+        </form>  
+    </div>
+
+    <div class="container-table my-5 d-none">  
+        <h2 class="text-center mb-4">Ruhsat Harcına Esas Alanlar</h2>  
+        <form id="netSquare">  
+            <div class="table-responsive">  
+                <table class="table table-bordered table-striped align-middle">  
+                    <thead class="table-dark">  
+                        <tr>  
+                            <th>#</th>  
+                            <th>Bulunduğu Kat</th>  
+                            <th>Kullanım Amacı</th>  
+                            <th>Tipi</th>
+                            <th   
+                                data-bs-toggle="tooltip"   
+                                title="Ortak alan hariç Bağımsız Bölüm Net Alanıdır (m²).">  
+                                Net Alanı
+                            </th>
+                            <th   
+                                data-bs-toggle="tooltip"   
+                                title="Ortak alan hariç Bağımsız Bölüm Brüt Alanıdır (m²).">  
+                                Brüt Alanı  
+                            </th>
+                            <th>Genel Brüt Alan</th>  
+                            <th>Ad</th>  
+                            <th>Sil</th>
+                        </tr>  
+                    </thead>  
+                    <tbody id="table-rows">  
+                        <tr>  
+                            <td>1</td>  
+                            <td>  
+                                <select class="form-select">  
+                                    <option>Zemin Kat</option>  
+                                    <option>Bodrum Kat</option>  
+                                    <option>1. Kat</option>  
+                                    <option>2. Kat</option>  
+                                    <option>3. Kat</option>  
+                                    <option>4. Kat</option>  
+                                    <option>5. Kat</option>  
+                                    <option>6. Kat</option>  
+                                </select>  
+                            </td>  
+                            <td>  
+                                <select class="form-select">  
+                                    <option>Daire</option>  
+                                    <option>Dükkan</option>  
+                                    <option>Ofis</option>  
+                                    <option>Depo</option>  
+                                </select>  
+                            </td>  
+                            <td>  
+                                <select class="form-select">  
+                                    <option>1 (dükkan, depo, ofis vs)</option>  
+                                    <option>1+1</option>  
+                                    <option>2+0</option>  
+                                    <option>2+1</option>  
+                                    <option>3+1</option>  
+                                    <option>3+1 dublex</option>  
+                                    <option>4+1</option>  
+                                    <option>4+1 dublex</option>  
+                                    <option>5+1 dublex</option>  
+                                </select>  
+                            </td>  
+                            <td><input type="number" class="form-control" placeholder="m²" required></td> <!-- Net alanı-->
+                            <td><input type="number" class="form-control brut-alan" placeholder="m²" required></td>  <!-- Brüt alanı-->
+                            <td><input type="number" class="form-control genel-brut-alan" placeholder="m²" required></td> <!-- Genel Brüt alanı-->
+                            <td><input type="text" class="form-control" placeholder="Ad"></td>
+                            <td>  
+                                <button id="delete-btn-1" type="button" class="btn btn-danger btn-sm delete-row-btn">Sil</button>
+                            </td>  
+                        </tr>  
+                    </tbody>  
+                </table>  
+            </div>  
+            <div class="d-flex justify-content-between">  
+                <button id="add-row-btn" class="btn btn-primary mt-3">Satır Ekle</button>
+                <button id="progress-btn" type="submit" class="btn btn-success-table mt-3">İlerle</button>  
+            </div>  
+        </form>  
+    </div>
+
+
+    <!-- Bina Planı: Tuğlalı Çatı ile! -->  
+    <div class="container-bina py-5 d-none">  
+        <h1 class="text-center mb-4">Bina Planı Tasarımı</h1>  
+
+        <!-- Kat Sayısı Formu -->  
+        <form id="building-form" class="card p-4 mb-4 mx-auto shadow" style="max-width: 500px;"></form>  
+
+        <!-- Bina Alanı -->  
+        <div id="building-container" class="d-none mx-auto shadow" style="width: 200px;">  
+            <!-- SVG Tuğla Desenli Çatı buraya JS ile eklenecek -->  
+        </div>  
+
+        <!-- Buton Alanı -->  
+        <div id="button-container" class="text-center">  
+            <button id="reset-btn" class="btn btn-danger mt-4 d-none">Sıfırla</button>  
+            <button id="next-btn" class="btn btn-success mt-4 d-none">Sonraki</button>  
+        </div>  
+    </div>  
+
+
+
+    </div> 
+
+    <script type="module">
+        import { showWarningMessage } from '/js/showMessage.js';
+        import { getBuildingInfos, getFloorNumber, isBodrum, populateTable } from '/js/building.js';
+
+        const projectNameBina = document.getElementById('projectNameBina'); 
+        const projectNameForm = document.getElementById('projectName'); 
+        const projectBar = document.querySelector("#projectBar");
+        const buttonHome = document.getElementById("buttonHome");
+        const containerProjectName = document.querySelector(".container-project-name");
+        const containerTable = document.querySelector(".container-table");
+        const progressBtn = document.getElementById("progress-btn");
+        const loginButton = document.getElementById("loginButton");
+
+        const buildingForm = document.getElementById("building-form");  
+        const containerBina = document.querySelector(".container-bina");  
+        const resetBtn = document.getElementById("reset-btn");  
+        const nextBtn = document.getElementById("next-btn");  
+        const buildingContainer = document.getElementById("building-container");
+
+        let rowCounter = 2;
+
+        let userId = null;
+        let projectName = null;
+        let dataFromDb = null;
+        let floorsDataFromDb = null;
+         
+        projectNameForm.addEventListener('submit', async (event) => {  
+            event.preventDefault(); // Sayfanın yeniden yüklenmesini önler  
+            const projectNameInput = document.getElementById('projectInput').value;
+            projectName = projectNameInput;
+            const data = {
+                projectName : projectNameInput,
+                userId : userId
+            };
+            try {  
+                // Kullanıcı giriş bilgilerini backend'e gönder  
+                const response = await fetch('/bina', {  
+                    method: 'POST',  
+                    headers: {  
+                        'Content-Type': 'application/json'  
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(data)  
+                });  
+           
+                const result = await response.json();
+                if (!response.ok && !result.success) {
+                    // Sunucu response.json ile hata mesajı döndüyse
+                    showWarningMessage(result.message, "tamam", true);
+                } else{
+                    const projectNameString = projectNameInput.toUpperCase();
+                    projectNameBina.textContent = projectNameString;
+                    containerProjectName.classList.add("d-none");
+                    containerTable.classList.remove("d-none");
+                }
+            } catch (error) {
+                // Ağ hatası, sunucuya istek ulaşmazsa
+                showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+                console.log('Hata:', error);
+            }
+            
+        });
+
+        // KULLANIM AMACI & TİPİ ARASINDAKİ BAĞI
+        function bindKullanimAmaciAndTipi(row) {
+            const kullanimAmaciSelect = row.querySelector('td:nth-child(3) select');
+            const tipiSelect = row.querySelector('td:nth-child(4) select');
+
+            function updateTipiOptions() {
+                const amac = kullanimAmaciSelect.value;
+                for (let i = 0; i < tipiSelect.options.length; i++) {
+                    let opt = tipiSelect.options[i];
+                    if (amac === "Daire") {
+                        if (opt.textContent.trim().startsWith("1 (dükkan")) {
+                            opt.disabled = true;
+                            if (tipiSelect.selectedIndex === i) {
+                                tipiSelect.selectedIndex = 1;
+                            }
+                        } else {
+                            opt.disabled = false;
+                        }
+                    } else {
+                        opt.disabled = !(i === 0);
+                        if (!(i === 0) && tipiSelect.selectedIndex === i) {
+                            tipiSelect.selectedIndex = 0;
+                        }
+                    }
+                }
+            }
+
+            kullanimAmaciSelect.addEventListener("change", updateTipiOptions);
+            updateTipiOptions();
+        }
+
+        // SAYFA YÜKLENDİĞİNDE VE YENİ SATIR EKLENDİĞİNDE ÇAĞIR
+        function bindKullanimAmaciToExistingRows() {
+            document.querySelectorAll("#table-rows tr").forEach(row => {
+                bindKullanimAmaciAndTipi(row);
+            });
+        }
+        document.addEventListener("DOMContentLoaded", bindKullanimAmaciToExistingRows);
+
+
+        
+        // Satır ekleme işlevi  
+        function addRow() {  
+            const tableRows = document.getElementById("table-rows");  
+            const newRowHTML = `  
+                <tr>  
+                    <td>${tableRows.children.length + 1}</td>  
+                    <td>  
+                        <select class="form-select">  
+                            <option>Zemin Kat</option>  
+                            <option>Bodrum Kat</option>
+                            <option>1. Kat</option>  
+                            <option>2. Kat</option>  
+                            <option>3. Kat</option>  
+                            <option>4. Kat</option>  
+                            <option>5. Kat</option>  
+                            <option>6. Kat</option>  
+                        </select>  
+                    </td>  
+                    <td>  
+                        <select class="form-select">  
+                            <option>Daire</option>  
+                            <option>Dükkan</option>  
+                            <option>Ofis</option>  
+                            <option>Depo</option>  
+                        </select>  
+                    </td> 
+                    <td>  
+                        <select class="form-select">  
+                            <option>1 (dükkan, depo vs)</option>  
+                            <option>1+1</option>  
+                            <option>2+0</option>  
+                            <option>2+1</option>  
+                            <option>3+1</option>  
+                            <option>3+1 dublex</option>  
+                            <option>4+1</option>  
+                            <option>4+1 dublex</option>  
+                            <option>5+1 dublex</option>  
+                        </select>  
+                    </td>  
+                    <td><input type="number" class="form-control" placeholder="m²" required></td>
+                    <td><input type="number" class="form-control brut-alan" placeholder="m²" required></td>
+                    <td><input type="number" class="form-control genel-brut-alan" placeholder="m²" required></td>  
+                    <td><input type="text" class="form-control" placeholder="Ad"></td>  
+                    <td>  
+                        <button id="delete-btn-${rowCounter}" type="button" class="btn btn-danger btn-sm delete-row-btn">Sil</button>  
+                    </td>  
+                </tr>  
+            `;  
+
+            tableRows.insertAdjacentHTML("beforeend", newRowHTML);
+            attachDeleteEvent(`delete-btn-${rowCounter}`);
+            bindKullanimAmaciAndTipi(tableRows.lastElementChild);
+            rowCounter++;
+        }  
+
+        // Satır silme işlevi  
+        function deleteRowById(buttonId) {  
+            const button = document.getElementById(buttonId); // Butonu id ile seçiyoruz  
+            if (!button) return; // Eğer doğru bir buton bulunamazsa işlevi durdur  
+
+            const row = button.closest("tr"); // İlgili satırı seç  
+            const tableRows = document.getElementById("table-rows");  
+            const rows = tableRows.querySelectorAll("tr");  
+
+            // Eğer tek bir satır kaldıysa sadece içeriği temizle  
+            if (rows.length === 1) {  
+                row.querySelectorAll("input, select").forEach((element) => {  
+                    if (element.tagName === "INPUT") {  
+                        element.value = ""; // Input içeriklerini temizle  
+                    } else if (element.tagName === "SELECT") {  
+                        element.selectedIndex = 0; // Select öğesini varsayılana ayarla  
+                    }  
+                });  
+            } else {  
+                // Daha fazla satır varsa satırı tamamen kaldır  
+                row.remove();  
+                updateRowNumbers(); // Satır numaralarını güncelle  
+            }  
+        }  
+
+        // Dinamik olarak "Sil" butonlarına olay bağlama işlevi  
+        function attachDeleteEvent(buttonId) {
+            const button = document.getElementById(buttonId);  
+            button.addEventListener("click", () => deleteRowById(buttonId));  
+        }  
+
+        // Satır numaralarını güncelleme işlevi  
+        function updateRowNumbers() {  
+            const rows = document.querySelectorAll("#table-rows tr");  
+            rows.forEach((row, index) => {  
+                row.querySelector("td:first-child").textContent = index + 1; // İlk sütuna yeni numaraları yaz
+            });  
+        }  
+
+        // Mevcut satırlara başlangıç silme olaylarını bağlama  
+        function attachEventsToExistingRows() {  
+            const deleteButtons = document.querySelectorAll(".delete-row-btn");  
+            deleteButtons.forEach((button) => {  
+                const buttonId = button.id;  
+                attachDeleteEvent(buttonId); // Her bir silme butonunun id'si ile olayları bağla  
+            });  
+        }
+
+        // Tüm input alanları
+        const inputs = document.querySelectorAll('.form-control');  
+
+        // Her bir input alanına bir "input" olayı dinleyicisi
+        inputs.forEach(input => {  
+            input.addEventListener('input', (event) => {  
+                const value = parseFloat(event.target.value); // Kullanıcıdan gelen değeri al  
+                if (value <= 0) {  
+                    event.target.value = ""; // Eğer değer negatifse, input'u temizle  
+                }  
+            });  
+        });
+
+        // Tabloya girilen verileri alan fonk.  
+        function getTableData() {  
+            const rows = document.querySelectorAll("#table-rows tr");   
+
+            const tableData = []; // Tüm verilerin saklanacağı dizi  
+
+            rows.forEach((row) => {  
+                const rowData = {};
+
+                rowData["rowNumber"] = row.querySelector("td:first-child").textContent.trim(); // 1. sütundaki satır numarası  
+                rowData["kat"] = row.querySelector("td:nth-child(2) select").value; // Kategori seçimi (2. sütun)  
+                rowData["alanTipi"] = row.querySelector("td:nth-child(3) select").value; // Alan tipi seçimi (3. sütun)  
+                rowData["tipi"] = row.querySelector("td:nth-child(4) select").value; // tipi seçimi (4. sütun)  
+                rowData["netAlan"] = row.querySelector("td:nth-child(5) input").value; // netAlan tipi seçimi (5. sütun)  
+                rowData["brutAlan"] = row.querySelector("td:nth-child(6) input").value; // Brüt alan verisi
+                rowData["genelBrutAlan"] = row.querySelector("td:nth-child(7) input").value; // Genel brüt alan verisi
+                rowData["Ad"] = row.querySelector("td:nth-child(8) input").value; // Ad bilgisi
+                tableData.push(rowData);
+            });  
+
+            return tableData;
+        }
+
+        function resetTableToInitialState() {  
+            const form = document.getElementById("netSquare"); // Form elemanını seç  
+    
+            // Tüm input ve select elemanlarını sıfırla  
+            const inputs = form.querySelectorAll("input");  
+            const selects = form.querySelectorAll("select");  
+            
+            // Input alanlarını temizle  
+            inputs.forEach(input => {  
+                if (input.type === "number" || input.type === "text") {  
+                    input.value = ""; // Değerleri temizle  
+                }  
+            });  
+
+            // Select elemanlarını varsayılana döndür  
+            selects.forEach(select => {  
+                select.selectedIndex = 0; // İlk seçeneği seç  
+            });  
+
+            // Tabloyu temizle ve sadece ilk satırı bırak  
+            const tableRows = document.getElementById("table-rows");  
+            tableRows.innerHTML = `  
+                <tr>  
+                    <td>1</td>  
+                    <td>  
+                        <select class="form-select">  
+                            <option>Zemin Kat</option>  
+                            <option>Bodrum Kat</option>  
+                            <option>1. Kat</option>  
+                            <option>2. Kat</option>  
+                            <option>3. Kat</option>  
+                            <option>4. Kat</option>  
+                            <option>5. Kat</option>  
+                            <option>6. Kat</option>  
+                        </select>  
+                    </td>  
+                    <td>  
+                        <select class="form-select">  
+                            <option>Daire</option>  
+                            <option>Dükkan</option>  
+                            <option>Ofis</option>  
+                            <option>Depo</option>  
+                        </select>  
+                    </td>  
+                    <td><input type="number" class="form-control" placeholder="m²" required></td>   
+                    <td><input type="number" class="form-control brut-alan" placeholder="m²" required></td>  
+                    <td><input type="number" class="form-control genel-brut-alan" placeholder="m²" required></td>  
+                    <td><input type="text" class="form-control" placeholder="Ad"></td>  
+                    <td>  
+                        <button id="delete-btn-1" type="button" class="btn btn-danger btn-sm delete-row-btn">Sil</button>  
+                    </td>  
+                </tr>  
+            `;  
+
+            // Form üzerindeki "valid" ve "invalid" doğrulama durumlarını sıfırla  
+            form.classList.remove("was-validated");  
+        }
+
+        buttonHome.addEventListener("click", () => {
+            window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
+        });
+
+        // Tuğla desenli çatı için SVG kodu  
+        const roofSVG = `  
+            <svg class="roof-svg" viewBox="0 0 300 90" style="display:block; margin:0 auto; width:300px; height:130px;">  
+            <defs>  
+                <pattern id="brick" patternUnits="userSpaceOnUse" width="18" height="15">  
+                <image href="img/brick.png" width="18" height="15"/>  
+                <line x1="0" y1="15" x2="18" y2="15" stroke="#fff" stroke-width="2"/>  
+                <line x1="9" y1="0" x2="9" y2="15" stroke="#fff" stroke-width="2"/>  
+                <line x1="0" y1="0" x2="0" y2="15" stroke="#fff" stroke-width="2"/>  
+                <line x1="18" y1="0" x2="18" y2="15" stroke="#fff" stroke-width="2"/>  
+                </pattern>  
+            </defs>  
+            <polygon points="0,90 150,0 300,90" fill="url(#brick)" />  
+            </svg>
+        `;
+        //<rect x="0" y="0" width="30" height="15" fill="#882E2E"/> 
+
+        // DOM yüklendiğinde olayları bağlama  
+        document.addEventListener("DOMContentLoaded", async () => {  
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));  
+            const tooltipList = tooltipTriggerList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+            window.user = {{#if user}}
+                { "email": "{{user.email}}", "role": "{{user.role}}", "userId": "{{user.id}}", "project": {{{json project}}} }
+            {{else}}
+                { "role": "{{role}}" }
+            {{/if}};
+      
+            //console.log("userId ",window.user.project);
+            userId = window.user.userId;
+            if(window.user.project){
+                const projectNameDb = window.user.project.projectName;
+                projectName = projectNameDb;
+                const tableDataDb = window.user.project.building;
+                if(tableDataDb && tableDataDb.length > 0){
+                    const rowNumber = tableDataDb.length;
+                    rowCounter = rowNumber+1;
+                    populateTable(tableDataDb);
+                    const projectNameString = projectNameDb.toUpperCase();
+                    projectNameBina.textContent = projectNameString;
+                    projectBar.classList.remove("d-none");
+                    buttonHome.classList.remove("d-none");
+                } else if(tableDataDb && tableDataDb.length == 0){
+                    const projectNameString = projectNameDb.toUpperCase();
+                    projectNameBina.textContent = projectNameString;
+                    containerProjectName.classList.add("d-none");
+                    containerTable.classList.remove("d-none");
+                    buttonHome.classList.add("d-none");
+                    //projectBar.classList.add("d-none");
+                } else{
+                    const userConfirmed = await showWarningMessage("Hata, Bozuk veri! Lütfen projeyi tekrar oluşturunuz", "tamam2", false);
+                    if(userConfirmed){
+                        window.location.href = "/";
+                    }
+                    return;
+                }
+            } else{
+                containerProjectName.classList.remove("d-none");
+                containerTable.classList.add("d-none");
+                //projectBar.classList.add("d-none");
+                buttonHome.classList.add("d-none");
+            }
+
+            //attachDynamicCalculations();
+
+            const addRowBtn = document.getElementById("add-row-btn");  
+            if (addRowBtn) {  
+                addRowBtn.addEventListener("click", (e) => {  
+                    e.preventDefault();
+                    addRow();  
+                    //attachDynamicCalculations();
+                });  
+            }
+
+            attachEventsToExistingRows(); // Mevcut silme butonlarına olay bağla
+
+            const netSquare = document.getElementById("netSquare");
+
+            netSquare.addEventListener("submit", async (e) => {
+                e.preventDefault(); 
+                if (!netSquare.checkValidity()) {
+                    e.stopPropagation();
+                }
+                netSquare.classList.add("was-validated"); // Doğrulama sınıfını ekle  
+                const building = getTableData();
+                //const data = readData("building");
+
+                const dataToDb = {
+                    userId: userId,           // kullanıcı id'si
+                    projectName: projectName, // proje adı
+                    building: building
+                };
+
+                try {  
+                    // Kullanıcı giriş bilgilerini backend'e gönder  
+                    const response = await fetch('/bina', {  
+                        method: 'POST',  
+                        headers: {  
+                            'Content-Type': 'application/json'  
+                        },
+                        credentials: 'include',
+                        body: JSON.stringify(dataToDb)
+                    });
+            
+                    const result = await response.json();
+                    if (!response.ok && !result.success) {
+                        // Sunucu response.json ile hata mesajı döndüyse
+                        showWarningMessage(result.message, "tamam", true);
+                    } else{
+                        dataFromDb = result.userInputs;
+                        //console.log("data ",dataFromDb);
+                    }
+                } catch (error) {
+                    // Ağ hatası, sunucuya istek ulaşmazsa
+                    showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+                    console.log('Hata:', error);
+                }
+
+                //const data = readData("building");
+                
+                const bodrumlar = dataFromDb.filter(d => d.kat === "Bodrum Kat");
+                const zeminler = dataFromDb.filter(d => d.kat === "Zemin Kat");
+                const digerler = dataFromDb.filter(d => d.kat !== "Bodrum Kat" && d.kat !== "Zemin Kat");
+                // Eğer bodrum kat varsa: önce bodrum, sonra zemin, sonra diğerler
+                let regularBuilding;
+                if (bodrumlar.length > 0) {
+                    regularBuilding = [...bodrumlar, ...zeminler, ...digerler];
+                } else {
+                    // Bodrum yoksa: önce zemin, sonra diğerler
+                    regularBuilding = [...zeminler, ...digerler];
+                }
+                // Sıralamadan sonra yeni rowNumber ver:
+                regularBuilding.forEach((e, i) => {
+                    e.rowNumber = i + 1;
+                });
+                //localStorage.setItem("building", JSON.stringify(regularBuilding));
+
+                containerTable.classList.add("d-none");
+                setBuildingView(dataFromDb);
+            });
+
+            
+        });
+
+        loginButton.addEventListener("click", () => {
+            window.location.href = "/";
+        });
+
+
+        let katsayisi = null;
+
+        // Bina Oluşturma İşlevi  
+        function setBuildingView(dataDb){
+            katsayisi = 0;
+            //const dataDb = readData("building");
+            getBuildingInfos(dataDb);
+            
+            const totalFloors = getFloorNumber();
+            const isbodrum = isBodrum(dataDb);
+            containerBina.classList.remove("d-none");  
+
+            if(isbodrum){
+                katsayisi = totalFloors + 1;
+                
+            } else{
+                katsayisi = totalFloors;
+            }
+            
+            // Kat yüksekliği hesaplaması
+            const buildingHeight = totalFloors * 100;  
+
+            // Bina konteynerine stil atayarak yükseklik ve görsel düzeni ekle  
+            buildingContainer.style.height = `${buildingHeight + 100}px`; // 50px çatı için ekleniyor  
+            buildingContainer.style.width = "300px";
+            buildingContainer.classList.remove("d-none");  
+
+            // Eski bina içeriğini temizle  
+            buildingContainer.innerHTML = "";  
+
+            // ----- ÇATI EKLE (SVG TUĞLALI) -----  
+            buildingContainer.insertAdjacentHTML('beforeend', roofSVG); 
+
+            // Katları oluşturma  
+            for (let i = totalFloors - 1; i >= 0; i--) {  
+                const floor = document.createElement("div");  
+                floor.classList.add("floor");  
+
+                // Kat numarasını belirleme  
+                if(!isbodrum){
+                    if (i === 0) {  
+                        floor.innerText = `Zemin Kat`; // İlk kat zemin kat  
+                    } else {  
+                        floor.innerText = `${i}. Kat`; // Diğer katları sıralı numaralandır  
+                    }
+                } else{
+                    if (i === 0) {  
+                        floor.innerText = `Bodrum Kat`; // İlk kat zemin kat  
+                        floor.style.backgroundColor = "#404448";
+                    } else if(i === 1){  
+                        floor.innerText = `Zemin Kat`; // Diğer katları sıralı numaralandır  
+                    } else{
+                        floor.innerText = `${i-1}. Kat`;
+                    }
+                }
+
+                // Katları binaya ekle  
+                buildingContainer.appendChild(floor);  
+            }  
+
+            // Formu gizle ve diğer butonları göster  
+            buildingForm.classList.add("d-none");  
+            resetBtn.classList.remove("d-none");  
+            nextBtn.classList.remove("d-none");  
+        }
+
+
+        // Resetleme İşlevi  
+        resetBtn.addEventListener("click", () => {  
+            buildingContainer.innerHTML = ""; // Binayı temizle
+            buildingContainer.classList.add("d-none"); // Bina görünümünü gizle
+            containerBina.classList.add("d-none");
+            containerTable.classList.remove("d-none");
+            resetTableToInitialState();
+            resetBtn.classList.add("d-none"); // Reset butonunu gizle  
+            nextBtn.classList.add("d-none"); // Sonraki butonunu gizle  
+            
+        });  
+
+        // Sonraki Butonu İşlevi  
+        nextBtn.addEventListener("click", async () => {
+            containerBina.classList.add("d-none");
+
+            // Önce dizi içinden ilgili grupları ayır:
+            const bodrumlar = dataFromDb.filter(d => d.kat === "Bodrum Kat");
+            const zeminler = dataFromDb.filter(d => d.kat === "Zemin Kat");
+            const digerler = dataFromDb.filter(d => d.kat !== "Bodrum Kat" && d.kat !== "Zemin Kat");
+
+            // Eğer bodrum kat varsa: önce bodrum, sonra zemin, sonra diğerler
+            let regularBuilding;
+            if (bodrumlar.length > 0) {
+                regularBuilding = [...bodrumlar, ...zeminler, ...digerler];
+            } else {
+                // Bodrum yoksa: önce zemin, sonra diğerler
+                regularBuilding = [...zeminler, ...digerler];
+            }
+
+            // Sıralamadan sonra yeni rowNumber ver:
+            regularBuilding.forEach((e, i) => {
+                e.rowNumber = i + 1;
+            });
+
+            const floorsData = setFloorsData(regularBuilding);
+
+            const dataToDb = {
+                userId: userId,           // kullanıcı id'si
+                projectName: projectName, // proje adı
+                floorsData: floorsData
+            };
+
+            try {  
+                // Kullanıcı giriş bilgilerini backend'e gönder  
+                const response = await fetch('/bina', {  
+                    method: 'POST',  
+                    headers: {  
+                        'Content-Type': 'application/json'  
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(dataToDb)
+                });
+        
+                const result = await response.json();
+                if (!response.ok && !result.success) {
+                    // Sunucu response.json ile hata mesajı döndüyse
+                    showWarningMessage(result.message, "tamam", true);
+                } else{
+                    floorsDataFromDb = result.floorsData;
+                    console.log("floorsDataFromDb ",floorsDataFromDb);
+                }
+
+            } catch (error) {
+                // Ağ hatası, sunucuya istek ulaşmazsa
+                showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+                console.log('Hata:', error);
+            }
+
+            window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
+        });  
+
+        function setFloorsData(data) {
+            const floors = [];
+            data.forEach(item => {
+                if (!floors.includes(item.kat)) floors.push(item.kat);
+            });
+
+            const result = [];
+
+            floors.forEach((floor) => {
+                // Kat adı sonuna " Planı" ekle
+                const floorName = `${floor} Planı`;
+
+                // Bu kattaki tüm odalar
+                const roomsOfFloor = data
+                    .filter(item => item.kat === floor)
+                    .map((item) => {
+                        // Oda Ad olarak isimlendiriliyor
+                        const roomObj = {
+                            roomName: item.Ad,
+                            isSold: "false"
+                        };
+                        if(item.rowNumber) roomObj.rowNumber = String(item.rowNumber);
+                        return roomObj;
+                    });
+
+                // Kat sırası için sadece "1. Kat" ve sonrası: floorNumber
+                const floorObj = {
+                    floorName,
+                    rooms: roomsOfFloor
+                };
+                const match = floor.match(/(\d+)\. Kat/);
+                if(match) floorObj.floorNumber = parseInt(match[1]);
+
+                result.push(floorObj);
+            });
+
+            return result;
+        }
+    
+    </script>  
+</body>  
+</html>

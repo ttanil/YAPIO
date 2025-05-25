@@ -1,0 +1,29 @@
+{
+  "name": "insaathesap",
+  "version": "1.0.0",
+  "description": "With the \"İnşaatHesap\" application, users can view, track, and update the sales status, total cost, and sale price of all apartments and areas with a single click.",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "npx nodemon app.js"
+  },
+  "author": "tahsintanil",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "express-fileupload": "^1.5.1",
+    "express-handlebars": "^8.0.1",
+    "express-session": "^1.18.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.14.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

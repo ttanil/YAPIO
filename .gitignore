@@ -1,0 +1,12 @@
+# node ve npm
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ortam değişkenleri
+.env
+
+# işletim sistemi dosyaları
+.DS_Store
+Thumbs.db

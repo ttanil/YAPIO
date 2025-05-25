@@ -1,0 +1,530 @@
+<!DOCTYPE html>  
+<html lang="en">  
+    <head>  
+        <meta charset="UTF-8">  
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <title>Register</title>
+        <!-- Bootstrap CSS -->  
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">  
+        <link rel="stylesheet" href="css/index.css"> 
+    </head>  
+    <style>
+        body {  
+            margin: 0;  
+            padding: 0; 
+            background-image: url('img/bck7_7.png');
+            background-repeat: no-repeat;  
+            background-size: 90%; 
+            background-position: bottom;  
+            background-color: #f4f2f2;
+            height: 120vh;  
+            font-family: Arial, sans-serif;  
+        }
+
+        .custom-btn {  
+            background-color: #847539;
+            color: white; /* Yazı rengi */  
+            border: none; /* Kenarlığın kaldırılması */  
+            border-radius: 10px; /* Kenarlıkları yuvarlaklaştırma */  
+            padding: 10px 20px; /* İç boşluklar */  
+            font-family: "Varela Round";  
+            font-size: 16px; /* Yazı boyutu */  
+            font-weight: bold; /* Kalın yazı */  
+            letter-spacing: 2px;
+            cursor: pointer; /* Fare imlecini işaretçi yapma */  
+            transition: background-color 0.3s ease; /* Hover geçiş efekti */
+            margin-right: 40px;
+        }  
+
+        .custom-modal-position {
+            position: relative;
+            top: 20%;
+        }
+
+        @media (max-width: 576px) { 
+            body {  
+                background-image: url('img/bck7_6.png');
+                height: 110vh;
+                background-size: 100%;
+                background-repeat:no-repeat; 
+                background-position:bottom;
+            }
+            .custom-btn {  
+                padding: 10px 20px; /* İç boşluklar */  
+                font-size: 12px; /* Yazı boyutu */
+                margin-right: 15px;
+            }
+
+            #registerForm .area,
+            #registerForm .area-bottom {
+                margin-top: -10px !important; 
+            }
+        }
+    </style>
+<body>
+    <!-- Responsive Header -->  
+    <nav class="header d-flex justify-content-between align-items-center px-3">  
+        <!-- Sol Taraf Başlık veya Logo -->  
+        <span>Yapıo</span>  
+    
+        <!-- Sağ Taraf Giriş Butonu -->  
+        <button class="btn custom-btn" id="indexPageButton">GERİ</button>  
+    </nav>  
+
+    <div class="container d-flex align-items-center min-vh-100 justify-content-center">
+        <div class="row w-100 justify-content-center">
+            <div class="col-lg-5 col-md-7 col-sm-9">
+                <div class="card shadow-lg border-0 rounded-4 p-4">
+                    <div class="card-body">
+                        <h3 class="mb-4 text-center fw-bold">Kayıt Ol</h3>
+                        <form id="registerForm">
+                            <div class="mb-3 text-center">
+                                <div class="btn-group" role="group" aria-label="Kullanıcı Tipi Seçimi">
+                                    <!-- ŞİRKET SOLDA - DEFAULT SEÇİLİ -->
+                                    <input type="radio" class="btn-check" name="userType" id="btnSirket" autocomplete="off" value="sirket" checked>
+                                    <label class="btn btn-outline-primary" for="btnSirket">Şirket</label>
+
+                                    <!-- ŞAHIS SAĞDA -->
+                                    <input type="radio" class="btn-check" name="userType" id="btnSahis" autocomplete="off" value="sahis">
+                                    <label class="btn btn-outline-primary" for="btnSahis">Şahıs</label>
+                                </div>
+                            </div>
+                            <div class="area-top">
+                                <label for="name" class="form-label" id="nameLabel"></label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Şirket Adı" required>
+                            </div>
+                            <div class="area">
+                                <label for="phone" class="form-label" id="phoneLabel"></label>
+                                <input type="text" class="form-control" id="phone" name="phone" placeholder="Telefon numarası (0..)" maxlength="11" minlength="11" pattern="^\d{11}$" required>
+                            </div>
+                            <div class="area">
+                                <label for="email" class="form-label"></label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="E-posta adresiniz" required>
+                            </div>
+                            <div class="area">
+                                <label for="password" class="form-label"></label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Şifrenizi giriniz" required>
+                            </div>
+                            <div class="area">
+                                <label for="confirmPassword" class="form-label"></label>
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Şifrenizi tekrar yazınız" required>
+                            </div>
+                            <!-- Şahıs alanları -->
+                            <div class="area d-none" id="sahisFields">
+                                <label for="tcno" class="form-label"></label>
+                                <input type="text" class="form-control" id="tcno" name="tcno" maxlength="11" pattern="\d{11}" placeholder="11 haneli T.C. Kimlik No">
+                                <div class="row mt-0">
+                                    <div class="col-6">
+                                        <label for="sahisIl" class="form-label"></label>
+                                        <input type="text" class="form-control" id="sahisIl" name="sahisIl" placeholder="İl">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="sahisIlce" class="form-label"></label>
+                                        <input type="text" class="form-control" id="sahisIlce" name="sahisIlce" placeholder="İlçe">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Şirket alanları -->
+                            <div class="area" id="sirketFields">
+                                <label for="vergiNo" class="form-label"></label>
+                                <input type="text" class="form-control" id="vergiNo" name="vergiNo" maxlength="10" pattern="\d{10}" placeholder="10 haneli Vergi No">
+                                <div class="row mt-0">
+                                        <div class="col-6">
+                                            <label for="sirketIl" class="form-label"></label>
+                                            <input type="text" class="form-control" id="sirketIl" name="sirketIl" placeholder="İl">
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="sirketIlce" class="form-label"></label>
+                                            <input type="text" class="form-control" id="sirketIlce" name="sirketIlce" placeholder="İlçe">
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="form-check mb-2 mt-3">
+                                <input class="form-check-input" type="checkbox" value="" id="kvkkCheck" required>
+                                <label class="form-check-label" for="kvkkCheck">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#conditionModal">Kullanım koşullarını</a> ve 
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">KVKK metnini</a> okudum, kabul ediyorum.
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 mt-2" id="registerButton">Kayıt Ol</button>
+                        </form>
+                        <p class="text-center mt-3 mb-0">Hesabınız var mı? <a href="/login" class="text-decoration-none">Giriş yap</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal KVKK -->  
+    <div class="modal fade" id="conditionModal" tabindex="-1" aria-labelledby="conditionModalLabel" aria-hidden="true">  
+        <div class="modal-dialog custom-modal-position">  
+            <div class="modal-content">  
+                <!-- Modal Başlık -->  
+                <div class="modal-header">  
+                    <h5 class="modal-title" id="conditionModalLabel" style="font-family: 'Verdana', sans-serif; color: #333;">Kullanım Koşulları — İnşaatHesap</h5>
+                </div>  
+                <!-- Modal İçerik -->  
+                <div class="modal-body" style="font-family: 'Arial', sans-serif; color: #555; max-height: 400px; overflow-y: auto;">  
+                    <p>  
+                        1. Genel Bilgilendirme<br>  
+                        Bu web ve mobil uygulamayı (“İnşaatHesap”) kullanmaya başladığınızda aşağıdaki kullanım koşullarını kabul etmiş sayılırsınız. 
+                        Lütfen uygulamamızı kullanmadan önce metni dikkatlice okuyunuz.  
+                    </p>
+                    <p>  
+                        2. Hizmet Tanımı<br>  
+                        inşaathesap, kullanıcılarına inşaat maliyet hesaplama, malzeme ve işçilik listeleri oluşturma, proje yönetimi gibi 
+                        çeşitli inşaat işlemleri ile ilgili araçlar ve hizmetler sunar. Tüm hesaplamalar, kullanıcının girdiği bilgilere 
+                        dayanır ve kullanıcıya kolaylık amacıyla sağlanmaktadır.  
+                    </p>
+                    <p>  
+                        3. Üyelik ve Kullanıcı Yükümlülükleri<br>  
+                        Uygulamaya üye olurken verdiğiniz bilgilerin doğru ve güncel olması sizin sorumluluğunuzdadır.
+                        Hesabınızın güvenliği ve gizliliği size aittir. Şifrenizi ve diğer bilgilerinizi korumak sizin yükümlülüğünüzdedir.
+                        Uygulama üzerinden yapılan tüm işlemlerden ve ortaya çıkan sonuçlardan kullanıcı sorumludur. 
+                    </p>
+                    <p>  
+                        4. Fikri Mülkiyet Hakları<br>
+                        İnşaatHesap uygulamasındaki tüm içerik, tasarım ve hesaplama algoritmaları telif hakları ile korunmaktadır. 
+                        İzinsiz olarak kopyalanamaz, çoğaltılamaz, dağıtılamaz veya ticari amaçla kullanılamaz.
+                    </p>
+                    <p>  
+                        5. Gizlilik ve Veri Koruma<br> 
+                        Kullanıcı bilgileriniz [Gizlilik Politikası/KVKK Metni] kapsamında korunmakta olup, üçüncü kişilerle paylaşılmaz.
+                        Hesap ve proje verilerinizin güvenliği bizim için önceliklidir.
+                    </p>
+                    <p>  
+                        6. Hizmette Değişiklik ve Sorumluluğun Sınırlandırılması<br> 
+                        inşaathesap, önceden bildirimde bulunmaksızın hizmet içeriğinde ve koşullarda değişiklik yapma hakkını saklı 
+                        tutar. Uygulamanın sunduğu sonuçlar sadece kullanıcıya yardımcı olmayı amaçlar; resmi veya bağlayıcı bir teknik 
+                        veya hukuki belge olarak kullanılamaz. Olası teknik sorunlar, veri kaybı veya hizmet kesintilerinden İnşaatHesap
+                         sorumlu tutulamaz.
+
+                    </p>
+                    <p>  
+                        7. Uygulanacak Hukuk ve Yetkili Mahkeme<br> 
+                        Bu koşullar Türkiye Cumhuriyeti kanunlarına tabidir. Doğabilecek uyuşmazlıklarda İstanbul Mahkemeleri ve 
+                        İcra Daireleri yetkilidir.
+                    </p>
+                    <p>  
+                        8. İletişim<br> 
+                        Her türlü soru ve sorunlarınız için tahsintanil@gmail.com
+                    </p>
+                </div>  
+                <!-- Modal Alt Kısım -->  
+                <div class="modal-footer">  
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>  
+                </div>  
+            </div>  
+        </div>  
+    </div>
+    <!-- Modal KVKK -->  
+    <div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">  
+        <div class="modal-dialog custom-modal-position">  
+            <div class="modal-content">  
+                <!-- Modal Başlık -->  
+                <div class="modal-header">  
+                    <h5 class="modal-title" id="privacyModalLabel" style="font-family: 'Verdana', sans-serif; color: #333;">Gizlilik Politikası</h5>
+                </div>  
+                <!-- Modal İçerik -->  
+                <div class="modal-body" style="font-family: 'Arial', sans-serif; color: #555; max-height: 400px; overflow-y: auto;">  
+                    <p>  
+                        1. İşlenen Kişisel Veriler<br>  
+                        Ödeme işlemleri sırasında tarafımızla paylaştığınız ve işlenen kişisel veriler şunlardır:  
+                    </p>  
+                    <ul>  
+                        <li>Ad, soyad</li>  
+                        <li>Telefon numarası</li>  
+                        <li>E-posta adresi</li>  
+                        <li>Fatura ve teslimat adresi</li>  
+                        <li>Kart bilgileri (kart numarası, son kullanma tarihi, CVV kodu gibi bilgiler yalnızca ödeme işlemi sırasında şifrelenerek işlenir ve saklanmaz)</li>  
+                        <li>IP adresi ve işlem logları</li>  
+                        <li>Ödeme işlemine ilişkin diğer bilgiler (tarih, saat, işlem tutarı vb.)</li>  
+                    </ul>  
+                    <p>  
+                        2. Kişisel Verilerin İşlenme Amaçları<br>  
+                        Kişisel verileriniz, aşağıdaki amaçlarla işlenmektedir:  
+                    </p>  
+                    <ul>  
+                        <li>Ödeme işlemlerinin gerçekleştirilmesi ve doğrulanması</li>  
+                        <li>Yasal yükümlülüklerin yerine getirilmesi (örneğin, muhasebe ve vergi mevzuatı gereklilikleri)</li>  
+                        <li>Dolandırıcılık ve kötüye kullanımın önlenmesi</li>  
+                        <li>Kullanıcı deneyiminin iyileştirilmesi ve müşteri memnuniyetinin artırılması</li>  
+                        <li>Talep ve şikayetlerin değerlendirilmesi</li>  
+                        <li>Yasal mercilerden gelen bilgi taleplerinin karşılanması</li>  
+                    </ul>  
+                    <p>  
+                        3. Kişisel Verilerin Aktarımı<br>  
+                        Kişisel verileriniz, yukarıda belirtilen amaçlar doğrultusunda aşağıdaki taraflarla paylaşılabilir:  
+                    </p>  
+                    <ul>  
+                        <li>Ödeme hizmeti sağlayıcıları (örneğin, bankalar, ödeme kuruluşları)</li>  
+                        <li>Yetkili kamu kurum ve kuruluşları (örneğin, mahkemeler, denetleyici otoriteler)</li>  
+                        <li>Yasal zorunluluklar kapsamında iş birliği yapılan üçüncü taraflar</li>  
+                        <li>Teknik destek ve altyapı hizmeti sağlayan iş ortakları</li>  
+                    </ul>  
+                    <p>  
+                        4. Kişisel Verilerin Saklanma Süresi
+                    </p>  
+                    <ul>  
+                        <li>Kişisel verileriniz, ilgili mevzuatta belirtilen süreler boyunca veya işleme amacının gerektirdiği süre boyunca saklanacaktır.</li>  
+                        <li>Ödeme işlemlerine ilişkin bilgiler, yasal muhasebe ve vergi yükümlülükleri kapsamında 10 yıl süreyle saklanabilir.</li>  
+                        <li>Kart bilgileri, ödeme işlemi sırasında şifrelenerek işlenir ve tarafımızca saklanmaz.</li>
+                    </ul>  
+                    <p>  
+                        5. Kişisel Verilerin Korunması<br> 
+                        Kişisel verilerinizin güvenliği bizim için önceliklidir. Bu kapsamda:
+                    </p>  
+                    <ul>  
+                        <li>Verileriniz, uluslararası güvenlik standartlarına uygun olarak şifrelenmekte ve korunmaktadır.</li>  
+                        <li>Yetkisiz erişim, veri kaybı veya kötüye kullanım gibi durumların önlenmesi için gerekli teknik ve idari tedbirler alınmaktadır.</li>  
+                        <li>Ödeme işlemleri sırasında kullanılan tüm sistemler, SSL (Secure Socket Layer) gibi güvenlik protokolleri ile korunmaktadır.</li>
+                    </ul>  
+                    <p>  
+                        6. KVKK Kapsamındaki Haklarınız<br> 
+                        6698 sayılı KVKK’nın 11. maddesi uyarınca, kişisel verilerinizle ilgili olarak aşağıdaki haklara sahipsiniz:
+                    </p>  
+                    <ul>  
+                        <li>Eksik veya yanlış işlenmiş olması hâlinde bunların düzeltilmesini isteme</li>  
+                        <li>Kişisel verilerinizin işlenip işlenmediğini öğrenme</li>  
+                        <li>İşlenmişse buna ilişkin bilgi talep etme</li>  
+                        <li>İşlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme</li>
+                        <li>Yurt içinde veya yurt dışında kişisel verilerinizin aktarıldığı üçüncü kişileri bilme</li>  
+                        <li>Eksik veya yanlış işlenmiş olması hâlinde bunların düzeltilmesini isteme</li>  
+                        <li>KVKK’da öngörülen şartlar çerçevesinde kişisel verilerinizin silinmesini veya yok edilmesini isteme</li>
+                        <li>İşlemlerin, kişisel verilerinizin aktarıldığı üçüncü kişilere bildirilmesini isteme</li>
+                        <li>İşlenen verilerin münhasıran otomatik sistemler vasıtasıyla analiz edilmesi suretiyle aleyhinize bir sonucun ortaya çıkmasına itiraz etme</li>  
+                        <li>Kişisel verilerinizin kanuna aykırı olarak işlenmesi sebebiyle zarara uğramanız hâlinde zararın giderilmesini talep etme</li>  
+                    </ul>  
+                    <p>  
+                        7. İletişim<br> 
+                        Kişisel verilerinizin işlenmesiyle ilgili her türlü soru ve talepleriniz için bizimle iletişime geçebilirsiniz.
+                    </p>
+                </div>  
+                <!-- Modal Alt Kısım -->  
+                <div class="modal-footer">  
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>  
+                </div>  
+            </div>  
+        </div>  
+    </div>
+
+<script type="module">
+    import { showWarningMessage } from '/js/showMessage.js';
+
+    window.addEventListener('DOMContentLoaded', function () {
+        const indexPageButton = document.getElementById("indexPageButton");
+        const registerButton = document.getElementById("registerButton");
+        const btnSahis = document.getElementById('btnSahis');
+        const btnSirket = document.getElementById('btnSirket');
+        const nameLabel = document.getElementById('nameLabel');
+        const nameInput = document.getElementById('name');
+        const form = document.getElementById('registerForm');
+        const phoneInput = document.getElementById('phone');
+
+        btnSahis.addEventListener('change', updateFields);
+        btnSirket.addEventListener('change', updateFields);
+
+        form.addEventListener('input', checkAllFilled);
+
+        function isVisible(input) {
+            // d-none, hidden veya display:none durumunda false döner
+            return !!(input.offsetParent);
+        }
+
+        function isReallyVisible(input) {
+            // Kendisinde veya herhangi bir atasında d-none veya display:none varsa false döner
+            while (input) {
+                if (input.classList && input.classList.contains('d-none')) return false;
+                if (window.getComputedStyle(input).display === "none") return false;
+                input = input.parentElement;
+            }
+            return true;
+        }
+
+        function validateField(input) {
+            const id = input.id;
+            const maxLengths = {
+                name: 50,
+                email: 30,
+                password: 12,
+                phone: 11,
+                tcno: 11,
+                vergiNo: 10,
+                sahisIl: 30,
+                sahisIlce: 30,
+                sirketIl: 30,
+                sirketIlce: 30
+            };
+            // Önce karakter uzunluğunu kontrol et
+            if (maxLengths[id] && input.value.length > maxLengths[id]) return false;
+
+            // Alan özel regex kuralları    
+            if(id === "name") {
+                if (document.getElementById('btnSahis').checked) {
+                    return /^[a-zA-ZşçöğüğıŞÇÖÜĞİ\s]{2,50}$/.test(input.value.trim());
+                } else {
+                    return /^.{2,50}$/.test(input.value.trim());
+                }
+            }
+
+            if (id === "phone") {
+                return /^\d{11}$/.test(input.value);
+            }
+
+            const regexMap = {
+                email: /^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,30}$/,
+                //password: /^(?=.*[a-zA-Z])(?=.*\d).{6,12}$/,
+                //confirmPassword: /^(?=.*[a-zA-Z])(?=.*\d).{6,12}$/,
+                tcno: /^\d{11}$/,
+                vergiNo: /^\d{10}$/,
+                sahisIl: /^[a-zA-ZşçöğüğıŞÇÖÜĞİ\s-]{2,30}$/,
+                sahisIlce: /^[a-zA-ZşçöğüğıŞÇÖÜĞİ\s-]{2,30}$/,
+                sirketIl: /^[a-zA-ZşçöğüğıŞÇÖÜĞİ\s-]{2,30}$/,
+                sirketIlce: /^[a-zA-ZşçöğüğıŞÇÖÜĞİ\s-]{2,30}$/
+            };
+            const regex = regexMap[id];
+            if (!regex) return true;
+            return regex.test(input.value.trim());
+        }
+
+        function checkAllFilled() {
+            const requiredInputs = form.querySelectorAll('input[required], select[required]');
+            let completed = true;
+
+            requiredInputs.forEach(input => {
+                if (!isReallyVisible(input)) return;
+
+                // Checkbox
+                if (input.type === 'checkbox') {
+                    if (!input.checked) completed = false;
+                } else {
+                    if (!input.value.trim()) {
+                        completed = false;
+                        input.classList.remove("is-valid", "is-invalid");
+                    } else if (!validateField(input)) {
+                        completed = false;
+                        input.classList.add("is-invalid");
+                        input.classList.remove("is-valid");
+                    } else {
+                        input.classList.add("is-valid");
+                        input.classList.remove("is-invalid");
+                    }
+                }
+            });
+
+            // Şifre eşleşmesi
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmPassword');
+            if (
+                isReallyVisible(password) && isReallyVisible(confirmPassword) &&
+                (password.value || confirmPassword.value)
+            ) {
+                if (password.value !== confirmPassword.value) {
+                    completed = false;
+                    confirmPassword.classList.add("is-invalid");
+                    confirmPassword.classList.remove("is-valid");
+                } else if(validateField(password) && validateField(confirmPassword)){
+                    confirmPassword.classList.remove("is-invalid");
+                    confirmPassword.classList.add("is-valid");
+                }
+            } else {
+                confirmPassword.classList.remove("is-invalid", "is-valid");
+            }
+
+            if (completed) {
+                if (!window._formAllFilledOnce) {
+                    window._formAllFilledOnce = true;
+                    registerButton.style.opacity = 1;
+                    registerButton.disabled = false;
+                }
+            } else {
+                window._formAllFilledOnce = false;
+                registerButton.style.opacity = 0.5;
+                registerButton.disabled = true;
+            }
+        }
+
+        function updateFields() {
+            nameInput.value = "";
+            document.getElementById('email').value = "";
+            document.getElementById('password').value = "";
+            document.getElementById('confirmPassword').value = "";
+            document.getElementById('phone').value = "";
+            document.getElementById('tcno').value = "";
+            document.getElementById('sahisIl').value = "";
+            document.getElementById('sahisIlce').value = "";
+            document.getElementById('vergiNo').value = "";
+            document.getElementById('sirketIl').value = "";
+            document.getElementById('sirketIlce').value = "";
+
+            const isSahis = btnSahis.checked;
+            document.getElementById('sahisFields').classList.toggle('d-none', !isSahis);
+            document.getElementById('sirketFields').classList.toggle('d-none', isSahis);
+            document.getElementById('tcno').required = isSahis;
+            document.getElementById('sahisIl').required = isSahis;
+            document.getElementById('sahisIlce').required = isSahis;
+            document.getElementById('vergiNo').required = !isSahis;
+            document.getElementById('sirketIl').required = !isSahis;
+            document.getElementById('sirketIlce').required = !isSahis;
+
+            if (isSahis) {
+                //nameLabel.textContent = "Ad Soyad";
+                nameInput.placeholder = "Ad Soyad";
+            } else {
+                //nameLabel.textContent = "Şirket Adı";
+                nameInput.placeholder = "Şirket Adı";
+            }
+            checkAllFilled();
+        }
+
+        indexPageButton.addEventListener("click", () => {
+            window.location.href = "/";
+        });
+
+        updateFields();
+
+        registerButton.addEventListener('click', async function(e) {
+            if (registerButton.disabled) return; // Güvenlik için
+            e.preventDefault();
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((v, k) => { data[k] = v; });
+            //console.log(data); // Burada veriler var
+            
+            
+            try {  
+                // Kullanıcı giriş bilgilerini backend'e gönder  
+                const response = await fetch('/register', {  
+                    method: 'POST',  
+                    headers: {  
+                        'Content-Type': 'application/json'  
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(data)  
+                });  
+            
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    const userConfirmed = await showWarningMessage("Kayıt başarılı!", "tamam2", false);
+                    if(userConfirmed){
+                        window.location.href = "/login";
+                    }
+                } else {
+                    // Sunucu response.json ile hata mesajı döndüyse
+                    showWarningMessage("Kayıt başarısız! <br>"+result.message, "tamam", true);
+                }
+            } catch (error) {
+                // Ağ hatası, sunucuya istek ulaşmazsa
+                showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+                //console.log('Hata:', error);
+            }
+        });
+    });
+</script>
+
+    <!-- Bootstrap JS -->  
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>  
+</html>

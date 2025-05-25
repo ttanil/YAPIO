@@ -1,0 +1,1855 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Drawing Bina</title>  
+
+    <!-- Bootstrap CSS -->  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">  
+    <link rel="stylesheet" href="css/index.css">
+
+    <style> 
+      body {  
+        margin: 0;  
+        padding: 0; 
+        background-image: url('/img/sample4.png');
+        background-repeat: repeat;  
+        background-size: auto; 
+        background-position: center;  
+        height: 115vh;  
+        font-family: Arial, sans-serif;  
+      }
+
+      .container-navbar {  
+        display: flex;  
+        flex: 0 0 100%;  
+        flex-wrap: nowrap;  
+        align-items: center;  
+        justify-content: center;  
+        margin: 0px;
+      }  
+      .container-fluid {  
+        display: flex;  
+        flex: 0 0 100%;  
+        flex-wrap: nowrap;  
+        align-items: center;  
+      }  
+      #projectName {  
+        flex: 0 0 90%;  
+        white-space: nowrap;  
+        overflow: hidden;  
+        text-overflow: ellipsis;  
+        font-family: Arial, sans-serif;  
+        font-size: 36px;
+      }  
+      .img-fluid {  
+        flex: 0 0 auto;  
+        height: 30px;  
+        width: 30px;  
+        margin-right: 10px;  
+      }
+      .custom-btn {  
+        background-color: #847539;
+        color: white; /* Yazı rengi */  
+        border: none; /* Kenarlığın kaldırılması */  
+        border-radius: 10px; /* Kenarlıkları yuvarlaklaştırma */  
+        padding: 10px 20px; /* İç boşluklar */  
+        font-family: "Varela Round";  
+        font-size: 16px; /* Yazı boyutu */  
+        font-weight: bold; /* Kalın yazı */  
+        letter-spacing: 2px;
+        cursor: pointer; /* Fare imlecini işaretçi yapma */  
+        transition: background-color 0.3s ease; /* Hover geçiş efekti */
+        margin-right: 40px;
+      }
+
+      .container{
+        width: 70% !important;
+      }
+      .container-arsa-giderleri {
+        margin-top: 30px !important;
+      }
+      .container-arsa-giderleri h3{
+        font-size: 26px;
+      }
+      .custom-flex {  
+        display: flex;  
+        flex-direction: column;  
+        gap: 0.5rem;  
+        justify-content: center; /* Ortala */  
+        align-items: flex-start;  /* Sola yasla */  
+      }
+      .custom-width{
+        width: 50%;
+      }
+
+
+      .modal-title{
+        font-family: Arial, sans-serif;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      .savedQuatations{
+        display: flex;
+        /*font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;*/
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', sans-serif;
+        font-size: 20px;
+        font-weight: bold;
+        justify-content: center;
+      }
+      .my-custom-btn {
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        vertical-align: middle;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: 0.25rem 0.5rem; /* btn-sm */
+        font-size: 0.875rem;     /* btn-sm */
+        line-height: 1.5;
+        border-radius: 0.2rem;
+        color: #fff;
+        background-color: #6c757d; /* btn-secondary */
+        border-color: #6c757d;
+        transition: color 0.15s, background-color 0.15s;
+      }
+      
+
+
+      .modal-edit {  
+        display: none;
+        position: fixed;  
+        left: 50%; top: 50%;  
+        transform: translate(-50%,-50%);  
+        background: #fff;  
+        border-radius: 14px;  
+        padding: 28px 25px 24px 25px;  
+        box-shadow: 0 10px 32px rgba(0,25,55,0.15), 0 3px 8px rgba(0,0,0,0.13);  
+        width: 100%;  
+        max-width: 370px;  
+        z-index: 9999;  
+        border: 1px solid #dbe7f5;  
+        animation: modalEditIn .2s cubic-bezier(.4,2,.6,1.1);  
+      }  
+      @keyframes modalEditIn {  
+        from { opacity: 0; transform: translate(-50%,-50%) scale(.97);}  
+        to   { opacity: 1; transform: translate(-50%,-50%) scale(1);}  
+      }  
+      .modal-edit h4 {  
+        margin: 0 0 18px 0;  
+        font-size: 1.2rem;  
+        color: #30446a;  
+        text-align: center;  
+      }  
+      .modal-edit label {  
+        display: block;  
+        color: #606c74;  
+        font-size: 0.97rem;  
+        margin: 6px 0 2px 2px;  
+      }  
+
+      .modal-edit input {  
+        width: 100%;  
+        padding: 7px;  
+        border: 1px solid #e1e6ea;  
+        border-radius: 8px;  
+        font-size: 1rem;  
+        background: #f7fafc;  
+        margin-bottom: 6px;  
+        transition: border .2s;  
+      }  
+      .modal-edit-textarea {  
+        width: 100%;  
+        min-height: 54px;  
+        padding: 8px;  
+        border: 1px solid #e1e6ea;  
+        border-radius: 8px;  
+        font-size: 1rem;  
+        background: #f7fafc;  
+        margin-bottom: 6px;  
+        resize: vertical; /* boyutu değiştirilebilir bırak */  
+        transition: border .2s;  
+      }  
+      .modal-edit-textarea:focus {  
+        border-color: #4788f1;  
+        outline: none;  
+        background: #fff;  
+      }
+      .modal-edit input:focus {  
+        border-color: #4788f1;  
+        outline: none;  
+        background: #fff;  
+      }  
+      .modal-edit button {  
+        margin-top: 8px;  
+        padding: 5px 10px;   /* Yükseklik ve genişlik daha küçük */  
+        border: none;  
+        border-radius: 4px;  /* Daha az yuvarlak */  
+        font-size: 0.92rem;  /* Daha ufak font */  
+        cursor: pointer;  
+      }  
+      #saveEdit {  
+        background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);  
+        color: #fff;  
+        font-weight: 400;  
+        box-shadow: 0 2px 6px #3b82f62d;  
+        margin-right: 6px;  
+      }  
+      #saveEdit:hover {  
+        background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);  
+      }  
+      #cancelEdit {  
+        background: #eef0f1;  
+        color: #4a5568;  
+        border: 1px solid #e2e8f0;  
+      }  
+      #cancelEdit:hover {  
+        background: #d1d5db;  
+        color: #222;  
+      }
+
+      /* Mobil cihazlar için duyarlılık (%75 genişlik) */  
+      @media (max-width: 768px) {
+        body {  
+          height: 100vh;
+        }
+
+        .container-navbar {  
+          flex-wrap: wrap;  
+          justify-content: flex-end;  
+        }  
+        #projectName {
+          flex: 0 0 70%;  
+          overflow: hidden;  
+          text-overflow: ellipsis;  
+          white-space: nowrap;  
+          text-align: left;  
+          font-size: 14px !important;  
+          max-width: 65%;     /* Taşmayı önler */  
+          min-width: 0;       /* flex shrink için gerekli */  
+          margin-right: 0;    /* İstenirse gap için elle ekleyin */
+        }  
+        #buttonHome {
+          flex: 0 0 30px;     /* Eğer 30px'lik bir kutu ise tam sabitlenir */  
+          padding: 0;         /* Ekstra boşlukları engeller */  
+          margin-left: 0;     /* İstenirse 5px gibi küçük bir boşluk eklenebilir */  
+          display: flex;  
+          align-items: center;
+        }
+        .img-fluid {  
+          height: 25px;  
+          width: 25px;  
+          margin-right: 0;    /* Sağdan boşluğu kaldırır */  
+          margin-left: 0;     /* Soldan boşluğu kaldırır */
+        }  
+        .custom-btn {  
+          font-size: 12px; /* Yazı boyutu */
+          padding: 5px 10px;      /* Yan boşlukları biraz artırdım */
+          border-radius: 6px;      /* Köşeler hafif yuvarlatıldı */
+          color: #fff;
+          border: none;
+          margin-right: 12px;
+          display: inline-block; 
+          font-weight: 500;     
+        }
+        .navbar-toggler {  
+          /* background-color: rgb(89, 125, 234);  */
+          background-color: #c2c5c9;
+          flex: 0 0 auto;  
+          margin-left: auto;  
+          justify-content: flex-end;  
+        }
+        .container-fluid {  
+          flex-wrap: wrap;  
+        } 
+        .dropdown-item{
+          display: flex;
+          margin-left: auto;  
+          justify-content: flex-end;
+        }
+        .mobile-navbar-menu {  
+          justify-content: flex-end !important;  
+          text-align: right !important;  
+          margin-top: 10px;
+          margin-bottom: 5px;
+        }  
+        .mobile-navbar-menu .nav-item, .mobile-navbar-menu .dropdown-item-mobile {
+          display: flex;
+          align-items: center;
+          justify-content: space-between !important;  
+          text-align: right !important;
+          font-size: 1.1rem;
+          font-style: bold !important;
+          height: 22px;
+          margin-top: 2px;
+          justify-self: end;
+        }
+        .dropdown-item-mobile {
+          width: 34%;
+          font-family: Arial, sans-serif !important; 
+          color: rgb(94, 93, 93) !important;      /* Varsayılan metin rengini kullan */  
+          text-decoration: none !important; /* Altı çizgiyi kaldır */  
+          font-weight: 400 !important;
+        }
+
+        .container{
+          width: 90% !important;
+        }
+        .container-tables .ms-2 {  
+          margin-left: 0.1rem !important;
+        } 
+        .container-tables button {  
+          padding: 0.2rem 0.8rem !important; /* Daha az iç boşluk */  
+          font-size: 1rem !important;        /* Daha küçük font */  
+        }  
+        .container-tables h4 {  
+          font-size: 0.85rem !important;  
+          margin: 0 !important;  
+        }
+        .container-arsa-giderleri {
+          margin-top: 30px !important;
+        }
+        .table-arsa h2 {  
+          font-size: 0.85rem !important;  
+        }
+        .container-arsa-giderleri h3{
+          font-size: 0.85rem !important;
+        }
+        .custom-width{
+          width: 75%;
+          height: 35px !important;
+        }
+
+        .btn-danger{
+          font-size: 0.7rem;
+          font-weight: 200;
+          border: 1px solid transparent;
+          padding: 0.15rem 0.3rem; /* btn-sm */
+          line-height: 1.3;
+          border-radius: 0.1rem;
+        }
+        .my-custom-btn {
+          font-size: 0.7rem;
+          font-weight: 200;
+          border: 1px solid transparent;
+          padding: 0.15rem 0.3rem; /* btn-sm */
+          line-height: 1.3;
+          border-radius: 0.1rem;
+        }
+  
+
+        .btn-primary{
+          gap: 0;
+          font-size: 13px;
+        }
+
+        .modal-dialog {  
+          max-width: 85vw;  
+          margin: 1.75rem auto;  
+          top:7%;
+        }
+        .savedQuatations{
+          font-size: 17px;
+        }
+
+        .modal-edit {  
+          width:80%;
+        }
+      }
+    </style>  
+</head>  
+
+<body>  
+  <!-- Responsive Header -->  
+  <nav class="header d-flex justify-content-between align-items-center px-3">
+    <span>Yapıo</span>
+    <button class="btn custom-btn" id="loginButton" style="display: none;">PROJELER</button> 
+  </nav>
+
+  <!-- Navbar -->  
+  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm mt-4 container-navbar">  
+    <div class="container-fluid">  
+      <!-- Proje Adı -->  
+      <h4 class="navbar-brand" id="projectName">Proje Adı</h4>  
+      <!-- Ana Sayfa Butonu -->  
+      <button class="btn d-flex navbar-home-button" id="buttonHome">  
+        <img src="/img/home1_1.png" alt="Katlar Görseli" class="img-fluid rounded">  
+      </button>  
+      <!-- Hamburger Menü -->  
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"  
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">  
+        <span class="navbar-toggler-icon"></span>  
+      </button>  
+  
+      <!-- Menu: Mobilde sağdan, büyük ekranda klasik dropdown -->  
+      <div class="collapse navbar-collapse" id="navbarNav">  
+        <!-- Masaüstü: Dropdown Menüsü -->  
+        <ul class="navbar-nav ms-auto d-none d-lg-flex">  
+            <li class="nav-item dropdown">  
+                <button class="btn nav-link dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">  
+                Menü  
+                </button>  
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">  
+                    <li>  
+                        <a class="dropdown-item d-flex align-items-center" id="regulation-button" href="#">  
+                          <img src="/img/edit.png" alt="" style="width:16px; height:16px; margin-right:8px;">  
+                          Düzenle  
+                        </a>  
+                    </li>
+                    <li>
+                      <a class="dropdown-item d-flex align-items-center" id="graphs-button" href="#">
+                          <img src="/img/growth_1.png" alt="" style="width:19px; height:19px; margin-right:8px;">
+                          Analizler
+                      </a>
+                  </li> 
+                </ul> 
+              </li>
+        </ul>  
+        <!-- Mobilde: Menü Seçenekleri En Sağa Yaslı -->  
+        <ul class="navbar-nav ms-auto d-lg-none justify-content-end text-end mobile-navbar-menu">     
+          <li>  
+              <a class="dropdown-item-mobile d-flex align-items-center" id="regulation-button-mobile">  
+                <img src="/img/edit.png" alt="" style="width:16px; height:16px;">  
+                Düzenle  
+              </a>  
+          </li> 
+          <li>
+            <a class="dropdown-item-mobile d-flex align-items-center" id="graphs-button-mobile" href="#">
+                <img src="/img/growth_1.png" alt="" style="width:19px; height:19px; ">
+                Analizler
+            </a>
+        </li>
+        </ul>  
+      </div>  
+    </div>  
+  </nav>
+
+  <div class="container my-5 mb-4">  
+    <div class="mx-auto">  
+      <div class="bg-white border rounded shadow p-3 mb-4"> <!-- Çerçeve burada -->  
+        <!-- Sekmeler -->  
+        <div class="d-flex flex-wrap border-bottom mb-3 container-tables"> 
+          <button id="tab1Btn" class="px-4 py-2 rounded-top border border-bottom-0 bg-white text-primary fw-semibold">
+            <h4>Arsa</h4>
+          </button>  
+          <button id="tab2Btn" class="px-4 py-2 rounded-top border border-bottom-0 bg-light text-secondary fw-semibold ms-2">
+            <h4>Projeler</h4>
+          </button>  
+          <button id="tab3Btn" class="px-4 py-2 rounded-top border border-bottom-0 bg-light text-secondary fw-semibold ms-2">
+            <h4>Kurumlar</h4>
+          </button>  
+          <button id="tab4Btn" class="px-4 py-2 rounded-top border border-bottom-0 bg-light text-secondary fw-semibold ms-2">
+            <h4> İşçilik</h4>
+          </button>  
+          <button id="tab5Btn" class="px-4 py-2 rounded-top border border-bottom-0 bg-light text-secondary fw-semibold ms-2">
+            <h4> Kaba</h4>
+          </button>  
+          <button id="tab6Btn" class="px-4 py-2 rounded-top border border-bottom-0 bg-light text-secondary fw-semibold ms-2">
+            <h4> İnce</h4>
+          </button>  
+        </div>  
+
+        <!-- Tablo 1 -->  
+        <div id="tab1Content">  
+          <div class="table-arsa my-1">  
+            <h2 class="text-center mb-4 fw-bold bg-black text-white rounded py-3">ARSA GİDERLERİ</h2>  
+            <div class="d-flex mt-3 flex-column gap-3 justify-content-center align-items-center container-arsa-giderleri">  
+                <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                  <h3>Arsa Bedeli</h3>  
+                </button>  
+                <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                  <h3>Yer Sahibi ile Anlaşma</h3>  
+                </button>  
+                <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">
+                  <h3>Yerden Çıkartmak</h3>
+                </button>  
+                <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                  <h3>Kira Bedeli</h3>
+                </button>  
+                <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                  <h3>Şantiye Kurulumu</h3>  
+                </button>  
+                <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                  <h3>Arsa Diğer</h3>  
+                </button>  
+              </div>  
+          </div>  
+        </div>    
+
+        <!-- Tablo 2 -->  
+        <div id="tab2Content" class="d-none">  
+          <div class="table-arsa my-1">  
+            <h2 class="text-center mb-4 fw-bold bg-black text-white rounded py-3">PROJE GİDERLERİ</h2>  
+            <div class="d-flex mt-3 flex-column gap-3 justify-content-center align-items-center container-arsa-giderleri">  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Mimari Proje</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Statik Proje</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">
+                <h3>Haritacı</h3>
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Tesisat Proje</h3>
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Elektrik Proje</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Asansör Proje</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Doğalgaz Proje</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Akustik Proje</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Şantiye Şefi</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Fenni Mesul Jeoloji</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Fenni Mesul Haritacı</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Kat İrtifa Kurma</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Enerji Kimliği</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Proje Diğer</h3>  
+              </button>  
+            </div>  
+          </div>  
+        </div> 
+
+        <!-- Tablo 3 -->  
+        <div id="tab3Content" class="d-none">  
+          <div class="table-arsa my-1">  
+            <h2 class="text-center mb-4 fw-bold bg-black text-white rounded py-3">KURUM ÖDEMELERİ</h2>  
+            <div class="d-flex mt-3 flex-column gap-3 justify-content-center align-items-center container-arsa-giderleri">  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Belediye</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Noter Ödemeleri</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">
+                <h3>Yapı Denetim</h3>
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Kadastro</h3>
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Zemin Etüdü</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Şantiye Elektrik</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Kentsel Dönüşüm</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>SSK</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Tapu</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Emlakçı</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Reklam ve Tanıtım</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Avukat</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Vergiler</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Kurumlar Diğer</h3>  
+              </button>  
+            </div>  
+          </div>  
+        </div> 
+
+        <!-- Tablo 4 -->  
+        <div id="tab5Content" class="d-none">  
+          <div class="table-arsa my-1">  
+            <h2 class="text-center mb-4 fw-bold bg-black text-white rounded py-3">KABA ÜRETİM GİDERLERİ</h2>  
+            <div class="d-flex mt-3 flex-column gap-3 justify-content-center align-items-center container-arsa-giderleri">  
+              <!--<button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Şantiye Kurulumu</h3>  
+              </button>  -->
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>İş Makinaları</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">
+                <h3>Beton</h3>
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Demir</h3>
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Su Yalıtımı Temel</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Duvar Örme</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Çatı</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Üretim Kaba Diğer</h3>  
+              </button>  
+            </div>  
+          </div>  
+        </div> 
+
+        <!-- Tablo 5 -->  
+        <div id="tab6Content" class="d-none">  
+          <div class="table-arsa my-1">  
+            <h2 class="text-center mb-4 fw-bold bg-black text-white rounded py-3">İNCE ÜRETİM GİDERLERİ</h2>  
+            <div class="d-flex mt-3 flex-column gap-3 justify-content-center align-items-center container-arsa-giderleri">  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Su Tesisatı</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Elektrik Tesisatı</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">
+                <h3>Mermer</h3>
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Pencereler</h3>
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Sıva</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Mantolama</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Kapılar</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Islak Zemin Yalıtımları</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Seramikler</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Parkeler</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Vitrifiyeler</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Bataryalar</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Stropiyer Alçıpan</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Mutfak</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Ankastre</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>İklimlendirme</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Korkuluk ve Perforje</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Söve</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Aydınlatma</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Kompozit Kaplama</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Peyzaj</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Üretim İnce Diğer</h3>  
+              </button>  
+            </div>  
+          </div>  
+        </div> 
+
+        <!-- Tablo 6 -->  
+        <div id="tab4Content" class="d-none">  
+          <div class="table-arsa my-1">  
+            <h2 class="text-center mb-4 fw-bold bg-black text-white rounded py-3">İŞÇİLİK GİDERLERİ</h2>  
+            <div class="d-flex mt-3 flex-column gap-3 justify-content-center align-items-center container-arsa-giderleri">  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Kalıp İşçiliği</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Demir İşçiliği</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">
+                <h3>Duvar Örme İşçiliği</h3>
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Sıva İşçiliği</h3>
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Şap İşçiliği</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Çatı İşçiliği</h3>  
+              </button>  
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Mantolama İşçiliği</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Yalıtım İşçiliği</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Su Tesisatı İşçiliği</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Elektrik İşçiliği</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Doğalgaz İşçiliği</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Asansör İşçiliği</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Dekor Alçıpan İşçiliği</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>Perforje İşçiliği</h3>  
+              </button> 
+              <button type="button" class="btn btn-outline-primary btn-lg text-center custom-width">  
+                <h3>İşçilik Diğer</h3>  
+              </button>  
+            </div>  
+          </div>  
+        </div> 
+
+
+      </div>  
+    </div>  
+  </div>
+
+  <!-- Modal HTML -->  
+  <div class="modal fade" id="dataEntryModal" tabindex="-1" aria-labelledby="dataEntryModalLabel" aria-hidden="true">  
+    <div class="modal-dialog">  
+      <div class="modal-content rounded shadow">  
+        <div class="modal-header">  
+          <h5 class="modal-title" id="dataEntryModalLabel">Veri Girişi</h5>  
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>  
+        </div>  
+        <div class="modal-body">  
+          <p class="mb-3 small text-muted" id="modalInfoText">Lütfen tutar ve tarihi giriniz.</p>  
+
+          <div class="d-flex gap-2 align-items-center mb-3">
+            <div class="flex-fill d-flex flex-column" style="display: none;" id="ownerPay">   
+              <p class="mb-1 ms-2 small text-muted" style="display: none;" id="ownerPayInputInfo">Alınacak Para</p>  
+              <input type="number" class="form-control" style="display: none;" id="ownerPayInput" placeholder="Alınacak Para">  
+            </div>  
+            <div class="owner-pay-button" style="display: none;" id="ownerPayButton">
+              <button type="button" class="btn btn-primary" id="ownerPayButtonActive">Kaydet</button>  
+            </div>
+          </div>
+          <div class="d-flex gap-2 align-items-center mb-3" style="display: none;" id="ownerPaidArea">
+            <div class="flex-fill d-flex flex-column" style="display: none;" id="ownerPaid">   
+              <p class="mb-1 ms-2 small text-muted" style="display: none;" id="ownerPaidInputInfo">Verilecek Para</p>  
+              <input type="number" class="form-control" style="display: none;" id="ownerPaidInput" placeholder="Verilecek Para">  
+            </div> 
+            <div class="owner-paid-button" style="display: none;" id="ownerPaidButton">
+              <button type="button" class="btn btn-primary" id="ownerPaidButtonActive">Kaydet</button>  
+            </div>
+          </div>
+          <div class="owner-deal-button" style="display: none;" id="ownerDealButton">
+            <button type="button" class="btn btn-primary" id="ownerDealButtonActive">Daire Seç</button>  
+          </div>
+
+          
+          <!-- Tutar ve Tarih Yan Yana -->  
+          <div class="d-flex gap-2 align-items-end mb-2 mt-3">  
+            <div class="flex-fill">  
+              <input type="number" class="form-control" id="modalInput" placeholder="Tutarı giriniz">  
+            </div>  
+            <div>  
+              <input type="date" class="form-control" id="modalDate">  
+            </div>  
+          </div>  
+          <textarea class="form-control" id="modalNote" placeholder="Açıklama (Opsiyonel)"></textarea>  
+        </div>  
+        <div class="modal-footer" id="modalFooterButton">
+          <button type="button" class="btn btn-primary" id="saveModalButton">Kaydet</button>  
+        </div>
+        <div class="saved-entries" data-type="Arsa Bedeli"></div>  
+      </div>  
+    </div>  
+  </div> 
+
+  <!-- Karartma Katmanı -->  
+  <div id="modalOverlay"   
+    style="display:none; position:fixed;   
+    top:0; left:0; width:100vw; height:100vh;   
+    background:rgba(0,0,0,0.5); z-index:998;">  
+  </div>
+
+  <!-- Modal for updating --> 
+  <div id="editModal" class= "modal-edit">  
+    <h4>Kayıt Güncelle</h4>  
+    <div>  
+      <label>Tarih</label>  
+      <input type="date" id="editTarih" /><br>  
+      <label id="unitModal">Tutar:</label>  
+      <input type="number" id="editTutar" /><br>  
+      <label>Not</label>  
+      <textarea id="editNot" class="modal-edit-textarea"></textarea>
+      <button id="saveEdit">Kaydet</button>  
+      <button id="cancelEdit">Vazgeç</button>  
+    </div>  
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>  
+  <script type="module">  
+    import { deleteData } from '/js/localDb.js';
+    import { buttonInfos } from '/js/quatationDatas.js';
+    import { areSameFn } from '/js/areSame.js';
+    import { showWarningMessage } from '/js/showMessage.js';
+
+    const projectNameString = document.getElementById("projectName");
+    const navbarCollapse = document.getElementById('navbarNav');  
+    const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
+    const regulationButton = document.getElementById("regulation-button");
+    const regulationButtonMobile = document.getElementById("regulation-button-mobile"); 
+    const quatationButton = document.getElementById("quatation-button"); 
+    const quatationButtonMobile = document.getElementById("quatation-button-mobile"); 
+    const graphsButton = document.getElementById("graphs-button"); 
+    const graphsButtonMobile = document.getElementById("graphs-button-mobile"); 
+    const buttonHome = document.getElementById("buttonHome");
+    const modalFooterButton = document.getElementById("modalFooterButton");
+    const saveModalButton = document.getElementById("saveModalButton");
+    const loginButton = document.getElementById("loginButton");
+    const ownerPay = document.getElementById("ownerPay");
+    const ownerPaid = document.getElementById("ownerPaid");
+    const ownerPaidButton = document.getElementById("ownerPaidButton");
+    const ownerDealButtonActive = document.getElementById("ownerDealButtonActive");
+    
+    // Tabs geçişleri  
+    const tab1Btn = document.getElementById('tab1Btn');  
+    const tab2Btn = document.getElementById('tab2Btn');  
+    const tab3Btn = document.getElementById('tab3Btn');  
+    const tab4Btn = document.getElementById('tab4Btn');  
+    const tab5Btn = document.getElementById('tab5Btn');  
+    const tab6Btn = document.getElementById('tab6Btn');  
+    const tab1Content = document.getElementById('tab1Content');  
+    const tab2Content = document.getElementById('tab2Content');  
+    const tab3Content = document.getElementById('tab3Content');
+    const tab4Content = document.getElementById('tab4Content');   
+    const tab5Content = document.getElementById('tab5Content');   
+    const tab6Content = document.getElementById('tab6Content');   
+
+    let fromControl = false;
+
+    let userId = null;
+    let projectName = null;
+
+    // DOM yüklendiğinde işlem başlat  
+    document.addEventListener("DOMContentLoaded", () => {  
+        event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle  
+
+        // 1- Menü dışındaki herhangi bir yere tıklanınca  
+        document.addEventListener('click', function (event) {  
+            if (navbarCollapse.classList.contains('show')) {  
+                // Eğer tıklanan yer menü veya hamburger değilse menüyü kapat  
+                if (!navbarCollapse.contains(event.target) &&  
+                    event.target !== document.querySelector('.navbar-toggler')  
+                    ) { bsCollapse.hide(); }  
+            }  
+        });  
+
+        // 2- Menü içerisindeki bir bağlantıya tıklanırsa kapansın
+        navbarCollapse.querySelectorAll('.nav-link').forEach(function (link) {  
+            link.addEventListener('click', function () {  
+            if (navbarCollapse.classList.contains('show')) {  
+                bsCollapse.hide();  
+            }  
+            });  
+        });
+
+        window.user = {{#if user}}
+            { "email": "{{user.email}}", "role": "{{user.role}}", "userId": "{{user.id}}", "project": {{{json project}}} }
+        {{else}}
+            { "role": "{{role}}" }
+        {{/if}};
+
+        userId = window.user.userId;
+        projectName = window.user.project.projectName;
+        if(projectName){
+            const projectNameText = projectName.toUpperCase();
+            projectNameString.textContent = projectNameText;
+        }
+
+        if(userId){
+            loginButton.style.display = "block";
+        } else{
+            loginButton.style.display = "none";
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);  
+        const cameFrom = urlParams.get('from');  
+        if (cameFrom) { 
+            activateTab('tab1');  
+            const defaultType = "Yer Sahibi ile Anlaşma";  
+            const btns = Array.from(document.querySelectorAll('.btn-outline-primary'));  
+            const btnToClick = btns.find(btn => btn.innerText.trim() === defaultType);  
+            if (btnToClick) btnToClick.click();
+        } else{
+            const stored = localStorage.getItem('activeTab') || 'tab1';  
+            activateTab(stored);
+        }
+
+        document.getElementById('modalDate').value = getTodayDate(); 
+
+    });
+
+    loginButton.addEventListener("click", () => {
+        window.location.href = "/";
+    });
+
+    
+
+    const tabs = [  
+        { btn: tab1Btn, content: tab1Content, key: 'tab1' },  
+        { btn: tab2Btn, content: tab2Content, key: 'tab2' },
+        { btn: tab3Btn, content: tab3Content, key: 'tab3' },
+        { btn: tab4Btn, content: tab4Content, key: 'tab4' },  
+        { btn: tab5Btn, content: tab5Content, key: 'tab5' },  
+        { btn: tab6Btn, content: tab6Content, key: 'tab6' },  
+    ];
+
+    function activateTab(key) {  
+        tabs.forEach(tab => {  
+            const isActive = tab.key === key;  
+            tab.content.classList.toggle('d-none', !isActive);  
+            tab.btn.classList.toggle('bg-white', isActive);  
+            tab.btn.classList.toggle('text-primary', isActive);  
+            tab.btn.classList.toggle('bg-light', !isActive);  
+            tab.btn.classList.toggle('text-secondary', !isActive);  
+        });  
+        localStorage.setItem('activeTab', key);  
+    }
+
+    tabs.forEach(tab => {  
+        tab.btn.onclick = () => activateTab(tab.key);  
+    });
+ 
+
+    regulationButton.addEventListener("click", () => {
+        window.location.href = `/bina?projectName=${encodeURIComponent(projectName)}`;
+    });
+    regulationButtonMobile.addEventListener("click", () => {
+        window.location.href = `/bina?projectName=${encodeURIComponent(projectName)}`;
+    });
+    graphsButton.addEventListener("click", () => {
+        window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
+    });
+    graphsButtonMobile.addEventListener("click", () => {
+        window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
+    });
+    buttonHome.addEventListener("click", () => {  
+        window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
+    });
+
+
+    const buttonInfo = buttonInfos;  
+
+    let activeType = null;
+
+    // Butonları seçip event ekle  
+    document.querySelectorAll('.btn-outline-primary').forEach(btn => {  
+      btn.addEventListener('click', async function() {  
+        const btnText = this.innerText.trim();  
+        activeType = btnText;
+
+        const info = buttonInfo[btnText] || {};
+
+        // Modal içeriklerini hazırla  
+        document.getElementById('dataEntryModalLabel').innerText = info.title || "Veri Girişi";  
+        document.getElementById('modalInfoText').innerText = info.desc || "";  
+
+        if(info.title === "Yer Sahibi ile Anlaşma"){
+          ownerPay.style.display = "flex";
+          ownerPaid.style.display = "flex";
+          ownerDealButton.style.display = "flex";
+          ownerPayButton.style.display = "flex";
+          ownerPaidButton.style.display = "flex";
+          ownerPayInput.style.display = "flex";
+          ownerPaidInput.style.display = "flex";
+          ownerPayInputInfo.style.display = "flex";
+          ownerPaidInputInfo.style.display = "flex";
+          
+          ownerPayButtonActive.textContent = "Kaydet";
+
+          await createIfDbNotExistAndAddItem("getPayment", "0", formatDate(getTodayDate()), "alinacak_para", "adet");
+          await createIfDbNotExistAndAddItem("givePayment", "0", formatDate(getTodayDate()), "verilecek_para", "adet");
+
+          await setPayButtons();
+
+          await updateSavedEntries(activeType, "false");
+        } else{
+          ownerPay.style.display = "none";
+          ownerPaid.style.display = "none";
+          ownerDealButton.style.display = "none";
+          ownerPayButton.style.display = "none";
+          ownerPaidButton.style.display = "none";
+          modalFooterButton.style.display = "flex";
+          ownerPayInput.style.display = "none";
+          ownerPaidInput.style.display = "none";
+          ownerPayInputInfo.style.display = "none";
+          ownerPaidInputInfo.style.display = "none";
+          saveModalButton.textContent = "Kaydet";
+          
+          document.getElementById('modalInput').style.display = "flex"; 
+          document.getElementById('modalNote').style.display = "flex";
+          document.getElementById('modalDate').style.display = "flex";
+          document.getElementById('modalInput').placeholder = info.placeholderTutar || "Tutarı giriniz";  
+          document.getElementById('modalNote').placeholder = info.placeholderNot || "Açıklama (Opsiyonel)";
+
+          // O anki kayıtları göster  
+          await updateSavedEntries(activeType, "false");
+
+          // Inputları temizle  
+          document.getElementById('modalInput').value = "";  
+          document.getElementById('modalNote').value = "";  
+        }
+
+        // Modalı aç  
+        const modal = new bootstrap.Modal(document.getElementById('dataEntryModal'), {  
+          backdrop: 'static',  // Dışarıya tıklama engellenir  
+          keyboard: false      // ESC tuşu ile kapanmaz, sadece X ile kapanır  
+        });  
+        modal.show(); 
+      });  
+    });  
+
+    // Kaydet  
+    document.getElementById('saveModalButton').addEventListener('click', async function() {  
+      const tutar = document.getElementById('modalInput').value;  
+      const tarih = document.getElementById('modalDate').value;  
+      const not = document.getElementById('modalNote').value;  
+      const unit = buttonInfo[activeType].unit;
+
+      if(activeType === "Yer Sahibi ile Anlaşma"){
+        return;
+      }
+
+      if (!tutar || !tarih) {  
+        alert("Tutar ve tarih alanı zorunludur!");  
+        return;  
+      } 
+
+      const savedDatas = areSameFn(tutar, not);
+      if(Array.isArray(savedDatas) && savedDatas.length !== 0){
+        const message = savedDatas
+          .map(item => {
+            const fields = [];
+            if (item.dbText !== null && item.dbText !== undefined) fields.push(item.dbText);
+            if (item.tutar !== null && item.tutar !== undefined) fields.push(`${item.tutar} TL`);
+            if (item.tarih !== null && item.tarih !== undefined) fields.push(`Tarih: ${formatDate(item.tarih)}`);
+            if (item.not !== null && item.not !== undefined && item.not !== "") fields.push(`Not: ${item.not}`);
+            return fields.join(', ');
+          })
+          .join('\n');
+        const messageText = "Benzer Kayıt Bulundu!\n\n" + message;
+        const userConfirmed = await showWarningMessage(messageText, "evet", false);
+        if(!userConfirmed){
+          return;
+        }
+      }
+
+      let data = await readData(activeType);
+      if (!data) data = [];  
+      data.push({ tutar:tutar, tarih: tarih, not: not, unit:unit });
+      data.sort((a, b) => new Date(a.tarih) - new Date(b.tarih));
+      await saveData(activeType, data);
+      await saveData(activeType, data);
+
+      // Liste güncelle  
+      await updateSavedEntries(activeType, "true");  
+
+      // Modalı kapat ve inputları temizle  
+      //bootstrap.Modal.getInstance(document.getElementById('dataEntryModal')).hide();  
+    });
+
+    async function readData (activeType){
+        let array = [];
+        const dataToDb = {
+            userId: userId,             // kullanıcı id'si
+            projectName: projectName,    // proje adı
+            activeType: toMongoFieldName(activeType),
+            process: "read"
+        };
+
+        try {  
+            // Kullanıcı giriş bilgilerini backend'e gönder  
+            const response = await fetch('/quatation', {  
+                method: 'POST',  
+                headers: {  
+                    'Content-Type': 'application/json'  
+                },
+                credentials: 'include',
+                body: JSON.stringify(dataToDb)
+            });
+        
+            const result = await response.json();
+            if (!response.ok && !result.success) {
+                // Sunucu response.json ile hata mesajı döndüyse
+                showWarningMessage(result.message, "tamam", true);
+            } else{
+                array = result.activeType;
+            }
+
+        } catch (error) {
+            // Ağ hatası, sunucuya istek ulaşmazsa
+            showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+            console.log('Hata:', error);
+        }
+
+        return array;
+    }
+
+    async function saveData (activeType, saves){
+      //const process = text === "update" ? "update" : "save";
+      const dataToDb = {
+          userId,
+          projectName,
+          activeType: toMongoFieldName(activeType),
+          saves,
+          process :"save"
+      };
+
+        try {  
+            // Kullanıcı giriş bilgilerini backend'e gönder  
+            const response = await fetch('/quatation', {  
+                method: 'POST',  
+                headers: {  
+                    'Content-Type': 'application/json'  
+                },
+                credentials: 'include',
+                body: JSON.stringify(dataToDb)
+            });
+            const result = await response.json();
+            if (!response.ok && !result.success) {
+                // Sunucu response.json ile hata mesajı döndüyse
+                showWarningMessage(result.message, "tamam", true);
+            }
+        } catch (error) {
+            // Ağ hatası, sunucuya istek ulaşmazsa
+            showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+            console.log('Hata:', error);
+        }
+    }
+
+    async function readDataBuilding(){
+        let array = [];
+        const dataToDb = {
+            userId: userId,             // kullanıcı id'si
+            projectName: projectName,    // proje adı
+            activeType: "activeType",
+            process: "building"
+        };
+
+        try {  
+            // Kullanıcı giriş bilgilerini backend'e gönder  
+            const response = await fetch('/quatation', {  
+                method: 'POST',  
+                headers: {  
+                    'Content-Type': 'application/json'  
+                },
+                credentials: 'include',
+                body: JSON.stringify(dataToDb)
+            });
+        
+            const result = await response.json();
+            if (!response.ok && !result.success) {
+                // Sunucu response.json ile hata mesajı döndüyse
+                showWarningMessage(result.message, "tamam", true);
+            } else{
+                array = result.building;
+            }
+
+        } catch (error) {
+            // Ağ hatası, sunucuya istek ulaşmazsa
+            showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+            console.log('Hata:', error);
+        }
+
+        return array;
+    }
+
+    function toMongoFieldName(text) {
+        // Tüm Türkçe karakterleri İngilizce karşılıklarına çevir
+        const trMap = {
+            'ç': 'c', 'ğ': 'g', 'ı': 'i', 'ö': 'o', 'ş': 's', 'ü': 'u',
+            'Ç': 'C', 'Ğ': 'G', 'İ': 'I', 'Ö': 'O', 'Ş': 'S', 'Ü': 'U'
+        };
+        let result = text.replace(/[\u00C0-\u017F]/g, function(c){
+            return trMap[c] || c;
+        });
+
+        // Harf, sayı ve boşluk dışındaki karakterleri kaldır
+        result = result.replace(/[^a-zA-Z0-9\s]/g, "");
+
+        // Trim, toLowerCase ve boşlukları ayırarak camelCase’e dönüştür
+        let parts = result.trim().split(/\s+/);
+        let camelCase = parts
+            .map((p, i) =>
+                i === 0
+                    ? p.charAt(0).toLowerCase() + p.slice(1).toLowerCase()
+                    : p.charAt(0).toUpperCase() + p.slice(1).toLowerCase()
+            )
+            .join('');
+
+        return camelCase;
+    }
+
+    // Kayıtları yazan fonksiyon  
+    async function updateSavedEntries(type, text) {  
+      const div = document.querySelector('.saved-entries');  
+      const list = await readData(type) || [];
+
+      if (list.length === 0) {  
+        div.innerHTML = "";  
+        return;  
+      }
+
+      document.getElementById('modalInput').value = '';  
+      //document.getElementById('modalDate').value = '';  
+      document.getElementById('modalNote').value = '';
+
+      if(list.length !== 0 && text === "true"){
+        const lastItem = list.length-1;
+        const payment = list[lastItem].tutar;
+        const not = list[lastItem].not;
+        document.getElementById('modalInput').placeholder = formatTL(payment) + " TL";
+        document.getElementById('modalNote').placeholder = not;
+      }
+      
+
+      const unit = buttonInfo[type]?.unit || "";
+
+      if(unit !== "adet"){
+        div.innerHTML = `  
+          <div class="mb-2 savedQuatations">KAYITLAR</div>  
+          ${  
+            list.map((item, idx) => `
+              <div class="card bg-light mb-2 p-2">  
+                <div class="fw">${formatDate(item.tarih)} tarihinde,  ${formatTL(item.tutar)} ${unit}</div>  
+                ${item.not ? `<div class="text-muted">${item.not}</div>` : ""}   
+                <div class="mt-2 d-flex gap-1 justify-content-end"> 
+                  <button class="my-custom-btn edit-btn" data-type="${type}" data-idx="${idx}">Düzenle</button>  
+                  <button class="btn btn-sm btn-danger delete-btn" data-type="${type}" data-idx="${idx}">Sil</button>  
+                </div>  
+              </div>
+            `).join('')  
+          }  
+        `;  
+
+        // Edit butonlarını bulup listener ekle  
+        div.querySelectorAll('.edit-btn').forEach(btn => {  
+          btn.addEventListener('click', function(event) {  
+            const idx = this.dataset.idx;  
+            const type = this.dataset.type;  
+            const item = list[idx];  
+            const tarih = item.tarih;  
+            const tutar = item.tutar;  
+            const not = item.not;  
+            const unit = item.unit;  
+
+            // Modalı aç ve kayıt bilgilerini yerleştir  
+            bootstrap.Modal.getInstance(document.getElementById('dataEntryModal')).hide();
+            document.getElementById('editModal').style.display = 'block';  
+            document.getElementById('modalOverlay').style.display = 'block'; 
+            document.getElementById('editTarih').value = item.tarih;
+
+            if(unit === "TL"){  
+              document.getElementById('unitModal').innerText = "Tutar";
+            } else if(unit === "adet"){  
+              document.getElementById('unitModal').innerText = "Adet";  
+            }  
+            // Tutar inputunu al  
+            const editTutarInput = document.getElementById('editTutar');  
+            editTutarInput.value = item.tutar;   // Önce mevcut değeri göster  
+
+            // Önceki event handler'ların çoğalmaması için eski focus eventlerini sil 
+            let hasCleared = false;
+            editTutarInput.onfocus = function() {  
+              if (!hasCleared) {  
+                this.value = "";  
+                hasCleared = true;
+              }  
+            };  
+
+            document.getElementById('editNot').value = item.not;
+            
+            // Kaydet butonu
+            document.getElementById('saveEdit').onclick = async function() {  
+              const newTarih = document.getElementById('editTarih').value;  
+              const newTutar = document.getElementById('editTutar').value;  
+              const newNot = document.getElementById('editNot').value;  
+
+              let dataDb = await readData(type) || [];
+              dataDb = dataDb.map(item => {  
+                if (item.tarih === tarih && item.tutar === tutar && item.not === not) {  
+                  // YENİ degerlerle dön  
+                  return {  
+                    ...item,  
+                    tarih: newTarih,  
+                    tutar: newTutar,  
+                    not: newNot,  
+                    unit: unit  
+                  };  
+                }  
+                return item;  
+              });
+              await saveData(type, dataDb);
+              
+              document.getElementById('editModal').style.display = 'none';  
+              document.getElementById('modalOverlay').style.display = 'none';
+
+              // Ekranı güncelle   
+              const modal = new bootstrap.Modal(document.getElementById('dataEntryModal'), {  
+                backdrop: 'static',  // Dışarıya tıklama engellenir  
+                keyboard: false      // ESC tuşu ile kapanmaz, sadece X ile kapanır  
+              });  
+              modal.show();
+              await updateSavedEntries(type, "false");
+            };
+
+            const cancelBtn = document.getElementById('cancelEdit');
+            cancelBtn.addEventListener("click", () => {
+              document.getElementById('editModal').style.display = 'none';  
+              document.getElementById('modalOverlay').style.display = 'none';  
+              // Ekranı güncelle   
+              const modal = new bootstrap.Modal(document.getElementById('dataEntryModal'), {  
+                backdrop: 'static',  // Dışarıya tıklama engellenir  
+                keyboard: false      // ESC tuşu ile kapanmaz, sadece X ile kapanır  
+              });  
+              modal.show();
+              updateSavedEntries(type, "false");
+            });
+              
+          });  
+        });  
+
+
+        div.querySelectorAll('.delete-btn').forEach(btn => {  
+          btn.addEventListener('click', async function(event) {  
+            const idx = this.dataset.idx;  
+            const type = this.dataset.type;  
+            const item = list[idx];  
+            const tarih = item.tarih;
+            const tutar = item.tutar;
+            const not = item.not;
+
+            let dataDb = await readData(type) || [];
+            dataDb = dataDb.filter(item =>   
+              !(item.tarih === tarih &&  
+                item.tutar === tutar &&  
+                item.not === not)  
+            ); // Bu tarihi siler  
+            await saveData(type, dataDb);
+
+            // Ekranı güncelle
+            await updateSavedEntries(type, "false");
+          });  
+        });
+
+      } else{
+        
+        const getPaymentDb = await readPayments("getPayment") || [];  
+        const getPaymentTutar = getPaymentDb[0].tutar;
+        const getPaymentInt = parseInt(getPaymentTutar);
+        const givePaymentDb = await readPayments("givePayment") || [];  
+        const givePaymentTutar = givePaymentDb[0].tutar;
+        const givePaymentInt = parseInt(givePaymentTutar);
+
+        div.innerHTML = "";  
+        let html = "";  
+        let total = 0;
+        let listToSet = null;
+        let textDb = null;
+
+        // Hangi veri kümesi gösterilecek?
+        if(getPaymentTutar !== "0"){
+          listToSet = getPaymentDb;
+          textDb = "getPayment";
+        } else if(givePaymentTutar !== "0"){
+          listToSet = givePaymentDb;
+          textDb = "givePayment";
+        }
+
+        if (listToSet && listToSet.length > 1) {
+          for (let i = 1; i < listToSet.length; i++) {
+            const item = listToSet[i];
+            const tutarValue = parseInt(item.tutar);
+            if (!tutarValue || tutarValue === 0) continue;
+            total += tutarValue;
+          }
+        }
+
+        // ANA KAYIT (index 0 için)
+        if (listToSet && listToSet.length && (getPaymentTutar !== "0" || givePaymentTutar !== "0")) {
+          const ana = listToSet[0];
+          html += `
+            <div class="mb-2 savedQuatations">KAYITLAR</div>
+            <div class="card bg-light mb-2 p-2">
+              <div class="fw">${ana.tarih} tarihinde, ${formatTL(parseInt(ana.tutar))} TL</div>
+              ${
+                ana.not === "alinacak_para"
+                  ? `<div class="fw">Alınacak para miktarı olarak girildi</div>`
+                  : ana.not === "verilecek_para"
+                    ? `<div class="fw">Verilecek para miktarı olarak girildi</div>`
+                    : ana.not
+                      ? `<div class="text-muted">${ana.not}</div>`
+                      : ""
+              }
+              ${
+                ana.not === "alinacak_para"
+                  ? `<div class="mt-2 d-flex gap-1 justify-content-center">
+                        <div class="fw">ALINAN TOPLAM: ${formatTL(total)} TL</div>
+                    </div>`
+                  : ana.not === "verilecek_para"
+                    ? `<div class="mt-2 d-flex gap-1 justify-content-center">
+                        <div class="fw">VERİLEN TOPLAM: ${formatTL(total)} TL</div>
+                    </div>`
+                  : ""
+              }
+            </div>
+          `;
+        }
+
+        // ALT KAYITLAR (index 1 ve sonrası)
+        if (listToSet && listToSet.length > 1) {
+          for (let i = 1; i < listToSet.length; i++) {
+            const item = listToSet[i];
+            const tutarValue = parseInt(item.tutar);
+            if (!tutarValue || tutarValue === 0) continue;
+            total += tutarValue;
+            html += `
+              <div class="card bg-light mb-2 p-2">
+                <div class="fw">${item.tarih} tarihinde, ${formatTL(tutarValue)} TL</div>
+                ${
+                  item.not === "alinacak_para"
+                    ? `<div class="fw">Alınan para miktarı olarak girildi</div>`
+                    : item.not === "verilecek_para"
+                      ? `<div class="fw">Verilen para miktarı olarak girildi</div>`
+                      : item.not
+                        ? `<div class="text-muted">${item.not}</div>`
+                        : ""
+                }
+                <div class="mt-2 d-flex gap-1 justify-content-end">
+                  <button class="btn btn-sm btn-danger delete-btn" data-type="${type}" data-idx="${i}" data-counter="${item.counter}">Sil</button>
+                </div>
+              </div>
+            `;
+          }
+        }
+        div.innerHTML = html;
+        
+        // verilen daireleri yazan
+        if (list.length > 0) {
+          let htmlParts = [];
+          let dataBuilding = await readDataBuilding();
+
+          for (let idx = 0; idx < list.length; idx++) {
+            const item = list[idx];
+            let match = null;
+
+            if (idx >= 0 && item.rowNumber && dataBuilding) {
+              match = dataBuilding.find(
+                element => String(element.rowNumber) === String(item.rowNumber)
+              );
+            }
+
+            if (idx >= 0 && item.rowNumber && match) {
+              htmlParts.push(`
+                <div class="card bg-light mb-2 p-2">  
+                  <div class="fw">${item.tarih} tarihinde,</div>  
+                  <div class="fw">${match.kat || ""}</div>  
+                  <div class="fw">${match.genelBrutAlan || ""} m², ${match.tipi || ""} ${match.alanTipi || ""}</div>  
+                  ${item.not ? `<div class="text-muted">${item.not}</div>` : ""}   
+                </div>  
+              `);
+            }
+          }
+
+          html += htmlParts.join('');
+        } 
+        div.innerHTML = html;
+
+        div.querySelectorAll('.delete-btn').forEach(btn => {  
+          btn.addEventListener('click', async function(event) {     
+            const idx = Number(this.dataset.idx);
+            console.log(idx," ",listToSet, " ", textDb);
+            listToSet.splice(idx, 1);
+            await savePayments(textDb, listToSet, "savePayment");
+            await updateSavedEntries(type, "false");
+          });  
+        });
+      }
+    }
+
+
+
+
+    // Kaydet arsa sahibinden alınacak para
+    ownerPayButtonActive.addEventListener('click', async function() {  
+      const tutar = document.getElementById('ownerPayInput').value;
+      const date = formatDate(getTodayDate());
+      const unit = buttonInfo[activeType].unit;
+      const type = this.dataset.type;
+
+      if(tutar === "-1" || parseInt(tutar) < 0){
+        return; 
+      }
+
+      let data = await readPayments("getPayment");
+      if(tutar === "0"){
+        data.splice(1);
+        data[0].tutar = "0";
+        await savePayments("getPayment", data, "savePayment");
+        await setPayButtons();
+        await updateSavedEntries(activeType, "false");
+        return;
+      }
+      const newItem = { tutar: tutar, tarih: date, not: "alinacak_para" };  
+      const existingIndex = data.findIndex(item => item.not === "alinacak_para");  
+
+      if (existingIndex !== -1) {  
+        // Kayıt varsa güncelle
+        data[existingIndex] = newItem;  
+      } else {  
+        // Yoksa ekle  
+        data.push(newItem);  
+      }
+      await savePayments("getPayment", data, "alinacak_para");
+      await setPayButtons();
+      // Liste güncelle  
+      await updateSavedEntries(activeType, "false");   
+    });
+
+    // Kaydet arsa sahibine verilecek para
+    ownerPaidButtonActive.addEventListener('click', async function() {  
+      const tutar = document.getElementById('ownerPaidInput').value;
+      const date = formatDate(getTodayDate());
+      const unit = buttonInfo[activeType].unit;
+      const type = this.dataset.type;
+
+      if(tutar === "-1" || parseInt(tutar) < 0){
+        return; 
+      }
+
+      let data = await readPayments("givePayment");
+      if(tutar === "0"){
+        data.splice(1);
+        data[0].tutar = "0";
+        await savePayments("givePayment", data, "savePayment");
+        await setPayButtons();
+        await updateSavedEntries(activeType, "false");
+        return;
+      }
+
+      const newItem = { tutar: tutar, tarih: date, not: "verilecek_para" };  
+      const existingIndex = data.findIndex(item => item.not === "verilecek_para"); 
+
+      if (existingIndex !== -1) {  
+        // Kayıt varsa güncelle
+        data[existingIndex] = newItem;  
+      } else {  
+        // Yoksa ekle  
+        data.push(newItem);  
+      }
+      await savePayments("givePayment", data, "verilecek_para");
+      await setPayButtons();
+      // Liste güncelle  
+      await updateSavedEntries(activeType, "false");
+    });
+
+    ownerDealButtonActive.addEventListener('click', function() {  
+      const previousUrl = window.location.href;  
+      window.location.href = 
+        'draw?from=' + encodeURIComponent(previousUrl) + 
+        '&projectName=' + encodeURIComponent(projectName);
+      });
+
+    async function createIfDbNotExistAndAddItem(activeType, tutar, date, text, unit) {  
+      let data = await readPayments(activeType) || []; 
+    }
+
+    async function readPayments(activeType){
+      let array = [];
+      const dataToDb = {
+          userId,
+          projectName,
+          activeType: activeType,
+          process :"readPayment"
+      };
+      try {  
+          // Kullanıcı giriş bilgilerini backend'e gönder  
+          const response = await fetch('/quatation', {  
+              method: 'POST',  
+              headers: {  
+                  'Content-Type': 'application/json'  
+              },
+              credentials: 'include',
+              body: JSON.stringify(dataToDb)
+          });
+          const result = await response.json();
+          if (!response.ok && !result.success) {
+              // Sunucu response.json ile hata mesajı döndüyse
+              showWarningMessage(result.message, "tamam", true);
+          } else{
+            array = result.activeType;
+          }
+      } catch (error) {
+          // Ağ hatası, sunucuya istek ulaşmazsa
+          showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+          console.log('Hata:', error);
+      }
+      return array;
+    }
+    async function savePayments(activeType, saves, text){
+      const dataToDb = {
+          userId,
+          projectName,
+          activeType: activeType,
+          saves,
+          process :text
+      };
+      try {  
+          // Kullanıcı giriş bilgilerini backend'e gönder  
+          const response = await fetch('/quatation', {  
+              method: 'POST',  
+              headers: {  
+                  'Content-Type': 'application/json'  
+              },
+              credentials: 'include',
+              body: JSON.stringify(dataToDb)
+          });
+          const result = await response.json();
+          if (!response.ok && !result.success) {
+              // Sunucu response.json ile hata mesajı döndüyse
+              showWarningMessage(result.message, "tamam", true);
+          }
+      } catch (error) {
+          // Ağ hatası, sunucuya istek ulaşmazsa
+          showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+          console.log('Hata:', error);
+      }
+    }
+
+    async function saveYerSahibiIleAnlasma(saves, text){
+      const dataToDb = {
+          userId,
+          projectName,
+          activeType: "yerSahibiIleAnlasma",
+          saves,
+          process :text
+      };
+
+        try {  
+            // Kullanıcı giriş bilgilerini backend'e gönder  
+            const response = await fetch('/quatation', {  
+                method: 'POST',  
+                headers: {  
+                    'Content-Type': 'application/json'  
+                },
+                credentials: 'include',
+                body: JSON.stringify(dataToDb)
+            });
+            const result = await response.json();
+            if (!response.ok && !result.success) {
+                // Sunucu response.json ile hata mesajı döndüyse
+                showWarningMessage(result.message, "tamam", true);
+            }
+        } catch (error) {
+            // Ağ hatası, sunucuya istek ulaşmazsa
+            showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+            console.log('Hata:', error);
+        }
+    }
+
+    async function setPayButtons(){
+      const ownerPayInput = document.getElementById("ownerPayInput");
+      const ownerPaidInput = document.getElementById("ownerPaidInput");
+      const ownerDealButton = document.getElementById("ownerDealButton");
+      const ownerPayButton = document.getElementById("ownerPayButton");
+      const ownerPayInputInfo = document.getElementById("ownerPayInputInfo");
+      const ownerPaidInputInfo = document.getElementById("ownerPaidInputInfo");
+      const ownerPaidButtonActive = document.getElementById("ownerPaidButtonActive");
+      const ownerPayButtonActive = document.getElementById("ownerPayButtonActive");
+
+      let text = null;
+      const getPaymentDb = await readPayments("getPayment") || [];  
+      const getPaymentTutar = getPaymentDb[0].tutar;
+      const getPaymentInt = parseInt(getPaymentTutar);
+      const givePaymentDb = await readPayments("givePayment") || [];  
+      const givePaymentTutar = givePaymentDb[0].tutar;
+      const givePaymentInt = parseInt(givePaymentTutar);
+
+      if(givePaymentTutar !== "0" && getPaymentTutar === "0"){
+        text = "verilecek_para";
+        saveModalButton.textContent = "Para Ver";
+        ownerPayInputInfo.style.display = "none";
+
+        document.getElementById('modalInput').style.display = "flex"; 
+        document.getElementById('modalNote').style.display = "flex"; 
+        document.getElementById('modalDate').style.display = "flex";
+        modalFooterButton.style.display = "flex";  
+        saveModalButton.style.display = "flex";    
+
+        ownerPay.style.display = "none";
+        ownerPayButton.style.display = "none";
+        ownerPayInput.style.display = "none";
+        ownerPaid.style.display = "flex";
+        ownerPaidButton.style.display = "flex";
+        ownerPaidInput.style.display = "flex";
+
+        ownerPaidInput.value = "";
+        ownerPaidInput.placeholder = formatTL(givePaymentInt)+" TL";  
+        ownerPaidButtonActive.textContent = "Değiştir";
+        ownerPaidInputInfo.style.display = "flex";
+        ownerPaidButton.style.display = "flex";
+        ownerPaidButton.style.alignSelf = "flex-end";
+        
+      } else if (getPaymentTutar !== "0" && givePaymentTutar === "0"){
+        text = "alinacak_para";
+        saveModalButton.textContent = "Para Al"
+        ownerPaid.style.display = "none";
+        ownerPaidInputInfo.style.display = "none";
+        ownerPaidButton.style.display = "none";
+        ownerPaidInput.style.display = "none";
+        ownerPay.style.display = "flex";
+        ownerPayInput.style.display = "flex";
+
+        ownerPayInput.value = "";
+        ownerPayInput.placeholder = formatTL(getPaymentInt)+" TL";  
+        ownerPayButtonActive.textContent = "Değiştir";
+        ownerPayInputInfo.style.display = "flex";
+        ownerPayButton.style.display = "flex";
+        ownerPayButton.style.alignSelf = "flex-end";
+      } else if(getPaymentTutar === "0" && givePaymentTutar === "0"){
+        document.getElementById('modalInput').style.display = "none"; 
+        document.getElementById('modalNote').style.display = "none"; 
+        document.getElementById('modalDate').style.display = "none";
+        saveModalButton.style.display = "none";
+
+        // Alınacak para alanlarını tamamen aç
+        ownerPay.style.display = "flex";
+        ownerPayInputInfo.style.display = "flex";
+        ownerPayInput.style.display = "flex";
+        ownerPayButton.style.display = "flex";
+        ownerPayButton.style.alignSelf = "flex-end";
+        ownerPayButtonActive.textContent = "Kaydet";
+        ownerPayInput.value = "";
+        ownerPayInput.placeholder = "Alınacak Para";
+        
+        // Verilecek para alanlarını da tamamen aç
+        ownerPaidArea.style.display = "flex";
+        ownerPaid.style.display = "flex";
+        ownerPaidInputInfo.style.display = "flex";
+        ownerPaidInput.style.display = "flex";
+        ownerPaidButton.style.display = "flex";
+        ownerPaidButton.style.alignSelf = "flex-end";
+        ownerPaidButtonActive.textContent = "Kaydet";
+        ownerPaidInput.value = "";
+        ownerPaidInput.placeholder = "Verilecek Para";
+      }
+    }
+
+    saveModalButton.addEventListener('click', async function() { 
+      if(saveModalButton.textContent === "Para Al" || saveModalButton.textContent === "Para Ver"){
+        if (saveModalButton.textContent === "Para Al"){
+          const data = await readPayments("getPayment");
+          const counter = data.length;
+          const ekVeri = {
+            tarih: formatDate(document.getElementById('modalDate').value) || formatDate(getTodayDate()),
+            tutar: document.getElementById('modalInput').value,
+            not: document.getElementById('modalNote').value,
+            counter: counter
+          };
+          data.push(ekVeri);
+          
+          await savePayments("getPayment", data, "savePayment");
+
+          document.getElementById('modalInput').value = "";  
+          document.getElementById('modalDate').value = "";  
+          document.getElementById('modalNote').value = "";
+
+        } else if(saveModalButton.textContent === "Para Ver"){
+          const data = await readPayments("givePayment");
+          const counter = data.length;
+          const ekVeri = {
+            tarih: formatDate(document.getElementById('modalDate').value) || formatDate(getTodayDate()),
+            tutar: document.getElementById('modalInput').value,
+            not: document.getElementById('modalNote').value,
+            counter: counter
+          };
+          data.push(ekVeri);
+          
+          await savePayments("givePayment", data, "savePayment");
+          document.getElementById('modalInput').value = "";  
+          document.getElementById('modalDate').value = "";  
+          document.getElementById('modalNote').value = "";
+        }
+
+        // Liste güncelle  
+        await updateSavedEntries(activeType, "false");
+      }
+    });
+
+    // •
+
+    function getTodayDate(){
+      const today = new Date();  
+      const yyyy = today.getFullYear();  
+      const mm = String(today.getMonth() + 1).padStart(2, '0');  
+      const dd = String(today.getDate()).padStart(2, '0');  
+      const formattedDate = `${yyyy}-${mm}-${dd}`;
+      return formattedDate;
+    }
+    function formatDate(dateString) {  
+      // "yyyy-mm-dd" -> "dd.mm.yyyy"  
+      const [year, month, day] = dateString.split("-");  
+      return `${day}.${month}.${year}`;  
+    }
+
+   
+    // Türk Lirası örneği için (virgül: ondalık, nokta: binlik ayırıcı)  
+    function formatTL(number) {  
+      number = number.toString();  
+      let [intPart, decPart] = number.replace(",", ".").split(".");  
+      intPart = intPart.replace(/\D/g, "");
+      intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");  
+
+      return decPart ? `${intPart},${decPart.substring(0,2)}` : intPart;  
+    }
+
+  </script>  
+</body>  
+</html>
+

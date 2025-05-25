@@ -1,0 +1,872 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>Yapıo</title>  
+  <!-- Bootstrap CSS -->  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Özel CSS -->  
+  <link rel="stylesheet" href="css/index.css">
+
+  <style>  
+    body, html {  
+      margin: 0;  
+      padding: 0;  
+      height: 100%;  
+      overflow: hidden;  
+    }  
+    video {  
+      position: absolute;  
+      top: 0;  
+      left: 0;  
+      width: 100%;  
+      height: 100%;  
+      object-fit: cover; /* Videonun ekranı doldurmasını sağlar */  
+      z-index: -1; /* Videoyu içeriklerin arkasına gönder */  
+    }
+    .custom-btn {  
+      background-color: #847539;
+      color: white; /* Yazı rengi */  
+      border: none; /* Kenarlığın kaldırılması */  
+      border-radius: 10px; /* Kenarlıkları yuvarlaklaştırma */  
+      padding: 10px 20px; /* İç boşluklar */  
+      font-family: "Varela Round";  
+      font-size: 16px; /* Yazı boyutu */  
+      font-weight: bold; /* Kalın yazı */  
+      letter-spacing: 2px;
+      cursor: pointer; /* Fare imlecini işaretçi yapma */  
+      transition: background-color 0.3s ease; /* Hover geçiş efekti */
+      margin-right: 40px;
+    }  
+
+    /* Hover efekti */  
+    .custom-btn:hover {  
+      background-color: #d6b739; /* Hover efektinde farklı renk */  
+    }  
+
+    /* Buton odaklanınca (focus) kenarlık vurgusu */  
+    .custom-btn:focus {  
+      outline: 2px solid #e9d480; /* Dış kenarlık */  
+      outline-offset: 2px;  
+    }
+    .container h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+    }
+    .container p{
+      font-family: "Quicksand", sans-serif;
+      font-size: 20px;
+      color: #ffffff;  
+    }
+
+    .user-area {
+      cursor: pointer;
+      margin-bottom: 26px;
+    }
+    .user-area img {
+      width: 48px; height: 48px; border-radius: 50%;
+      background-color: #847539;
+    }
+    .user-area .username {
+      color: #000000; font-weight: bold; margin-top: 8px; letter-spacing: 1px;
+    }
+
+    .text-center{
+      margin-top: -200px;
+    }
+
+    .make-btn {
+      background-color: #0a43f0;
+      color: white; /* Yazı rengi */  
+      border: none; /* Kenarlığın kaldırılması */  
+      border-radius: 5px; /* Kenarlıkları yuvarlaklaştırma */  
+      padding: 10px 20px; /* İç boşluklar */  
+      font-family: "Varela Round";  
+      font-size: 20px; /* Yazı boyutu */
+      letter-spacing: 2px;
+      cursor: pointer; /* Fare imlecini işaretçi yapma */  
+      transition: background-color 0.3s ease; /* Hover geçiş efekti */
+      z-index: 3;  
+      position: relative; 
+      margin-top: 100px;
+    }
+    .make-btn2 {
+      background-color: #0a43f0;
+      color: white; /* Yazı rengi */  
+      border: none; /* Kenarlığın kaldırılması */  
+      border-radius: 5px; /* Kenarlıkları yuvarlaklaştırma */  
+      padding: 10px 20px; /* İç boşluklar */  
+      font-family: "Varela Round";  
+      font-size: 18px; /* Yazı boyutu */
+      letter-spacing: 2px;
+      cursor: pointer; /* Fare imlecini işaretçi yapma */  
+      transition: background-color 0.3s ease; /* Hover geçiş efekti */
+      z-index: 3;  
+      position: relative; 
+      margin-top: 30px;
+      display: block; 
+    }
+    .make-btn:hover {  
+      background-color: #1d53f4; /* Hover efektinde farklı renk */  
+    } 
+    .made-btn {
+      background-color: #4d9166;
+      color: white; /* Yazı rengi */  
+      border: none; /* Kenarlığın kaldırılması */  
+      border-radius: 5px; /* Kenarlıkları yuvarlaklaştırma */  
+      padding: 10px 20px; /* İç boşluklar */  
+      font-family: "Varela Round";  
+      font-size: 20px; /* Yazı boyutu */
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: background-color 0.3s ease; /* Hover geçiş efekti */
+      z-index: 3;  
+      position: relative; 
+      margin-top: 10px;
+    }
+    .made-btn:hover {  
+      background-color: #FF2800; /* Hover efektinde farklı renk */  
+    } 
+
+    .bg-login {
+      margin: 0;  
+      padding: 0; 
+      background-image: url('img/bck7_7.png');
+      background-repeat: no-repeat;  
+      background-size: 90%; 
+      background-position: bottom;  
+      background-color: #f4f2f2;
+      height: 120vh;  
+      font-family: Arial, sans-serif;
+    }
+
+    .project-list {
+      min-height: 200px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .modal-content {
+      padding: 0 !important;
+      border-radius: 1.2rem;
+    }
+    .modal-header {
+      position: relative;
+    }
+    .modal-header .btn-close {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+    }
+    .modal-body {
+      padding: 2rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    #registerModalLabel{
+      display: flex;
+      justify-content: center;
+    }
+    /* Daha küçük ekranlarda header boyutu küçülür */  
+    @media (max-width: 768px) {
+      .custom-btn {  
+        padding: 10px 20px; /* İç boşluklar */  
+        font-size: 12px; /* Yazı boyutu */
+        margin-right: 15px;
+      }
+      .container h1 {
+        font-family: 'Oswald', sans-serif;
+        font-size: 28px;
+        font-weight: 500;
+      }
+      .container p{
+        font-family: "Quicksand", sans-serif;
+        font-size: 15px;
+      }
+
+      .bg-login { 
+        background-image: url('img/bck7_6.png');
+        height: 110vh;
+        background-size: 100%;
+        background-repeat:no-repeat; 
+        background-position:bottom;
+      }
+
+      .user-area img {
+        width: 34px; height: 34px; border-radius: 50%;
+      }
+      .user-area .username {
+        color: #000000; font-weight: bold; margin-top: 8px; letter-spacing: 1px; font-size: 0.8rem;
+      }
+
+      .modal-body {
+        padding: 1rem;
+        max-width: 100%;
+      }
+
+    }  
+    /* Daha büyük ekranlarda header boyutu büyür */  
+    @media (min-width: 1200px) {  
+      .header {  
+        height: 14vh;  
+      }  
+    }  
+    .content {  
+      z-index: 1; /* Videonun üstünde görüntülenir */  
+      color: white;  
+      text-align: center;  
+      font-family: Arial, sans-serif;  
+      padding: 20px;  
+    }  
+  </style>  
+</head>  
+<body>  
+  <!-- Video Arka Plan -->  
+  <video id="backgroundVideo" muted autoplay loop playsinline>
+    <source src="img/edit2_1.mp4" type="video/mp4">  
+    Tarayıcınız video etiketini desteklemiyor.  
+  </video>  
+
+  <!-- Responsive Header -->  
+  <nav class="header d-flex justify-content-between align-items-center px-3">  
+    <!-- Sol Taraf Başlık veya Logo -->  
+    <span>Yapıo</span>  
+  
+    <!-- Sağ Taraf Giriş Butonu -->  
+    <button class="btn custom-btn" id="loginButton">GİRİŞ</button>  
+  </nav>  
+
+  <!-- Kullanıcı avatarı ve adı proje listesinin üstünde gösterilir -->
+  <div class="user-area d-flex align-items-center ms-3 ms-md-5 mt-3 d-none" id="userArea">
+    <img src="/img/user1.png" alt="Kullanıcı Avatarı" id="userImg">
+    <div class="username ms-1" id="userAreaName">Kullanıcı Adı</div>
+  </div>
+  
+
+  <!-- İçerik -->  
+  <div class="container h-100 d-flex justify-content-center align-items-center">
+    <div class="content text-center">  
+      <h1 id="text1">Her Detayı Hesaplıyoruz!</h1>  
+      <p id="text2">Tüm projeleriniz her zaman yanınızda, elinizin altında</p>
+
+      <div class="project-list w-75" id="projectList">
+        <a id="make-button" class="btn make-btn">Proje Oluştur</a>
+      </div>
+      <div class="container d-flex justify-content-center align-items-center" style="height: 10vh;">
+        <a id="made-button" class="btn made-btn w-100 d-block mx-auto">Projeye Git</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kayıt Modalı -->
+  <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content rounded-4">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title w-100" id="registerModalLabel">Kullanıcı Ayarları</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+        </div>
+        <div class="modal-body">
+          <form id="registerForm">
+            <input type="text" class="form-control mb-2" id="name" name="name" placeholder="Adınız veya Şirket Adı">
+            <input type="text" class="form-control mb-2" id="phone" name="phone" placeholder="Telefon numarası (0..)" maxlength="11" minlength="11" pattern="^\d{11}$">
+            <input type="email" class="form-control mb-2" id="email" name="email" placeholder="E-posta adresiniz">
+            <input type="password" class="form-control mb-2" id="passwordRecent" name="passwordRecent" placeholder="Şifrenizi giriniz" required>
+            <input type="password" class="form-control mb-2" id="password" name="password" placeholder="Yeni Şifre" required>
+            <input type="password" class="form-control mb-2" id="confirmPassword" name="confirmPassword" placeholder="Tekrar" required>
+            <input type="text" class="form-control mb-2" id="tcno" name="tcno" maxlength="11" pattern="\d{11}" placeholder="11 haneli T.C. Kimlik No">
+            <div class="row g-2 mb-2">
+              <div class="col-6">
+                <input type="text" class="form-control" id="il" name="il" placeholder="İl">
+              </div>
+              <div class="col-6">
+                <input type="text" class="form-control" id="ilce" name="ilce" placeholder="İlçe">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mt-2" id="registerButton">Kaydet</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JavaScript -->  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>  
+
+  <script type="module">
+    import { saveData, readData, deleteData } from '/js/localDb.js';
+    import { showWarningMessage } from '/js/showMessage.js';
+
+    const makeButton = document.getElementById("make-button");
+    const madeButton = document.getElementById("made-button");
+    const loginButton = document.getElementById("loginButton");
+    const text1 = document.getElementById("text1");
+    const text2 = document.getElementById("text2");
+    const userAreaName = document.getElementById("userAreaName");
+    const userImg = document.getElementById("userImg");
+    const projectArea = document.querySelector(".project-area");
+    const userArea = document.querySelector(".user-area");
+    const name = document.getElementById("name");
+    const phone = document.getElementById("phone");
+    const email = document.getElementById("email");
+    const passwordRecent = document.getElementById("passwordRecent");
+    const confirmPassword = document.getElementById("confirmPassword");
+    const tcno = document.getElementById("tcno");
+    const il = document.getElementById("il");
+    const ilce = document.getElementById("ilce");
+    const form = document.getElementById('registerForm');
+    const registerButton = document.getElementById('registerButton');
+
+    let userId = null;
+    let projectName = null;
+
+    let userNameInfo = null;
+    let userPhoneInfo = null;
+    let userEmailInfo = null;
+    let userTCnoInfo = null;
+    let userIlInfo = null;
+    let userIlceInfo = null;
+    let userSirketIl = null;
+    let userSirketIlce = null;
+    let userTipiInfo = null;
+    let userVergiNo = null;
+
+    makeButton.style.visibility = "hidden";
+    madeButton.style.visibility = "hidden";
+
+    // Başta buton disabled olsun
+    registerButton.style.opacity = 0.5;
+    registerButton.disabled = true;
+
+    document.addEventListener("DOMContentLoaded", async () => {  
+      window.user = {{#if user}}
+        { "email": "{{user.email}}", "role": "{{user.role}}", "userId": "{{user.id}}" }
+      {{else}}
+          { "role": "{{role}}" }
+      {{/if}};
+
+      userId = window.user.userId;
+
+      if(window.user.role === "misafir"){
+        deleteData("isUser");
+        showBackgroundVideo();
+        setScreen();
+        userArea.classList.add("d-none");
+      }else if(window.user.role === "user"){
+        hideBackgroundVideo();
+        await setUserScreen(window.user.userId);
+        userArea.classList.remove("d-none");
+      }
+
+      userAreaName.textContent = userNameInfo;
+
+    });
+
+    userImg.addEventListener("click", () => {
+      if(userTipiInfo === "sahis"){
+        name.placeholder = userNameInfo;
+        phone.placeholder = userPhoneInfo;
+        email.placeholder = userEmailInfo;
+        tcno.placeholder = userTCnoInfo;
+        il.placeholder = userIlInfo;
+        ilce.placeholder = userIlceInfo;
+      } else if(userTipiInfo === "sirket"){
+        name.placeholder = userNameInfo;
+        phone.placeholder = userPhoneInfo;
+        email.placeholder = userEmailInfo;
+        tcno.placeholder = userVergiNo;
+        il.placeholder = userSirketIl;
+        ilce.placeholder = userSirketIlce;
+      }
+      
+      const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+      registerModal.show();
+    });
+
+    function validateField(input) {
+        const id = input.id;
+        const value = input.value.trim();
+
+        const maxLengths = {
+            name: 50,
+            phone: 11,
+            email: 30,
+            password: 12,
+            confirmPassword: 12,
+            tcno: 11,
+            il: 30,
+            ilce: 30
+        };
+
+        if (maxLengths[id] && value.length > maxLengths[id]) return false;
+
+        if (id === "name") return /^.{2,50}$/.test(value);
+        if (id === "phone") return /^\d{11}$/.test(value);
+        if (id === "tcno") return /^\d{11}$/.test(value);
+        if (id === "il" || id === "ilce")
+            return /^[a-zA-ZşçöğüğıŞÇÖÜĞİ\s-]{2,30}$/.test(value);
+        if (id === "email")
+            return /^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,30}$/.test(value);
+        if (id === "password" || id === "confirmPassword")
+            return /^.{6,12}$/.test(value);
+        return true;
+    }
+
+    // Yalnızca 3 şifre alanı dolu ve geçerli mi kontrolü
+    function arePasswordsValid() {
+        const passwordRecent = document.getElementById('passwordRecent');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const passwords = [password, confirmPassword];
+
+        for (const input of passwords) {
+            if (!input.value.trim() || !validateField(input)) return false;
+        }
+        // Şifre ve tekrar eşleşiyor mu?
+        if (password.value !== confirmPassword.value) return false;
+        return true;
+    }
+
+    function checkAllFilled() {
+        // Tüm inputları al
+        const inputs = form.querySelectorAll('input');
+
+        // Diğer alanlara giriş yapılmışsa (boş değilse) validasyonunu uygula
+        inputs.forEach(input => {
+            if (
+                input.id !== "passwordRecent" &&
+                input.id !== "password" &&
+                input.id !== "confirmPassword"
+            ) {
+                if (!input.value.trim()) {
+                    // Boşsa validasyon class'ı verme
+                    input.classList.remove("is-valid", "is-invalid");
+                } else if (!validateField(input)) {
+                    input.classList.add("is-invalid");
+                    input.classList.remove("is-valid");
+                } else {
+                    input.classList.add("is-valid");
+                    input.classList.remove("is-invalid");
+                }
+            }
+        });
+
+        // Şifre alanlarını kontrol et ve classlarını güncelle
+        ["passwordRecent", "password", "confirmPassword"].forEach(id => {
+            const input = document.getElementById(id);
+            if (!input.value.trim()) {
+                input.classList.remove("is-valid", "is-invalid");
+            } else if (!validateField(input)) {
+                input.classList.add("is-invalid");
+                input.classList.remove("is-valid");
+            } else {
+                input.classList.add("is-valid");
+                input.classList.remove("is-invalid");
+            }
+        });
+
+        // confirmPassword alanı, password ile eşleşmiyorsa extra invalid class
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+        if (
+            password.value &&
+            confirmPassword.value &&
+            password.value !== confirmPassword.value
+        ) {
+            confirmPassword.classList.add("is-invalid");
+            confirmPassword.classList.remove("is-valid");
+        }
+
+        // Butonun aktifliği sadece şifre alanlarına bağlı
+        if (arePasswordsValid()) {
+            registerButton.style.opacity = 1;
+            registerButton.disabled = false;
+        } else {
+            registerButton.style.opacity = 0.5;
+            registerButton.disabled = true;
+        }
+    }
+
+    // Tüm inputlar için event dinleyici ekle
+    form.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', checkAllFilled);
+    });
+
+    function getRegisterFormData() {
+      if(userTipiInfo === "sahis"){
+        return {
+          name: document.getElementById("name").value || userNameInfo,
+          phone: document.getElementById("phone").value || userPhoneInfo,
+          email: document.getElementById("email").value || userEmailInfo,
+          passwordRecent: document.getElementById("passwordRecent").value,
+          password: document.getElementById("password").value,
+          confirmPassword: document.getElementById("confirmPassword").value,
+          userTCnoInfo: document.getElementById("tcno").value || userTCnoInfo,
+          userIlInfo: document.getElementById("il").value || userIlInfo,
+          userIlceInfo: document.getElementById("ilce").value || userIlceInfo,
+          userSirketIl : userSirketIl,
+          userSirketIlce : userSirketIlce,
+          userTipiInfo : userTipiInfo,
+          userVergiNo : userVergiNo
+        };
+      }else if(userTipiInfo === "sirket"){
+        return {
+          name: document.getElementById("name").value || userNameInfo,
+          phone: document.getElementById("phone").value || userPhoneInfo,
+          email: document.getElementById("email").value || userEmailInfo,
+          passwordRecent: document.getElementById("passwordRecent").value,
+          password: document.getElementById("password").value,
+          confirmPassword: document.getElementById("confirmPassword").value,
+          userVergiNo : document.getElementById("tcno").value || userVergiNo,
+          userSirketIl : document.getElementById("il").value || userSirketIl,
+          userSirketIlce : document.getElementById("ilce").value || userSirketIlce,
+          userIlInfo : userIlInfo,
+          userIlceInfo : userIlceInfo,
+          userTipiInfo : userTipiInfo,
+          userTCnoInfo : userTCnoInfo
+        };
+      }
+      
+    }
+
+    // Form submitte kontrol et
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      checkAllFilled();
+      if (!registerButton.disabled) {
+          console.log("tt", getRegisterFormData());
+          const userInfos = getRegisterFormData();
+          await getDb(userInfos);
+      }
+    });
+
+    async function getDb(userInfos){
+        const dataToDb = {
+            userId: userId,
+            projectName: "saveUserInfos",
+            userInfos: userInfos,
+            process: "saveUserInfos"
+        };
+
+        try {  
+            // Kullanıcı giriş bilgilerini backend'e gönder  
+            const response = await fetch('/', {  
+                method: 'POST',  
+                headers: {  
+                    'Content-Type': 'application/json'  
+                },
+                credentials: 'include',
+                body: JSON.stringify(dataToDb)
+            });
+        
+            const result = await response.json();
+            if (!response.ok && !result.success) {
+                // Sunucu response.json ile hata mesajı döndüyse
+                showWarningMessage(result.message, "tamam", true);
+            } else{
+                showWarningMessage(result.message, "tamam", true);
+            }
+            
+        } catch (error) {
+            // Ağ hatası, sunucuya istek ulaşmazsa
+            showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+            console.log('Hata:', error);
+        }
+    }
+
+    function setScreen(){
+      const projectNameDb = readData("projectName");
+      let projectName = null;
+      if(projectNameDb){
+        projectName = readData("projectName")[0];
+      }
+      
+      document.body.classList.remove("bg-login");
+      text1.style.display = "block";
+      text2.style.display = "block";
+      loginButton.textContent = "GİRİŞ";
+      if(projectName){
+        makeButton.style.visibility = "visible";
+        makeButton.textContent = "Projeye Git";
+        madeButton.textContent = "Projeyi Sil";
+        madeButton.style.backgroundColor = "#FF2800";
+        madeButton.style.visibility = "visible";
+      } else{
+        makeButton.textContent = "Proje Oluştur";
+        makeButton.style.visibility = "visible";
+        madeButton.style.visibility = "hidden";
+        makeButton.style.backgroundColor = "#4d9166";
+      }
+    }
+
+    async function setUserScreen(userId){
+      document.body.classList.add("bg-login");
+      text1.style.display = "none";
+      text2.style.display = "none";
+      loginButton.textContent = "ÇIKIŞ";
+      makeButton.style.visibility = "visible";
+      await renderProjects(userId);
+    }
+
+    loginButton.addEventListener("click", async () => {
+      if(loginButton.textContent === "GİRİŞ"){
+        window.location.href = "/login";
+      } else if(loginButton.textContent === "ÇIKIŞ"){
+        await fetch("/logout", {
+          method: "POST",
+          credentials: "include"
+        });
+        window.location.href = "/";
+      }
+    });
+    
+    makeButton.addEventListener("click", () => {
+      window.location.href = "/bina";
+    });
+
+    madeButton.addEventListener("click", async  () => {  
+      const userConfirmed = await showWarningMessage("Projeniz silinecektir. Devam etmek istiyor musunuz?", "evet", false);
+        if (userConfirmed) {
+          deleteData("projectName");
+          deleteData("floorsData");
+          deleteData("building");
+          deleteData("soldItems");
+          deleteData("Yer Sahibi ile Anlaşma");
+          setScreen();
+        }
+    });
+
+    function hideBackgroundVideo() {
+      const videoElem = document.getElementById('backgroundVideo');
+      if (videoElem) {
+          videoElem.style.display = "none";
+          videoElem.pause();
+      }
+    }
+
+    function showBackgroundVideo() {
+      const videoElem = document.getElementById('backgroundVideo');
+      if (videoElem) {
+          videoElem.style.display = "block";
+          videoElem.play(); // Yeniden başlatmak için
+      }
+    }
+    function positionProjectList(n) {
+      const list = document.getElementById('projectList');
+      const makeBtn = list.querySelector('.make-btn2');
+
+      list.style.position = 'absolute';
+      list.style.left = '50%';
+      list.style.transform = 'translateX(-50%)';
+
+      if (n <= 3) {
+        // Tam ortada (yukarıdan %50, dik ortala)
+        list.style.top = '45%';
+        list.style.transform = 'translate(-50%, -50%)';
+        if (makeBtn) makeBtn.style.marginTop = "35px";
+      } else if (n <= 6) {
+        // Yukarıdan %30 boşluk
+        list.style.top = '30%';
+        list.style.transform = 'translateX(-50%)';
+        if (makeBtn) makeBtn.style.marginTop = "35px";
+      } else {
+        // Yukarıdan %15 boşluk
+        list.style.top = '25%';
+        list.style.transform = 'translateX(-50%)';
+        if (makeBtn) makeBtn.style.marginTop = "20px";
+      }
+    }
+
+    async function renderProjects(userId) {
+      const projects = [];
+      const data = {
+          userId : userId
+      };
+      try {  
+          const response = await fetch('/', {  
+              method: 'POST',  
+              headers: {  
+                  'Content-Type': 'application/json'  
+              },
+              credentials: 'include',
+              body: JSON.stringify(data)  
+          });  
+      
+          const result = await response.json();
+          if (!response.ok && !result.success) {
+              showWarningMessage(result.message, "tamam", true);
+          } else{
+              if(Array.isArray(result.projects)){
+                result.projects.forEach(element => { 
+                  projects.push(element.projectName);
+                });
+                userNameInfo = result.projects[0].userNameInfo;
+                userPhoneInfo = result.projects[0].userPhoneInfo;
+                userEmailInfo = result.projects[0].userEmailInfo;
+                userTCnoInfo = result.projects[0].userTCnoInfo;
+                userIlInfo = result.projects[0].userIlInfo;
+                userIlceInfo = result.projects[0].userIlceInfo;
+                userSirketIl = result.projects[0].userSirketIl;
+                userSirketIlce = result.projects[0].userSirketIlce;
+                userTipiInfo = result.projects[0].userTipiInfo;
+                userVergiNo = result.projects[0].userVergiNo;
+              } else{
+                userNameInfo = result.projects.userNameInfo;
+                userPhoneInfo = result.projects.userPhoneInfo;
+                userEmailInfo = result.projects.userEmailInfo;
+                userTCnoInfo = result.projects.userTCnoInfo;
+                userIlInfo = result.projects.userIlInfo;
+                userIlceInfo = result.projects.userIlceInfo;
+                userSirketIl = result.projects.userSirketIl;
+                userSirketIlce = result.projects.userSirketIlce;
+                userTipiInfo = result.projects.userTipiInfo;
+                userVergiNo = result.projects.userVergiNo;
+              }
+          }
+      } catch (error) {
+          showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+          console.log('Hata:', error);
+      }
+      
+      const projectList = document.querySelector('.project-list');
+      projectList.innerHTML = "";
+
+      if (projects.length === 0) {
+        projectList.innerHTML = `<div class="text-center text-secondary fst-italic w-100">Hiç projeniz yok.</div>`;
+        const makeBtn = document.createElement('a');
+        makeBtn.id = "make-button2";
+        makeBtn.className = "btn make-btn2";
+        makeBtn.textContent = "Proje Oluştur";
+        makeBtn.style.marginTop = "55px";
+        makeBtn.style.padding = "6px 9px";
+        makeBtn.style.fontSize = "15px";
+        makeBtn.onclick = () => window.location.href = "/bina"; // veya eventListener ile
+        projectList.appendChild(makeBtn);
+        //positionProjectList(1); // Ortada dursun
+        return;
+      }
+
+      projects.forEach((proj, idx) => {
+        const projectCard = document.createElement('div');
+        projectCard.className = "card mb-2 border-0 shadow-lg project-card animate-pop position-relative";
+        projectCard.style.background = "linear-gradient(90deg, #f7ecd2 0%, #e3e7fa 100%)";
+        projectCard.innerHTML = `
+            <div class="row align-items-center g-0">
+              <div class="col-auto d-flex align-items-center px-3" style="font-size: 2rem; color:#5b74e6;">
+                <i class="bi bi-building-up"></i>
+              </div>
+              <div class="col ps-0">
+                <div class="card-body py-3 d-flex align-items-center justify-content-between">
+                  <h5 class="card-title mb-1 fw-bold text-primary proj-name" style="cursor:pointer;">${proj}</h5>
+                  <button class="btn btn-outline-danger btn-sm ms-2 me-1 delete-project" data-index="${idx}" title="Sil">Sil</button>
+                </div>
+              </div>
+            </div>
+            <span class="badge bg-success position-absolute top-0 start-0 m-2 shadow mt-1" style="font-size:0.9rem;">${idx + 1}</span>
+          `;
+        projectList.appendChild(projectCard);
+      });
+
+      const makeBtn = document.createElement('a');
+      makeBtn.id = "make-button2";
+      makeBtn.className = "btn make-btn2";
+      makeBtn.textContent = "Proje Oluştur";
+      makeBtn.onclick = () => window.location.href = "/bina"; // veya eventListener ile
+      projectList.appendChild(makeBtn);
+
+      positionProjectList(projects.length);
+
+      // Buton işlevleri
+      document.querySelectorAll('.delete-project').forEach(btn => {
+        btn.addEventListener('click', async function() {
+          const projName = this.closest('.card-body').querySelector('.proj-name').textContent.trim();
+          const messageText = projName + " Projesi silinecektir! Devam etmek istiyor musunuz?";
+
+          const userConfirmed = await showWarningMessage(messageText, "evet", false);
+          if(!userConfirmed){
+            return;
+          } else{
+            const data = {
+                userId : userId,
+                projectName : projName
+            };
+            try {
+                const response = await fetch('/', {  
+                    method: 'POST',  
+                    headers: {  
+                        'Content-Type': 'application/json'  
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(data)  
+                });  
+            
+                const result = await response.json();
+                if (!response.ok && !result.success) {
+                    showWarningMessage(result.message, "tamam", true);
+                } else{
+                  await renderProjects(userId);
+                }
+            } catch (error) {
+                // Ağ hatası, sunucuya istek ulaşmazsa
+                showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+                console.log('Hata:', error);
+            }
+          }
+        });
+      });
+
+      document.querySelectorAll('.proj-name').forEach(btn => {
+        btn.addEventListener('click', async function() {
+          const projName = this.closest('.card-body').querySelector('.proj-name').textContent.trim();
+          projectName = projName;
+          const building = await readDataDb("building");
+          if(building.length > 0){
+              window.location.href = `/draw?projectName=${encodeURIComponent(projName)}`;
+          } else{
+              window.location.href = `/bina?projectName=${encodeURIComponent(projName)}`;
+          }
+        });
+      });
+    }
+
+    async function readDataDb (activeType){
+        let array = [];
+        const dataToDb = {
+            userId: userId,
+            projectName: projectName,
+            activeType: activeType,
+            process: "read"
+        };
+
+        try {  
+            // Kullanıcı giriş bilgilerini backend'e gönder  
+            const response = await fetch('/', {  
+                method: 'POST',  
+                headers: {  
+                    'Content-Type': 'application/json'  
+                },
+                credentials: 'include',
+                body: JSON.stringify(dataToDb)
+            });
+        
+            const result = await response.json();
+            if (!response.ok && !result.success) {
+                // Sunucu response.json ile hata mesajı döndüyse
+                showWarningMessage(result.message, "tamam", true);
+            } else{
+                array = result.activeType;
+            }
+        } catch (error) {
+            // Ağ hatası, sunucuya istek ulaşmazsa
+            showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+            console.log('Hata:', error);
+        }
+        return array;
+    }
+  </script>
+
+
+</body>  
+</html>

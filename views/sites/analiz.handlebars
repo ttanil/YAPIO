@@ -1,0 +1,1536 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Analizler</title>
+    <!-- Bootstrap CSS -->  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">  
+    <link rel="stylesheet" href="/css/index.css"> 
+     
+    <style> 
+        body {  
+            margin: 0;  
+            padding: 0; 
+            background-image: url('/img/bck7_7.png');
+            background-repeat: no-repeat;  
+            background-size: 90%; 
+            background-position: bottom;  
+            background-color: #f4f2f2;
+            height: 120vh;  
+            font-family: Arial, sans-serif;  
+        }
+
+        .container-navbar {  
+            display: flex;  
+            flex: 0 0 100%;  
+            flex-wrap: nowrap;  
+            align-items: center;  
+            justify-content: center;  
+            margin: 0px;
+        }  
+        .container-fluid {  
+            display: flex;  
+            flex: 0 0 100%;  
+            flex-wrap: nowrap;  
+            align-items: center;  
+        }  
+        #projectName {  
+            flex: 0 0 90%;  
+            white-space: nowrap;  
+            overflow: hidden;  
+            text-overflow: ellipsis;  
+            font-family: Arial, sans-serif;  
+            font-size: 36px;
+        }  
+        .img-fluid {  
+            flex: 0 0 auto;  
+            height: 30px;  
+            width: 30px;  
+            margin-right: 10px;  
+        }
+        .custom-btn {  
+            background-color: #847539;
+            color: white; /* Yazı rengi */  
+            border: none; /* Kenarlığın kaldırılması */  
+            border-radius: 10px; /* Kenarlıkları yuvarlaklaştırma */  
+            padding: 10px 20px; /* İç boşluklar */  
+            font-family: "Varela Round";  
+            font-size: 16px; /* Yazı boyutu */  
+            font-weight: bold; /* Kalın yazı */  
+            letter-spacing: 2px;
+            cursor: pointer; /* Fare imlecini işaretçi yapma */  
+            transition: background-color 0.3s ease; /* Hover geçiş efekti */
+            margin-right: 40px;
+        }
+
+        .container{
+            width: 70% !important;
+        }
+        .container-arsa-giderleri {
+            margin-top: 30px !important;
+        }
+        .container-arsa-giderleri h3{
+            font-size: 26px;
+        }
+        .custom-flex {  
+            display: flex;  
+            flex-direction: column;  
+            gap: 0.5rem;  
+            justify-content: center; /* Ortala */  
+            align-items: flex-start;  /* Sola yasla */  
+        }
+        .custom-width{
+            width: 50%;
+        }
+
+
+        .modal-title{
+            font-family: Arial, sans-serif;
+            font-size: 20px;
+            font-weight: bold;
+        }
+      
+    
+    
+        #container-graph { 
+            background: #fff; 
+            padding: 24px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 10px #0001; 
+            width: 600px; 
+            margin: auto;
+        }  
+
+
+
+        .kpi-kart {  
+          background: white;  
+          border-radius: 18px;  
+          box-shadow: 0 4px 24px rgba(0,0,0,0.07);  
+          border-top: 4px solid #3b82f6;  
+          max-width: 340px;
+          width: 100%;  
+          padding: 2rem 1.5rem;  
+          box-sizing: border-box;
+          display: flex;  
+          flex-direction: column;  
+          align-items: center;  
+          margin: 1 rem 0;
+        }  
+
+        .kpi-baslik {  
+          color: #4b5563;  
+          font-size: 1.2rem;  
+          margin-bottom: 0.5rem;  
+          font-family: Arial, sans-serif;  
+        }  
+        .kpi-sayi {  
+          color: #2563eb;  
+          font-size: 3rem;  
+          font-weight: 900;  
+          margin-bottom: 0.5rem;  
+          font-family: Arial Black, Arial, sans-serif;  
+          letter-spacing: 1px;  
+        }  
+        .kpi-alt {  
+          color: #9ca3af;  
+          font-size: 1rem;  
+          font-weight: 500;  
+          letter-spacing: 1px;  
+          font-family: Arial, sans-serif;  
+        } 
+
+
+        /* Mobil cihazlar için duyarlılık (%75 genişlik) */  
+        @media (max-width: 768px) {
+            body {  
+                background-image: url('/img/bck7_6.png');
+                height: 100vh;
+                background-size: 100%;
+                background-repeat:no-repeat; 
+                background-position:bottom;
+            }
+
+            .container-navbar {  
+                flex-wrap: wrap;  
+                justify-content: flex-end;  
+            }  
+            #projectName {
+                flex: 0 0 70%;  
+                overflow: hidden;  
+                text-overflow: ellipsis;  
+                white-space: nowrap;  
+                text-align: left;  
+                font-size: 14px !important;  
+                max-width: 65%;     /* Taşmayı önler */  
+                min-width: 0;       /* flex shrink için gerekli */  
+                margin-right: 0;    /* İstenirse gap için elle ekleyin */
+            }  
+            #buttonHome {
+                flex: 0 0 30px;     /* Eğer 30px'lik bir kutu ise tam sabitlenir */  
+                padding: 0;         /* Ekstra boşlukları engeller */  
+                margin-left: 0;     /* İstenirse 5px gibi küçük bir boşluk eklenebilir */  
+                display: flex;  
+                align-items: center;
+            }
+            .img-fluid {  
+                height: 25px;  
+                width: 25px;  
+                margin-right: 0;    /* Sağdan boşluğu kaldırır */  
+                margin-left: 0;     /* Soldan boşluğu kaldırır */
+            }  
+            .custom-btn {  
+              font-size: 12px; /* Yazı boyutu */
+              padding: 5px 10px;      /* Yan boşlukları biraz artırdım */
+              border-radius: 6px;      /* Köşeler hafif yuvarlatıldı */
+              color: #fff;
+              border: none;
+              margin-right: 12px;
+              display: inline-block; 
+              font-weight: 500;   
+            }
+            .navbar-toggler {  
+                /* background-color: rgb(89, 125, 234);  */
+                background-color: #c2c5c9;
+                flex: 0 0 auto;  
+                margin-left: auto;  
+                justify-content: flex-end;  
+            }
+            .container-fluid {  
+                flex-wrap: wrap;  
+            } 
+            .dropdown-item{
+                display: flex;
+                margin-left: auto;  
+                justify-content: flex-end;
+            }
+            .mobile-navbar-menu {  
+                justify-content: flex-end !important;  
+                text-align: right !important;  
+                margin-top: 10px;
+                margin-bottom: 5px;
+            }  
+            .mobile-navbar-menu .nav-item, .mobile-navbar-menu .dropdown-item-mobile {
+                display: flex;
+                align-items: center;
+                justify-content: space-between !important;  
+                text-align: right !important;
+                font-size: 1.1rem;
+                font-style: bold !important;
+                height: 22px;
+                margin-top: 2px;
+                justify-self: end;
+            }
+            .dropdown-item-mobile {
+                width: 34%;
+                font-family: Arial, sans-serif !important; 
+                color: rgb(94, 93, 93) !important;      /* Varsayılan metin rengini kullan */  
+                text-decoration: none !important; /* Altı çizgiyi kaldır */  
+                font-weight: 400 !important;
+            }
+
+
+            #container-graph { 
+                background: #fff; 
+                padding: 12px; 
+                border-radius: 8px; 
+                box-shadow: 0 2px 10px #0001; 
+                width: 90%; 
+                margin: auto; 
+            } 
+
+            .kpi-kart {
+              max-width: 150px;
+              height: 135px;  
+              width: 100%;  
+              padding: 1rem 0.7rem; 
+              margin: 0.5 rem 0;
+            }
+            .kpi-baslik {  
+              font-size: 0.9rem;  
+              margin-bottom: 0.3rem;  
+            }  
+            .kpi-sayi {  
+              font-size: 1.3rem;  
+              margin-bottom: 0.4rem;  
+              letter-spacing: 0.7px;  
+            }  
+            .kpi-alt {
+              font-size: 0.8rem;
+            }
+        }
+    </style>  
+</head> 
+
+
+<body>  
+    <!-- Responsive Header -->  
+  <nav class="header d-flex justify-content-between align-items-center px-3">
+    <span>Yapıo</span>
+    <button class="btn custom-btn" id="loginButton" style="display: none;">PROJELER</button> 
+  </nav>
+
+  <!-- Navbar -->  
+  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm mt-4 container-navbar">  
+    <div class="container-fluid">  
+      <!-- Proje Adı -->  
+      <h4 class="navbar-brand" id="projectName">Proje Adı</h4>  
+      <!-- Ana Sayfa Butonu -->  
+      <button class="btn d-flex navbar-home-button" id="buttonHome">  
+        <img src="/img/home1_1.png" alt="Katlar Görseli" class="img-fluid rounded">  
+      </button>  
+      <!-- Hamburger Menü -->  
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"  
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">  
+        <span class="navbar-toggler-icon"></span>  
+      </button>  
+  
+      <!-- Menu: Mobilde sağdan, büyük ekranda klasik dropdown -->  
+      <div class="collapse navbar-collapse" id="navbarNav">  
+        <!-- Masaüstü: Dropdown Menüsü -->  
+        <ul class="navbar-nav ms-auto d-none d-lg-flex">  
+            <li class="nav-item dropdown">  
+                <button class="btn nav-link dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">  
+                Menü  
+                </button>  
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">  
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" id="quatation-button" href="#">
+                            <img src="/img/pay1_1.png" alt="" style="width:19px; height:19px; margin-right:8px;">
+                            Giderler
+                        </a>
+                    </li> 
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" id="sold-button" href="#">
+                            <img src="/img/property.png" alt="" style="width:19px; height:19px; margin-right:8px;">
+                            Durum
+                        </a>
+                    </li> 
+                </ul> 
+              </li>
+        </ul>
+        <!-- Mobilde: Menü Seçenekleri En Sağa Yaslı -->  
+        <ul class="navbar-nav ms-auto d-lg-none justify-content-end text-end mobile-navbar-menu">     
+            <li>
+                <a class="dropdown-item-mobile d-flex align-items-center" id="quatation-button-mobile" href="#">
+                    <img src="/img/pay1_1.png" alt="" style="width:19px; height:19px; ">
+                    Giderler
+                </a>
+            </li> 
+            <li>
+                <a class="dropdown-item-mobile d-flex align-items-center" id="sold-button-mobile" href="#">
+                    <img src="/img/property.png" alt="" style="width:19px; height:19px; ">
+                    Durum
+                </a>
+            </li> 
+          <!-- <li class="nav-item">  
+            <a class="nav-link" id="quatation-button-mobile">Maliyetler</a>  
+          </li>  -->
+        </ul>  
+      </div>  
+    </div>  
+  </nav>
+
+
+
+
+  <div class="mt-4 graph" id="container-graph">  
+    <h2 class="d-flex justify-content-center">Giderler</h2>  
+    <canvas id="myChart" width="400" height="250"></canvas>  
+  </div>  
+
+  <!-- KPI Kartı Burada -->
+  <div class="d-flex justify-content-center gap-4 mt-4">  
+    <div class="kpi-kart">  
+      <div class="kpi-baslik">Toplam Gider</div>  
+      <div class="kpi-sayi" id="genelToplamText">170</div>  
+      <div class="kpi-alt">TL</div>  
+    </div>  
+    <div class="kpi-kart">  
+      <div class="kpi-baslik">m² Maliyet</div>  
+      <div class="kpi-sayi" id="mKareMaliyetText">170</div>  
+      <div class="kpi-alt">TL</div>  
+    </div>  
+  </div>
+
+  <!-- Modal -->  
+  <div class="modal fade" id="myInfoModal" tabindex="-1" aria-labelledby="myInfoModalLabel" aria-hidden="true">  
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">  
+        <div class="modal-header">  
+          <h5 class="modal-title" id="myInfoModalLabel">Detay Başlığı</h5>  
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>  
+        </div>  
+        <div class="modal-body" id="modal-body-content">  
+          <canvas id="detailChart"></canvas>
+        </div>  
+      </div>  
+    </div>  
+  </div> 
+  
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
+  <script type="module">
+    import { showWarningMessage } from '/js/showMessage.js';
+    
+    const projectNameString = document.getElementById("projectName");
+    const navbarCollapse = document.getElementById('navbarNav');  
+    const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
+    const buttonHome = document.getElementById("buttonHome");
+    const quatationButton = document.getElementById("quatation-button"); 
+    const quatationButtonMobile = document.getElementById("quatation-button-mobile");
+    const soldButton = document.getElementById("sold-button"); 
+    const soldButtonMobile = document.getElementById("sold-button-mobile");
+    const genelToplamText = document.getElementById("genelToplamText");
+    const mKareMaliyetText = document.getElementById("mKareMaliyetText");
+    const loginButton = document.getElementById("loginButton");
+
+    let userId = null;
+    let projectName = null;
+    let building = null;
+
+    let arsaBedeliTutar = 0;
+    let santiyeKurulumuTutar = 0;
+    let arsaGiderleriToplam = 0;
+    let kiraBedeliTutar = 0;
+    let arsaDigerTutar = 0;
+    let mimariProjeTutar = 0;
+    let statikProjeTutar = 0;
+    let haritaciTutar = 0;
+    let tesisatProjeTutar = 0;
+    let elektrikProjeTutar = 0;
+    let asansorProjeTutar = 0;
+    let dogalgazProjeTutar = 0;
+    let akustikProjeTutar = 0;
+    let santiyeSefiTutar = 0;
+    let fenniMesulJeoTutar = 0;
+    let fenniMesulHaritaciTutar = 0;
+    let katIrtifaTutar = 0;
+    let enerjiKimligiTutar = 0;
+    let projeDigerTutar = 0;
+    let projelerGiderleriToplam = 0;
+    let belediyeTutar = 0;
+    let noterOdemeleriTutar = 0;
+    let yapidenetimTutar = 0;
+    let kadastroTutar = 0;
+    let zeminEtuduTutar = 0;
+    let santiyeElektrikTutar = 0;
+    let kentselDonusumTutar = 0;
+    let SSKTutar = 0;
+    let tapuTutar = 0;
+    let emlakcıTutar = 0;
+    let reklamTutar = 0;
+    let avukatTutar = 0;
+    let vergilerTutar = 0;
+    let kurumlarDigerTutar = 0;
+    let kurumlarGiderleriToplam = 0;
+    let isMakinalariTutar = 0;
+    let betonTutar = 0;
+    let demirTutar = 0;
+    let suYalitimiTemelTutar = 0;
+    let duvarOrmeTutar = 0;
+    let catiTutar = 0;
+    let uretimKabaDigerTutar = 0;
+    let kabaUretimGiderleriToplam = 0;
+    let suTesisatiTutar = 0;
+    let elektrikTesisatiTutar = 0;
+    let mermerTutar = 0;
+    let pencerelerTutar = 0;
+    let sivaTutar = 0;
+    let mantolamaTutar = 0;
+    let kapilarTutar = 0;
+    let islakZeminYalitimlariTutar = 0;
+    let seramiklerTutar = 0;
+    let parkelerTutar = 0;
+    let vitrifiyelerTutar = 0;
+    let bataryalarTutar = 0;
+    let stropiyerAlcıpanTutar = 0;
+    let mutfakTutar = 0;
+    let ankastreTutar = 0;
+    let iklimlendirmeTutar = 0;
+    let korkulukVePerforjeTutar = 0;
+    let soveTutar = 0;
+    let aydinlatmaTutar = 0;
+    let kompozitKaplamaTutar = 0;
+    let peyzajTutar = 0;
+    let uretimInceDigerTutar = 0;
+    let inceUretimGiderleriToplam = 0;
+    let kalipIsciligiTutar = 0;
+    let demirIsciligiTutar = 0;
+    let duvarOrmeIsciligiTutar = 0;
+    let sivaIsciligiTutar = 0;
+    let sapIsciligiTutar = 0;
+    let catiIsciligiTutar = 0;
+    let mantolamaIsciligiTutar = 0;
+    let yalitimIsciligiTutar = 0;
+    let suTesisatiIsciligiTutar = 0;
+    let elektrikIsciligiTutar = 0;
+    let dogalgazIsciligiTutar = 0;
+    let asansorIsciligiTutar = 0;
+    let dekorAlcipanIsciligiTutar = 0;
+    let perforjeIsciligiTutar = 0;
+    let iscilikDigerTutar = 0;
+    let iscilikGiderleriToplam = 0;
+    let genelToplam = 0;
+    let mKareMaliyet = 0;
+    let mKareToplam = 0;
+
+    // DOM yüklendiğinde işlem başlat  
+    document.addEventListener("DOMContentLoaded", async () => {  
+        event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle  
+
+        // 1- Menü dışındaki herhangi bir yere tıklanınca  
+        document.addEventListener('click', function (event) {  
+            if (navbarCollapse.classList.contains('show')) {  
+                // Eğer tıklanan yer menü veya hamburger değilse menüyü kapat  
+                if (!navbarCollapse.contains(event.target) &&  
+                    event.target !== document.querySelector('.navbar-toggler')  
+                    ) { bsCollapse.hide(); }  
+            }  
+        });  
+
+        // 2- Menü içerisindeki bir bağlantıya tıklanırsa kapansın
+        navbarCollapse.querySelectorAll('.nav-link').forEach(function (link) {  
+            link.addEventListener('click', function () {  
+            if (navbarCollapse.classList.contains('show')) {  
+                bsCollapse.hide();  
+            }  
+            });  
+        });
+
+        window.user = {{#if user}}
+            { "email": "{{user.email}}", "role": "{{user.role}}", "userId": "{{user.id}}", "project": {{{json project}}} }
+        {{else}}
+            { "role": "{{role}}" }
+        {{/if}};
+
+        userId = window.user.userId;
+        projectName = window.user.project.projectName;
+
+        if(userId){
+            loginButton.style.display = "block";
+        } else{
+            loginButton.style.display = "none";
+        }
+        if(projectName){
+            const projectNameText = projectName.toUpperCase();
+            projectNameString.textContent = projectNameText;
+        }
+
+        
+        const arsaBedeli = await readData("Arsa Bedeli");
+        if(arsaBedeli !=null){
+          arsaBedeli.forEach(element => {
+            arsaBedeliTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const santiyeKurulumu = await readData("Şantiye Kurulumu");
+        if(santiyeKurulumu !=null){
+          santiyeKurulumu.forEach(element => {
+            santiyeKurulumuTutar += parseInt(element.tutar);
+          });
+        }
+        let yerdenCıkartmakTutar = 0;
+        const yerdenCıkartmak = await readData("Yerden Çıkartmak");
+        if(yerdenCıkartmak !=null){
+          yerdenCıkartmak.forEach(element => {
+            yerdenCıkartmakTutar += parseInt(element.tutar);
+          });
+        }
+    
+        const kiraBedeli = await readData("Kira Bedeli");
+        if(kiraBedeli !=null){
+          kiraBedeli.forEach(element => {
+            kiraBedeliTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const arsaDiger = await readData("Arsa Diğer");
+        if(arsaDiger !=null){
+          arsaDiger.forEach(element => {
+            arsaDigerTutar += parseInt(element.tutar);
+          });
+        }
+        arsaGiderleriToplam = arsaBedeliTutar + santiyeKurulumuTutar + yerdenCıkartmakTutar + kiraBedeliTutar + arsaDigerTutar;
+
+        const mimariProje = await readData("Mimari Proje");
+        if(mimariProje !=null){
+          mimariProje.forEach(element => {
+            mimariProjeTutar += parseInt(element.tutar);
+          });
+        }
+    
+        const statikProje = await readData("Statik Proje");
+        if(statikProje !=null){
+          statikProje.forEach(element => {
+            statikProjeTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const haritaci = await readData("Haritacı");
+        if(haritaci !=null){
+          haritaci.forEach(element => {
+            haritaciTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const tesisatProje = await readData("Tesisat Proje");
+        if(tesisatProje !=null){
+          tesisatProje.forEach(element => {
+            tesisatProjeTutar += parseInt(element.tutar);
+          });
+        }
+    
+        const elektrikProje = await readData("Elektrik Proje");
+        if(elektrikProje !=null){
+          elektrikProje.forEach(element => {
+            elektrikProjeTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const asansorProje = await readData("Asansör Proje");
+        if(asansorProje !=null){
+          asansorProje.forEach(element => {
+            asansorProjeTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const dogalgazProje = await readData("Doğalgaz Proje");
+        if(dogalgazProje !=null){
+          dogalgazProje.forEach(element => {
+            dogalgazProjeTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const akustikProje = await readData("Akustik Proje");
+        if(akustikProje !=null){
+          akustikProje.forEach(element => {
+            akustikProjeTutar += parseInt(element.tutar);
+          });
+        }
+    
+        const santiyeSefi = await readData("Şantiye Şefi");
+        if(santiyeSefi !=null){
+          santiyeSefi.forEach(element => {
+            santiyeSefiTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const fenniMesulJeo = await readData("Fenni Mesul Jeoloji");
+        if(fenniMesulJeo !=null){
+          fenniMesulJeo.forEach(element => {
+            fenniMesulJeoTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const fenniMesulHaritaci = await readData("Fenni Mesul Haritacı");
+        if(fenniMesulHaritaci !=null){
+          fenniMesulHaritaci.forEach(element => {
+            fenniMesulHaritaciTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const katIrtifa = await readData("Kat İrtifa Kurma");
+        if(katIrtifa !=null){
+          katIrtifa.forEach(element => {
+            katIrtifaTutar += parseInt(element.tutar);
+          });
+        }
+    
+        const enerjiKimligi = await readData("Enerji Kimliği");
+        if(enerjiKimligi !=null){
+          enerjiKimligi.forEach(element => {
+            enerjiKimligiTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const projeDiger = await readData("Proje Diğer");
+        if(projeDiger !=null){
+          projeDiger.forEach(element => {
+            projeDigerTutar += parseInt(element.tutar);
+          });
+        }
+        
+        projelerGiderleriToplam = mimariProjeTutar + statikProjeTutar + haritaciTutar +tesisatProjeTutar + elektrikProjeTutar
+            + asansorProjeTutar + dogalgazProjeTutar + akustikProjeTutar + santiyeSefiTutar + fenniMesulJeoTutar + fenniMesulHaritaciTutar
+            + katIrtifaTutar + enerjiKimligiTutar + projeDigerTutar;
+
+        const belediye = await readData("Belediye");
+        if(belediye !=null){
+          belediye.forEach(element => {
+            belediyeTutar += parseInt(element.tutar);
+          });
+        }
+    
+        const noterOdemeleri = await readData("Noter Ödemeleri");
+        if(noterOdemeleri !=null){
+          noterOdemeleri.forEach(element => {
+            noterOdemeleriTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const yapidenetim = await readData("Yapı Denetim");
+        if(yapidenetim !=null){
+          yapidenetim.forEach(element => {
+            yapidenetimTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const kadastro = await readData("Kadastro");
+        if(kadastro !=null){
+          kadastro.forEach(element => {
+            kadastroTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const zeminEtudu = await readData("Zemin Etüdü");
+        if(zeminEtudu !=null){
+          zeminEtudu.forEach(element => {
+            zeminEtuduTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const santiyeElektrik = await readData("Şantiye Elektrik");
+        if(santiyeElektrik !=null){
+          santiyeElektrik.forEach(element => {
+            santiyeElektrikTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const kentselDonusum = await readData("Kentsel Dönüşüm");
+        if(kentselDonusum !=null){
+          kentselDonusum.forEach(element => {
+            kentselDonusumTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const SSK = await readData("SSK");
+        if(SSK !=null){
+          SSK.forEach(element => {
+            SSKTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const tapu = await readData("Tapu");
+        if(tapu !=null){
+          tapu.forEach(element => {
+            tapuTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const emlakcı = await readData("Emlakçı");
+        if(emlakcı !=null){
+          emlakcı.forEach(element => {
+            emlakcıTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const reklam = await readData("Reklam ve Tanıtım");
+        if(reklam !=null){
+          reklam.forEach(element => {
+            reklamTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const avukat = await readData("Avukat");
+        if(avukat !=null){
+          avukat.forEach(element => {
+            avukatTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const vergiler = await readData("Vergiler");
+        if(vergiler !=null){
+          vergiler.forEach(element => {
+            vergilerTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const kurumlarDiger = await readData("Kurumlar Diğer");
+        if(kurumlarDiger !=null){
+          kurumlarDiger.forEach(element => {
+            kurumlarDigerTutar += parseInt(element.tutar);
+          });
+        }
+        
+        kurumlarGiderleriToplam = belediyeTutar + noterOdemeleriTutar + yapidenetimTutar + kadastroTutar + zeminEtuduTutar 
+            + santiyeElektrikTutar + kentselDonusumTutar + SSKTutar + tapuTutar + emlakcıTutar + reklamTutar + avukatTutar + vergilerTutar
+            + kurumlarDigerTutar;
+
+        const isMakinalari = await readData("İş Makinaları");
+        if(isMakinalari !=null){
+          isMakinalari.forEach(element => {
+            isMakinalariTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const beton = await readData("Beton");
+        if(beton !=null){
+          beton.forEach(element => {
+            betonTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const demir = await readData("Demir");
+        if(demir !=null){
+          demir.forEach(element => {
+            demirTutar += parseInt(element.tutar);
+          });
+        }
+    
+        const suYalitimiTemel = await readData("Su Yalıtımı Temel");
+        if(suYalitimiTemel !=null){
+          suYalitimiTemel.forEach(element => {
+            suYalitimiTemelTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const duvarOrme = await readData("Duvar Örme");
+        if(duvarOrme !=null){
+          duvarOrme.forEach(element => {
+            duvarOrmeTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const cati = await readData("Çatı");
+        if(cati !=null){
+          cati.forEach(element => {
+            catiTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const uretimKabaDiger = await readData("Üretim Kaba Diğer");
+        if(uretimKabaDiger !=null){
+          uretimKabaDiger.forEach(element => {
+            uretimKabaDigerTutar += parseInt(element.tutar);
+          });
+        }
+        
+        kabaUretimGiderleriToplam = isMakinalariTutar + betonTutar + demirTutar + suYalitimiTemelTutar + duvarOrmeTutar + catiTutar
+            + uretimKabaDigerTutar;
+      
+        const suTesisati = await readData("Su Tesisatı");
+        if(suTesisati !=null){
+          suTesisati.forEach(element => {
+            suTesisatiTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const elektrikTesisati = await readData("Elektrik Tesisatı");
+        if(elektrikTesisati !=null){
+          elektrikTesisati.forEach(element => {
+            elektrikTesisatiTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const mermer = await readData("Mermer");
+        if(mermer !=null){
+          mermer.forEach(element => {
+            mermerTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const pencereler = await readData("Pencereler");
+        if(pencereler !=null){
+          pencereler.forEach(element => {
+            pencerelerTutar += parseInt(element.tutar);
+          });
+        }
+    
+        const siva = await readData("Sıva");
+        if(siva !=null){
+          siva.forEach(element => {
+            sivaTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const mantolama = await readData("Mantolama");
+        if(mantolama !=null){
+          mantolama.forEach(element => {
+            mantolamaTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const kapilar = await readData("Kapılar");
+        if(kapilar !=null){
+          kapilar.forEach(element => {
+            kapilarTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const islakZeminYalitimlari = await readData("Islak Zemin Yalıtımları");
+        if(islakZeminYalitimlari !=null){
+          islakZeminYalitimlari.forEach(element => {
+            islakZeminYalitimlariTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const seramikler = await readData("Seramikler");
+        if(seramikler !=null){
+          seramikler.forEach(element => {
+            seramiklerTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const parkeler = await readData("Parkeler");
+        if(parkeler !=null){
+          parkeler.forEach(element => {
+            parkelerTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const vitrifiyeler = await readData("Vitrifiyeler");
+        if(vitrifiyeler !=null){
+          vitrifiyeler.forEach(element => {
+            vitrifiyelerTutar += parseInt(element.tutar);
+          });
+        }
+    
+        const bataryalar = await readData("Bataryalar");
+        if(bataryalar !=null){
+          bataryalar.forEach(element => {
+            bataryalarTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const stropiyerAlcıpan = await readData("Stropiyer Alçıpan");
+        if(stropiyerAlcıpan !=null){
+          stropiyerAlcıpan.forEach(element => {
+            stropiyerAlcıpanTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const mutfak = await readData("Mutfak");
+        if(mutfak !=null){
+          mutfak.forEach(element => {
+            mutfakTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const ankastre = await readData("Ankastre");
+        if(ankastre !=null){
+          ankastre.forEach(element => {
+            ankastreTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const iklimlendirme = await readData("İklimlendirme");
+        if(iklimlendirme !=null){
+          iklimlendirme.forEach(element => {
+            iklimlendirmeTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const korkulukVePerforje = await readData("Korkuluk ve Perforje");
+        if(korkulukVePerforje !=null){
+          korkulukVePerforje.forEach(element => {
+            korkulukVePerforjeTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const sove = await readData("Söve");
+        if(sove !=null){
+          sove.forEach(element => {
+            soveTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const aydinlatma = await readData("Aydınlatma");
+        if(aydinlatma !=null){
+          aydinlatma.forEach(element => {
+            aydinlatmaTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const kompozitKaplama = await readData("Kompozit Kaplama");
+        if(kompozitKaplama !=null){
+          kompozitKaplama.forEach(element => {
+            kompozitKaplamaTutar += parseInt(element.tutar);
+          });
+        }
+    
+        const peyzaj = await readData("Peyzaj");
+        if(peyzaj !=null){
+          peyzaj.forEach(element => {
+            peyzajTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const uretimInceDiger = await readData("Üretim İnce Diğer");
+        if(uretimInceDiger !=null){
+          uretimInceDiger.forEach(element => {
+            uretimInceDigerTutar += parseInt(element.tutar);
+          });
+        }
+        
+        inceUretimGiderleriToplam = suTesisatiTutar + elektrikTesisatiTutar + mermerTutar + pencerelerTutar + sivaTutar + mantolamaTutar
+            + kapilarTutar + islakZeminYalitimlariTutar + seramiklerTutar + parkelerTutar + vitrifiyelerTutar + bataryalarTutar + stropiyerAlcıpanTutar 
+            + mutfakTutar + ankastreTutar + iklimlendirmeTutar + korkulukVePerforjeTutar + soveTutar + aydinlatmaTutar + kompozitKaplamaTutar 
+            + peyzajTutar + uretimInceDigerTutar;
+
+        const kalipIsciligi = await readData("Kalıp İşçiliği");
+        if(kalipIsciligi !=null){
+          kalipIsciligi.forEach(element => {
+            kalipIsciligiTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const demirIsciligi = await readData("Demir İşçiliği");
+        if(demirIsciligi !=null){
+          demirIsciligi.forEach(element => {
+            demirIsciligiTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const duvarOrmeIsciligi = await readData("Duvar Örme İşçiliği");
+        if(duvarOrmeIsciligi !=null){
+          duvarOrmeIsciligi.forEach(element => {
+            duvarOrmeIsciligiTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const sivaIsciligi = await readData("Sıva İşçiliği");
+        if(sivaIsciligi !=null){
+          sivaIsciligi.forEach(element => {
+            sivaIsciligiTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const sapIsciligi = await readData("Şap İşçiliği");
+        if(sapIsciligi !=null){
+          sapIsciligi.forEach(element => {
+            sapIsciligiTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const catiIsciligi = await readData("Çatı İşçiliği");
+        if(catiIsciligi !=null){
+          catiIsciligi.forEach(element => {
+            catiIsciligiTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const mantolamaIsciligi = await readData("Mantolama İşçiliği");
+        if(mantolamaIsciligi !=null){
+          mantolamaIsciligi.forEach(element => {
+            mantolamaIsciligiTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const yalitimIsciligi = await readData("Yalıtım İşçiliği");
+        if(yalitimIsciligi !=null){
+          yalitimIsciligi.forEach(element => {
+            yalitimIsciligiTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const suTesisatiIsciligi = await readData("Su Tesisatı İşçiliği");
+        if(suTesisatiIsciligi !=null){
+          suTesisatiIsciligi.forEach(element => {
+            suTesisatiIsciligiTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const elektrikIsciligi = await readData("Elektrik İşçiliği");
+        if(elektrikIsciligi !=null){
+          elektrikIsciligi.forEach(element => {
+            elektrikIsciligiTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const dogalgazIsciligi = await readData("Doğalgaz İşçiliği");
+        if(dogalgazIsciligi !=null){
+          dogalgazIsciligi.forEach(element => {
+            dogalgazIsciligiTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const asansorIsciligi = await readData("Asansör İşçiliği");
+        if(asansorIsciligi !=null){
+          asansorIsciligi.forEach(element => {
+            asansorIsciligiTutar += parseInt(element.tutar);
+          });
+        }
+    
+        const dekorAlcipanIsciligi = await readData("Dekor Alçıpan İşçiliği");
+        if(dekorAlcipanIsciligi !=null){
+          dekorAlcipanIsciligi.forEach(element => {
+            dekorAlcipanIsciligiTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const perforjeIsciligi = await readData("Perforje İşçiliği");
+        if(perforjeIsciligi !=null){
+          perforjeIsciligi.forEach(element => {
+            perforjeIsciligiTutar += parseInt(element.tutar);
+          });
+        }
+        
+        const iscilikDiger = await readData("İşçilik Diğer");
+        if(iscilikDiger !=null){
+          iscilikDiger.forEach(element => {
+            iscilikDigerTutar += parseInt(element.tutar);
+          });
+        }
+        
+        iscilikGiderleriToplam = kalipIsciligiTutar + demirIsciligiTutar + duvarOrmeIsciligiTutar + sivaIsciligiTutar + sapIsciligiTutar
+            + catiIsciligiTutar + mantolamaIsciligiTutar + yalitimIsciligiTutar + suTesisatiIsciligiTutar + elektrikIsciligiTutar
+            + dogalgazIsciligiTutar + asansorIsciligiTutar + dekorAlcipanIsciligiTutar + perforjeIsciligiTutar + iscilikDigerTutar;
+
+        genelToplam = arsaGiderleriToplam + projelerGiderleriToplam + kurumlarGiderleriToplam + iscilikGiderleriToplam + kabaUretimGiderleriToplam + inceUretimGiderleriToplam;
+
+        building = await readData("building");
+        if(building !=null){
+          building.forEach(element => {
+            mKareToplam += parseInt(element.genelBrutAlan);
+          });
+        }
+
+        const yerSahibi = await readData("Yer Sahibi ile Anlaşma");
+        if(yerSahibi !=null){
+          yerSahibi.forEach(element => {
+            const rowNumber = element.rowNumber;
+            if(rowNumber !=null){
+              const match = building.find(element => element.rowNumber === rowNumber);
+              mKareToplam -= parseInt(match.genelBrutAlan);
+            }
+          });
+
+          const tutarAlinacak = yerSahibi[0].tutar;
+          if(tutarAlinacak !=null){
+            genelToplam -= tutarAlinacak;
+          }
+          const tutarVerilecek = yerSahibi[0].tutar;
+          if(tutarVerilecek !=null){
+            genelToplam -= tutarVerilecek;
+          }
+        }
+
+        genelToplamText.textContent = formatTL(genelToplam);
+        mKareMaliyetText.textContent = formatTL(genelToplam/mKareToplam);
+
+        const maliyet = formatTL(genelToplam/mKareToplam);
+        await saveData("metreMaliyet", {metreMaliyeti : maliyet});
+
+        let detailChart;
+
+        const ctx = document.getElementById('myChart').getContext('2d');  
+        const myChart = new Chart(ctx, {  
+          type: 'bar',  
+          data: {  
+            labels: ['Arsa', 'Projeler', 'Kurumlar', 'İşçilik', 'Kaba', 'İnce'],  
+            datasets: [{  
+              label: 'Harcamalar',  
+              data: [arsaGiderleriToplam, projelerGiderleriToplam, kurumlarGiderleriToplam, iscilikGiderleriToplam, kabaUretimGiderleriToplam, inceUretimGiderleriToplam],  
+              backgroundColor: [  
+                'rgba(59, 130, 246, 0.8)',  
+                'rgba(16, 185, 129, 0.8)',  
+                'rgba(250, 220, 20, 0.8)',  
+                'rgba(239, 68, 68, 0.8)',  
+                'rgba(168, 85, 247, 0.8)',  
+                'rgba(251, 146, 60, 0.8)'  
+              ]  
+            }]  
+          },  
+          options: {  
+            plugins: {  
+              legend: { display: false },  
+              title: {  
+                display: true,  
+                //text: 'Yıllık Satışlar',  
+                padding: { bottom: 30 }  // <--- Başlık ile grafik arasına boşluk (px cinsinden)  
+              }  
+            },
+            scales: {  
+              y: {  
+                beginAtZero: true,  
+                ticks: {  
+                  stepSize: 50000,  
+                  callback: function(value) {  
+                    return value/1000 + ' bin TL';  
+                  }  
+                },  
+    /*
+                title: { 
+                  display: true,  
+                  text: 'bin TL' 
+                }  
+                  */
+              }
+            },
+            onClick: (event, elements) => {  
+              if (elements.length > 0) {  
+                const index = elements[0].index;  
+                const label = myChart.data.labels[index];  
+                const value = myChart.data.datasets[0].data[index];  
+
+                let labelsArray = ['Arsa', 'Projeler', 'Kurumlar', 'İşçilik', 'Kaba', 'İnce'];
+                let dataArray = [];
+                let backgroundArray = [];
+                if(label === "Arsa"){
+                  labelsArray = ["Arsa Bedeli","Yerden Çıkartmak","Kira Bedeli","Şantiye Kurulumu","Arsa Diğer"];
+                  dataArray = [arsaBedeliTutar, yerdenCıkartmakTutar, kiraBedeliTutar, santiyeKurulumuTutar, arsaDigerTutar];
+                  backgroundArray = ['rgba(30, 64, 175, 0.8)','rgba(147, 197, 253, 0.8)'];
+                } else if(label === "Projeler"){
+                  labelsArray = [
+                    "Mimari Proje",
+                    "Statik Proje",
+                    "Haritacı",
+                    "Tesisat Proje",
+                    "Elektrik Proje",
+                    "Asansör Proje",
+                    "Doğalgaz Proje",
+                    "Akustik Proje",
+                    "Şantiye Şefi",
+                    "Fenni Mesul Jeoloji",
+                    "Fenni Mesul Haritacı",
+                    "Kat İrtifa Kurma",
+                    "Enerji Kimliği",
+                    "Proje Diğer"
+                  ];
+                  dataArray = [
+                    mimariProjeTutar,
+                    statikProjeTutar,
+                    haritaciTutar,
+                    tesisatProjeTutar,
+                    elektrikProjeTutar,
+                    asansorProjeTutar,
+                    dogalgazProjeTutar,
+                    akustikProjeTutar,
+                    santiyeSefiTutar,
+                    fenniMesulJeoTutar,
+                    fenniMesulHaritaciTutar,
+                    katIrtifaTutar,
+                    enerjiKimligiTutar,
+                    projeDigerTutar
+                  ];
+                  backgroundArray = ['rgba(11, 129, 90, 0.8)', 'rgba(66, 227, 175, 0.8)'];
+                } else if(label === "Kurumlar"){
+                  labelsArray = [
+                    "Belediye",
+                    "Noter Ödemeleri",
+                    "Yapı Denetim",
+                    "Kadastro",
+                    "Zemin Etüdü",
+                    "Şantiye Elektrik",
+                    "Kentsel Dönüşüm",
+                    "SSK",
+                    "Tapu",
+                    "Emlakçı",
+                    "Reklam ve Tanıtım",
+                    "Avukat",
+                    "Vergiler",
+                    "Kurumlar Diğer"
+                  ];
+                  dataArray = [
+                    belediyeTutar,
+                    noterOdemeleriTutar,
+                    yapidenetimTutar,
+                    kadastroTutar,
+                    zeminEtuduTutar,
+                    santiyeElektrikTutar,
+                    kentselDonusumTutar,
+                    SSKTutar,
+                    tapuTutar,
+                    emlakcıTutar,
+                    reklamTutar,
+                    avukatTutar,
+                    vergilerTutar,
+                    kurumlarDigerTutar
+                  ];
+                  backgroundArray = ['rgba(200, 176, 16, 0.8)', 'rgba(255, 239, 130, 0.8)'];
+                } else if(label === "İşçilik"){
+                  labelsArray = [
+                    "Kalıp İşçiliği",
+                    "Demir İşçiliği",
+                    "Duvar Örme İşçiliği",
+                    "Sıva İşçiliği",
+                    "Şap İşçiliği",
+                    "Çatı İşçiliği",
+                    "Mantolama İşçiliği",
+                    "Yalıtım İşçiliği",
+                    "Su Tesisatı İşçiliği",
+                    "Elektrik İşçiliği",
+                    "Doğalgaz İşçiliği",
+                    "Asansör İşçiliği",
+                    "Dekor Alçıpan İşçiliği",
+                    "Perforje İşçiliği",
+                    "İşçilik Diğer"
+                  ];
+                  dataArray = [
+                    kalipIsciligiTutar,
+                    demirIsciligiTutar,
+                    duvarOrmeIsciligiTutar,
+                    sivaIsciligiTutar,
+                    sapIsciligiTutar,
+                    catiIsciligiTutar,
+                    mantolamaIsciligiTutar,
+                    yalitimIsciligiTutar,
+                    suTesisatiIsciligiTutar,
+                    elektrikIsciligiTutar,
+                    dogalgazIsciligiTutar,
+                    asansorIsciligiTutar,
+                    dekorAlcipanIsciligiTutar,
+                    perforjeIsciligiTutar,
+                    iscilikDigerTutar
+                  ];
+                  backgroundArray = ['rgba(246, 10, 10, 0.8)', 'rgba(255, 121, 121, 0.8)'];
+                } else if(label === "Kaba"){
+                  labelsArray = [
+                    "İş Makinaları",
+                    "Beton",
+                    "Demir",
+                    "Su Yalıtımı Temel",
+                    "Duvar Örme",
+                    "Çatı",
+                    "Üretim Kaba Diğer"
+                  ];
+                  dataArray = [
+                    isMakinalariTutar,
+                    betonTutar,
+                    demirTutar,
+                    suYalitimiTemelTutar,
+                    duvarOrmeTutar,
+                    catiTutar,
+                    uretimKabaDigerTutar
+                  ];
+                  backgroundArray = ['rgba(120, 45, 180, 0.8)', 'rgba(174, 79, 246, 0.8)'];
+                } else if(label === "İnce"){
+                  labelsArray = [
+                    "Su Tesisatı",
+                    "Elektrik Tesisatı",
+                    "Mermer",
+                    "Pencereler",
+                    "Sıva",
+                    "Mantolama",
+                    "Kapılar",
+                    "Islak Zemin Yalıtımları",
+                    "Seramikler",
+                    "Parkeler",
+                    "Vitrifiyeler",
+                    "Bataryalar",
+                    "Stropiyer Alçıpan",
+                    "Mutfak",
+                    "Ankastre",
+                    "İklimlendirme",
+                    "Korkuluk ve Perforje",
+                    "Söve",
+                    "Aydınlatma",
+                    "Kompozit Kaplama",
+                    "Peyzaj",
+                    "Üretim İnce Diğer"
+                  ];
+                  dataArray = [
+                    suTesisatiTutar,
+                    elektrikTesisatiTutar,
+                    mermerTutar,
+                    pencerelerTutar,
+                    sivaTutar,
+                    mantolamaTutar,
+                    kapilarTutar,
+                    islakZeminYalitimlariTutar,
+                    seramiklerTutar,
+                    parkelerTutar,
+                    vitrifiyelerTutar,
+                    bataryalarTutar,
+                    stropiyerAlcıpanTutar,
+                    mutfakTutar,
+                    ankastreTutar,
+                    iklimlendirmeTutar,
+                    korkulukVePerforjeTutar,
+                    soveTutar,
+                    aydinlatmaTutar,
+                    kompozitKaplamaTutar,
+                    peyzajTutar,
+                    uretimInceDigerTutar
+                  ];
+                  backgroundArray = ['rgba(252, 137, 42, 0.8)', 'rgba(254, 182, 122, 0.8)'];
+                }
+                
+
+                // Modal içeriğini güncelle  
+                document.getElementById("myInfoModalLabel").textContent = label + " Harcamaları";  
+                const dynamicHeight = Math.max(labelsArray.length * 30, 320); // En az 320px  
+                document.getElementById("modal-body-content").innerHTML = `  
+                  <b>${label} gideri:</b> ${value.toLocaleString()} TL  
+                  <canvas id="detailChart" width="380" height="${dynamicHeight}"></canvas>`;   
+
+                // Modalı aç  
+                const myModal = new bootstrap.Modal(document.getElementById('myInfoModal'));  
+                myModal.show();  
+
+                // Modal tamamen açıldığında grafik oluştur  
+                const modalEl = document.getElementById('myInfoModal');  
+                const drawDetailChart = function () {  
+                  if (detailChart) detailChart.destroy();  
+                  const ctx = document.getElementById('detailChart').getContext('2d');  
+                  detailChart = new Chart(ctx, {  
+                    type: 'bar',  
+                    data: {  
+                      labels: labelsArray,  
+                      datasets: [{  
+                        label: 'Harcamalar',  
+                        data: dataArray,  
+                        backgroundColor: backgroundArray
+                      }]  
+                    },  
+                    options: {  
+                      indexAxis: 'y', // Yatay grafik  
+                      plugins: {  
+                        legend: { display: false },  
+                        title: { display: true, padding: { bottom: 30 } }  
+                      },  
+                      scales: {  
+                        x: {  
+                          beginAtZero: true,  
+                          ticks: {  
+                            stepSize: 50000,  
+                            callback: function (value) {  
+                              return value/1000 + ' bin TL';  
+                            },
+                            minRotation: 45, // veya rotation: 45, Chart.js sürümüne göre  
+                            maxRotation: 45
+                          }  
+                        }  
+                      }
+                    }  
+                  });  
+                  // Listener'ı kaldır ki yalnızca 1 kez çalışsın  
+                  modalEl.removeEventListener('shown.bs.modal', drawDetailChart);  
+                };  
+
+                modalEl.addEventListener('shown.bs.modal', drawDetailChart);  
+              }  
+            }  
+            
+          }  
+        }); 
+    });
+
+    loginButton.addEventListener("click", () => {
+        window.location.href = "/";
+    });
+
+    quatationButton.addEventListener("click", () => {
+        window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
+    });
+    quatationButtonMobile.addEventListener("click", () => {
+        window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
+    });
+    soldButton.addEventListener("click", () => {
+        window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
+    });
+    soldButtonMobile.addEventListener("click", () => {
+        window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
+    });
+    buttonHome.addEventListener("click", () => {  
+        window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
+    });
+
+    function toMongoFieldName(text) {
+        // Tüm Türkçe karakterleri İngilizce karşılıklarına çevir
+        const trMap = {
+            'ç': 'c', 'ğ': 'g', 'ı': 'i', 'ö': 'o', 'ş': 's', 'ü': 'u',
+            'Ç': 'C', 'Ğ': 'G', 'İ': 'I', 'Ö': 'O', 'Ş': 'S', 'Ü': 'U'
+        };
+        let result = text.replace(/[\u00C0-\u017F]/g, function(c){
+            return trMap[c] || c;
+        });
+
+        // Harf, sayı ve boşluk dışındaki karakterleri kaldır
+        result = result.replace(/[^a-zA-Z0-9\s]/g, "");
+
+        // Trim, toLowerCase ve boşlukları ayırarak camelCase’e dönüştür
+        let parts = result.trim().split(/\s+/);
+        let camelCase = parts
+            .map((p, i) =>
+                i === 0
+                    ? p.charAt(0).toLowerCase() + p.slice(1).toLowerCase()
+                    : p.charAt(0).toUpperCase() + p.slice(1).toLowerCase()
+            )
+            .join('');
+
+        return camelCase;
+    }
+
+    async function readData (activeType){
+        let array = [];
+        const dataToDb = {
+            userId: userId,
+            projectName: projectName,
+            activeType: toMongoFieldName(activeType),
+            process: "read"
+        };
+
+        try {  
+            // Kullanıcı giriş bilgilerini backend'e gönder  
+            const response = await fetch('/analiz', {  
+                method: 'POST',  
+                headers: {  
+                    'Content-Type': 'application/json'  
+                },
+                credentials: 'include',
+                body: JSON.stringify(dataToDb)
+            });
+        
+            const result = await response.json();
+            if (!response.ok && !result.success) {
+                // Sunucu response.json ile hata mesajı döndüyse
+                showWarningMessage(result.message, "tamam", true);
+            } else{
+                array = result.activeType;
+            }
+        } catch (error) {
+            // Ağ hatası, sunucuya istek ulaşmazsa
+            showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+            console.log('Hata:', error);
+        }
+        return array;
+    }  
+
+    async function saveData(activeType, saves){
+      const dataToDb = {
+          userId,
+          projectName,
+          activeType: activeType,
+          saves,
+          process :"save"
+      };
+      try {  
+          // Kullanıcı giriş bilgilerini backend'e gönder  
+          const response = await fetch('/analiz', {  
+              method: 'POST',  
+              headers: {  
+                  'Content-Type': 'application/json'  
+              },
+              credentials: 'include',
+              body: JSON.stringify(dataToDb)
+          });
+          const result = await response.json();
+          if (!response.ok && !result.success) {
+              // Sunucu response.json ile hata mesajı döndüyse
+              showWarningMessage(result.message, "tamam", true);
+          }
+      } catch (error) {
+          // Ağ hatası, sunucuya istek ulaşmazsa
+          showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+          console.log('Hata:', error);
+      }
+    }
+
+    // Türk Lirası örneği için (virgül: ondalık, nokta: binlik ayırıcı)  
+    function formatTL(number) {  
+      number = number.toString();  
+      let [intPart, decPart] = number.replace(",", ".").split(".");  
+      intPart = intPart.replace(/\D/g, "");
+      intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");  
+
+      return decPart ? `${intPart},${decPart.substring(0,2)}` : intPart;  
+    }
+  </script>  
+</body>  
+</html>

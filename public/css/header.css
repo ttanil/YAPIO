@@ -1,0 +1,31 @@
+.header {  
+    width: 100%;  
+    background-color: black; /* Siyah arka plan */  
+    color: white; /* Beyaz yazı */  
+    display: flex;  
+    align-items: center; /* Metni içeride dikey ortalar */  
+    justify-content: center; /* Sol ve sağ kenara elemaları yayar */  
+    z-index: 2;  
+    font-family: "Poppins", sans-serif;  
+    padding: 0 20px; /* Header iç kenar boşluğu */  
+    /* Varsayılan yükseklik */  
+    height: 8vh; /* Ekran yüksekliğinin 8%'i */  
+}  
+.header span{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 26px; /* Yazı boyutu */  
+    font-weight: 600; /* Kalın yazı */  
+    letter-spacing: 2px;
+}
+
+
+@media (max-width: 768px) {  
+    .header {  
+        height: 10vh;  
+    }
+    .header span{
+        font-size: 30px; /* Yazı boyutu */  
+        font-weight: 700; /* Kalın yazı */  
+        letter-spacing: 1px;
+    }
+}
