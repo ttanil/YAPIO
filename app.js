@@ -46,10 +46,10 @@ app.use(express.json());  //sunucu ile istemci yani frontend ile backend arasın
 app.use(fileUpload());  //resim vb dosyalar için
 app.use(cookieParser());    // Cookie'leri işlemek için 
 app.use(expressSession({
-    secret:'SECRET_VALUE',
-    resave:'true',
-    saveUninitialized:'true',
-    //cookie:{path:'/', httpOnly:'true', secure:'auto', maxAge:time} // çıkıldığında tekrar giriş ister
+    secret:SECRET_VALUE,
+    resave:false,
+    saveUninitialized:false,
+    cookie:{path:'/', httpOnly:true, secure:'auto', maxAge:time} // çıkıldığında tekrar giriş ister
 }));
 app.use(express.static(path.join(__dirname,'public')));
 

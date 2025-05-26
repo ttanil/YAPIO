@@ -507,6 +507,8 @@
             { "role": "{{role}}" }
         {{/if}};
 
+        console.log(window.user);
+
         userId = window.user.userId;
         projectName = window.user.project.projectName;
 
@@ -522,35 +524,35 @@
 
         
         const arsaBedeli = await readData("Arsa Bedeli");
-        if(arsaBedeli !=null){
+        if(arsaBedeli.length > 0){
           arsaBedeli.forEach(element => {
             arsaBedeliTutar += parseInt(element.tutar);
           });
         }
         
         const santiyeKurulumu = await readData("Şantiye Kurulumu");
-        if(santiyeKurulumu !=null){
+        if(santiyeKurulumu.length > 0){
           santiyeKurulumu.forEach(element => {
             santiyeKurulumuTutar += parseInt(element.tutar);
           });
         }
         let yerdenCıkartmakTutar = 0;
         const yerdenCıkartmak = await readData("Yerden Çıkartmak");
-        if(yerdenCıkartmak !=null){
+        if(yerdenCıkartmak.length > 0){
           yerdenCıkartmak.forEach(element => {
             yerdenCıkartmakTutar += parseInt(element.tutar);
           });
         }
     
         const kiraBedeli = await readData("Kira Bedeli");
-        if(kiraBedeli !=null){
+        if(kiraBedeli.length > 0){
           kiraBedeli.forEach(element => {
             kiraBedeliTutar += parseInt(element.tutar);
           });
         }
         
         const arsaDiger = await readData("Arsa Diğer");
-        if(arsaDiger !=null){
+        if(arsaDiger.length > 0){
           arsaDiger.forEach(element => {
             arsaDigerTutar += parseInt(element.tutar);
           });
@@ -558,98 +560,98 @@
         arsaGiderleriToplam = arsaBedeliTutar + santiyeKurulumuTutar + yerdenCıkartmakTutar + kiraBedeliTutar + arsaDigerTutar;
 
         const mimariProje = await readData("Mimari Proje");
-        if(mimariProje !=null){
+        if(mimariProje.length > 0){
           mimariProje.forEach(element => {
             mimariProjeTutar += parseInt(element.tutar);
           });
         }
     
         const statikProje = await readData("Statik Proje");
-        if(statikProje !=null){
+        if(statikProje.length > 0){
           statikProje.forEach(element => {
             statikProjeTutar += parseInt(element.tutar);
           });
         }
         
         const haritaci = await readData("Haritacı");
-        if(haritaci !=null){
+        if(haritaci.length > 0){
           haritaci.forEach(element => {
             haritaciTutar += parseInt(element.tutar);
           });
         }
         
         const tesisatProje = await readData("Tesisat Proje");
-        if(tesisatProje !=null){
+        if(tesisatProje.length > 0){
           tesisatProje.forEach(element => {
             tesisatProjeTutar += parseInt(element.tutar);
           });
         }
     
         const elektrikProje = await readData("Elektrik Proje");
-        if(elektrikProje !=null){
+        if(elektrikProje.length > 0){
           elektrikProje.forEach(element => {
             elektrikProjeTutar += parseInt(element.tutar);
           });
         }
         
         const asansorProje = await readData("Asansör Proje");
-        if(asansorProje !=null){
+        if(asansorProje.length > 0){
           asansorProje.forEach(element => {
             asansorProjeTutar += parseInt(element.tutar);
           });
         }
         
         const dogalgazProje = await readData("Doğalgaz Proje");
-        if(dogalgazProje !=null){
+        if(dogalgazProje.length > 0){
           dogalgazProje.forEach(element => {
             dogalgazProjeTutar += parseInt(element.tutar);
           });
         }
         
         const akustikProje = await readData("Akustik Proje");
-        if(akustikProje !=null){
+        if(akustikProje.length > 0){
           akustikProje.forEach(element => {
             akustikProjeTutar += parseInt(element.tutar);
           });
         }
     
         const santiyeSefi = await readData("Şantiye Şefi");
-        if(santiyeSefi !=null){
+        if(santiyeSefi.length > 0){
           santiyeSefi.forEach(element => {
             santiyeSefiTutar += parseInt(element.tutar);
           });
         }
         
         const fenniMesulJeo = await readData("Fenni Mesul Jeoloji");
-        if(fenniMesulJeo !=null){
+        if(fenniMesulJeo.length > 0){
           fenniMesulJeo.forEach(element => {
             fenniMesulJeoTutar += parseInt(element.tutar);
           });
         }
         
         const fenniMesulHaritaci = await readData("Fenni Mesul Haritacı");
-        if(fenniMesulHaritaci !=null){
+        if(fenniMesulHaritaci.length > 0){
           fenniMesulHaritaci.forEach(element => {
             fenniMesulHaritaciTutar += parseInt(element.tutar);
           });
         }
         
         const katIrtifa = await readData("Kat İrtifa Kurma");
-        if(katIrtifa !=null){
+        if(katIrtifa.length > 0){
           katIrtifa.forEach(element => {
             katIrtifaTutar += parseInt(element.tutar);
           });
         }
     
         const enerjiKimligi = await readData("Enerji Kimliği");
-        if(enerjiKimligi !=null){
+        if(enerjiKimligi.length > 0){
           enerjiKimligi.forEach(element => {
             enerjiKimligiTutar += parseInt(element.tutar);
           });
         }
         
         const projeDiger = await readData("Proje Diğer");
-        if(projeDiger !=null){
+        if(projeDiger.length > 0){
           projeDiger.forEach(element => {
             projeDigerTutar += parseInt(element.tutar);
           });
@@ -660,98 +662,98 @@
             + katIrtifaTutar + enerjiKimligiTutar + projeDigerTutar;
 
         const belediye = await readData("Belediye");
-        if(belediye !=null){
+        if(belediye.length > 0){
           belediye.forEach(element => {
             belediyeTutar += parseInt(element.tutar);
           });
         }
     
         const noterOdemeleri = await readData("Noter Ödemeleri");
-        if(noterOdemeleri !=null){
+        if(noterOdemeleri.length > 0){
           noterOdemeleri.forEach(element => {
             noterOdemeleriTutar += parseInt(element.tutar);
           });
         }
         
         const yapidenetim = await readData("Yapı Denetim");
-        if(yapidenetim !=null){
+        if(yapidenetim.length > 0){
           yapidenetim.forEach(element => {
             yapidenetimTutar += parseInt(element.tutar);
           });
         }
         
         const kadastro = await readData("Kadastro");
-        if(kadastro !=null){
+        if(kadastro.length > 0){
           kadastro.forEach(element => {
             kadastroTutar += parseInt(element.tutar);
           });
         }
         
         const zeminEtudu = await readData("Zemin Etüdü");
-        if(zeminEtudu !=null){
+        if(zeminEtudu.length > 0){
           zeminEtudu.forEach(element => {
             zeminEtuduTutar += parseInt(element.tutar);
           });
         }
         
         const santiyeElektrik = await readData("Şantiye Elektrik");
-        if(santiyeElektrik !=null){
+        if(santiyeElektrik.length > 0){
           santiyeElektrik.forEach(element => {
             santiyeElektrikTutar += parseInt(element.tutar);
           });
         }
         
         const kentselDonusum = await readData("Kentsel Dönüşüm");
-        if(kentselDonusum !=null){
+        if(kentselDonusum.length > 0){
           kentselDonusum.forEach(element => {
             kentselDonusumTutar += parseInt(element.tutar);
           });
         }
         
         const SSK = await readData("SSK");
-        if(SSK !=null){
+        if(SSK.length > 0){
           SSK.forEach(element => {
             SSKTutar += parseInt(element.tutar);
           });
         }
         
         const tapu = await readData("Tapu");
-        if(tapu !=null){
+        if(tapu.length > 0){
           tapu.forEach(element => {
             tapuTutar += parseInt(element.tutar);
           });
         }
         
         const emlakcı = await readData("Emlakçı");
-        if(emlakcı !=null){
+        if(emlakcı.length > 0){
           emlakcı.forEach(element => {
             emlakcıTutar += parseInt(element.tutar);
           });
         }
         
         const reklam = await readData("Reklam ve Tanıtım");
-        if(reklam !=null){
+        if(reklam.length > 0){
           reklam.forEach(element => {
             reklamTutar += parseInt(element.tutar);
           });
         }
         
         const avukat = await readData("Avukat");
-        if(avukat !=null){
+        if(avukat.length > 0){
           avukat.forEach(element => {
             avukatTutar += parseInt(element.tutar);
           });
         }
         
         const vergiler = await readData("Vergiler");
-        if(vergiler !=null){
+        if(vergiler.length > 0){
           vergiler.forEach(element => {
             vergilerTutar += parseInt(element.tutar);
           });
         }
         
         const kurumlarDiger = await readData("Kurumlar Diğer");
-        if(kurumlarDiger !=null){
+        if(kurumlarDiger.length > 0){
           kurumlarDiger.forEach(element => {
             kurumlarDigerTutar += parseInt(element.tutar);
           });
@@ -762,49 +764,49 @@
             + kurumlarDigerTutar;
 
         const isMakinalari = await readData("İş Makinaları");
-        if(isMakinalari !=null){
+        if(isMakinalari.length > 0){
           isMakinalari.forEach(element => {
             isMakinalariTutar += parseInt(element.tutar);
           });
         }
         
         const beton = await readData("Beton");
-        if(beton !=null){
+        if(beton.length > 0){
           beton.forEach(element => {
             betonTutar += parseInt(element.tutar);
           });
         }
         
         const demir = await readData("Demir");
-        if(demir !=null){
+        if(demir.length > 0){
           demir.forEach(element => {
             demirTutar += parseInt(element.tutar);
           });
         }
     
         const suYalitimiTemel = await readData("Su Yalıtımı Temel");
-        if(suYalitimiTemel !=null){
+        if(suYalitimiTemel.length > 0){
           suYalitimiTemel.forEach(element => {
             suYalitimiTemelTutar += parseInt(element.tutar);
           });
         }
         
         const duvarOrme = await readData("Duvar Örme");
-        if(duvarOrme !=null){
+        if(duvarOrme.length > 0){
           duvarOrme.forEach(element => {
             duvarOrmeTutar += parseInt(element.tutar);
           });
         }
         
         const cati = await readData("Çatı");
-        if(cati !=null){
+        if(cati.length > 0){
           cati.forEach(element => {
             catiTutar += parseInt(element.tutar);
           });
         }
         
         const uretimKabaDiger = await readData("Üretim Kaba Diğer");
-        if(uretimKabaDiger !=null){
+        if(uretimKabaDiger.length > 0){
           uretimKabaDiger.forEach(element => {
             uretimKabaDigerTutar += parseInt(element.tutar);
           });
@@ -814,154 +816,154 @@
             + uretimKabaDigerTutar;
       
         const suTesisati = await readData("Su Tesisatı");
-        if(suTesisati !=null){
+        if(suTesisati.length > 0){
           suTesisati.forEach(element => {
             suTesisatiTutar += parseInt(element.tutar);
           });
         }
         
         const elektrikTesisati = await readData("Elektrik Tesisatı");
-        if(elektrikTesisati !=null){
+        if(elektrikTesisati.length > 0){
           elektrikTesisati.forEach(element => {
             elektrikTesisatiTutar += parseInt(element.tutar);
           });
         }
         
         const mermer = await readData("Mermer");
-        if(mermer !=null){
+        if(mermer.length > 0){
           mermer.forEach(element => {
             mermerTutar += parseInt(element.tutar);
           });
         }
         
         const pencereler = await readData("Pencereler");
-        if(pencereler !=null){
+        if(pencereler.length > 0){
           pencereler.forEach(element => {
             pencerelerTutar += parseInt(element.tutar);
           });
         }
     
         const siva = await readData("Sıva");
-        if(siva !=null){
+        if(siva.length > 0){
           siva.forEach(element => {
             sivaTutar += parseInt(element.tutar);
           });
         }
         
         const mantolama = await readData("Mantolama");
-        if(mantolama !=null){
+        if(mantolama.length > 0){
           mantolama.forEach(element => {
             mantolamaTutar += parseInt(element.tutar);
           });
         }
         
         const kapilar = await readData("Kapılar");
-        if(kapilar !=null){
+        if(kapilar.length > 0){
           kapilar.forEach(element => {
             kapilarTutar += parseInt(element.tutar);
           });
         }
         
         const islakZeminYalitimlari = await readData("Islak Zemin Yalıtımları");
-        if(islakZeminYalitimlari !=null){
+        if(islakZeminYalitimlari.length > 0){
           islakZeminYalitimlari.forEach(element => {
             islakZeminYalitimlariTutar += parseInt(element.tutar);
           });
         }
         
         const seramikler = await readData("Seramikler");
-        if(seramikler !=null){
+        if(seramikler.length > 0){
           seramikler.forEach(element => {
             seramiklerTutar += parseInt(element.tutar);
           });
         }
         
         const parkeler = await readData("Parkeler");
-        if(parkeler !=null){
+        if(parkeler.length > 0){
           parkeler.forEach(element => {
             parkelerTutar += parseInt(element.tutar);
           });
         }
         
         const vitrifiyeler = await readData("Vitrifiyeler");
-        if(vitrifiyeler !=null){
+        if(vitrifiyeler.length > 0){
           vitrifiyeler.forEach(element => {
             vitrifiyelerTutar += parseInt(element.tutar);
           });
         }
     
         const bataryalar = await readData("Bataryalar");
-        if(bataryalar !=null){
+        if(bataryalar.length > 0){
           bataryalar.forEach(element => {
             bataryalarTutar += parseInt(element.tutar);
           });
         }
         
         const stropiyerAlcıpan = await readData("Stropiyer Alçıpan");
-        if(stropiyerAlcıpan !=null){
+        if(stropiyerAlcıpan.length > 0){
           stropiyerAlcıpan.forEach(element => {
             stropiyerAlcıpanTutar += parseInt(element.tutar);
           });
         }
         
         const mutfak = await readData("Mutfak");
-        if(mutfak !=null){
+        if(mutfak.length > 0){
           mutfak.forEach(element => {
             mutfakTutar += parseInt(element.tutar);
           });
         }
         
         const ankastre = await readData("Ankastre");
-        if(ankastre !=null){
+        if(ankastre.length > 0){
           ankastre.forEach(element => {
             ankastreTutar += parseInt(element.tutar);
           });
         }
         
         const iklimlendirme = await readData("İklimlendirme");
-        if(iklimlendirme !=null){
+        if(iklimlendirme.length > 0){
           iklimlendirme.forEach(element => {
             iklimlendirmeTutar += parseInt(element.tutar);
           });
         }
         
         const korkulukVePerforje = await readData("Korkuluk ve Perforje");
-        if(korkulukVePerforje !=null){
+        if(korkulukVePerforje.length > 0){
           korkulukVePerforje.forEach(element => {
             korkulukVePerforjeTutar += parseInt(element.tutar);
           });
         }
         
         const sove = await readData("Söve");
-        if(sove !=null){
+        if(sove.length > 0){
           sove.forEach(element => {
             soveTutar += parseInt(element.tutar);
           });
         }
         
         const aydinlatma = await readData("Aydınlatma");
-        if(aydinlatma !=null){
+        if(aydinlatma.length > 0){
           aydinlatma.forEach(element => {
             aydinlatmaTutar += parseInt(element.tutar);
           });
         }
         
         const kompozitKaplama = await readData("Kompozit Kaplama");
-        if(kompozitKaplama !=null){
+        if(kompozitKaplama.length > 0){
           kompozitKaplama.forEach(element => {
             kompozitKaplamaTutar += parseInt(element.tutar);
           });
         }
     
         const peyzaj = await readData("Peyzaj");
-        if(peyzaj !=null){
+        if(peyzaj.length > 0){
           peyzaj.forEach(element => {
             peyzajTutar += parseInt(element.tutar);
           });
         }
         
         const uretimInceDiger = await readData("Üretim İnce Diğer");
-        if(uretimInceDiger !=null){
+        if(uretimInceDiger.length > 0){
           uretimInceDiger.forEach(element => {
             uretimInceDigerTutar += parseInt(element.tutar);
           });
@@ -973,91 +975,91 @@
             + peyzajTutar + uretimInceDigerTutar;
 
         const kalipIsciligi = await readData("Kalıp İşçiliği");
-        if(kalipIsciligi !=null){
+        if(kalipIsciligi.length > 0){
           kalipIsciligi.forEach(element => {
             kalipIsciligiTutar += parseInt(element.tutar);
           });
         }
         
         const demirIsciligi = await readData("Demir İşçiliği");
-        if(demirIsciligi !=null){
+        if(demirIsciligi.length > 0){
           demirIsciligi.forEach(element => {
             demirIsciligiTutar += parseInt(element.tutar);
           });
         }
         
         const duvarOrmeIsciligi = await readData("Duvar Örme İşçiliği");
-        if(duvarOrmeIsciligi !=null){
+        if(duvarOrmeIsciligi.length > 0){
           duvarOrmeIsciligi.forEach(element => {
             duvarOrmeIsciligiTutar += parseInt(element.tutar);
           });
         }
         
         const sivaIsciligi = await readData("Sıva İşçiliği");
-        if(sivaIsciligi !=null){
+        if(sivaIsciligi.length > 0){
           sivaIsciligi.forEach(element => {
             sivaIsciligiTutar += parseInt(element.tutar);
           });
         }
         
         const sapIsciligi = await readData("Şap İşçiliği");
-        if(sapIsciligi !=null){
+        if(sapIsciligi.length > 0){
           sapIsciligi.forEach(element => {
             sapIsciligiTutar += parseInt(element.tutar);
           });
         }
         
         const catiIsciligi = await readData("Çatı İşçiliği");
-        if(catiIsciligi !=null){
+        if(catiIsciligi.length > 0){
           catiIsciligi.forEach(element => {
             catiIsciligiTutar += parseInt(element.tutar);
           });
         }
         
         const mantolamaIsciligi = await readData("Mantolama İşçiliği");
-        if(mantolamaIsciligi !=null){
+        if(mantolamaIsciligi.length > 0){
           mantolamaIsciligi.forEach(element => {
             mantolamaIsciligiTutar += parseInt(element.tutar);
           });
         }
         
         const yalitimIsciligi = await readData("Yalıtım İşçiliği");
-        if(yalitimIsciligi !=null){
+        if(yalitimIsciligi.length > 0){
           yalitimIsciligi.forEach(element => {
             yalitimIsciligiTutar += parseInt(element.tutar);
           });
         }
         
         const suTesisatiIsciligi = await readData("Su Tesisatı İşçiliği");
-        if(suTesisatiIsciligi !=null){
+        if(suTesisatiIsciligi.length > 0){
           suTesisatiIsciligi.forEach(element => {
             suTesisatiIsciligiTutar += parseInt(element.tutar);
           });
         }
         
         const elektrikIsciligi = await readData("Elektrik İşçiliği");
-        if(elektrikIsciligi !=null){
+        if(elektrikIsciligi.length > 0){
           elektrikIsciligi.forEach(element => {
             elektrikIsciligiTutar += parseInt(element.tutar);
           });
         }
         
         const dogalgazIsciligi = await readData("Doğalgaz İşçiliği");
-        if(dogalgazIsciligi !=null){
+        if(dogalgazIsciligi.length > 0){
           dogalgazIsciligi.forEach(element => {
             dogalgazIsciligiTutar += parseInt(element.tutar);
           });
         }
         
         const asansorIsciligi = await readData("Asansör İşçiliği");
-        if(asansorIsciligi !=null){
+        if(asansorIsciligi.length > 0){
           asansorIsciligi.forEach(element => {
             asansorIsciligiTutar += parseInt(element.tutar);
           });
         }
     
         const dekorAlcipanIsciligi = await readData("Dekor Alçıpan İşçiliği");
-        if(dekorAlcipanIsciligi !=null){
+        if(dekorAlcipanIsciligi.length > 0){
           dekorAlcipanIsciligi.forEach(element => {
             dekorAlcipanIsciligiTutar += parseInt(element.tutar);
           });
@@ -1071,7 +1073,7 @@
         }
         
         const iscilikDiger = await readData("İşçilik Diğer");
-        if(iscilikDiger !=null){
+        if(iscilikDiger.length > 0){
           iscilikDiger.forEach(element => {
             iscilikDigerTutar += parseInt(element.tutar);
           });
@@ -1084,28 +1086,28 @@
         genelToplam = arsaGiderleriToplam + projelerGiderleriToplam + kurumlarGiderleriToplam + iscilikGiderleriToplam + kabaUretimGiderleriToplam + inceUretimGiderleriToplam;
 
         building = await readData("building");
-        if(building !=null){
+        if(building.length > 0){
           building.forEach(element => {
             mKareToplam += parseInt(element.genelBrutAlan);
           });
         }
 
         const yerSahibi = await readData("Yer Sahibi ile Anlaşma");
-        if(yerSahibi !=null){
+        if(yerSahibi.length > 0 ){
           yerSahibi.forEach(element => {
             const rowNumber = element.rowNumber;
-            if(rowNumber !=null){
+            if(rowNumber.length > 0){
               const match = building.find(element => element.rowNumber === rowNumber);
               mKareToplam -= parseInt(match.genelBrutAlan);
             }
           });
 
           const tutarAlinacak = yerSahibi[0].tutar;
-          if(tutarAlinacak !=null){
+          if(tutarAlinacak.length > 0){
             genelToplam -= tutarAlinacak;
           }
           const tutarVerilecek = yerSahibi[0].tutar;
-          if(tutarVerilecek !=null){
+          if(tutarVerilecek.length > 0){
             genelToplam -= tutarVerilecek;
           }
         }

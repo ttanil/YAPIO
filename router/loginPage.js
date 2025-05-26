@@ -60,10 +60,14 @@ router.post('/', async (req, res) => {
 
         res.cookie('token', token, {
             httpOnly: true,
-            secure: false,    // canlıda true ve HTTPS olmalı
+            secure: true,    // canlıda true ve HTTPS olmalı
             sameSite: 'lax',
         });
-
+/*
+        req.session.userInfo = {
+            userInfos : user.userInputs
+        };
+*/
         return res.json({
             message: 'Giriş başarılı!',
             role: user.role,

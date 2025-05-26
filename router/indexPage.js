@@ -19,7 +19,6 @@ router.post('/', async (req, res) => {
     const { userId, projectName, activeType = null, process = null } = req.body;
     
     if(userId && !projectName && !process){
-        console.log("tt1");
         try {
             const user = await Users.findById(userId);
             if (!user) {
@@ -64,7 +63,6 @@ router.post('/', async (req, res) => {
             return res.status(500).json({ success: false, message: "Kayıt hatası: " });
         }
     } else if(userId && projectName && !process){
-        console.log("tt2");
         try {
             const result = await Users.updateOne(
                 { _id: userId },
