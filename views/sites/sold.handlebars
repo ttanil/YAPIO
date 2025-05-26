@@ -506,6 +506,7 @@
 
     let userId = null;
     let projectName = null;
+    let userProjectInfos = null;
 
     let dataBuilding = null;
     let dataFloors = null;
@@ -546,6 +547,9 @@
         userId = window.user.userId;
         projectName = window.user.project.projectName;
 
+        userProjectInfos = window.user.project || [];
+        console.log(userProjectInfos);
+
         if(userId){
             loginButton.style.display = "block";
         } else{
@@ -558,13 +562,17 @@
 
         //await saveDataDb("payment", {tarih: "20.05.2025", not : "ilk ödeme", rowNumber : "2", tutar:"100000"});
 
-        dataBuilding = await readDataDb("building") || [];
-        dataFloors = await readDataDb("floorsData") || [];
-        dataSoldItems = await readDataDb("soldItems") || [];
-        paymentDb = await readDataDb("payment") || [];
+        //dataBuilding = await readDataDb("building") || [];
+        dataBuilding = userProjectInfos.building;
+        //dataFloors = await readDataDb("floorsData") || [];
+        dataFloors = userProjectInfos.floorsData;
+        //dataSoldItems = await readDataDb("soldItems") || [];
+        dataSoldItems = userProjectInfos.soldItems;
+        //paymentDb = await readDataDb("payment") || [];
+        paymentDb = userProjectInfos.payment;
         const maliyetObj = await readDataDb("metreMaliyet");
         maliyet = String(maliyetObj[0].metreMaliyeti);
-        const raw = await readDataDb("yerSahibiIleAnlasma");
+        const raw = userProjectInfos.yerSahibiIleAnlasma;
         yerSahibiIleAnlasma = Array.isArray(raw) ? raw.map(e => ({ ...e, buyerInfo: "owner" })) : [];
         const allItems = [...dataSoldItems, ...yerSahibiIleAnlasma];
 
@@ -626,7 +634,7 @@
                 };
         });
         tabloyuGuncelle(daireler);
-        console.log("daireler ",daireler);
+        //console.log("daireler ",daireler);
     });
 
     loginButton.addEventListener("click", () => {
