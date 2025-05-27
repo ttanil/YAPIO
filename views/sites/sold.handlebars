@@ -947,7 +947,7 @@
                             String(item.tarih) === String(oldData.tarih)
                         );
                         if (i !== -1) {
-                            paymentDb[i].not = newNot;
+                            paymentDb[i].not = newNot || "";
                             paymentDb[i].tutar = newTutar;
                             paymentDb[i].tarih = newTarih;
                             await saveDataDb("payment", paymentDb);

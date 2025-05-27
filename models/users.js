@@ -53,7 +53,7 @@ const givePaymentSchema = new mongoose.Schema({
 const paymentSchema = new mongoose.Schema({
     tarih: { type: String, required: true },
     rowNumber: { type: String, required: true },
-    not: { type: String, required: true },
+    not: { type: String, default: " " },
     tutar : { type: String, required: true }
 },{ _id: false });
 
