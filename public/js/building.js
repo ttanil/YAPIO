@@ -12,7 +12,7 @@ let allFloors = [bodrum, zemin, kat1, kat2, kat3, kat4, kat5, kat6];
 export function getBuildingInfos(data){
     bodrum.length = 0;  
     zemin.length = 0;  
-    kat1.length = 0;  
+    kat1.length = 0;
     kat2.length = 0;  
     kat3.length = 0;  
     kat4.length = 0;  
@@ -186,8 +186,8 @@ export function populateTable(tableData){
                         <option ${rowData.tipi === "5+1 dublex" ? "selected" : ""}>5+1 dublex</option>  
                     </select>  
                 </td>  
-                <td><input type="number" class="form-control" placeholder="m²" value="${rowData.netAlan || ""}" required></td>
-                <td><input type="number" class="form-control brut-alan" placeholder="m²" value="${rowData.brutAlan || ""}" required></td>
+                <td><input type="number" class="form-control d-none" placeholder="m²" value="${rowData.netAlan || ""}"></td>
+                <td><input type="number" class="form-control brut-alan d-none" placeholder="m²" value="${rowData.brutAlan || ""}"></td>
                 <td><input type="number" class="form-control genel-brut-alan" placeholder="m²" value="${rowData.genelBrutAlan || ""}" required></td>  
                 <td><input type="text" class="form-control" placeholder="Ad" value="${rowData.Ad || ""}"></td>  
                 <td>  

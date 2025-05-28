@@ -74,6 +74,7 @@ router.post('/', async (req, res) => {
         }
     } else if (projectName && activeType && process === "save") {
         const dataToDb = req.body.saves;
+        console.log(dataToDb);
         try {
             const user = await Users.findById(userId);
             if (!user) {

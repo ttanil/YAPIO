@@ -19,10 +19,10 @@ const floorDataSchema = new mongoose.Schema({
 const buildingSchema = new mongoose.Schema({
     Ad: { type: String, required: false },
     alanTipi: { type: String, required: true },
-    brutAlan: { type: String, required: true },
+    brutAlan: { type: String, default: " " },
     genelBrutAlan: { type: String, required: true },
     kat: { type: String, required: true },
-    netAlan: { type: String, required: true },
+    netAlan: { type: String, default: " " },
     rowNumber: { type: String, required: true },
     tipi: { type: String, required: true }
 }, { _id: false });

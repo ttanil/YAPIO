@@ -310,18 +310,18 @@
                             <th>Bulunduğu Kat</th>  
                             <th>Kullanım Amacı</th>  
                             <th>Tipi</th>
-                            <th   
+                            <th class="d-none"  
                                 data-bs-toggle="tooltip"   
                                 title="Ortak alan hariç Bağımsız Bölüm Net Alanıdır (m²).">  
                                 Net Alanı
                             </th>
-                            <th   
+                            <th class="d-none"  
                                 data-bs-toggle="tooltip"   
                                 title="Ortak alan hariç Bağımsız Bölüm Brüt Alanıdır (m²).">  
                                 Brüt Alanı  
                             </th>
                             <th>Genel Brüt Alan</th>  
-                            <th>Ad</th>  
+                            <th>Kapı No</th>  
                             <th>Sil</th>
                         </tr>  
                     </thead>  
@@ -359,10 +359,10 @@
                                     <option>4+1</option>  
                                     <option>4+1 dublex</option>  
                                     <option>5+1 dublex</option>  
-                                </select>  
+                                </select>
                             </td>  
-                            <td><input type="number" class="form-control" placeholder="m²" required></td> <!-- Net alanı-->
-                            <td><input type="number" class="form-control brut-alan" placeholder="m²" required></td>  <!-- Brüt alanı-->
+                            <td><input type="number" class="form-control d-none" placeholder="m²"></td> <!-- Net alanı-->
+                            <td><input type="number" class="form-control brut-alan d-none" placeholder="m²"></td>  <!-- Brüt alanı-->
                             <td><input type="number" class="form-control genel-brut-alan" placeholder="m²" required></td> <!-- Genel Brüt alanı-->
                             <td><input type="text" class="form-control" placeholder="Ad"></td>
                             <td>  
@@ -546,8 +546,8 @@
                             <option>5+1 dublex</option>  
                         </select>  
                     </td>  
-                    <td><input type="number" class="form-control" placeholder="m²" required></td>
-                    <td><input type="number" class="form-control brut-alan" placeholder="m²" required></td>
+                    <td><input type="number" class="form-control d-none" placeholder="m²"></td>
+                    <td><input type="number" class="form-control brut-alan d-none" placeholder="m²"></td>
                     <td><input type="number" class="form-control genel-brut-alan" placeholder="m²" required></td>  
                     <td><input type="text" class="form-control" placeholder="Ad"></td>  
                     <td>  
@@ -690,8 +690,8 @@
                             <option>Depo</option>  
                         </select>  
                     </td>  
-                    <td><input type="number" class="form-control" placeholder="m²" required></td>   
-                    <td><input type="number" class="form-control brut-alan" placeholder="m²" required></td>  
+                    <td><input type="number" class="form-control d-none" placeholder="m²"></td>   
+                    <td><input type="number" class="form-control brut-alan d-none" placeholder="m²"></td>  
                     <td><input type="number" class="form-control genel-brut-alan" placeholder="m²" required></td>  
                     <td><input type="text" class="form-control" placeholder="Ad"></td>  
                     <td>  

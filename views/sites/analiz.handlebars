@@ -1117,7 +1117,12 @@
         mKareMaliyetText.textContent = formatTL(genelToplam/mKareToplam);
 
         const maliyet = formatTL(genelToplam/mKareToplam);
-        await saveData("metreMaliyet", {metreMaliyeti : maliyet});
+        const value = parseFloat(maliyet);
+        if (isNaN(value)) {
+          // Hata mesajı veya önlem
+        } else {
+          await saveData("metreMaliyet", { metreMaliyeti: value });
+        }
 
         let detailChart;
 
@@ -1503,6 +1508,8 @@
           saves,
           process :"save"
       };
+      console.log("dataToDb ",dataToDb);
+      
       try {  
           // Kullanıcı giriş bilgilerini backend'e gönder  
           const response = await fetch('/analiz', {  
@@ -1523,6 +1530,7 @@
           showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
           console.log('Hata:', error);
       }
+      
     }
 
     // Türk Lirası örneği için (virgül: ondalık, nokta: binlik ayırıcı)  
