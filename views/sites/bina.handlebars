@@ -310,16 +310,6 @@
                             <th>Bulunduğu Kat</th>  
                             <th>Kullanım Amacı</th>  
                             <th>Tipi</th>
-                            <th class="d-none"  
-                                data-bs-toggle="tooltip"   
-                                title="Ortak alan hariç Bağımsız Bölüm Net Alanıdır (m²).">  
-                                Net Alanı
-                            </th>
-                            <th class="d-none"  
-                                data-bs-toggle="tooltip"   
-                                title="Ortak alan hariç Bağımsız Bölüm Brüt Alanıdır (m²).">  
-                                Brüt Alanı  
-                            </th>
                             <th>Genel Brüt Alan</th>  
                             <th>Kapı No</th>  
                             <th>Sil</th>
@@ -360,11 +350,9 @@
                                     <option>4+1 dublex</option>  
                                     <option>5+1 dublex</option>  
                                 </select>
-                            </td>  
-                            <td><input type="number" class="form-control d-none" placeholder="m²"></td> <!-- Net alanı-->
-                            <td><input type="number" class="form-control brut-alan d-none" placeholder="m²"></td>  <!-- Brüt alanı-->
+                            </td>
                             <td><input type="number" class="form-control genel-brut-alan" placeholder="m²" required></td> <!-- Genel Brüt alanı-->
-                            <td><input type="text" class="form-control" placeholder="Ad"></td>
+                            <td><input type="text" class="form-control" placeholder="Kapı No"></td>
                             <td>  
                                 <button id="delete-btn-1" type="button" class="btn btn-danger btn-sm delete-row-btn">Sil</button>
                             </td>  
@@ -545,11 +533,9 @@
                             <option>4+1 dublex</option>  
                             <option>5+1 dublex</option>  
                         </select>  
-                    </td>  
-                    <td><input type="number" class="form-control d-none" placeholder="m²"></td>
-                    <td><input type="number" class="form-control brut-alan d-none" placeholder="m²"></td>
+                    </td>
                     <td><input type="number" class="form-control genel-brut-alan" placeholder="m²" required></td>  
-                    <td><input type="text" class="form-control" placeholder="Ad"></td>  
+                    <td><input type="text" class="form-control" placeholder="Kapı No"></td>  
                     <td>  
                         <button id="delete-btn-${rowCounter}" type="button" class="btn btn-danger btn-sm delete-row-btn">Sil</button>  
                     </td>  
@@ -636,10 +622,10 @@
                 rowData["kat"] = row.querySelector("td:nth-child(2) select").value; // Kategori seçimi (2. sütun)  
                 rowData["alanTipi"] = row.querySelector("td:nth-child(3) select").value; // Alan tipi seçimi (3. sütun)  
                 rowData["tipi"] = row.querySelector("td:nth-child(4) select").value; // tipi seçimi (4. sütun)  
-                rowData["netAlan"] = row.querySelector("td:nth-child(5) input").value; // netAlan tipi seçimi (5. sütun)  
-                rowData["brutAlan"] = row.querySelector("td:nth-child(6) input").value; // Brüt alan verisi
-                rowData["genelBrutAlan"] = row.querySelector("td:nth-child(7) input").value; // Genel brüt alan verisi
-                rowData["Ad"] = row.querySelector("td:nth-child(8) input").value; // Ad bilgisi
+                rowData["netAlan"] = " "; // netAlan tipi seçimi (5. sütun)  
+                rowData["brutAlan"] = " "; // Brüt alan verisi
+                rowData["genelBrutAlan"] = row.querySelector("td:nth-child(5) input").value; // Genel brüt alan verisi
+                rowData["Ad"] = row.querySelector("td:nth-child(6) input").value; // Ad bilgisi
                 tableData.push(rowData);
             });  
 
@@ -689,11 +675,9 @@
                             <option>Ofis</option>  
                             <option>Depo</option>  
                         </select>  
-                    </td>  
-                    <td><input type="number" class="form-control d-none" placeholder="m²"></td>   
-                    <td><input type="number" class="form-control brut-alan d-none" placeholder="m²"></td>  
+                    </td>
                     <td><input type="number" class="form-control genel-brut-alan" placeholder="m²" required></td>  
-                    <td><input type="text" class="form-control" placeholder="Ad"></td>  
+                    <td><input type="text" class="form-control" placeholder="Kapı No"></td>  
                     <td>  
                         <button id="delete-btn-1" type="button" class="btn btn-danger btn-sm delete-row-btn">Sil</button>  
                     </td>  
@@ -849,7 +833,6 @@
                 setBuildingView(dataFromDb);
             });
 
-            
         });
 
         loginButton.addEventListener("click", () => {

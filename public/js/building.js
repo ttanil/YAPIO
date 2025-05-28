@@ -185,11 +185,9 @@ export function populateTable(tableData){
                         <option ${rowData.tipi === "4+1 dublex" ? "selected" : ""}>4+1 dublex</option>  
                         <option ${rowData.tipi === "5+1 dublex" ? "selected" : ""}>5+1 dublex</option>  
                     </select>  
-                </td>  
-                <td><input type="number" class="form-control d-none" placeholder="m²" value="${rowData.netAlan || ""}"></td>
-                <td><input type="number" class="form-control brut-alan d-none" placeholder="m²" value="${rowData.brutAlan || ""}"></td>
+                </td>
                 <td><input type="number" class="form-control genel-brut-alan" placeholder="m²" value="${rowData.genelBrutAlan || ""}" required></td>  
-                <td><input type="text" class="form-control" placeholder="Ad" value="${rowData.Ad || ""}"></td>  
+                <td><input type="text" class="form-control" placeholder="Kapı No" value="${rowData.Ad || ""}"></td>  
                 <td>  
                     <button id="delete-btn-${index + 1}" type="button" class="btn btn-danger btn-sm delete-row-btn">Sil</button>  
                 </td>  
