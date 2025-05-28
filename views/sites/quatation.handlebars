@@ -425,6 +425,11 @@
     </div>  
   </nav>
 
+  <div id="loader" style="display:none;">
+    <div class="spinner"></div>
+    <span>Yükleniyor...</span>
+</div>
+
   <div class="container my-5 mb-4">  
     <div class="mx-auto">  
       <div class="bg-white border rounded shadow p-3 mb-4"> <!-- Çerçeve burada -->  
@@ -1008,7 +1013,10 @@
 
           await setPayButtons();
 
-          await updateSavedEntries(activeType, "false");
+          showLoader(); // <--- LOADER BAŞLASIN!
+          // Liste güncelle  
+          await updateSavedEntries(activeType, "false")
+            .finally(() => hideLoader());  
         } else{
           ownerPay.style.display = "none";
           ownerPaid.style.display = "none";
@@ -1028,8 +1036,10 @@
           document.getElementById('modalInput').placeholder = info.placeholderTutar || "Tutarı giriniz";  
           document.getElementById('modalNote').placeholder = info.placeholderNot || "Açıklama (Opsiyonel)";
 
-          // O anki kayıtları göster  
-          await updateSavedEntries(activeType, "false");
+          showLoader(); // <--- LOADER BAŞLASIN!
+          // Liste güncelle  
+          await updateSavedEntries(activeType, "false")
+            .finally(() => hideLoader());  
 
           // Inputları temizle  
           document.getElementById('modalInput').value = "";  
@@ -1087,8 +1097,10 @@
       await saveData(activeType, data);
       await saveData(activeType, data);
 
+      showLoader(); // <--- LOADER BAŞLASIN!
       // Liste güncelle  
-      await updateSavedEntries(activeType, "true");  
+      await updateSavedEntries(activeType, "false")
+        .finally(() => hideLoader());  
 
       // Modalı kapat ve inputları temizle  
       //bootstrap.Modal.getInstance(document.getElementById('dataEntryModal')).hide();  
@@ -1336,11 +1348,14 @@
                 keyboard: false      // ESC tuşu ile kapanmaz, sadece X ile kapanır  
               });  
               modal.show();
-              await updateSavedEntries(type, "false");
+              showLoader(); // <--- LOADER BAŞLASIN!
+              // Liste güncelle  
+              await updateSavedEntries(type, "false")
+                .finally(() => hideLoader());
             };
 
             const cancelBtn = document.getElementById('cancelEdit');
-            cancelBtn.addEventListener("click", () => {
+            cancelBtn.addEventListener("click", async () => {
               document.getElementById('editModal').style.display = 'none';  
               document.getElementById('modalOverlay').style.display = 'none';  
               // Ekranı güncelle   
@@ -1349,8 +1364,11 @@
                 keyboard: false      // ESC tuşu ile kapanmaz, sadece X ile kapanır  
               });  
               modal.show();
-              updateSavedEntries(type, "false");
-            });
+              showLoader(); // <--- LOADER BAŞLASIN!
+              // Liste güncelle  
+              await updateSavedEntries(type, "false")
+                .finally(() => hideLoader());
+             });
               
           });  
         });  
@@ -1373,9 +1391,11 @@
             ); // Bu tarihi siler  
             await saveData(type, dataDb);
 
-            // Ekranı güncelle
-            await updateSavedEntries(type, "false");
-          });  
+            showLoader(); // <--- LOADER BAŞLASIN!
+            // Liste güncelle  
+            await updateSavedEntries(type, "false")
+              .finally(() => hideLoader());
+              });  
         });
 
       } else{
@@ -1507,7 +1527,10 @@
             console.log(idx," ",listToSet, " ", textDb);
             listToSet.splice(idx, 1);
             await savePayments(textDb, listToSet, "savePayment");
-            await updateSavedEntries(type, "false");
+            showLoader(); // <--- LOADER BAŞLASIN!
+            // Liste güncelle  
+            await updateSavedEntries(type, "false")
+              .finally(() => hideLoader());
           });  
         });
       }
@@ -1533,7 +1556,10 @@
         data[0].tutar = "0";
         await savePayments("getPayment", data, "savePayment");
         await setPayButtons();
-        await updateSavedEntries(activeType, "false");
+        showLoader(); // <--- LOADER BAŞLASIN!
+        // Liste güncelle  
+        await updateSavedEntries(activeType, "false")
+          .finally(() => hideLoader());
         return;
       }
       const newItem = { tutar: tutar, tarih: date, not: "alinacak_para" };  
@@ -1548,8 +1574,10 @@
       }
       await savePayments("getPayment", data, "alinacak_para");
       await setPayButtons();
-      // Liste güncelle  
-      await updateSavedEntries(activeType, "false");   
+      showLoader(); // <--- LOADER BAŞLASIN!
+        // Liste güncelle  
+        await updateSavedEntries(activeType, "false")
+          .finally(() => hideLoader());
     });
 
     // Kaydet arsa sahibine verilecek para
@@ -1569,7 +1597,10 @@
         data[0].tutar = "0";
         await savePayments("givePayment", data, "savePayment");
         await setPayButtons();
-        await updateSavedEntries(activeType, "false");
+        showLoader(); // <--- LOADER BAŞLASIN!
+        // Liste güncelle  
+        await updateSavedEntries(activeType, "false")
+          .finally(() => hideLoader());Z
         return;
       }
 
@@ -1585,8 +1616,10 @@
       }
       await savePayments("givePayment", data, "verilecek_para");
       await setPayButtons();
-      // Liste güncelle  
-      await updateSavedEntries(activeType, "false");
+      showLoader(); // <--- LOADER BAŞLASIN!
+        // Liste güncelle  
+        await updateSavedEntries(activeType, "false")
+          .finally(() => hideLoader());
     });
 
     ownerDealButtonActive.addEventListener('click', function() {  
@@ -1817,8 +1850,10 @@
           document.getElementById('modalNote').value = "";
         }
 
+        showLoader(); // <--- LOADER BAŞLASIN!
         // Liste güncelle  
-        await updateSavedEntries(activeType, "false");
+        await updateSavedEntries(activeType, "false")
+          .finally(() => hideLoader());
       }
     });
 
@@ -1847,6 +1882,13 @@
       intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");  
 
       return decPart ? `${intPart},${decPart.substring(0,2)}` : intPart;  
+    }
+
+    function showLoader() {
+        document.getElementById('loader').style.display = 'flex';
+    }
+    function hideLoader() {
+        document.getElementById('loader').style.display = 'none';
     }
 
   </script>  

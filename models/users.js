@@ -70,7 +70,7 @@ const metreMaliyetSchema = new mongoose.Schema({
 
 const defaultFields = {
     tarih: { type: String, required: true },
-    not: { type: String, required: true },
+    not: { type: String, default: " " },
     tutar: { type: String, required: true },
     unit: { type: String, required: true }
 };
