@@ -1013,10 +1013,8 @@
 
           await setPayButtons();
 
-          showLoader(); // <--- LOADER BAŞLASIN!
           // Liste güncelle  
-          await updateSavedEntries(activeType, "false")
-            .finally(() => hideLoader());  
+          await updateSavedEntries(activeType, "false");  
         } else{
           ownerPay.style.display = "none";
           ownerPaid.style.display = "none";
@@ -1036,10 +1034,8 @@
           document.getElementById('modalInput').placeholder = info.placeholderTutar || "Tutarı giriniz";  
           document.getElementById('modalNote').placeholder = info.placeholderNot || "Açıklama (Opsiyonel)";
 
-          showLoader(); // <--- LOADER BAŞLASIN!
           // Liste güncelle  
-          await updateSavedEntries(activeType, "false")
-            .finally(() => hideLoader());  
+          await updateSavedEntries(activeType, "false");  
 
           // Inputları temizle  
           document.getElementById('modalInput').value = "";  
@@ -1094,13 +1090,12 @@
       if (!data) data = [];  
       data.push({ tutar:tutar, tarih: tarih, not: not, unit:unit });
       data.sort((a, b) => new Date(a.tarih) - new Date(b.tarih));
-      await saveData(activeType, data);
-      await saveData(activeType, data);
-
       showLoader(); // <--- LOADER BAŞLASIN!
+      await saveData(activeType, data)
+          .finally(() => hideLoader());
+
       // Liste güncelle  
-      await updateSavedEntries(activeType, "false")
-        .finally(() => hideLoader());  
+      await updateSavedEntries(activeType, "false");
 
       // Modalı kapat ve inputları temizle  
       //bootstrap.Modal.getInstance(document.getElementById('dataEntryModal')).hide();  
@@ -1337,7 +1332,9 @@
                 }  
                 return item;  
               });
-              await saveData(type, dataDb);
+              showLoader(); // <--- LOADER BAŞLASIN!
+              await saveData(type, dataDb)
+                .finally(() => hideLoader());
               
               document.getElementById('editModal').style.display = 'none';  
               document.getElementById('modalOverlay').style.display = 'none';
@@ -1347,11 +1344,8 @@
                 backdrop: 'static',  // Dışarıya tıklama engellenir  
                 keyboard: false      // ESC tuşu ile kapanmaz, sadece X ile kapanır  
               });  
-              modal.show();
-              showLoader(); // <--- LOADER BAŞLASIN!
-              // Liste güncelle  
-              await updateSavedEntries(type, "false")
-                .finally(() => hideLoader());
+              modal.show(); 
+              await updateSavedEntries(type, "false");
             };
 
             const cancelBtn = document.getElementById('cancelEdit');
@@ -1389,13 +1383,13 @@
                 item.tutar === tutar &&  
                 item.not === not)  
             ); // Bu tarihi siler  
-            await saveData(type, dataDb);
-
             showLoader(); // <--- LOADER BAŞLASIN!
+            await saveData(type, dataDb)
+                .finally(() => hideLoader());
             // Liste güncelle  
             await updateSavedEntries(type, "false")
-              .finally(() => hideLoader());
-              });  
+              
+          });  
         });
 
       } else{
@@ -1556,10 +1550,8 @@
         data[0].tutar = "0";
         await savePayments("getPayment", data, "savePayment");
         await setPayButtons();
-        showLoader(); // <--- LOADER BAŞLASIN!
         // Liste güncelle  
-        await updateSavedEntries(activeType, "false")
-          .finally(() => hideLoader());
+        await updateSavedEntries(activeType, "false");
         return;
       }
       const newItem = { tutar: tutar, tarih: date, not: "alinacak_para" };  
@@ -1574,10 +1566,8 @@
       }
       await savePayments("getPayment", data, "alinacak_para");
       await setPayButtons();
-      showLoader(); // <--- LOADER BAŞLASIN!
         // Liste güncelle  
-        await updateSavedEntries(activeType, "false")
-          .finally(() => hideLoader());
+        await updateSavedEntries(activeType, "false");
     });
 
     // Kaydet arsa sahibine verilecek para
@@ -1597,10 +1587,8 @@
         data[0].tutar = "0";
         await savePayments("givePayment", data, "savePayment");
         await setPayButtons();
-        showLoader(); // <--- LOADER BAŞLASIN!
         // Liste güncelle  
-        await updateSavedEntries(activeType, "false")
-          .finally(() => hideLoader());Z
+        await updateSavedEntries(activeType, "false");
         return;
       }
 
@@ -1616,10 +1604,8 @@
       }
       await savePayments("givePayment", data, "verilecek_para");
       await setPayButtons();
-      showLoader(); // <--- LOADER BAŞLASIN!
         // Liste güncelle  
-        await updateSavedEntries(activeType, "false")
-          .finally(() => hideLoader());
+      await updateSavedEntries(activeType, "false");
     });
 
     ownerDealButtonActive.addEventListener('click', function() {  
@@ -1850,10 +1836,8 @@
           document.getElementById('modalNote').value = "";
         }
 
-        showLoader(); // <--- LOADER BAŞLASIN!
         // Liste güncelle  
-        await updateSavedEntries(activeType, "false")
-          .finally(() => hideLoader());
+        await updateSavedEntries(activeType, "false");
       }
     });
 
