@@ -559,7 +559,7 @@
                     credentials: 'include',
                     body: JSON.stringify(dataToDb)
                 });
-        
+
                 const result = await response.json();
                 if (!response.ok && !result.success) {
                     // Sunucu response.json ile hata mesajı döndüyse

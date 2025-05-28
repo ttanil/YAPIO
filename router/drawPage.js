@@ -191,6 +191,9 @@ router.post('/', async (req, res) => {
                 project.soldItems = project.soldItems.filter(
                     agr => agr.rowNumber !== soldOwner.rowNumber
                 );
+
+                // Sadece rowNumber OLANLARI çıkart, diğerlerini bırak
+                project.payment = project.payment.filter(p => p.rowNumber !== String(soldOwner.rowNumber));
             }
             
             await user.save();
