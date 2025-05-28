@@ -180,7 +180,7 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
                 roomModal.hide();  
                 resolve(true);  
             }
-        };  
+        };
         okButton.addEventListener("click", okButton.okHandler);
 
         // Bootstrap modal'ı aç  
@@ -237,7 +237,8 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
             payload.soldOwner = soldOwner;
             payload.soldOwnerText = soldOwnerText; // "add" veya "delete"
         }
-
+        showLoader();
+        let result;
         try {
             const response = await fetch('/draw', {
                 method: 'POST',
@@ -246,7 +247,8 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
                 body: JSON.stringify(payload),
             });
 
-            const result = await response.json();
+            result = await response.json();
+
             if (!response.ok || !result.success) {
                 showWarningMessage(result.message || "İşlem başarısız.", "tamam", true);
                 return false;
@@ -258,6 +260,15 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
             showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
             console.log('Hata:', error);
             return false;
+        } finally {
+            hideLoader();
         }
+    }
+
+    function showLoader() {
+        document.getElementById('loader').style.display = 'flex';
+    }
+    function hideLoader() {
+        document.getElementById('loader').style.display = 'none';
     }
 }
