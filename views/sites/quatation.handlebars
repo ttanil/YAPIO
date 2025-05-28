@@ -765,7 +765,7 @@
           <div class="d-flex gap-2 align-items-center mb-3">
             <div class="flex-fill d-flex flex-column" style="display: none;" id="ownerPay">   
               <p class="mb-1 ms-2 small text-muted" style="display: none;" id="ownerPayInputInfo">Alınacak Para</p>  
-              <input type="number" class="form-control" style="display: none;" id="ownerPayInput" placeholder="Alınacak Para">  
+              <input type="text" class="form-control" style="display: none;" id="ownerPayInput" placeholder="Alınacak Para">  
             </div>  
             <div class="owner-pay-button" style="display: none;" id="ownerPayButton">
               <button type="button" class="btn btn-primary" id="ownerPayButtonActive">Kaydet</button>  
@@ -788,7 +788,7 @@
           <!-- Tutar ve Tarih Yan Yana -->  
           <div class="d-flex gap-2 align-items-end mb-2 mt-3">  
             <div class="flex-fill">  
-              <input type="number" class="form-control" id="modalInput" placeholder="Tutarı giriniz">  
+              <input type="text" class="form-control" id="modalInput" placeholder="Tutarı giriniz">  
             </div>  
             <div>  
               <input type="date" class="form-control" id="modalDate">  
@@ -818,14 +818,13 @@
       <label>Tarih</label>  
       <input type="date" id="editTarih" /><br>  
       <label id="unitModal">Tutar:</label>  
-      <input type="number" id="editTutar" /><br>  
+      <input type="text" id="editTutar" /><br>  
       <label>Not</label>  
       <textarea id="editNot" class="modal-edit-textarea"></textarea>
       <button id="saveEdit">Kaydet</button>  
       <button id="cancelEdit">Vazgeç</button>  
     </div>  
   </div>
-
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>  
   <script type="module">  
@@ -851,6 +850,10 @@
     const ownerPaid = document.getElementById("ownerPaid");
     const ownerPaidButton = document.getElementById("ownerPaidButton");
     const ownerDealButtonActive = document.getElementById("ownerDealButtonActive");
+    const modalInput = document.getElementById("modalInput");
+    const editTutar = document.getElementById("editTutar");
+    const ownerPayInput = document.getElementById("ownerPayInput");
+    const ownerPaidInput = document.getElementById("ownerPaidInput");
     
     // Tabs geçişleri  
     const tab1Btn = document.getElementById('tab1Btn');  
@@ -926,7 +929,69 @@
             activateTab(stored);
         }
 
-        document.getElementById('modalDate').value = getTodayDate(); 
+        document.getElementById('modalDate').value = getTodayDate();
+
+        if (modalInput) {
+          modalInput.addEventListener("input", function() {
+            let value = this.value.replace(/\D/g, '');
+            if (!value) {
+              this.value = "";
+              return;
+            }
+            this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+          });
+        }
+        if (ownerPayInput) {
+          ownerPayInput.addEventListener("input", function() {
+            let value = this.value.replace(/\D/g, '');
+            if (!value) {
+              this.value = "";
+              return;
+            }
+            this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+          });
+        }
+        if (ownerPaidInput) {
+          ownerPayInput.addEventListener("input", function() {
+            let value = this.value.replace(/\D/g, '');
+            if (!value) {
+              this.value = "";
+              return;
+            }
+            this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+          });
+        }
+        if (editTutar) {
+          // Control variable for focus clearing (ONE per modal open)
+          let hasCleared = false;
+
+          editTutar.addEventListener("focus", function() {
+            if (!hasCleared) {
+              this.value = '';
+              hasCleared = true;
+            }
+          });
+
+          editTutar.addEventListener("input", function() {
+            // IME desteği için, sadece rakamları al
+            let pos = this.selectionStart;
+            let value = this.value.replace(/\D/g, '');
+
+            if (!value) {
+              this.value = "";
+              return;
+            }
+
+            this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            // İmlecin geriye sıçraması istemiyorsan:
+            this.setSelectionRange(this.value.length, this.value.length);
+          });
+
+          // Modal her açıldığında eski clearing durumunu sıfırlamak için:
+          document.getElementById('editModal').addEventListener('show', function() {
+            hasCleared = false;
+          });
+        }
 
     });
 
@@ -1052,8 +1117,10 @@
     });  
 
     // Kaydet  
-    document.getElementById('saveModalButton').addEventListener('click', async function() {  
-      const tutar = document.getElementById('modalInput').value;  
+    document.getElementById('saveModalButton').addEventListener('click', async function() {
+      const tutarRaw = modalInput.value.replace(/\./g, "");
+      if (tutarRaw.trim() === "") return; // boşsa fonksiyonu çıkar
+      const tutar = Number(tutarRaw);
       const tarih = document.getElementById('modalDate').value;  
       const not = document.getElementById('modalNote').value;  
       const unit = buttonInfo[activeType].unit;
@@ -1276,96 +1343,109 @@
         `;  
 
         // Edit butonlarını bulup listener ekle  
-        div.querySelectorAll('.edit-btn').forEach(btn => {  
-          btn.addEventListener('click', function(event) {  
-            const idx = this.dataset.idx;  
-            const type = this.dataset.type;  
-            const item = list[idx];  
-            const tarih = item.tarih;  
-            const tutar = item.tutar;  
-            const not = item.not;  
-            const unit = item.unit;  
+        div.querySelectorAll('.edit-btn').forEach(btn => {
+          btn.addEventListener('click', function(event) {
+            const idx = this.dataset.idx;
+            const type = this.dataset.type;
+            const item = list[idx];
+            const tarih = item.tarih;
+            const tutar = item.tutar;
+            const not = item.not;
+            const unit = item.unit;
 
-            // Modalı aç ve kayıt bilgilerini yerleştir  
-            bootstrap.Modal.getInstance(document.getElementById('dataEntryModal')).hide();
-            document.getElementById('editModal').style.display = 'block';  
-            document.getElementById('modalOverlay').style.display = 'block'; 
+            // Modalları aç ve veri aktar
+            document.getElementById('editModal').style.display = 'block';
+            document.getElementById('modalOverlay').style.display = 'block';
+            document.getElementById('dataEntryModal').style.display = 'none';
             document.getElementById('editTarih').value = item.tarih;
 
-            if(unit === "TL"){  
+            // Birim/Tutar başlığı
+            if(unit === "TL"){
               document.getElementById('unitModal').innerText = "Tutar";
-            } else if(unit === "adet"){  
-              document.getElementById('unitModal').innerText = "Adet";  
-            }  
-            // Tutar inputunu al  
-            const editTutarInput = document.getElementById('editTutar');  
-            editTutarInput.value = item.tutar;   // Önce mevcut değeri göster  
+            } else if(unit === "adet"){
+              document.getElementById('unitModal').innerText = "Adet";
+            }
 
-            // Önceki event handler'ların çoğalmaması için eski focus eventlerini sil 
-            let hasCleared = false;
-            editTutarInput.onfocus = function() {  
-              if (!hasCleared) {  
-                this.value = "";  
-                hasCleared = true;
-              }  
-            };  
+            // Tutar değerini ata
+            const editTutar = document.getElementById('editTutar');
+            editTutar.value = item.tutar;  // Hata yok!
 
+            // Not değerini ata
             document.getElementById('editNot').value = item.not;
-            
+
+            // İlk focus'ta silme (sadece bir kere çalışsın)
+            let hasCleared = false;
+            editTutar.onfocus = function() {
+              if (!hasCleared) {
+                this.value = "";
+                hasCleared = true;
+              }
+            };
+
             // Kaydet butonu
-            document.getElementById('saveEdit').onclick = async function() {  
-              const newTarih = document.getElementById('editTarih').value;  
-              const newTutar = document.getElementById('editTutar').value;  
-              const newNot = document.getElementById('editNot').value;  
+            document.getElementById('saveEdit').onclick = async function() {
+              const newTarih = document.getElementById('editTarih').value;
+              let newTutarRaw = document.getElementById('editTutar').value.replace(/\./g, '');
+              if (newTutarRaw.trim() === '') return; // Boşsa fonksiyonu bitir
+
+              let parsedTutar = parseInt(newTutarRaw, 10);
+              if (isNaN(parsedTutar)) return;
+              const newNot = document.getElementById('editNot').value;
 
               let dataDb = await readData(type) || [];
-              dataDb = dataDb.map(item => {  
-                if (item.tarih === tarih && item.tutar === tutar && item.not === not) {  
-                  // YENİ degerlerle dön  
-                  return {  
-                    ...item,  
-                    tarih: newTarih,  
-                    tutar: newTutar,  
-                    not: newNot,  
-                    unit: unit  
-                  };  
-                }  
-                return item;  
+              dataDb = dataDb.map(item => {
+                if (item.tarih === tarih && item.tutar === tutar && item.not === not) {
+                  return {
+                    ...item,
+                    tarih: newTarih,
+                    tutar: parsedTutar,
+                    not: newNot,
+                    unit: unit
+                  };
+                }
+                return item;
               });
-              showLoader(); // <--- LOADER BAŞLASIN!
-              await saveData(type, dataDb)
-                .finally(() => hideLoader());
-              
-              document.getElementById('editModal').style.display = 'none';  
-              document.getElementById('modalOverlay').style.display = 'none';
+              showLoader();
+              await saveData(type, dataDb).finally(() => hideLoader());
 
-              // Ekranı güncelle   
-              const modal = new bootstrap.Modal(document.getElementById('dataEntryModal'), {  
-                backdrop: 'static',  // Dışarıya tıklama engellenir  
-                keyboard: false      // ESC tuşu ile kapanmaz, sadece X ile kapanır  
-              });  
-              modal.show(); 
+              document.getElementById('editModal').style.display = 'none';
+              document.getElementById('modalOverlay').style.display = 'none';
+              // Bootstrap karartma overlay'i de kaldır
+              const modalBackdrop = document.querySelector('.modal-backdrop');
+              if (modalBackdrop) modalBackdrop.remove();
+
+              // Ekranı ve listeyi güncelle
+              const modal = new bootstrap.Modal(document.getElementById('dataEntryModal'), {
+                backdrop: 'static',
+                keyboard: false
+              });
+              modal.show();
               await updateSavedEntries(type, "false");
             };
 
+            // Vazgeç/Kapat butonu
             const cancelBtn = document.getElementById('cancelEdit');
-            cancelBtn.addEventListener("click", async () => {
-              document.getElementById('editModal').style.display = 'none';  
-              document.getElementById('modalOverlay').style.display = 'none';  
-              // Ekranı güncelle   
-              const modal = new bootstrap.Modal(document.getElementById('dataEntryModal'), {  
-                backdrop: 'static',  // Dışarıya tıklama engellenir  
-                keyboard: false      // ESC tuşu ile kapanmaz, sadece X ile kapanır  
-              });  
+            cancelBtn.onclick = async () => {
+              // Önce düzen-modali ve kendi overlayini kapat
+              document.getElementById('editModal').style.display = 'none';
+              document.getElementById('modalOverlay').style.display = 'none';
+
+              // Bootstrap modali açmadan önce varsa eski karartmayı sil
+              const modalBackdrop = document.querySelector('.modal-backdrop');
+              if (modalBackdrop) modalBackdrop.remove();
+
+              // Bootstrap modalı tekrar aç, diğer işlemleri yap
+              const modal = new bootstrap.Modal(document.getElementById('dataEntryModal'), {
+                backdrop: 'static',
+                keyboard: false
+              });
               modal.show();
-              showLoader(); // <--- LOADER BAŞLASIN!
-              // Liste güncelle  
-              await updateSavedEntries(type, "false")
-                .finally(() => hideLoader());
-             });
-              
+
+              showLoader();
+              await updateSavedEntries(type, "false").finally(() => hideLoader());
+            };
           });  
-        });  
+        });
 
 
         div.querySelectorAll('.delete-btn').forEach(btn => {  
@@ -1535,7 +1615,11 @@
 
     // Kaydet arsa sahibinden alınacak para
     ownerPayButtonActive.addEventListener('click', async function() {  
-      const tutar = document.getElementById('ownerPayInput').value;
+      const inputEl = document.getElementById('ownerPayInput');
+      const tutarRaw = inputEl.value.replace(/\./g, '');
+      if (!tutarRaw.trim()) return; // boşsa çık
+
+      const tutar = parseInt(tutarRaw, 10);
       const date = formatDate(getTodayDate());
       const unit = buttonInfo[activeType].unit;
       const type = this.dataset.type;
@@ -1572,7 +1656,11 @@
 
     // Kaydet arsa sahibine verilecek para
     ownerPaidButtonActive.addEventListener('click', async function() {  
-      const tutar = document.getElementById('ownerPaidInput').value;
+      const inputEl = document.getElementById('ownerPaidInput');
+      const tutarRaw = inputEl.value.replace(/\./g, '');
+      if (!tutarRaw.trim()) return; // boş girişse fonksiyonu sonlandır
+
+      const tutar = parseInt(tutarRaw, 10);
       const date = formatDate(getTodayDate());
       const unit = buttonInfo[activeType].unit;
       const type = this.dataset.type;
@@ -1713,8 +1801,6 @@
     }
 
     async function setPayButtons(){
-      const ownerPayInput = document.getElementById("ownerPayInput");
-      const ownerPaidInput = document.getElementById("ownerPaidInput");
       const ownerDealButton = document.getElementById("ownerDealButton");
       const ownerPayButton = document.getElementById("ownerPayButton");
       const ownerPayInputInfo = document.getElementById("ownerPayInputInfo");
@@ -1757,7 +1843,11 @@
         
       } else if (getPaymentTutar !== "0" && givePaymentTutar === "0"){
         text = "alinacak_para";
+        document.getElementById('modalInput').style.display = "flex"; 
+        document.getElementById('modalNote').style.display = "flex"; 
+        document.getElementById('modalDate').style.display = "flex";
         saveModalButton.textContent = "Para Al"
+        saveModalButton.style.display = "flex";
         ownerPaid.style.display = "none";
         ownerPaidInputInfo.style.display = "none";
         ownerPaidButton.style.display = "none";
