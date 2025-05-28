@@ -356,6 +356,11 @@
     </div>  
   </nav>
 
+<div id="loader" style="display:none;">
+    <div class="spinner"></div>
+    <span>Yükleniyor...</span>
+</div>
+
   <div class="container-list mt-5 mb-5">
     <div class="card shadow border-0">
       <div class="card-header bg-warning text-dark">
@@ -821,7 +826,9 @@
                                     not: not || ""
                                 });
 
-                                await saveDataDb("payment", paymentDb);
+                                showLoader(); // <--- LOADER BAŞLASIN!
+                                await saveDataDb("payment", paymentDb)
+                                    .finally(() => hideLoader());
                                 const yenilenmisDaireler = await createDaireler();
                                 tabloyuGuncelle(yenilenmisDaireler);
                                 updatePaymentList(detayDaire, detayDaire.rowNumber, yenilenmisDaireler);
@@ -896,7 +903,9 @@
                     );
                     if (i !== -1) {
                         paymentDb.splice(i, 1);
-                        await saveDataDb("payment", paymentDb);
+                        showLoader(); // <--- LOADER BAŞLASIN!
+                        await saveDataDb("payment", paymentDb)
+                            .finally(() => hideLoader());
                         const yenilenmisDaireler = await createDaireler();
                         tabloyuGuncelle(yenilenmisDaireler);
                         updatePaymentList(detayDaire, detayDaire.rowNumber, yenilenmisDaireler);
@@ -950,7 +959,9 @@
                             paymentDb[i].not = newNot || "";
                             paymentDb[i].tutar = newTutar;
                             paymentDb[i].tarih = newTarih;
-                            await saveDataDb("payment", paymentDb);
+                            showLoader(); // <--- LOADER BAŞLASIN!
+                            await saveDataDb("payment", paymentDb)
+                                .finally(() => hideLoader());
                             const yenilenmisDaireler = await createDaireler();
                             tabloyuGuncelle(yenilenmisDaireler);
                             updatePaymentList(detayDaire, detayDaire.rowNumber, yenilenmisDaireler);
@@ -1122,6 +1133,12 @@
         }
     }
 
+    function showLoader() {
+        document.getElementById('loader').style.display = 'flex';
+    }
+    function hideLoader() {
+        document.getElementById('loader').style.display = 'none';
+    }
     
 
     </script>
