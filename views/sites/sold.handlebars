@@ -657,414 +657,414 @@
     });
 
     // Ana tabloyu güncelleyen fonksiyon
-        function tabloyuGuncelle(daireler) {
-            const tbody = document.getElementById("daire-tbody");
-            tbody.innerHTML = "";
-            daireler.forEach((daire, i) => {
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-                    <td>${daire.kat ?? ""}</td>
-                    <td>${daire.ad ?? ""}</td>
-                    <td>${daire.tip ?? ""}</td>
-                    <td>${daire.m2 ?? ""}</td>
-                    <td 
-                        style="
-                            color:
-                            ${daire.durum === "Satıldı" ? "green" : ""}
-                            ${daire.durum === "Yer Sahibi" ? "red" : ""}
-                        "
-                    >
-                        ${daire.durum ?? ""}
-                    </td>
-                    <td>
-                        <button class="btn btn-detail" data-index="${i}">
-                            <img src="${daire.detay ?? ""}" alt="detail" style="width:20px;height:20px;">
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
+    function tabloyuGuncelle(daireler) {
+        const tbody = document.getElementById("daire-tbody");
+        tbody.innerHTML = "";
+        daireler.forEach((daire, i) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${daire.kat ?? ""}</td>
+                <td>${daire.ad ?? ""}</td>
+                <td>${daire.tip ?? ""}</td>
+                <td>${daire.m2 ?? ""}</td>
+                <td 
+                    style="
+                        color:
+                        ${daire.durum === "Satıldı" ? "green" : ""}
+                        ${daire.durum === "Yer Sahibi" ? "red" : ""}
+                    "
+                >
+                    ${daire.durum ?? ""}
+                </td>
+                <td>
+                    <button class="btn btn-detail" data-index="${i}">
+                        <img src="${daire.detay ?? ""}" alt="detail" style="width:20px;height:20px;">
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
 
-            document.querySelectorAll('.btn-detail').forEach(button => {
-                button.addEventListener('click', function () {
+        document.querySelectorAll('.btn-detail').forEach(button => {
+            button.addEventListener('click', function () {
+                document.querySelectorAll('.btn-detail img').forEach(img => {
+                    img.src = "/img/detail.png";
+                });
+                // Sadece tıklananın img'si aktif olsun
+                const img = this.querySelector('img');
+                img.src = "/img/detail_1.png";
+
+                const index = this.getAttribute('data-index');
+                const detayDaire = daireler[index];
+
+                const roomModal = new bootstrap.Modal(document.getElementById("roomModal"));
+                roomModal.show(); 
+
+                const modalEl = document.getElementById('roomModal');
+                modalEl.addEventListener('hidden.bs.modal', function () {
                     document.querySelectorAll('.btn-detail img').forEach(img => {
                         img.src = "/img/detail.png";
                     });
-                    // Sadece tıklananın img'si aktif olsun
-                    const img = this.querySelector('img');
-                    img.src = "/img/detail_1.png";
+                    paymentModalBody.innerHTML = "";
+                });
 
-                    const index = this.getAttribute('data-index');
-                    const detayDaire = daireler[index];
+                modalTitle.textContent = (detayDaire.kat || "") + ", " + (detayDaire.tip || "");
+                modalSubtitle.textContent = detayDaire.ad || "";
 
-                    const roomModal = new bootstrap.Modal(document.getElementById("roomModal"));
-                    roomModal.show(); 
-
-                    const modalEl = document.getElementById('roomModal');
-                    modalEl.addEventListener('hidden.bs.modal', function () {
-                        document.querySelectorAll('.btn-detail img').forEach(img => {
-                            img.src = "/img/detail.png";
-                        });
-                        paymentModalBody.innerHTML = "";
-                    });
-
-                    modalTitle.textContent = (detayDaire.kat || "") + ", " + (detayDaire.tip || "");
-                    modalSubtitle.textContent = detayDaire.ad || "";
-
-                    let imgConstructor = null;
-                    const model = detayDaire.tipi;
-                    const tip = detayDaire.tip;
-                    if(model === "1+1"){
-                        imgConstructor = "daire3d_1";
-                    } else if(model === "2+1" || model === "2+0"){
-                        imgConstructor = "daire_3d_2";
-                    } else if(model === "3+1"){
-                        imgConstructor = "daire_3d_3";
-                    } else if(model === "3+1 dublex" || model === "4+1 dublex" || model === "5+1 dublex"){
-                        imgConstructor = "dublex";
-                    } else if(model === "4+1"){
-                        imgConstructor = "daire3d_4";
-                    } else if(tip === "Dükkan"){
-                        imgConstructor = "store_1";
-                    } else if(tip === "Depo"){
-                        imgConstructor = "depo";
-                    } else if(tip === "Ofis"){
-                        imgConstructor = "ofis";
-                    } 
-                    roomModalImage.innerHTML = `  
-                        <span style="display: flex; align-items: center; justify-content: center;"> 
-                            <img src="/img/${imgConstructor}.png" alt="" style="width:300px; height:250px; ">
-                        </span>  
-                    `;
+                let imgConstructor = null;
+                const model = detayDaire.tipi;
+                const tip = detayDaire.tip;
+                if(model === "1+1"){
+                    imgConstructor = "daire3d_1";
+                } else if(model === "2+1" || model === "2+0"){
+                    imgConstructor = "daire_3d_2";
+                } else if(model === "3+1"){
+                    imgConstructor = "daire_3d_3";
+                } else if(model === "3+1 dublex" || model === "4+1 dublex" || model === "5+1 dublex"){
+                    imgConstructor = "dublex";
+                } else if(model === "4+1"){
+                    imgConstructor = "daire3d_4";
+                } else if(tip === "Dükkan"){
+                    imgConstructor = "store_1";
+                } else if(tip === "Depo"){
+                    imgConstructor = "depo";
+                } else if(tip === "Ofis"){
+                    imgConstructor = "ofis";
+                } 
+                roomModalImage.innerHTML = `  
+                    <span style="display: flex; align-items: center; justify-content: center;"> 
+                        <img src="/img/${imgConstructor}.png" alt="" style="width:300px; height:250px; ">
+                    </span>  
+                `;
 
 
-                    odaMetreKare.textContent = detayDaire.m2 + " m²";
-                    
-                    if(model !== "1 (dükkan, depo vs)"){
-                        odaTipi.innerHTML = `${model}&nbsp;${detayDaire.tip}`;
-                        odaTipiText.style.display = "flex";
-                    } else{
-                        odaTipi.innerHTML = `${detayDaire.tip}`;
-                        odaTipiText.style.display = "none";
-                    }
+                odaMetreKare.textContent = detayDaire.m2 + " m²";
                 
-                    odaDurum.textContent = detayDaire.durum;
-                    if (detayDaire.durum === "Satıldı") {
-                        odaDurum.style.color = "green";
-                    } else if (detayDaire.durum === "Yer Sahibi") {
-                        odaDurum.style.color = "red";
+                if(model !== "1 (dükkan, depo vs)"){
+                    odaTipi.innerHTML = `${model}&nbsp;${detayDaire.tip}`;
+                    odaTipiText.style.display = "flex";
+                } else{
+                    odaTipi.innerHTML = `${detayDaire.tip}`;
+                    odaTipiText.style.display = "none";
+                }
+            
+                odaDurum.textContent = detayDaire.durum;
+                if (detayDaire.durum === "Satıldı") {
+                    odaDurum.style.color = "green";
+                } else if (detayDaire.durum === "Yer Sahibi") {
+                    odaDurum.style.color = "red";
+                } else {
+                    odaDurum.style.color = "black";
+                }
+                odaMaliyet.textContent = "Maliyet : " + formatTL(detayDaire.maliyet) + " ₺";
+
+                // Eğer satılmışsa Ödeme Bilgileri Göster
+                if (detayDaire.buyerInfo && detayDaire.buyerInfo !== 'owner') {
+                    roomInfoForm.style.display = "block";
+                    aliciAdSoyad.textContent = detayDaire.buyerInfo;
+                    satisTarihi.textContent = detayDaire.soldDate;
+                    satisFiyati.textContent = formatTL(detayDaire.itemPrice) + " ₺";
+                    paymentButton.classList.remove("d-none");
+
+                    updatePaymentList(detayDaire, detayDaire.rowNumber, daireler);
+                } else {
+                    roomInfoForm.style.display = "none";
+                    paymentButton.classList.add("d-none");
+                    document.querySelector('.saved-entries').innerHTML = "";
+                }
+
+                // Ödeme ekleme modalı
+                let isCancel = true;
+                paymentButton.onclick = function () {
+                    if (!isCancel) {
+                        paymentModalBody.innerHTML = "";
+                        isCancel = true;
+                        const paymentBtn = document.getElementById('paymentBtnInner');
+                        paymentBtn.className = "btn btn-success";
+                        paymentBtn.textContent = isCancel ? "Ödeme Al" : "İptal";
                     } else {
-                        odaDurum.style.color = "black";
-                    }
-                    odaMaliyet.textContent = "Maliyet : " + formatTL(detayDaire.maliyet) + " ₺";
-
-                    // Eğer satılmışsa Ödeme Bilgileri Göster
-                    if (detayDaire.buyerInfo && detayDaire.buyerInfo !== 'owner') {
-                        roomInfoForm.style.display = "block";
-                        aliciAdSoyad.textContent = detayDaire.buyerInfo;
-                        satisTarihi.textContent = detayDaire.soldDate;
-                        satisFiyati.textContent = formatTL(detayDaire.itemPrice) + " ₺";
-                        paymentButton.classList.remove("d-none");
-
-                        updatePaymentList(detayDaire, detayDaire.rowNumber, daireler);
-                    } else {
-                        roomInfoForm.style.display = "none";
-                        paymentButton.classList.add("d-none");
-                        document.querySelector('.saved-entries').innerHTML = "";
-                    }
-
-                    // Ödeme ekleme modalı
-                    let isCancel = true;
-                    paymentButton.onclick = function () {
-                        if (!isCancel) {
-                            paymentModalBody.innerHTML = "";
-                            isCancel = true;
-                            const paymentBtn = document.getElementById('paymentBtnInner');
-                            paymentBtn.className = "btn btn-success";
-                            paymentBtn.textContent = isCancel ? "Ödeme Al" : "İptal";
-                        } else {
-                            paymentModalBody.innerHTML = `
-                                <div class="container-payment mx-auto" style="width:90%;">
-                                    <div class="d-flex gap-2 align-items-end mb-2 mt-3">
-                                        <div class="flex-fill">
-                                            <input type="number" class="form-control" id="modalInput" placeholder="Tutarı giriniz">
-                                        </div>
-                                        <div>
-                                            <input type="date" class="form-control" id="modalDate">
-                                        </div>
+                        paymentModalBody.innerHTML = `
+                            <div class="container-payment mx-auto" style="width:90%;">
+                                <div class="d-flex gap-2 align-items-end mb-2 mt-3">
+                                    <div class="flex-fill">
+                                        <input type="number" class="form-control" id="modalInput" placeholder="Tutarı giriniz">
                                     </div>
-                                    <textarea class="form-control" id="modalNote" placeholder="Açıklama (Opsiyonel)"></textarea>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary" id="saveModalButton" data-rowNumber="${detayDaire.rowNumber}">
-                                            Kaydet
-                                        </button>
+                                    <div>
+                                        <input type="date" class="form-control" id="modalDate">
                                     </div>
                                 </div>
-                            `;
-                            document.getElementById('modalDate').value = getTodayDate();
-                            isCancel = false;
+                                <textarea class="form-control" id="modalNote" placeholder="Açıklama (Opsiyonel)"></textarea>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" id="saveModalButton" data-rowNumber="${detayDaire.rowNumber}">
+                                        Kaydet
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        document.getElementById('modalDate').value = getTodayDate();
+                        isCancel = false;
+                        const paymentBtn = document.getElementById('paymentBtnInner');
+                        paymentBtn.className = "btn btn-success";
+                        paymentBtn.textContent = isCancel ? "Ödeme Al" : "İptal";
+
+                        // Kaydet butonu
+                        document.getElementById('saveModalButton').onclick = async function () {
+                            const tutar = document.getElementById('modalInput').value;
+                            const tarih = document.getElementById('modalDate').value;
+                            const not = document.getElementById('modalNote').value;
+                            const rowNumber = this.getAttribute('data-rowNumber');
+
+                            if (!tutar || !tarih) {
+                                showWarningMessage("Eksik Giriş Yaptınız! Lütfen kontrol edip tekrar giriniz.", "tamam", false);
+                                return;
+                            }
+
+                            paymentDb.push({
+                                rowNumber: rowNumber,
+                                tutar: tutar,
+                                tarih: formatDate(tarih),
+                                not: not || ""
+                            });
+
+                            showLoader(); // <--- LOADER BAŞLASIN!
+                            await saveDataDb("payment", paymentDb);   
+                            const yenilenmisDaireler = await createDaireler()
+                                .finally(() => hideLoader());
+                            tabloyuGuncelle(yenilenmisDaireler);
+                            updatePaymentList(detayDaire, detayDaire.rowNumber, yenilenmisDaireler);
                             const paymentBtn = document.getElementById('paymentBtnInner');
                             paymentBtn.className = "btn btn-success";
                             paymentBtn.textContent = isCancel ? "Ödeme Al" : "İptal";
-
-                            // Kaydet butonu
-                            document.getElementById('saveModalButton').onclick = async function () {
-                                const tutar = document.getElementById('modalInput').value;
-                                const tarih = document.getElementById('modalDate').value;
-                                const not = document.getElementById('modalNote').value;
-                                const rowNumber = this.getAttribute('data-rowNumber');
-
-                                if (!tutar || !tarih) {
-                                    showWarningMessage("Eksik Giriş Yaptınız! Lütfen kontrol edip tekrar giriniz.", "tamam", false);
-                                    return;
-                                }
-
-                                paymentDb.push({
-                                    rowNumber: rowNumber,
-                                    tutar: tutar,
-                                    tarih: formatDate(tarih),
-                                    not: not || ""
-                                });
-
-                                showLoader(); // <--- LOADER BAŞLASIN!
-                                await saveDataDb("payment", paymentDb)
-                                    .finally(() => hideLoader());
-                                const yenilenmisDaireler = await createDaireler();
-                                tabloyuGuncelle(yenilenmisDaireler);
-                                updatePaymentList(detayDaire, detayDaire.rowNumber, yenilenmisDaireler);
-                                const paymentBtn = document.getElementById('paymentBtnInner');
-                                paymentBtn.className = "btn btn-success";
-                                paymentBtn.textContent = isCancel ? "Ödeme Al" : "İptal";
-                                paymentModalBody.innerHTML = "";
-                                isCancel = true;
-                            };
-                        }
+                            paymentModalBody.innerHTML = "";
+                            isCancel = true;
+                        };
                     }
-                });
+                }
             });
+        });
+    }
+
+    // Ödeme listesini güncelleyen fonksiyon
+    function updatePaymentList(detayDaire, rowNumber, daireler) {
+        const div = document.querySelector('.saved-entries');
+        const detay = daireler.find(d => d.rowNumber == rowNumber);
+        const list = detay && Array.isArray(detay.payment) ? detay.payment : [];
+        if (!list.length) {
+            div.innerHTML = '<div class="text-center text-muted py-2">Hiç ödeme yok</div>';
+            return;
         }
 
-        // Ödeme listesini güncelleyen fonksiyon
-        function updatePaymentList(detayDaire, rowNumber, daireler) {
-            const div = document.querySelector('.saved-entries');
-            const detay = daireler.find(d => d.rowNumber == rowNumber);
-            const list = detay && Array.isArray(detay.payment) ? detay.payment : [];
-            if (!list.length) {
-                div.innerHTML = '<div class="text-center text-muted py-2">Hiç ödeme yok</div>';
-                return;
-            }
+        // Toplam ve kalan ödemeler
+        const toplamOdeme = list.reduce((acc, item) => acc + parseInt(item.tutar || '0'), 0);
+        const kalanOdeme = parseInt(detayDaire.itemPrice) - toplamOdeme;
 
-            // Toplam ve kalan ödemeler
-            const toplamOdeme = list.reduce((acc, item) => acc + parseInt(item.tutar || '0'), 0);
-            const kalanOdeme = parseInt(detayDaire.itemPrice) - toplamOdeme;
-
-            div.innerHTML = `
-                <div class="mb-2 savedQuatations d-flex justify-content-center fw-semibold fs-6" id="savedQuatationsSold">ÖDEMELER</div>
-                <div class="card bg-light mb-2 p-2" style="width:60%; margin:0 auto;">
-                    <div class="fw">Toplam ödeme : ${formatTL(toplamOdeme)}  ₺</div>
-                </div>
-                <div class="card bg-light mb-4 p-2" style="width:60%; margin:0 auto;">
-                    <div class="fw">Kalan ödeme : ${formatTL(kalanOdeme)}  ₺</div>
-                </div>
-                ${list.map((item, idx) => `
-                    <div class="card bg-light mb-2 p-2">
-                        <div class="fw">${item.tarih} tarihinde, ${formatTL(item.tutar)} ₺</div>
-                        ${item.not ? `<div class="text-muted">${item.not}</div>` : ""}
-                        <div class="mt-2 d-flex gap-1 justify-content-end">
-                            <button class="my-custom-btn edit-btn"
-                                data-idx="${idx}"
-                                data-not="${item.not || ''}"
-                                data-tutar="${item.tutar || ''}"
-                                data-tarih="${item.tarih || ''}"
-                                data-rowNumber="${item.rowNumber || ''}">Düzenle</button>
-                            <button class="btn btn-sm btn-danger delete-btn"
-                                data-idx="${idx}"
-                                data-not="${item.not || ''}"
-                                data-tutar="${item.tutar || ''}"
-                                data-tarih="${item.tarih || ''}"
-                                data-rowNumber="${item.rowNumber || ''}">Sil</button>
-                        </div>
+        div.innerHTML = `
+            <div class="mb-2 savedQuatations d-flex justify-content-center fw-semibold fs-6" id="savedQuatationsSold">ÖDEMELER</div>
+            <div class="card bg-light mb-2 p-2" style="width:60%; margin:0 auto;">
+                <div class="fw">Toplam ödeme : ${formatTL(toplamOdeme)}  ₺</div>
+            </div>
+            <div class="card bg-light mb-4 p-2" style="width:60%; margin:0 auto;">
+                <div class="fw">Kalan ödeme : ${formatTL(kalanOdeme)}  ₺</div>
+            </div>
+            ${list.map((item, idx) => `
+                <div class="card bg-light mb-2 p-2">
+                    <div class="fw">${item.tarih} tarihinde, ${formatTL(item.tutar)} ₺</div>
+                    ${item.not ? `<div class="text-muted">${item.not}</div>` : ""}
+                    <div class="mt-2 d-flex gap-1 justify-content-end">
+                        <button class="my-custom-btn edit-btn"
+                            data-idx="${idx}"
+                            data-not="${item.not || ''}"
+                            data-tutar="${item.tutar || ''}"
+                            data-tarih="${item.tarih || ''}"
+                            data-rowNumber="${item.rowNumber || ''}">Düzenle</button>
+                        <button class="btn btn-sm btn-danger delete-btn"
+                            data-idx="${idx}"
+                            data-not="${item.not || ''}"
+                            data-tutar="${item.tutar || ''}"
+                            data-tarih="${item.tarih || ''}"
+                            data-rowNumber="${item.rowNumber || ''}">Sil</button>
                     </div>
-                `).join('')}
-            `;
+                </div>
+            `).join('')}
+        `;
 
-            // Silme işlemi
-            div.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.onclick = async function () {
-                    const not = this.getAttribute('data-not');
-                    const tutar = this.getAttribute('data-tutar');
-                    const tarih = this.getAttribute('data-tarih');
-                    const rowNumber = this.getAttribute('data-rowNumber');
+        // Silme işlemi
+        div.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.onclick = async function () {
+                const not = this.getAttribute('data-not');
+                const tutar = this.getAttribute('data-tutar');
+                const tarih = this.getAttribute('data-tarih');
+                const rowNumber = this.getAttribute('data-rowNumber');
+                const i = paymentDb.findIndex(item =>
+                    String(item.rowNumber) === String(rowNumber) &&
+                    String(item.not) === String(not) &&
+                    String(item.tutar) === String(tutar) &&
+                    String(item.tarih) === String(tarih)
+                );
+                if (i !== -1) {
+                    paymentDb.splice(i, 1);
+                    showLoader(); // <--- LOADER BAŞLASIN!
+                    await saveDataDb("payment", paymentDb);
+                    const yenilenmisDaireler = await createDaireler()
+                        .finally(() => hideLoader());
+                    tabloyuGuncelle(yenilenmisDaireler);
+                    updatePaymentList(detayDaire, detayDaire.rowNumber, yenilenmisDaireler);
+                }
+            };
+        });
+
+        // Düzenleme işlemi (inline edit)
+        div.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.onclick = function () {
+                const idx = this.getAttribute('data-idx');
+                const oldData = list[idx];
+                const kit = this.closest('.card.bg-light.mb-2.p-2');
+
+                // Önce varsa eski formu kaldır
+                const oldForm = div.querySelector('.edit-form-inline');
+                if (oldForm) oldForm.remove();
+
+                // Inline form oluştur
+                const formDiv = document.createElement('div');
+                formDiv.className = 'edit-form-inline';
+                formDiv.innerHTML = `
+                    <div class="p-2 mt-2 rounded" style="background:#f8f9fa; border:1px solid #d1d5db;">
+                        <label>Tutar: <input type="number" class="form-control" id="editTutar" value="${oldData.tutar || ''}"></label><br>
+                        <label>Tarih: <input type="date" class="form-control" id="editTarih" value="${oldData.tarih || ''}"></label><br>
+                        <label>Not: <input type="text" class="form-control" id="editNot" value="${oldData.not || ''}"></label><br>
+                        <button class="btn btn-sm btn-success mt-2" id="saveEditBtn">Kaydet</button>
+                        <button class="btn btn-sm btn-secondary mt-2" id="cancelEditBtn">İptal</button>
+                    </div>
+                `;
+                kit.parentNode.insertBefore(formDiv, kit.nextSibling);
+
+                // Kaydet ve iptal
+                formDiv.querySelector('#saveEditBtn').onclick = async function () {
+                    const newTutar = formDiv.querySelector('#editTutar').value;
+                    const newTarih = formDiv.querySelector('#editTarih').value;
+                    const newNot = formDiv.querySelector('#editNot').value;
+
+                    if (!newTutar || !newTarih) {
+                        showWarningMessage("Eksik Giriş Yaptınız!", "tamam", false);
+                        return;
+                    }
+
                     const i = paymentDb.findIndex(item =>
-                        String(item.rowNumber) === String(rowNumber) &&
-                        String(item.not) === String(not) &&
-                        String(item.tutar) === String(tutar) &&
-                        String(item.tarih) === String(tarih)
+                        String(item.rowNumber) === String(oldData.rowNumber) &&
+                        String(item.not) === String(oldData.not) &&
+                        String(item.tutar) === String(oldData.tutar) &&
+                        String(item.tarih) === String(oldData.tarih)
                     );
                     if (i !== -1) {
-                        paymentDb.splice(i, 1);
+                        paymentDb[i].not = newNot || "";
+                        paymentDb[i].tutar = newTutar;
+                        paymentDb[i].tarih = newTarih;
                         showLoader(); // <--- LOADER BAŞLASIN!
-                        await saveDataDb("payment", paymentDb)
+                        await saveDataDb("payment", paymentDb);
+                        const yenilenmisDaireler = await createDaireler()
                             .finally(() => hideLoader());
-                        const yenilenmisDaireler = await createDaireler();
                         tabloyuGuncelle(yenilenmisDaireler);
                         updatePaymentList(detayDaire, detayDaire.rowNumber, yenilenmisDaireler);
                     }
+                    formDiv.remove();
                 };
-            });
-
-            // Düzenleme işlemi (inline edit)
-            div.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.onclick = function () {
-                    const idx = this.getAttribute('data-idx');
-                    const oldData = list[idx];
-                    const kit = this.closest('.card.bg-light.mb-2.p-2');
-
-                    // Önce varsa eski formu kaldır
-                    const oldForm = div.querySelector('.edit-form-inline');
-                    if (oldForm) oldForm.remove();
-
-                    // Inline form oluştur
-                    const formDiv = document.createElement('div');
-                    formDiv.className = 'edit-form-inline';
-                    formDiv.innerHTML = `
-                        <div class="p-2 mt-2 rounded" style="background:#f8f9fa; border:1px solid #d1d5db;">
-                            <label>Tutar: <input type="number" class="form-control" id="editTutar" value="${oldData.tutar || ''}"></label><br>
-                            <label>Tarih: <input type="date" class="form-control" id="editTarih" value="${oldData.tarih || ''}"></label><br>
-                            <label>Not: <input type="text" class="form-control" id="editNot" value="${oldData.not || ''}"></label><br>
-                            <button class="btn btn-sm btn-success mt-2" id="saveEditBtn">Kaydet</button>
-                            <button class="btn btn-sm btn-secondary mt-2" id="cancelEditBtn">İptal</button>
-                        </div>
-                    `;
-                    kit.parentNode.insertBefore(formDiv, kit.nextSibling);
-
-                    // Kaydet ve iptal
-                    formDiv.querySelector('#saveEditBtn').onclick = async function () {
-                        const newTutar = formDiv.querySelector('#editTutar').value;
-                        const newTarih = formDiv.querySelector('#editTarih').value;
-                        const newNot = formDiv.querySelector('#editNot').value;
-
-                        if (!newTutar || !newTarih) {
-                            showWarningMessage("Eksik Giriş Yaptınız!", "tamam", false);
-                            return;
-                        }
-
-                        const i = paymentDb.findIndex(item =>
-                            String(item.rowNumber) === String(oldData.rowNumber) &&
-                            String(item.not) === String(oldData.not) &&
-                            String(item.tutar) === String(oldData.tutar) &&
-                            String(item.tarih) === String(oldData.tarih)
-                        );
-                        if (i !== -1) {
-                            paymentDb[i].not = newNot || "";
-                            paymentDb[i].tutar = newTutar;
-                            paymentDb[i].tarih = newTarih;
-                            showLoader(); // <--- LOADER BAŞLASIN!
-                            await saveDataDb("payment", paymentDb)
-                                .finally(() => hideLoader());
-                            const yenilenmisDaireler = await createDaireler();
-                            tabloyuGuncelle(yenilenmisDaireler);
-                            updatePaymentList(detayDaire, detayDaire.rowNumber, yenilenmisDaireler);
-                        }
-                        formDiv.remove();
-                    };
-                    formDiv.querySelector('#cancelEditBtn').onclick = function () {
-                        formDiv.remove();
-                    };
+                formDiv.querySelector('#cancelEditBtn').onclick = function () {
+                    formDiv.remove();
                 };
-            });
-        }
+            };
+        });
+    }
 
-        async function createDaireler() {
-            dataBuilding = await readDataDb("building") || [];
-            dataFloors = await readDataDb("floorsData") || [];
-            dataSoldItems = await readDataDb("soldItems") || [];
-            paymentDb = await readDataDb("payment") || [];
-            const maliyetObj = await readDataDb("metreMaliyet");
-            maliyet = String(maliyetObj[0].metreMaliyeti);
-            const raw = await readDataDb("yerSahibiIleAnlasma");
-            yerSahibiIleAnlasma = Array.isArray(raw) ? raw.map(e => ({ ...e, buyerInfo: "owner" })) : [];
-            const allItems = [...dataSoldItems, ...yerSahibiIleAnlasma];
+    async function createDaireler() {
+        dataBuilding = await readDataDb("building") || [];
+        dataFloors = await readDataDb("floorsData") || [];
+        dataSoldItems = await readDataDb("soldItems") || [];
+        paymentDb = await readDataDb("payment") || [];
+        const maliyetObj = await readDataDb("metreMaliyet");
+        maliyet = String(maliyetObj[0].metreMaliyeti);
+        const raw = await readDataDb("yerSahibiIleAnlasma");
+        yerSahibiIleAnlasma = Array.isArray(raw) ? raw.map(e => ({ ...e, buyerInfo: "owner" })) : [];
+        const allItems = [...dataSoldItems, ...yerSahibiIleAnlasma];
 
-            // Kat planı ismine göre room listesi haritası
-            const floorsMap = Object.fromEntries(
-                dataFloors.map(floor => [
-                    floor.floorName.replace(/ Planı$/, ""),
-                    floor.rooms
-                ])
-            );
+        // Kat planı ismine göre room listesi haritası
+        const floorsMap = Object.fromEntries(
+            dataFloors.map(floor => [
+                floor.floorName.replace(/ Planı$/, ""),
+                floor.rooms
+            ])
+        );
 
-            // Satış kaydı rowNumber map'i (bulmayı hızlandırır)
-            const soldMap = Object.fromEntries(
-                allItems.map(item => [String(item.rowNumber), item])
-            );
+        // Satış kaydı rowNumber map'i (bulmayı hızlandırır)
+        const soldMap = Object.fromEntries(
+            allItems.map(item => [String(item.rowNumber), item])
+        );
 
-            // Sonuç dizisi direkt olarak oluşturuluyor
-            const daireler = dataBuilding.map(element => {
-                const kat = element.kat;
-                const rowNumber = element.rowNumber;
-                const ad = element.Ad || null;
+        // Sonuç dizisi direkt olarak oluşturuluyor
+        const daireler = dataBuilding.map(element => {
+            const kat = element.kat;
+            const rowNumber = element.rowNumber;
+            const ad = element.Ad || null;
 
-                const oda =
-                    (floorsMap[kat] && floorsMap[kat].find(room => room.rowNumber === rowNumber)) || {};
+            const oda =
+                (floorsMap[kat] && floorsMap[kat].find(room => room.rowNumber === rowNumber)) || {};
 
-                    // Satış bilgileri
-                    const found = soldMap[String(rowNumber)];
-                    let durum = "Müsait";
-                    if (found) {
-                        if (found.buyerInfo === "owner") {
-                            durum = "Yer Sahibi";
-                        } else if (found.buyerInfo) {
-                            durum = "Satıldı";
-                        }
+                // Satış bilgileri
+                const found = soldMap[String(rowNumber)];
+                let durum = "Müsait";
+                if (found) {
+                    if (found.buyerInfo === "owner") {
+                        durum = "Yer Sahibi";
+                    } else if (found.buyerInfo) {
+                        durum = "Satıldı";
                     }
+                }
 
-                    const paymentsForThisDaire = paymentDb.filter(
-                        payment => String(payment.rowNumber) === String(rowNumber)
-                    );
+                const paymentsForThisDaire = paymentDb.filter(
+                    payment => String(payment.rowNumber) === String(rowNumber)
+                );
 
-                    const num = parseFloat(maliyet.replace(/\./g, '').replace(',', '.'));
-                    const totalMaliyet = num*parseInt(element.genelBrutAlan);
+                const num = parseFloat(maliyet.replace(/\./g, '').replace(',', '.'));
+                const totalMaliyet = num*parseInt(element.genelBrutAlan);
 
-                    return {
-                        kat,
-                        ad,
-                        tip: element.alanTipi,
-                        tipi: element.tipi,
-                        m2: element.genelBrutAlan,
-                        durum,
-                        detay: "/img/detail.png",
-                        rowNumber,
-                        itemPrice: found ? found.itemPrice : null,
-                        soldDate: found ? found.date : null,
-                        buyerInfo: found ? found.buyerInfo : null,
-                        maliyet: totalMaliyet,
-                        payment: paymentsForThisDaire
-                    };
-            });
-            return daireler;
-        }
+                return {
+                    kat,
+                    ad,
+                    tip: element.alanTipi,
+                    tipi: element.tipi,
+                    m2: element.genelBrutAlan,
+                    durum,
+                    detay: "/img/detail.png",
+                    rowNumber,
+                    itemPrice: found ? found.itemPrice : null,
+                    soldDate: found ? found.date : null,
+                    buyerInfo: found ? found.buyerInfo : null,
+                    maliyet: totalMaliyet,
+                    payment: paymentsForThisDaire
+                };
+        });
+        return daireler;
+    }
 
-        // Türk Lirası örneği için (nokta: binlik ayırıcı)  
-        function formatTL(number) {
-            let num = Number(String(number).replace(",", "."));
-            if (isNaN(num)) return "";
-            num = Math.round(num);
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        }
+    // Türk Lirası örneği için (nokta: binlik ayırıcı)  
+    function formatTL(number) {
+        let num = Number(String(number).replace(",", "."));
+        if (isNaN(num)) return "";
+        num = Math.round(num);
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
 
-        function getTodayDate() {
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const dd = String(today.getDate()).padStart(2, '0');
-            return `${yyyy}-${mm}-${dd}`;
-        }
-        function formatDate(dateString) {  
-            // "yyyy-mm-dd" -> "dd.mm.yyyy"  
-            const [year, month, day] = dateString.split("-");  
-            return `${day}.${month}.${year}`;  
-        }
+    function getTodayDate() {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+    }
+    function formatDate(dateString) {  
+        // "yyyy-mm-dd" -> "dd.mm.yyyy"  
+        const [year, month, day] = dateString.split("-");  
+        return `${day}.${month}.${year}`;  
+    }
     
     async function readDataDb (activeType){
         let array = [];
