@@ -266,9 +266,12 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
     }
 
     function showLoader() {
-        document.getElementById('loader').style.display = 'flex';
+        const loader = document.getElementById('loader');
+        if (loader) loader.style.display = 'flex'; // ya da block
     }
+
     function hideLoader() {
-        document.getElementById('loader').style.display = 'none';
+        const loader = document.getElementById('loader');
+        if (loader) loader.style.display = 'none';
     }
 }
