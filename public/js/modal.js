@@ -121,11 +121,16 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
                 rowNumber: rowNumber,
                 isSold: "false"
             };
-            await processDeal({ type: "sold", isSoldSituation: updatedFloorData });
+            
+            showLoader();
+            await processDeal({ type: "sold", isSoldSituation: updatedFloorData })
+                .finally(() => hideLoader());
 
             // Owner agreement sil
             const dataOwner = { rowNumber: rowNumber };
-            await processDeal({ type: "owner", dataOwner, dataOwnerText: "delete" });
+            showLoader();
+            await processDeal({ type: "owner", dataOwner, dataOwnerText: "delete" })
+                .finally(() => hideLoader());
 
             roomModal.hide(); // Modal'ı kapat  
             resolve(true); // Güncellenmiş veriyle "resolved"  
@@ -140,14 +145,19 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
                 tutar : "0",
                 not : "Yer Sahibine Verildi"
             };
-            await processDeal({ type: "owner", dataOwner, dataOwnerText: "add" });
+            showLoader();
+            await processDeal({ type: "owner", dataOwner, dataOwnerText: "add" })
+                .finally(() => hideLoader());
 
             const updatedFloorData = {
                 floorName : floorName,
                 rowNumber : rowNumber,
                 isSold : "owner"
             };
-            await processDeal({ type: "sold", isSoldSituation: updatedFloorData });
+            
+            showLoader();
+            await processDeal({ type: "sold", isSoldSituation: updatedFloorData })
+                .finally(() => hideLoader());
 
             roomModal.hide(); // Modal'ı kapat  
             resolve(true); // Güncellenmiş veriyle "resolved"  
@@ -167,15 +177,19 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
                     buyerInfo: buyerInfo.value,  
                     date: getDate(),  
                     rowNumber: rowNumber  
-                };  
-                await processDeal({ type: "soldItem", soldOwner, soldOwnerText: "add" });
+                };
+                showLoader();
+                await processDeal({ type: "soldItem", soldOwner, soldOwnerText: "add" })
+                    .finally(() => hideLoader());
 
                 const updatedFloorData = {
                     floorName: floorName,
                     rowNumber: rowNumber,
                     isSold: "true"
                 };
-                await processDeal({ type: "sold", isSoldSituation: updatedFloorData });
+                showLoader();
+                await processDeal({ type: "sold", isSoldSituation: updatedFloorData })
+                    .finally(() => hideLoader());
 
                 roomModal.hide();  
                 resolve(true);  
@@ -237,7 +251,6 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
             payload.soldOwner = soldOwner;
             payload.soldOwnerText = soldOwnerText; // "add" veya "delete"
         }
-        showLoader();
         let result;
         try {
             const response = await fetch('/draw', {
@@ -254,14 +267,12 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
                 return false;
             } else {
                 // Gerekirse callback ile güncel veri
-                return result;
+                //return result;
             }
         } catch (error) {
             showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
             console.log('Hata:', error);
             return false;
-        } finally {
-            hideLoader();
         }
     }
 
