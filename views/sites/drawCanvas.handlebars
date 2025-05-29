@@ -154,6 +154,42 @@
             display: flex;
             flex-direction: column;
         }
+
+        .total-area-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: #f9fafb;
+            border: 2px solid #847539;
+            border-radius: 12px;
+            padding: 8px 14px;
+            margin: 24px 0 10px 0;
+            box-shadow: 0 4px 22px 0 rgba(132, 117, 57, 0.04);
+            font-family: "Varela Round", Arial, sans-serif;
+            transition: background 0.3s;
+        }
+
+        .total-area-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: #847539;
+            margin-right: 12px;
+            white-space: nowrap;
+        }
+
+        .total-area-value {
+            background: #847539;
+            color: #fff;
+            font-weight: bold;
+            font-size: 17px;
+            border-radius: 8px;
+            padding: 4px 11px;
+            min-width: 60px;
+            text-align: center;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 5px 0 rgba(132, 117, 57, 0.1);
+        }
         
 
         /* Responsive Tasarım */  
@@ -291,6 +327,31 @@
             }
             #sellButton{
                 padding: 2px !important;
+            }
+
+            .total-area-container {
+                width: 88%;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;    /* <--- stretch yerine center */
+                gap: 3px;
+                padding: 10px 10px;
+                margin: 16px 0 6px 0;
+                width: 100%;
+            }
+            .total-area-label {
+                font-size: 15px;
+                margin-right: 0;
+                margin-bottom: 2px;
+                text-align: center;    /* <--- ortala */
+                width: 100%;
+            }
+            .total-area-value {
+                font-size: 17px;
+                padding: 7px 0;
+                min-width: 0;
+                text-align: center;    /* <--- ortala */
+                width: 100%;
             }
         }  
     </style>  
@@ -443,6 +504,12 @@
         </div>  
     </div>
 
+    <!-- Toplam Brüt Metrekare Alanı -->
+    <div class="total-area-container">
+        <div class="total-area-label">Toplam Genel Brüt Metrekare</div>
+        <div class="total-area-value" id="totalBrutArea">0 m²</div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script type="module">
@@ -472,6 +539,7 @@
         const loginButton = document.getElementById("loginButton");
         const soldButton = document.getElementById("sold-button"); 
         const soldButtonMobile = document.getElementById("sold-button-mobile");
+        const totalBrutArea = document.getElementById("totalBrutArea");
 
         const buttonGroup = document.getElementById("buttonGroup");  
         const sellButton = document.getElementById("sellButton");  
@@ -586,7 +654,7 @@
                 } else{
                     floorsData = result.floorsData;
                     building = result.building;
-                    //console.log("floorsData ",floorsData);
+                    console.log("building ",building);
                 }
 
             } catch (error) {
@@ -601,6 +669,14 @@
             const windowsPerFloor = getRoomNumbers(floorsData); // Her kattaki pencere sayısı  
 
             setBuilding(floorNumber, hasBasement, windowsPerFloor);
+
+            if(Array.isArray(building) && building.length > 0){
+                let topBrut = 0;
+                building.forEach(element => {
+                    topBrut += parseInt(element.genelBrutAlan);
+                });
+                totalBrutArea.textContent = topBrut + " m²";
+            }
         }
 
         buttonHome.addEventListener("click", () => {  
@@ -839,6 +915,18 @@
         soldButtonMobile.addEventListener("click", () => {
             window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
         });
+
+        function syncTotalAreaWidth() {
+            const building = document.querySelector('#building-container');
+            const totalAreaDiv = document.querySelector('.total-area-container');
+            if (building && totalAreaDiv) {
+                totalAreaDiv.style.width = building.offsetWidth + "px";
+                totalAreaDiv.style.marginLeft = "auto";
+                totalAreaDiv.style.marginRight = "auto";
+            }
+        }
+        window.addEventListener('DOMContentLoaded', syncTotalAreaWidth);
+        window.addEventListener('resize', syncTotalAreaWidth);
 
       </script>
 
