@@ -168,6 +168,42 @@
             color: #fff;  
         }
 
+        .total-area-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: #f9fafb;
+            border: 2px solid #847539;
+            border-radius: 12px;
+            padding: 14px 26px;
+            margin: 24px 0 10px 0;
+            box-shadow: 0 4px 22px 0 rgba(132, 117, 57, 0.04);
+            font-family: "Varela Round", Arial, sans-serif;
+            transition: background 0.3s;
+        }
+
+        .total-area-label {
+            font-size: 19px;
+            font-weight: 500;
+            color: #847539;
+            margin-right: 12px;
+            white-space: nowrap;
+        }
+
+        .total-area-value {
+            background: #847539;
+            color: #fff;
+            font-weight: bold;
+            font-size: 20px;
+            border-radius: 8px;
+            padding: 7px 20px;
+            min-width: 100px;
+            text-align: center;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 5px 0 rgba(132, 117, 57, 0.1);
+        }
+
         /* Mobil cihazlar için duyarlılık (%75 genişlik) */  
         @media (max-width: 768px) {
             #projectNameBina {  
@@ -261,6 +297,30 @@
             /* Satır hover efekti için */  
             table tbody tr:hover {  
                 background-color: #f9f9f9;  
+            }
+
+            .total-area-container {
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;    /* <--- stretch yerine center */
+                gap: 3px;
+                padding: 10px 10px;
+                margin: 16px 0 6px 0;
+                width: 100%;
+            }
+            .total-area-label {
+                font-size: 15px;
+                margin-right: 0;
+                margin-bottom: 2px;
+                text-align: center;    /* <--- ortala */
+                width: 100%;
+            }
+            .total-area-value {
+                font-size: 17px;
+                padding: 7px 0;
+                min-width: 0;
+                text-align: center;    /* <--- ortala */
+                width: 100%;
             }
         }
     </style>  
@@ -360,6 +420,11 @@
                     </tbody>  
                 </table>  
             </div>  
+            <!-- Toplam Brüt Metrekare Alanı -->
+            <div class="total-area-container">
+                <div class="total-area-label">Toplam Genel Brüt Metrekare</div>
+                <div class="total-area-value" id="totalBrutArea">0 m²</div>
+            </div>
             <div class="d-flex justify-content-between">  
                 <button id="add-row-btn" class="btn btn-primary mt-3">Satır Ekle</button>
                 <button id="progress-btn" type="submit" class="btn btn-success-table mt-3">İlerle</button>  
@@ -546,6 +611,8 @@
             attachDeleteEvent(`delete-btn-${rowCounter}`);
             bindKullanimAmaciAndTipi(tableRows.lastElementChild);
             rowCounter++;
+            addAreaListeners();
+            updateTotalBrutArea();
         }  
 
         // Satır silme işlevi  
@@ -570,7 +637,8 @@
                 // Daha fazla satır varsa satırı tamamen kaldır  
                 row.remove();  
                 updateRowNumbers(); // Satır numaralarını güncelle  
-            }  
+            }
+            updateTotalBrutArea();
         }  
 
         // Dinamik olarak "Sil" butonlarına olay bağlama işlevi  
@@ -761,12 +829,14 @@
             if (addRowBtn) {  
                 addRowBtn.addEventListener("click", (e) => {  
                     e.preventDefault();
-                    addRow();  
+                    addRow();
                     //attachDynamicCalculations();
                 });  
             }
 
             attachEventsToExistingRows(); // Mevcut silme butonlarına olay bağla
+            addAreaListeners();
+            updateTotalBrutArea();
 
             const netSquare = document.getElementById("netSquare");
 
@@ -1016,6 +1086,41 @@
             });
 
             return result;
+        }
+
+        function preventSubmitOnLastInput() {
+            const rows = document.querySelectorAll("#table-rows tr");
+            if(rows.length === 0) return;
+            const lastRow = rows[rows.length - 1];
+            const lastInputs = lastRow.querySelectorAll("input, select");
+            if(lastInputs.length === 0) return;
+            const lastInput = lastInputs[lastInputs.length - 1];
+            lastInput.addEventListener("keydown", function(event) {
+                if(event.key === "Enter" || event.key === "Tab") {
+                    // Son inputta Enter/Tab ile yeni satır açılmasını ENGELLE
+                    event.preventDefault();
+                }
+            });
+        }
+        // Her satır eklendiğinde çağır:
+        addRow(); // sonra:
+        preventSubmitOnLastInput();
+
+        // Toplam genel brüt alanı hesaplama ve gösterme fonksiyonu
+        function updateTotalBrutArea() {
+            let sum = 0;
+            document.querySelectorAll('.genel-brut-alan').forEach(input => {
+                const value = parseFloat(input.value.replace(',', '.'));
+                if (!isNaN(value)) sum += value;
+            });
+            document.getElementById('totalBrutArea').textContent = sum > 0 ? `${sum} m²` : '0 m²';
+        }
+        // Başlangıçta ve her input eklendiğinde field'lara dinleyici ekle
+        function addAreaListeners() {
+            document.querySelectorAll('.genel-brut-alan').forEach(input => {
+                input.removeEventListener('input', updateTotalBrutArea); // Tekrarlı eklenmesin
+                input.addEventListener('input', updateTotalBrutArea);
+            });
         }
     
     </script>  
