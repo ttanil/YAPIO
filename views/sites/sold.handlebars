@@ -861,6 +861,8 @@
                             paymentBtn.textContent = isCancel ? "Ödeme Al" : "İptal";
                             paymentModalBody.innerHTML = "";
                             isCancel = true;
+                            paymentBtn.className = "btn btn-success";
+                            paymentBtn.textContent = "Ödeme Al";
                         };
                     }
                 }
