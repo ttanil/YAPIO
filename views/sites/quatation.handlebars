@@ -391,35 +391,35 @@
                 Menü  
                 </button>  
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">  
-                    <li>  
-                        <a class="dropdown-item d-flex align-items-center" id="regulation-button" href="#">  
-                          <img src="/img/edit.png" alt="" style="width:16px; height:16px; margin-right:8px;">  
-                          Düzenle  
-                        </a>  
-                    </li>
                     <li>
                       <a class="dropdown-item d-flex align-items-center" id="graphs-button" href="#">
                           <img src="/img/growth_1.png" alt="" style="width:19px; height:19px; margin-right:8px;">
                           Analizler
                       </a>
                   </li> 
+                  <li>
+                      <a class="dropdown-item d-flex align-items-center" id="sold-button" href="#">
+                          <img src="/img/property.png" alt="" style="width:19px; height:19px; margin-right:8px;">
+                          Durum
+                      </a>
+                  </li> 
                 </ul> 
               </li>
         </ul>  
         <!-- Mobilde: Menü Seçenekleri En Sağa Yaslı -->  
-        <ul class="navbar-nav ms-auto d-lg-none justify-content-end text-end mobile-navbar-menu">     
-          <li>  
-              <a class="dropdown-item-mobile d-flex align-items-center" id="regulation-button-mobile">  
-                <img src="/img/edit.png" alt="" style="width:16px; height:16px;">  
-                Düzenle  
-              </a>  
-          </li> 
+        <ul class="navbar-nav ms-auto d-lg-none justify-content-end text-end mobile-navbar-menu">
           <li>
             <a class="dropdown-item-mobile d-flex align-items-center" id="graphs-button-mobile" href="#">
                 <img src="/img/growth_1.png" alt="" style="width:19px; height:19px; ">
                 Analizler
             </a>
         </li>
+        <li>
+            <a class="dropdown-item-mobile d-flex align-items-center" id="sold-button-mobile" href="#">
+                <img src="/img/property.png" alt="" style="width:19px; height:19px; ">
+                Durum
+            </a>
+        </li> 
         </ul>  
       </div>  
     </div>  
@@ -836,8 +836,6 @@
     const projectNameString = document.getElementById("projectName");
     const navbarCollapse = document.getElementById('navbarNav');  
     const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
-    const regulationButton = document.getElementById("regulation-button");
-    const regulationButtonMobile = document.getElementById("regulation-button-mobile"); 
     const quatationButton = document.getElementById("quatation-button"); 
     const quatationButtonMobile = document.getElementById("quatation-button-mobile"); 
     const graphsButton = document.getElementById("graphs-button"); 
@@ -854,6 +852,8 @@
     const editTutar = document.getElementById("editTutar");
     const ownerPayInput = document.getElementById("ownerPayInput");
     const ownerPaidInput = document.getElementById("ownerPaidInput");
+    const soldButton = document.getElementById("sold-button"); 
+    const soldButtonMobile = document.getElementById("sold-button-mobile");
     
     // Tabs geçişleri  
     const tab1Btn = document.getElementById('tab1Btn');  
@@ -1026,13 +1026,6 @@
         tab.btn.onclick = () => activateTab(tab.key);  
     });
  
-
-    regulationButton.addEventListener("click", () => {
-        window.location.href = `/bina?projectName=${encodeURIComponent(projectName)}`;
-    });
-    regulationButtonMobile.addEventListener("click", () => {
-        window.location.href = `/bina?projectName=${encodeURIComponent(projectName)}`;
-    });
     graphsButton.addEventListener("click", () => {
         window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
     });
@@ -1041,6 +1034,12 @@
     });
     buttonHome.addEventListener("click", () => {  
         window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
+    });
+    soldButton.addEventListener("click", () => {
+        window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
+    });
+    soldButtonMobile.addEventListener("click", () => {
+        window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
     });
 
 

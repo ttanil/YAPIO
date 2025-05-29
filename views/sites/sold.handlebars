@@ -333,7 +333,13 @@
                 <button class="btn nav-link dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">  
                 Menü  
                 </button>  
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">  
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" id="quatation-button" href="#">
+                            <img src="img/pay1_1.png" alt="" style="width:19px; height:19px; margin-right:8px;">
+                            Giderler
+                        </a>
+                    </li>
                     <li>
                         <a class="dropdown-item d-flex align-items-center" id="graphs-button" href="#">
                             <img src="/img/growth_1.png" alt="" style="width:19px; height:19px; margin-right:8px;">
@@ -344,7 +350,13 @@
               </li>
         </ul>
         <!-- Mobilde: Menü Seçenekleri En Sağa Yaslı -->  
-        <ul class="navbar-nav ms-auto d-lg-none justify-content-end text-end mobile-navbar-menu">     
+        <ul class="navbar-nav ms-auto d-lg-none justify-content-end text-end mobile-navbar-menu">
+            <li>
+                <a class="dropdown-item-mobile d-flex align-items-center" id="quatation-button-mobile" href="#">
+                    <img src="img/pay1_1.png" alt="" style="width:19px; height:19px; ">
+                    Giderler
+                </a>
+            </li>   
             <li>
                 <a class="dropdown-item-mobile d-flex align-items-center" id="graphs-button-mobile" href="#">
                     <img src="/img/growth_1.png" alt="" style="width:19px; height:19px; ">
@@ -508,6 +520,8 @@
     const paymentButton = document.querySelector(".payment-button");
     const paymentModalBody = document.getElementById('paymentModalBody');
     const loginButton = document.getElementById("loginButton");
+    const quatationButton = document.getElementById("quatation-button"); 
+    const quatationButtonMobile = document.getElementById("quatation-button-mobile");
 
     let userId = null;
     let projectName = null;
@@ -553,7 +567,7 @@
         projectName = window.user.project.projectName;
 
         userProjectInfos = window.user.project || [];
-        console.log(userProjectInfos);
+        //console.log(userProjectInfos);
 
         if(userId){
             loginButton.style.display = "block";
@@ -645,7 +659,12 @@
     loginButton.addEventListener("click", () => {
         window.location.href = "/";
     });
-
+    quatationButton.addEventListener("click", () => {
+        window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
+    });
+    quatationButtonMobile.addEventListener("click", () => {
+        window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
+    });
     graphsButton.addEventListener("click", () => {
       window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
     });
@@ -776,18 +795,21 @@
                 // Ödeme ekleme modalı
                 let isCancel = true;
                 paymentButton.onclick = function () {
+                    const paymentBtn = document.getElementById('paymentBtnInner');
+                    const openInlineForm = document.querySelector('.edit-form-inline');
+                    if (openInlineForm) openInlineForm.remove();
                     if (!isCancel) {
                         paymentModalBody.innerHTML = "";
                         isCancel = true;
-                        const paymentBtn = document.getElementById('paymentBtnInner');
                         paymentBtn.className = "btn btn-success";
                         paymentBtn.textContent = isCancel ? "Ödeme Al" : "İptal";
+                        setEditDeleteButtonsDisabled(false);
                     } else {
                         paymentModalBody.innerHTML = `
                             <div class="container-payment mx-auto" style="width:90%;">
                                 <div class="d-flex gap-2 align-items-end mb-2 mt-3">
                                     <div class="flex-fill">
-                                        <input type="number" class="form-control" id="modalInput" placeholder="Tutarı giriniz">
+                                        <input type="text" class="form-control" id="modalInput" placeholder="Tutarı giriniz">
                                     </div>
                                     <div>
                                         <input type="date" class="form-control" id="modalDate">
@@ -801,15 +823,18 @@
                                 </div>
                             </div>
                         `;
+                        addModalInputFormatter();
                         document.getElementById('modalDate').value = getTodayDate();
                         isCancel = false;
-                        const paymentBtn = document.getElementById('paymentBtnInner');
                         paymentBtn.className = "btn btn-success";
                         paymentBtn.textContent = isCancel ? "Ödeme Al" : "İptal";
+                        setEditDeleteButtonsDisabled(true);
 
                         // Kaydet butonu
                         document.getElementById('saveModalButton').onclick = async function () {
-                            const tutar = document.getElementById('modalInput').value;
+                            const tutarRaw = modalInput.value.replace(/\./g, "");
+                            if (tutarRaw.trim() === "") return; // boşsa fonksiyonu çıkar
+                            const tutar = Number(tutarRaw);
                             const tarih = document.getElementById('modalDate').value;
                             const not = document.getElementById('modalNote').value;
                             const rowNumber = this.getAttribute('data-rowNumber');
@@ -832,7 +857,6 @@
                                 .finally(() => hideLoader());
                             tabloyuGuncelle(yenilenmisDaireler);
                             updatePaymentList(detayDaire, detayDaire.rowNumber, yenilenmisDaireler);
-                            const paymentBtn = document.getElementById('paymentBtnInner');
                             paymentBtn.className = "btn btn-success";
                             paymentBtn.textContent = isCancel ? "Ödeme Al" : "İptal";
                             paymentModalBody.innerHTML = "";
@@ -847,6 +871,7 @@
     // Ödeme listesini güncelleyen fonksiyon
     function updatePaymentList(detayDaire, rowNumber, daireler) {
         const div = document.querySelector('.saved-entries');
+        const formDiv = document.createElement('div');
         const detay = daireler.find(d => d.rowNumber == rowNumber);
         const list = detay && Array.isArray(detay.payment) ? detay.payment : [];
         if (!list.length) {
@@ -925,11 +950,11 @@
                 if (oldForm) oldForm.remove();
 
                 // Inline form oluştur
-                const formDiv = document.createElement('div');
                 formDiv.className = 'edit-form-inline';
+                const oldTutar = formatTL(oldData.tutar);
                 formDiv.innerHTML = `
                     <div class="p-2 mt-2 rounded" style="background:#f8f9fa; border:1px solid #d1d5db;">
-                        <label>Tutar: <input type="number" class="form-control" id="editTutar" value="${oldData.tutar || ''}"></label><br>
+                        <label>Tutar: <input type="text" class="form-control" id="editTutar" placeholder="${oldTutar || ''} ₺"></label><br>
                         <label>Tarih: <input type="date" class="form-control" id="editTarih" value="${oldData.tarih || ''}"></label><br>
                         <label>Not: <input type="text" class="form-control" id="editNot" value="${oldData.not || ''}"></label><br>
                         <button class="btn btn-sm btn-success mt-2" id="saveEditBtn">Kaydet</button>
@@ -937,10 +962,13 @@
                     </div>
                 `;
                 kit.parentNode.insertBefore(formDiv, kit.nextSibling);
+                addModalInputFormatter2();
 
                 // Kaydet ve iptal
                 formDiv.querySelector('#saveEditBtn').onclick = async function () {
-                    const newTutar = formDiv.querySelector('#editTutar').value;
+                    const tutarRaw = editTutar.value.replace(/\./g, "");
+                    if (tutarRaw.trim() === "") return; // boşsa fonksiyonu çıkar
+                    const newTutar = Number(tutarRaw);
                     const newTarih = formDiv.querySelector('#editTarih').value;
                     const newNot = formDiv.querySelector('#editNot').value;
 
@@ -1139,7 +1167,55 @@
     function hideLoader() {
         document.getElementById('loader').style.display = 'none';
     }
-    
+
+    function addModalInputFormatter() {
+        // input her açıldığında tekrar gelirse öncekini eklememek için önce kaldır
+        const input = document.getElementById('modalInput');
+        if(!input) return;
+        input.addEventListener('input', function(e) {
+            let pos = input.selectionStart;
+            let oldLength = input.value.length;
+            let value = input.value.replace(/\D/g, '');
+            // baştaki sıfırları sil
+            value = value.replace(/^0+/, '') || '0';
+            let formatted = value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            input.value = formatted;
+            // imleci sona at
+            let diff = input.value.length - oldLength;
+            input.setSelectionRange(pos + diff, pos + diff);
+        });
+    }
+    function addModalInputFormatter2() {
+        // input her açıldığında tekrar gelirse öncekini eklememek için önce kaldır
+        const input = document.getElementById('editTutar');
+        if(!input) return;
+        input.addEventListener('input', function(e) {
+            let pos = input.selectionStart;
+            let oldLength = input.value.length;
+            let value = input.value.replace(/\D/g, '');
+            // baştaki sıfırları sil
+            value = value.replace(/^0+/, '') || '0';
+            let formatted = value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            input.value = formatted;
+            // imleci sona at
+            let diff = input.value.length - oldLength;
+            input.setSelectionRange(pos + diff, pos + diff);
+        });
+    }
+    function setEditDeleteButtonsDisabled(disabled) {
+        // Düzenle butonları
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.disabled = disabled;
+            btn.style.opacity = disabled ? "0.5" : "1";
+            btn.style.pointerEvents = disabled ? "none" : "auto";
+        });
+        // Sil butonları
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.disabled = disabled;
+            btn.style.opacity = disabled ? "0.5" : "1";
+            btn.style.pointerEvents = disabled ? "none" : "auto";
+        });
+    }
 
     </script>
 

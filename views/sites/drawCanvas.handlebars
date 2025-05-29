@@ -345,6 +345,12 @@
                                     Analizler
                                 </a>
                             </li> 
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" id="sold-button" href="#">
+                                    <img src="/img/property.png" alt="" style="width:19px; height:19px; margin-right:8px;">
+                                    Durum
+                                </a>
+                            </li> 
                         </ul>  
                     </li>  
                 </ul>  
@@ -368,6 +374,12 @@
                             Analizler
                         </a>
                     </li>
+                    <li>
+                        <a class="dropdown-item-mobile d-flex align-items-center" id="sold-button-mobile" href="#">
+                            <img src="/img/property.png" alt="" style="width:19px; height:19px; ">
+                            Durum
+                        </a>
+                    </li> 
                 </ul>  
             </div>  
         </div>  
@@ -458,6 +470,8 @@
         const buttonHome = document.getElementById("buttonHome");
         const roof = document.createElement("div"); 
         const loginButton = document.getElementById("loginButton");
+        const soldButton = document.getElementById("sold-button"); 
+        const soldButtonMobile = document.getElementById("sold-button-mobile");
 
         const buttonGroup = document.getElementById("buttonGroup");  
         const sellButton = document.getElementById("sellButton");  
@@ -818,6 +832,12 @@
         });
         graphsButtonMobile.addEventListener("click", () => {
             window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
+        });
+        soldButton.addEventListener("click", () => {
+            window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
+        });
+        soldButtonMobile.addEventListener("click", () => {
+            window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
         });
 
       </script>
