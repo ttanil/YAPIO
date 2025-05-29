@@ -64,6 +64,82 @@
         margin-right: 40px;
       }
 
+
+      .pastel-search-box-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 36px 0 32px 0;
+}
+
+.pastel-search-box {
+  display: flex;
+  align-items: center;
+  background: #FFFACD;
+  border: 2px solid #b2f2bb;
+  border-radius: 14px;
+  box-shadow: 0 6px 32px 0 rgba(130, 200, 131, 0.09);
+  padding: 7px 18px 7px 14px;
+  transition: border 0.22s, box-shadow 0.23s;
+  min-width: 330px;
+  max-width: 520px;
+  width: 100%;
+  gap: 10px;
+}
+
+.pastel-search-box:focus-within {
+  border-color: #7bc273;
+  box-shadow: 0 2px 18px 0 rgba(123, 194, 115, 0.13);
+}
+
+.search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7bc273;
+  margin-right: 4px;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 1.16rem;
+  color: #847539;
+  font-family: 'Varela Round', Arial, sans-serif;
+  letter-spacing: 1px;
+  padding: 8px 4px;
+}
+
+.search-input::placeholder {
+  color: #b6a672;
+  opacity: 1;
+  font-size: 1.05rem;
+}
+
+.search-btn {
+  background: linear-gradient(90deg,#7bc273 45%, #b2f2bb 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 20px 9px 18px;
+  font-family: 'Varela Round', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 1.5px;
+  box-shadow: 0 2px 8px 0 rgba(123, 194, 115, 0.08);
+  transition: background 0.2s, box-shadow 0.17s;
+}
+.search-btn:hover, .search-btn:focus {
+  background: linear-gradient(90deg,#66b26a 35%, #95e6ab 100%);
+  box-shadow: 0 4px 18px 0 rgba(123, 194, 115, 0.17);
+}
+
+
+
+
       .container{
         width: 70% !important;
       }
@@ -293,6 +369,26 @@
           font-weight: 400 !important;
         }
 
+
+
+        .pastel-search-box {
+          min-width: 0;
+          width: 99%;
+          max-width: none;
+          padding: 5px 7px;
+          border-radius: 9px;
+        }
+        .search-btn {
+          padding: 7px 13px;
+          font-size: 0.8rem;
+        }
+        .search-input {
+          font-size: 1rem;
+          padding: 7px 2px;
+        }
+
+
+
         .container{
           width: 90% !important;
         }
@@ -400,7 +496,7 @@
                   <li>
                       <a class="dropdown-item d-flex align-items-center" id="sold-button" href="#">
                           <img src="/img/property.png" alt="" style="width:19px; height:19px; margin-right:8px;">
-                          Durum
+                          Satış
                       </a>
                   </li> 
                 </ul> 
@@ -417,13 +513,27 @@
         <li>
             <a class="dropdown-item-mobile d-flex align-items-center" id="sold-button-mobile" href="#">
                 <img src="/img/property.png" alt="" style="width:19px; height:19px; ">
-                Durum
+                Satış
             </a>
         </li> 
         </ul>  
       </div>  
-    </div>  
+    </div>
   </nav>
+
+  <!-- Search Alanı 
+  <div class="pastel-search-box-wrapper">
+    <form class="pastel-search-box" autocomplete="off">
+      <span class="search-icon">
+        <svg width="22" height="22" viewBox="0 0 22 22" style="vertical-align:middle;" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="10" cy="10" r="7" stroke="#7bc273" stroke-width="2"/>
+          <line x1="16.2929" y1="16.5" x2="21" y2="21" stroke="#7bc273" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <input type="text" class="search-input" placeholder="Aramak istediğiniz kalemi yazın..." />
+      <button type="submit" class="search-btn">ARA</button>
+    </form>
+  </div> -->
 
   <div id="loader" style="display:none;">
     <div class="spinner"></div>
@@ -1609,9 +1719,6 @@
       }
     }
 
-
-
-
     // Kaydet arsa sahibinden alınacak para
     ownerPayButtonActive.addEventListener('click', async function() {  
       const inputEl = document.getElementById('ownerPayInput');
@@ -1967,4 +2074,3 @@
   </script>  
 </body>  
 </html>
-

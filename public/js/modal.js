@@ -172,8 +172,10 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
             if (!buyerInfo.value || !itemPrice.value) {
                 showWarningMessage("Eksik Giriş Yaptınız! Lütfen kontrol edip tekrar giriniz.", "tamam", false);
             } else {
-                const soldOwner = {  
-                    itemPrice: parseInt(itemPrice.value, 10),  
+                const rawPrice = itemPrice.value.replace(/\./g, ''); // Noktasız hali
+                const price = parseInt(rawPrice, 10);
+                const soldOwner = {
+                    itemPrice: price,  
                     buyerInfo: buyerInfo.value,  
                     date: getDate(),  
                     rowNumber: rowNumber  
@@ -198,7 +200,8 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
         okButton.addEventListener("click", okButton.okHandler);
 
         // Bootstrap modal'ı aç  
-        roomModal.show();  
+        roomModal.show();
+        addModalInputFormatterForItemPrice();
 
         // Modal'ın kullanıcı tarafından kapatılma olayını dinle  
         const modalElement = document.getElementById("roomModal");  
@@ -284,5 +287,20 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
     function hideLoader() {
         const loader = document.getElementById('loader');
         if (loader) loader.style.display = 'none';
+    }
+
+    function addModalInputFormatterForItemPrice() {
+        const input = document.getElementById('itemPrice');
+        if (!input) return;
+        input.addEventListener('input', function (e) {
+            let pos = input.selectionStart;
+            let oldLength = input.value.length;
+            let value = input.value.replace(/\D/g, '');
+            value = value.replace(/^0+/, '') || '0';
+            let formatted = value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            input.value = formatted;
+            let diff = input.value.length - oldLength;
+            input.setSelectionRange(pos + diff, pos + diff);
+        });
     }
 }
