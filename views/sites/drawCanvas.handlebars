@@ -590,7 +590,7 @@
         let projectName = null;
         let building = null;
         let floorsDataFromDb = null;
-        let selectedDoor = null;
+        let selectedDoor = "right";
 
         // DOM yüklendiğinde işlem başlat  
         document.addEventListener("DOMContentLoaded", () => {  
@@ -680,7 +680,7 @@
                 } else{
                     floorsData = result.floorsData;
                     building = result.building;
-                    selectedDoor = result.selectedDoor[0].selectedDoor;
+                    selectedDoor = result.selectedDoor[0].selectedDoor || "right";
                 }
 
             } catch (error) {

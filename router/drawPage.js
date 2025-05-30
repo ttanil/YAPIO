@@ -61,8 +61,14 @@ router.post('/', async (req, res) => {
                 return res.status(404).json({ success: false, message: "Proje bulunamadı." });
             }
 
-            // selectedDoor alanını al, yoksa default ver
-            const selectedDoor = project.selectedDoor || "right";
+            let selectedDoor;
+            if (!project.selectedDoor || project.selectedDoor.length === 0) {
+                project.selectedDoor = [{ selectedDoor: "right" }]; // doğru veri yapısı
+                await user.save();              // db'ye kaydet
+                selectedDoor = [{ selectedDoor: "right" }];
+            } else {
+                selectedDoor = project.selectedDoor;
+            }
 
             // building, floorsData ve selectedDoor dön
             return res.json({
@@ -70,7 +76,7 @@ router.post('/', async (req, res) => {
                 message: "Kayıt bulundu!",
                 building: project.building || [],
                 floorsData: project.floorsData || [],
-                selectedDoor: project.selectedDoor || []
+                selectedDoor
             });
         } catch (err) {
             console.error("Kayıt Hatası:", err);
