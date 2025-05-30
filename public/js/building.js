@@ -164,18 +164,11 @@ export function populateTable(tableData){
                         <option ${rowData.kat === "5. Kat" ? "selected" : ""}>5. Kat</option>  
                         <option ${rowData.kat === "6. Kat" ? "selected" : ""}>6. Kat</option>  
                     </select>  
-                </td>  
+                </td>
                 <td>  
                     <select class="form-select">  
-                        <option ${rowData.alanTipi === "Daire" ? "selected" : ""}>Daire</option>  
-                        <option ${rowData.alanTipi === "Dükkan" ? "selected" : ""}>Dükkan</option>  
-                        <option ${rowData.alanTipi === "Ofis" ? "selected" : ""}>Ofis</option>  
-                        <option ${rowData.alanTipi === "Depo" ? "selected" : ""}>Depo</option>  
-                    </select>  
-                </td>  
-                <td>  
-                    <select class="form-select">  
-                        <option ${rowData.tipi === "1 (dükkan, depo vs)" ? "selected" : ""}>1 (dükkan, depo vs)</option>  
+                        <option ${rowData.tipi === "Dükkan" ? "selected" : ""}>Dükkan</option>  
+                        <option ${rowData.tipi === "Ofis" ? "selected" : ""}>Ofis</option>  
                         <option ${rowData.tipi === "1+1" ? "selected" : ""}>1+1</option>  
                         <option ${rowData.tipi === "2+0" ? "selected" : ""}>2+0</option>  
                         <option ${rowData.tipi === "2+1" ? "selected" : ""}>2+1</option>  
@@ -186,8 +179,8 @@ export function populateTable(tableData){
                         <option ${rowData.tipi === "5+1 dublex" ? "selected" : ""}>5+1 dublex</option>  
                     </select>  
                 </td>
-                <td><input type="number" class="form-control genel-brut-alan" placeholder="m²" value="${rowData.genelBrutAlan || ""}" required></td>  
-                <td><input type="text" class="form-control" placeholder="Kapı No" value="${rowData.Ad || ""}"></td>  
+                <td><input type="text" class="form-control" placeholder="Kapı No" value="${rowData.Ad || ""}"></td>
+                <td><input type="number" class="form-control genel-brut-alan" placeholder="m²" value="${rowData.genelBrutAlan || ""}" required></td>
                 <td>  
                     <button id="delete-btn-${index + 1}" type="button" class="btn btn-danger btn-sm delete-row-btn">Sil</button>  
                 </td>  

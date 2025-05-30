@@ -90,7 +90,7 @@ router.post('/', async (req, res) => {
             if (projectIndex !== -1) {
                 // Proje mevcutsa, building'i tamamen yenisiyle değiştir
                 user.userInputs[projectIndex].building = building;
-                // (Eğer floorsData da göndermek istersen: user.userInputs[projectIndex].floorsData = floorsData)
+                user.userInputs[projectIndex].metreMaliyet = { metreMaliyeti: 0 };
             } else {
                 // Proje yoksa yeni proje oluşturup ekle
                 return res.json({

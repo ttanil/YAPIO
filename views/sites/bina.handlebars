@@ -367,11 +367,10 @@
                     <thead class="table-dark">  
                         <tr>  
                             <th>#</th>  
-                            <th>Bulunduğu Kat</th>  
-                            <th>Kullanım Amacı</th>  
+                            <th>Bulunduğu Kat</th> 
                             <th>Tipi</th>
-                            <th>Genel Brüt Alan</th>  
                             <th>Kapı No</th>  
+                            <th>Genel Brüt Alan</th>
                             <th>Sil</th>
                         </tr>  
                     </thead>  
@@ -389,18 +388,11 @@
                                     <option>5. Kat</option>  
                                     <option>6. Kat</option>  
                                 </select>  
-                            </td>  
+                            </td>
                             <td>  
                                 <select class="form-select">  
-                                    <option>Daire</option>  
                                     <option>Dükkan</option>  
                                     <option>Ofis</option>  
-                                    <option>Depo</option>  
-                                </select>  
-                            </td>  
-                            <td>  
-                                <select class="form-select">  
-                                    <option>1 (dükkan, depo, ofis vs)</option>  
                                     <option>1+1</option>  
                                     <option>2+0</option>  
                                     <option>2+1</option>  
@@ -411,8 +403,8 @@
                                     <option>5+1 dublex</option>  
                                 </select>
                             </td>
-                            <td><input type="number" class="form-control genel-brut-alan" placeholder="m²" required></td> <!-- Genel Brüt alanı-->
                             <td><input type="text" class="form-control" placeholder="Kapı No"></td>
+                            <td><input type="number" class="form-control genel-brut-alan" placeholder="m²" required></td> <!-- Genel Brüt alanı-->
                             <td>  
                                 <button id="delete-btn-1" type="button" class="btn btn-danger btn-sm delete-row-btn">Sil</button>
                             </td>  
@@ -577,18 +569,11 @@
                             <option>5. Kat</option>  
                             <option>6. Kat</option>  
                         </select>  
-                    </td>  
+                    </td>
                     <td>  
                         <select class="form-select">  
-                            <option>Daire</option>  
                             <option>Dükkan</option>  
                             <option>Ofis</option>  
-                            <option>Depo</option>  
-                        </select>  
-                    </td> 
-                    <td>  
-                        <select class="form-select">  
-                            <option>1 (dükkan, depo vs)</option>  
                             <option>1+1</option>  
                             <option>2+0</option>  
                             <option>2+1</option>  
@@ -599,8 +584,8 @@
                             <option>5+1 dublex</option>  
                         </select>  
                     </td>
-                    <td><input type="number" class="form-control genel-brut-alan" placeholder="m²" required></td>  
                     <td><input type="text" class="form-control" placeholder="Kapı No"></td>  
+                    <td><input type="number" class="form-control genel-brut-alan" placeholder="m²" required></td>          
                     <td>  
                         <button id="delete-btn-${rowCounter}" type="button" class="btn btn-danger btn-sm delete-row-btn">Sil</button>  
                     </td>  
@@ -687,13 +672,21 @@
                 const rowData = {};
 
                 rowData["rowNumber"] = row.querySelector("td:first-child").textContent.trim(); // 1. sütundaki satır numarası  
-                rowData["kat"] = row.querySelector("td:nth-child(2) select").value; // Kategori seçimi (2. sütun)  
-                rowData["alanTipi"] = row.querySelector("td:nth-child(3) select").value; // Alan tipi seçimi (3. sütun)  
-                rowData["tipi"] = row.querySelector("td:nth-child(4) select").value; // tipi seçimi (4. sütun)  
+                rowData["kat"] = row.querySelector("td:nth-child(2) select").value; // Kategori seçimi (2. sütun)
+                rowData["tipi"] = row.querySelector("td:nth-child(3) select").value; // tipi seçimi (4. sütun)  
                 rowData["netAlan"] = " "; // netAlan tipi seçimi (5. sütun)  
                 rowData["brutAlan"] = " "; // Brüt alan verisi
+                rowData["Ad"] = row.querySelector("td:nth-child(4) input").value; // Ad bilgisi
                 rowData["genelBrutAlan"] = row.querySelector("td:nth-child(5) input").value; // Genel brüt alan verisi
-                rowData["Ad"] = row.querySelector("td:nth-child(6) input").value; // Ad bilgisi
+
+                if(rowData["tipi"] === "Dükkan"){
+                    rowData["alanTipi"] = "Dükkan";
+                } else if(rowData["tipi"] === "Ofis"){
+                    rowData["alanTipi"] = "Ofis";
+                } else {
+                    rowData["alanTipi"] = rowData["tipi"];
+                }
+                
                 tableData.push(rowData);
             });  
 
@@ -727,7 +720,7 @@
                     <td>  
                         <select class="form-select">  
                             <option>Zemin Kat</option>  
-                            <option>Bodrum Kat</option>  
+                            <option>Bodrum Kat</option>
                             <option>1. Kat</option>  
                             <option>2. Kat</option>  
                             <option>3. Kat</option>  
@@ -735,17 +728,23 @@
                             <option>5. Kat</option>  
                             <option>6. Kat</option>  
                         </select>  
-                    </td>  
+                    </td>
                     <td>  
                         <select class="form-select">  
-                            <option>Daire</option>  
                             <option>Dükkan</option>  
                             <option>Ofis</option>  
-                            <option>Depo</option>  
+                            <option>1+1</option>  
+                            <option>2+0</option>  
+                            <option>2+1</option>  
+                            <option>3+1</option>  
+                            <option>3+1 dublex</option>  
+                            <option>4+1</option>  
+                            <option>4+1 dublex</option>  
+                            <option>5+1 dublex</option>  
                         </select>  
                     </td>
-                    <td><input type="number" class="form-control genel-brut-alan" placeholder="m²" required></td>  
                     <td><input type="text" class="form-control" placeholder="Kapı No"></td>  
+                    <td><input type="number" class="form-control genel-brut-alan" placeholder="m²" required></td>  
                     <td>  
                         <button id="delete-btn-1" type="button" class="btn btn-danger btn-sm delete-row-btn">Sil</button>  
                     </td>  
@@ -1103,7 +1102,6 @@
             });
         }
         // Her satır eklendiğinde çağır:
-        addRow(); // sonra:
         preventSubmitOnLastInput();
 
         // Toplam genel brüt alanı hesaplama ve gösterme fonksiyonu
