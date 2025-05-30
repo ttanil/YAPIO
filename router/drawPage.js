@@ -61,6 +61,9 @@ router.post('/', async (req, res) => {
                 return res.status(404).json({ success: false, message: "Proje bulunamadı." });
             }
 
+            // selectedDoor alanını al, yoksa default ver
+            const selectedDoor = project.selectedDoor || "right";
+
             // building, floorsData ve selectedDoor dön
             return res.json({
                 success: true,
