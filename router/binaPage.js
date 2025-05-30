@@ -109,6 +109,7 @@ router.post('/', async (req, res) => {
         }
     } else if(projectName && !building && floorsData){
         const selectedDoor = req.body;
+        const selectedWall = req.body;
         try {
             const user = await Users.findById(userId);
             if (!user) {
@@ -122,13 +123,15 @@ router.post('/', async (req, res) => {
                 // Proje varsa floorsData VE selectedDoor güncelle
                 user.userInputs[projectIndex].floorsData = floorsData;
                 user.userInputs[projectIndex].selectedDoor = selectedDoor;
+                user.userInputs[projectIndex].selectedWall = selectedWall;
             } else {
                 // Proje yoksa yeni proje oluştur
                 user.userInputs.push({
                     projectName: projectName,
                     building: [],
                     floorsData: floorsData,
-                    selectedDoor: selectedDoor // yeni ekledik
+                    selectedDoor: selectedDoor,
+                    selectedWall:selectedWall
                 });
             }
 

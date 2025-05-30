@@ -517,6 +517,7 @@
         const buildingContainer = document.getElementById("building-container");
 
         let selectedDoorUser = null;
+        let selectedWallUser = "none";
         let rowCounter = 2;
 
         let userId = null;
@@ -943,10 +944,11 @@
 
             // Kat yüksekliği hesaplaması
             const buildingHeight = totalFloors * 100;
-            buildingContainer.style.height = `${buildingHeight + 100}px`; // 50px çatı için ekleniyor
+            buildingContainer.style.height = `${buildingHeight + 100}px`; // 100px çatı için ekleniyor
             buildingContainer.style.width = "300px";
             buildingContainer.classList.remove("d-none");
             buildingContainer.innerHTML = "";
+
 
             // Çatı ekle
             buildingContainer.insertAdjacentHTML('beforeend', roofSVG);
@@ -969,14 +971,20 @@
                     }
                 }
 
-                // En alt kattaysa kapılar ekleniyor
+                // En alt kattaysa kapı ve duvar işlemleri yapılır
                 if (i === 0) {
                     floor.style.position = "relative";
 
+                    // Duvarları ekleyip referansları kaydet
+                    const { wallLeft, wallRight } = addWallsToFloor(
+                        floor, nextBtn, girisYazisi, buildingHeight
+                    );
+
+                    // Kapıları ekle
                     const doorLeft = document.createElement("img");
                     doorLeft.src = "img/door_left.png";
                     doorLeft.alt = "Sol Kapı";
-                    doorLeft.className = "img-door selectable-door";
+                    doorLeft.className = "img-door selectable-door kapi-animasyon";
                     doorLeft.style.position = "absolute";
                     doorLeft.style.left = "-20px";
                     doorLeft.style.bottom = "0";
@@ -985,23 +993,16 @@
                     const doorRight = document.createElement("img");
                     doorRight.src = "img/door_right.png";
                     doorRight.alt = "Sağ Kapı";
-                    doorRight.className = "img-door selectable-door";
+                    doorRight.className = "img-door selectable-door kapi-animasyon";
                     doorRight.style.position = "absolute";
                     doorRight.style.right = "-20px";
                     doorRight.style.bottom = "0";
                     doorRight.style.cursor = "pointer";
 
-                    // Sadece burada ID gerekirse, dinamik ver (veya id hiç verme)
-                    // doorLeft.id = "uniqueDoorLeft";  // Gerekirse benzersiz id
-                    // doorRight.id = "uniqueDoorRight";
-
                     floor.appendChild(doorLeft);
                     floor.appendChild(doorRight);
 
-                    doorLeft.classList.add('kapi-animasyon');
-                    doorRight.classList.add('kapi-animasyon');
-
-                    // Kapı seçim event'i
+                    // Kapı eventleri - seçildiğinde duvarları gösterir
                     doorLeft.addEventListener("click", () => {
                         doorLeft.classList.add("selected");
                         doorRight.classList.remove("selected");
@@ -1011,10 +1012,15 @@
                         doorRight.classList.remove('kapi-animasyon');
                         window.selectedDoor = "left";
                         selectedDoorUser = "left";
-                        if (girisYazisi && girisYazisi.parentNode) {
-                            girisYazisi.parentNode.removeChild(girisYazisi);
-                        }
+                        nextBtn.disabled = false;
+                        nextBtn.style.opacity = "1";
+
+                        // Sol kapı seçildiyse sadece sağ duvar açılır
+                        wallLeft.style.display = "none";
+                        wallRight.style.display = "block";
+                        girisYazisi.innerHTML = "Bitişik yapı varsa seçiniz <br>yoksa sonraki butonuyla devam ediniz.";
                     });
+
                     doorRight.addEventListener("click", () => {
                         doorRight.classList.add("selected");
                         doorLeft.classList.remove("selected");
@@ -1024,19 +1030,93 @@
                         doorRight.classList.remove('kapi-animasyon');
                         window.selectedDoor = "right";
                         selectedDoorUser = "right";
-                        if (girisYazisi && girisYazisi.parentNode) {
-                            girisYazisi.parentNode.removeChild(girisYazisi);
-                        }
+                        nextBtn.disabled = false;
+                        nextBtn.style.opacity = "1";
+
+                        // Sağ kapı seçildiyse sadece sol duvar açılır
+                        wallLeft.style.display = "block";
+                        wallRight.style.display = "none";
+                        girisYazisi.innerHTML = "Bitişik yapı varsa seçiniz <br>yoksa sonraki butonuyla devam ediniz.";
                     });
                 }
 
                 buildingContainer.appendChild(floor);
             }
 
+
             // Form, butonlar
             buildingForm.classList.add("d-none");
             resetBtn.classList.remove("d-none");
             nextBtn.classList.remove("d-none");
+        }
+
+        function addWallsToFloor(floor, nextBtn, girisYazisi, height) {
+            // Sol duvar
+            const wallLeft = document.createElement("img");
+            wallLeft.src = "img/wall_left.png";
+            wallLeft.alt = "Sol Duvar";
+            wallLeft.className = "img-wall kapi-animasyon";
+            wallLeft.style.position = "absolute";
+            wallLeft.style.left = "-45px";
+            wallLeft.style.bottom = "0";
+            wallLeft.style.width = "40px";
+            wallLeft.style.height = `${height+10}px`;
+            wallLeft.style.cursor = "pointer";
+            wallLeft.style.display = "none"; // Başlangıçta gizli
+
+            // Sağ duvar
+            const wallRight = document.createElement("img");
+            wallRight.src = "img/wall_right.png";
+            wallRight.alt = "Sağ Duvar";
+            wallRight.className = "img-wall kapi-animasyon";
+            wallRight.style.position = "absolute";
+            wallRight.style.right = "-45px";
+            wallRight.style.bottom = "0";
+            wallRight.style.width = "40px";
+            wallRight.style.height = `${height+10}px`;
+            wallRight.style.cursor = "pointer";
+            wallRight.style.display = "none"; // Başlangıçta gizli
+
+            // Sol duvar tıklama
+            wallLeft.addEventListener("click", () => {
+                wallLeft.classList.add("selected");
+                wallRight.classList.remove("selected");
+                wallLeft.style.display = "block";
+                wallRight.style.display = "none";
+                wallLeft.classList.remove('kapi-animasyon');
+                wallRight.classList.remove('kapi-animasyon');
+                window.selectedDoor = "wall_left";
+                selectedWallUser = "left";
+                if (girisYazisi && girisYazisi.parentNode) {
+                    girisYazisi.parentNode.removeChild(girisYazisi);
+                }
+                nextBtn.disabled = false;
+                nextBtn.style.opacity = "1";
+            });
+
+            // Sağ duvar tıklama
+            wallRight.addEventListener("click", () => {
+                wallRight.classList.add("selected");
+                wallLeft.classList.remove("selected");
+                wallRight.style.display = "block";
+                wallLeft.style.display = "none";
+                wallLeft.classList.remove('kapi-animasyon');
+                wallRight.classList.remove('kapi-animasyon');
+                window.selectedDoor = "wall_right";
+                selectedWallUser = "right";
+                if (girisYazisi && girisYazisi.parentNode) {
+                    girisYazisi.parentNode.removeChild(girisYazisi);
+                }
+                nextBtn.disabled = false;
+                nextBtn.style.opacity = "1";
+            });
+
+            // DOM'a ekle
+            floor.appendChild(wallLeft);
+            floor.appendChild(wallRight);
+
+            // Fonksiyon sonunda duvara erişim gerekirse return dönebilirsin
+            return { wallLeft, wallRight };
         }
 
 
@@ -1052,7 +1132,9 @@
             
         });  
 
-        // Sonraki Butonu İşlevi  
+        // Sonraki Butonu İşlevi
+        nextBtn.disabled = true;
+        nextBtn.style.opacity = "0.3";
         nextBtn.addEventListener("click", async () => {
             containerBina.classList.add("d-none");
 
@@ -1077,11 +1159,13 @@
 
             const floorsData = setFloorsData(regularBuilding);
 
+            console.log("selectedDoor ",selectedDoor);
             const dataToDb = {
                 userId: userId,           // kullanıcı id'si
                 projectName: projectName, // proje adı
                 floorsData: floorsData,
-                selectedDoor: selectedDoorUser
+                selectedDoor: selectedDoorUser,
+                selectedWall : selectedWallUser
             };
 
             try {  

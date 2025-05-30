@@ -72,6 +72,10 @@ const selectedDoorSchema = new mongoose.Schema({
     selectedDoor: { type: String, default : "right" }
 },{ _id: false });
 
+const selectedWallSchema = new mongoose.Schema({
+    selectedWall: { type: String, default : "none" }
+},{ _id: false });
+
 const defaultFields = {
     tarih: { type: String, required: true },
     not: { type: String, default: " " },
@@ -167,6 +171,7 @@ const userInputSchema = new mongoose.Schema({
   givePayment: [givePaymentSchema],
   soldItems: [soldItemsSchema],
   selectedDoor: [selectedDoorSchema],
+  selectedWall: [selectedWallSchema],
 
   arsaBedeli: [arsaBedeliSchema],
   santiyeKurulumu: [santiyeKurulumuSchema],

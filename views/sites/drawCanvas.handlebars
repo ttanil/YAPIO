@@ -599,6 +599,8 @@
         let building = null;
         let floorsDataFromDb = null;
         let selectedDoor = "right";
+        let selectedWall = "none";
+        let numberOfFloors = null;
 
         // DOM yüklendiğinde işlem başlat  
         document.addEventListener("DOMContentLoaded", () => {  
@@ -687,8 +689,10 @@
                     showWarningMessage(result.message, "tamam", true);
                 } else{
                     floorsData = result.floorsData;
+                    numberOfFloors = floorsData.length || 0;
                     building = result.building;
                     selectedDoor = result.selectedDoor[0].selectedDoor || "right";
+                    selectedWall = result.selectedWall[0].selectedWall || "none";
                 }
 
             } catch (error) {
@@ -700,9 +704,9 @@
             // Veriler
             const floorNumber = floorsData.length;  
             const hasBasement = isBodrumFloorDb(floorsData); // Bodrum var mı?
-            const windowsPerFloor = getRoomNumbers(floorsData); // Her kattaki pencere sayısı  
+            const windowsPerFloor = getRoomNumbers(floorsData); // Her kattaki pencere sayısı
 
-            setBuilding(floorNumber, hasBasement, windowsPerFloor, selectedDoor);
+            setBuilding(floorNumber, hasBasement, windowsPerFloor, selectedDoor, selectedWall);
 
             if(Array.isArray(building) && building.length > 0){
                 let topBrut = 0;
@@ -851,7 +855,7 @@
             roofElement.style.borderRight = `${width / 2}px solid transparent`;  
         }
 
-        function setBuilding(floorNumber, hasBasement, windowsPerFloor, selectedDoor) {  
+        function setBuilding(floorNumber, hasBasement, windowsPerFloor, selectedDoor, selectedWall) {  
             buildingContainer.innerHTML = "";  
 
             // Çatı SVG  
@@ -920,7 +924,7 @@
                     doorLeft.alt = "Sol Kapı";
                     doorLeft.className = "img-door selectable-door";
                     doorLeft.style.position = "absolute";
-                    doorLeft.style.left = "-20px";
+                    doorLeft.style.left = "-25px";
                     doorLeft.style.bottom = "0";
 
                     const doorRight = document.createElement("img");
@@ -928,13 +932,52 @@
                     doorRight.alt = "Sağ Kapı";
                     doorRight.className = "img-door selectable-door";
                     doorRight.style.position = "absolute";
-                    doorRight.style.right = "-20px";
+                    doorRight.style.right = "-25px";
                     doorRight.style.bottom = "0";
+
+                    // Duvarlar
+                    const wallLeft = document.createElement("img");
+                    wallLeft.src = "img/wall_left.png";
+                    wallLeft.alt = "Sol Duvar";
+                    wallLeft.className = "img-wall kapi-animasyon";
+                    wallLeft.style.position = "absolute";
+                    wallLeft.style.left = "-30px";
+                    wallLeft.style.bottom = "0";
+                    wallLeft.style.width = "25px";
+                    wallLeft.style.height = `${90 * numberOfFloors}px`;
+                    wallLeft.style.cursor = "pointer";
+                    wallLeft.style.display = "none"; // Başlangıçta gizli
+
+                    const wallRight = document.createElement("img");
+                    wallRight.src = "img/wall_right.png";
+                    wallRight.alt = "Sağ Duvar";
+                    wallRight.className = "img-wall kapi-animasyon";
+                    wallRight.style.position = "absolute";
+                    wallRight.style.right = "-30px";
+                    wallRight.style.bottom = "0";
+                    wallRight.style.width = "25px";
+                    wallRight.style.height = `${90 * numberOfFloors}px`;
+                    wallRight.style.cursor = "pointer";
+                    wallRight.style.display = "none"; // Başlangıçta gizli
+
+                    floor.appendChild(wallLeft);
+                    floor.appendChild(wallRight);
 
                     if(selectedDoor === "right"){
                         floor.appendChild(doorRight);
                     } else if(selectedDoor === "left"){
                         floor.appendChild(doorLeft);
+                    }
+
+                    if(selectedWall === "right"){
+                        wallRight.style.display = "block";
+                        wallLeft.style.display = "none";
+                    } else if(selectedWall === "left"){
+                        wallLeft.style.display = "block";
+                        wallRight.style.display = "none";
+                    } else if(selectedWall === "none"){
+                        wallLeft.style.display = "none";
+                        wallRight.style.display = "none";
                     }
                     
                 }

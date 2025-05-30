@@ -63,11 +63,19 @@ router.post('/', async (req, res) => {
 
             let selectedDoor;
             if (!project.selectedDoor || project.selectedDoor.length === 0) {
-                project.selectedDoor = [{ selectedDoor: "right" }]; // doğru veri yapısı
-                await user.save();              // db'ye kaydet
+                project.selectedDoor = [{ selectedDoor: "right" }];
+                await user.save();
                 selectedDoor = [{ selectedDoor: "right" }];
             } else {
                 selectedDoor = project.selectedDoor;
+            }
+            let selectedWall;
+            if (!project.selectedWall || project.selectedWall.length === 0) {
+                project.selectedWall = [{ selectedWall: "none" }];
+                await user.save();
+                selectedWall = [{ selectedWall: "none" }];
+            } else {
+                selectedWall = project.selectedWall;
             }
 
             // building, floorsData ve selectedDoor dön
@@ -76,7 +84,8 @@ router.post('/', async (req, res) => {
                 message: "Kayıt bulundu!",
                 building: project.building || [],
                 floorsData: project.floorsData || [],
-                selectedDoor
+                selectedDoor,
+                selectedWall
             });
         } catch (err) {
             console.error("Kayıt Hatası:", err);
