@@ -126,6 +126,26 @@
             cursor: pointer;
         }  
 
+
+        .door-selection-wrapper {
+            gap: 0px;
+        }
+        .door-side {
+            cursor: pointer;
+            border: 3px solid transparent;
+            border-radius: 12px;
+            padding: 8px 4px 3px 4px;
+            transition: border 0.22s, box-shadow 0.22s;
+            width: 60px;
+        }
+        .img-door {
+            width: 48px;
+            height: 72px;
+            display: block;
+        }
+
+
+
         /* Buton Stilleri */  
         .btn-orange {  
             background-color: #265df5; /* Turuncu renk */  
@@ -313,6 +333,11 @@
                 border-right: 100px solid transparent;  
                 border-bottom: 50px solid #ff5733; /* Çatı rengi */  
                 margin: 0 auto;
+            }
+
+            .img-door {
+                width: 28px;
+                height: 45px;
             }
 
 
@@ -565,6 +590,7 @@
         let projectName = null;
         let building = null;
         let floorsDataFromDb = null;
+        let selectedDoor = null;
 
         // DOM yüklendiğinde işlem başlat  
         document.addEventListener("DOMContentLoaded", () => {  
@@ -654,6 +680,7 @@
                 } else{
                     floorsData = result.floorsData;
                     building = result.building;
+                    selectedDoor = result.selectedDoor[0].selectedDoor;
                 }
 
             } catch (error) {
@@ -667,7 +694,8 @@
             const hasBasement = isBodrumFloorDb(floorsData); // Bodrum var mı?
             const windowsPerFloor = getRoomNumbers(floorsData); // Her kattaki pencere sayısı  
 
-            setBuilding(floorNumber, hasBasement, windowsPerFloor);
+            console.log(selectedDoor);
+            setBuilding(floorNumber, hasBasement, windowsPerFloor, selectedDoor);
 
             if(Array.isArray(building) && building.length > 0){
                 let topBrut = 0;
@@ -816,11 +844,10 @@
             roofElement.style.borderRight = `${width / 2}px solid transparent`;  
         }
 
-        function setBuilding(floorNumber, hasBasement, windowsPerFloor) {  
-            // Bina içeriğini temizle ve yeniden oluştur  
+        function setBuilding(floorNumber, hasBasement, windowsPerFloor, selectedDoor) {  
             buildingContainer.innerHTML = "";  
 
-            // Tuğla desenli çatı için SVG kodu  
+            // Çatı SVG  
             const roofSVG = `  
                 <svg class="roof-svg" viewBox="0 0 300 90" style="display:block; width:300px; height:130px;">  
                 <defs>  
@@ -835,18 +862,16 @@
                 <polygon points="0,90 150,0 300,90" fill="url(#brick)" />  
                 </svg>
             `;
-
-            // ----- ÇATI EKLE (SVG TUĞLALI) -----  
             buildingContainer.insertAdjacentHTML('beforeend', roofSVG);  
 
+            let maxWidth = 300; // Minimum genişlik
             windowsPerFloor.forEach(windowCount => {  
-                const width = Math.max(300, windowCount * 30); // Minimum genişlik 300px  
+                const width = Math.max(300, windowCount * 30);  
                 if (width > maxWidth) {  
-                    maxWidth = width; // Maksimum genişliği güncelle  
+                    maxWidth = width;  
                 }  
             });  
 
-            // Katları ekleme  
             for (let i = floorNumber - 1; i >= 0; i--) {  
                 const floor = document.createElement("div");  
                 floor.className = "floor";  
@@ -854,12 +879,10 @@
                 // Pencereleri ekle
                 addWindows(i, floor, windowsPerFloor[i]); 
 
-
                 // Kat isim etiketi  
                 const floorName = document.createElement("div");  
                 floorName.className = "floor-name";  
 
-                // Kat isimlendirmesi  
                 if (hasBasement === true) {  
                     if (i === 0) {  
                         floorName.textContent = "Bodrum Kat";  
@@ -875,15 +898,40 @@
                     } else {  
                         floorName.textContent = `${i}. Kat`;  
                     }  
-                }  
-
-                // Kat ismini katın üstüne ekleme  
+                }
                 floor.appendChild(floorName);  
 
-                // Katların genişliğini en geniş katın genişliğine eşit yap  
                 floor.style.width = `${maxWidth}px`;  
 
-                // Katları bina konteynerine ekle  
+                // --- TEK KAPIYI EN ALT KATA EKLE ---
+                if (
+                    (hasBasement && i === 0) ||             // Bodrum varsa oraya ekle
+                    (!hasBasement && i === 0)               // Yoksa zemin kata ekle
+                ) {
+                    const doorLeft = document.createElement("img");
+                    doorLeft.src = "img/door_left.png";
+                    doorLeft.alt = "Sol Kapı";
+                    doorLeft.className = "img-door selectable-door";
+                    doorLeft.style.position = "absolute";
+                    doorLeft.style.left = "-20px";
+                    doorLeft.style.bottom = "0";
+
+                    const doorRight = document.createElement("img");
+                    doorRight.src = "img/door_right.png";
+                    doorRight.alt = "Sağ Kapı";
+                    doorRight.className = "img-door selectable-door";
+                    doorRight.style.position = "absolute";
+                    doorRight.style.right = "-20px";
+                    doorRight.style.bottom = "0";
+
+                    if(selectedDoor === "right"){
+                        floor.appendChild(doorRight);
+                    } else if(selectedDoor === "left"){
+                        floor.appendChild(doorLeft);
+                    }
+                    
+                }
+
                 buildingContainer.appendChild(floor);
             }
         }

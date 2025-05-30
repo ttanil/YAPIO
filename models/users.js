@@ -68,6 +68,10 @@ const metreMaliyetSchema = new mongoose.Schema({
     metreMaliyeti: { type: Number, required: true }
 },{ _id: false });
 
+const selectedDoorSchema = new mongoose.Schema({
+    selectedDoor: { type: String, default : "right" }
+},{ _id: false });
+
 const defaultFields = {
     tarih: { type: String, required: true },
     not: { type: String, default: " " },
@@ -162,6 +166,7 @@ const userInputSchema = new mongoose.Schema({
   getPayment: [getPaymentSchema],
   givePayment: [givePaymentSchema],
   soldItems: [soldItemsSchema],
+  selectedDoor: [selectedDoorSchema],
 
   arsaBedeli: [arsaBedeliSchema],
   santiyeKurulumu: [santiyeKurulumuSchema],

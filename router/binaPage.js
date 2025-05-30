@@ -46,7 +46,7 @@ router.get('/', authenticateUser, async (req, res) => {
 router.post('/', async (req, res) => { 
     const { userId, projectName, building = null, floorsData = null } = req.body;
 
-    //console.log("building ",building, " ",projectName);
+    //console.log("building ",req.body);
     
     if(projectName && !building && !floorsData){
         try {
@@ -108,6 +108,7 @@ router.post('/', async (req, res) => {
             return res.status(500).json({ success: false, message: "Kayıt hatası: " });
         }
     } else if(projectName && !building && floorsData){
+        const selectedDoor = req.body;
         try {
             const user = await Users.findById(userId);
             if (!user) {
@@ -118,14 +119,16 @@ router.post('/', async (req, res) => {
             const projectIndex = user.userInputs.findIndex(prj => prj.projectName === projectName);
 
             if (projectIndex !== -1) {
-                // Proje varsa floorsData'yı güncelle
+                // Proje varsa floorsData VE selectedDoor güncelle
                 user.userInputs[projectIndex].floorsData = floorsData;
+                user.userInputs[projectIndex].selectedDoor = selectedDoor;
             } else {
                 // Proje yoksa yeni proje oluştur
                 user.userInputs.push({
                     projectName: projectName,
-                    building: [],           // boş bırakabilirsin
-                    floorsData: floorsData  // gelen floorsData ile ekle
+                    building: [],
+                    floorsData: floorsData,
+                    selectedDoor: selectedDoor // yeni ekledik
                 });
             }
 

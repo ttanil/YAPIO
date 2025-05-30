@@ -152,15 +152,57 @@
             box-sizing: border-box;  
         }  
     
-        /* Çatı görünümü için üçgen   
-        .roof {  
-            width: 0;  
-            height: 0;  
-            border-left: 100px solid transparent;  
-            border-right: 100px solid transparent;  
-            border-bottom: 50px solid #ff5733;  
-            margin: 0 auto;  
-        }  */
+
+        .giris-uyari {
+            display: block;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(90deg, #fd7e14 0%, #f9d423 100%);
+            border-radius: 16px;
+            padding: 12px 16px;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 12px #fd7e1420;
+            margin-bottom: 24px !important;
+            margin-top: 8px !important;
+            border: 2px solid #fcb900;
+            text-shadow: 0 1px 2px #b85a0055;
+            transition: transform 0.15s;
+        }
+
+        .door-selection-wrapper {
+            gap: 0px;
+        }
+        .door-side {
+            cursor: pointer;
+            border: 3px solid transparent;
+            border-radius: 12px;
+            padding: 8px 4px 3px 4px;
+            transition: border 0.22s, box-shadow 0.22s;
+            width: 60px;
+        }
+        .img-door {
+            width: 48px;
+            height: 72px;
+            display: block;
+        }
+        @keyframes kapipulse {
+        0% {
+            transform: scale(1);
+            box-shadow: 0 0 8px #63901c50;
+        }
+        50% {
+            transform: scale(1.12);
+            box-shadow: 0 0 24px #ffd70080;
+        }
+        100% {
+            transform: scale(1);
+            box-shadow: 0 0 8px #63901c50;
+        }
+        }
+        .kapi-animasyon {
+            animation: kapipulse 1s infinite;
+        }
 
 
         #reset-btn {  
@@ -253,6 +295,11 @@
 
             form .btn-success-table, #projectName button {  
                 font-size: 0.75rem !important;
+            }
+
+            .img-door {
+                width: 28px;
+                height: 45px;
             }
 
             /* Çok küçük genişlikleri büyüt */
@@ -467,12 +514,14 @@
         const nextBtn = document.getElementById("next-btn");  
         const buildingContainer = document.getElementById("building-container");
 
+        let selectedDoorUser = null;
         let rowCounter = 2;
 
         let userId = null;
         let projectName = null;
         let dataFromDb = null;
         let floorsDataFromDb = null;
+        
          
         projectNameForm.addEventListener('submit', async (event) => {  
             event.preventDefault(); // Sayfanın yeniden yüklenmesini önler  
@@ -510,47 +559,6 @@
             }
             
         });
-
-        // KULLANIM AMACI & TİPİ ARASINDAKİ BAĞI
-        function bindKullanimAmaciAndTipi(row) {
-            const kullanimAmaciSelect = row.querySelector('td:nth-child(3) select');
-            const tipiSelect = row.querySelector('td:nth-child(4) select');
-
-            function updateTipiOptions() {
-                const amac = kullanimAmaciSelect.value;
-                for (let i = 0; i < tipiSelect.options.length; i++) {
-                    let opt = tipiSelect.options[i];
-                    if (amac === "Daire") {
-                        if (opt.textContent.trim().startsWith("1 (dükkan")) {
-                            opt.disabled = true;
-                            if (tipiSelect.selectedIndex === i) {
-                                tipiSelect.selectedIndex = 1;
-                            }
-                        } else {
-                            opt.disabled = false;
-                        }
-                    } else {
-                        opt.disabled = !(i === 0);
-                        if (!(i === 0) && tipiSelect.selectedIndex === i) {
-                            tipiSelect.selectedIndex = 0;
-                        }
-                    }
-                }
-            }
-
-            kullanimAmaciSelect.addEventListener("change", updateTipiOptions);
-            updateTipiOptions();
-        }
-
-        // SAYFA YÜKLENDİĞİNDE VE YENİ SATIR EKLENDİĞİNDE ÇAĞIR
-        function bindKullanimAmaciToExistingRows() {
-            document.querySelectorAll("#table-rows tr").forEach(row => {
-                bindKullanimAmaciAndTipi(row);
-            });
-        }
-        document.addEventListener("DOMContentLoaded", bindKullanimAmaciToExistingRows);
-
-
         
         // Satır ekleme işlevi  
         function addRow() {  
@@ -594,7 +602,6 @@
 
             tableRows.insertAdjacentHTML("beforeend", newRowHTML);
             attachDeleteEvent(`delete-btn-${rowCounter}`);
-            bindKullanimAmaciAndTipi(tableRows.lastElementChild);
             rowCounter++;
             addAreaListeners();
             updateTotalBrutArea();
@@ -688,7 +695,7 @@
                 }
                 
                 tableData.push(rowData);
-            });  
+            });
 
             return tableData;
         }
@@ -846,7 +853,6 @@
                 }
                 netSquare.classList.add("was-validated"); // Doğrulama sınıfını ekle  
                 const building = getTableData();
-                //const data = readData("building");
 
                 const dataToDb = {
                     userId: userId,           // kullanıcı id'si
@@ -912,67 +918,123 @@
         let katsayisi = null;
 
         // Bina Oluşturma İşlevi  
-        function setBuildingView(dataDb){
+        function setBuildingView(dataDb) {
             katsayisi = 0;
-            //const dataDb = readData("building");
             getBuildingInfos(dataDb);
-            
+
+            // "Bina Planı Tasarımı" başlığının hemen altına span olarak ekle
+            const h1Title = document.querySelector('.container-bina h1');
+            const girisYazisi = document.createElement("span");
+            girisYazisi.textContent = "Giriş kapısını seçiniz";
+            girisYazisi.className = "giris-uyari text-center my-3 d-block";
+            h1Title.insertAdjacentElement('afterend', girisYazisi);
+
             const totalFloors = getFloorNumber();
             const isbodrum = isBodrum(dataDb);
-            containerBina.classList.remove("d-none");  
+            containerBina.classList.remove("d-none");
 
-            if(isbodrum){
+            if (isbodrum) {
                 katsayisi = totalFloors + 1;
-                
-            } else{
+            } else {
                 katsayisi = totalFloors;
             }
-            
+
             // Kat yüksekliği hesaplaması
-            const buildingHeight = totalFloors * 100;  
-
-            // Bina konteynerine stil atayarak yükseklik ve görsel düzeni ekle  
-            buildingContainer.style.height = `${buildingHeight + 100}px`; // 50px çatı için ekleniyor  
+            const buildingHeight = totalFloors * 100;
+            buildingContainer.style.height = `${buildingHeight + 100}px`; // 50px çatı için ekleniyor
             buildingContainer.style.width = "300px";
-            buildingContainer.classList.remove("d-none");  
+            buildingContainer.classList.remove("d-none");
+            buildingContainer.innerHTML = "";
 
-            // Eski bina içeriğini temizle  
-            buildingContainer.innerHTML = "";  
+            // Çatı ekle
+            buildingContainer.insertAdjacentHTML('beforeend', roofSVG);
 
-            // ----- ÇATI EKLE (SVG TUĞLALI) -----  
-            buildingContainer.insertAdjacentHTML('beforeend', roofSVG); 
+            // Katları oluştur
+            for (let i = totalFloors - 1; i >= 0; i--) {
+                const floor = document.createElement("div");
+                floor.classList.add("floor");
 
-            // Katları oluşturma  
-            for (let i = totalFloors - 1; i >= 0; i--) {  
-                const floor = document.createElement("div");  
-                floor.classList.add("floor");  
-
-                // Kat numarasını belirleme  
-                if(!isbodrum){
-                    if (i === 0) {  
-                        floor.innerText = `Zemin Kat`; // İlk kat zemin kat  
-                    } else {  
-                        floor.innerText = `${i}. Kat`; // Diğer katları sıralı numaralandır  
-                    }
-                } else{
-                    if (i === 0) {  
-                        floor.innerText = `Bodrum Kat`; // İlk kat zemin kat  
+                if (!isbodrum) {
+                    floor.innerText = i === 0 ? "Zemin Kat" : `${i}. Kat`;
+                } else {
+                    if (i === 0) {
+                        floor.innerText = "Bodrum Kat";
                         floor.style.backgroundColor = "#404448";
-                    } else if(i === 1){  
-                        floor.innerText = `Zemin Kat`; // Diğer katları sıralı numaralandır  
-                    } else{
-                        floor.innerText = `${i-1}. Kat`;
+                    } else if (i === 1) {
+                        floor.innerText = "Zemin Kat";
+                    } else {
+                        floor.innerText = `${i - 1}. Kat`;
                     }
                 }
 
-                // Katları binaya ekle  
-                buildingContainer.appendChild(floor);  
-            }  
+                // En alt kattaysa kapılar ekleniyor
+                if (i === 0) {
+                    floor.style.position = "relative";
 
-            // Formu gizle ve diğer butonları göster  
-            buildingForm.classList.add("d-none");  
-            resetBtn.classList.remove("d-none");  
-            nextBtn.classList.remove("d-none");  
+                    const doorLeft = document.createElement("img");
+                    doorLeft.src = "img/door_left.png";
+                    doorLeft.alt = "Sol Kapı";
+                    doorLeft.className = "img-door selectable-door";
+                    doorLeft.style.position = "absolute";
+                    doorLeft.style.left = "-20px";
+                    doorLeft.style.bottom = "0";
+                    doorLeft.style.cursor = "pointer";
+
+                    const doorRight = document.createElement("img");
+                    doorRight.src = "img/door_right.png";
+                    doorRight.alt = "Sağ Kapı";
+                    doorRight.className = "img-door selectable-door";
+                    doorRight.style.position = "absolute";
+                    doorRight.style.right = "-20px";
+                    doorRight.style.bottom = "0";
+                    doorRight.style.cursor = "pointer";
+
+                    // Sadece burada ID gerekirse, dinamik ver (veya id hiç verme)
+                    // doorLeft.id = "uniqueDoorLeft";  // Gerekirse benzersiz id
+                    // doorRight.id = "uniqueDoorRight";
+
+                    floor.appendChild(doorLeft);
+                    floor.appendChild(doorRight);
+
+                    doorLeft.classList.add('kapi-animasyon');
+                    doorRight.classList.add('kapi-animasyon');
+
+                    // Kapı seçim event'i
+                    doorLeft.addEventListener("click", () => {
+                        doorLeft.classList.add("selected");
+                        doorRight.classList.remove("selected");
+                        doorLeft.style.display = "block";
+                        doorRight.style.display = "none";
+                        doorLeft.classList.remove('kapi-animasyon');
+                        doorRight.classList.remove('kapi-animasyon');
+                        window.selectedDoor = "left";
+                        selectedDoorUser = "left";
+                        if (girisYazisi && girisYazisi.parentNode) {
+                            girisYazisi.parentNode.removeChild(girisYazisi);
+                        }
+                    });
+                    doorRight.addEventListener("click", () => {
+                        doorRight.classList.add("selected");
+                        doorLeft.classList.remove("selected");
+                        doorRight.style.display = "block";
+                        doorLeft.style.display = "none";
+                        doorLeft.classList.remove('kapi-animasyon');
+                        doorRight.classList.remove('kapi-animasyon');
+                        window.selectedDoor = "right";
+                        selectedDoorUser = "right";
+                        if (girisYazisi && girisYazisi.parentNode) {
+                            girisYazisi.parentNode.removeChild(girisYazisi);
+                        }
+                    });
+                }
+
+                buildingContainer.appendChild(floor);
+            }
+
+            // Form, butonlar
+            buildingForm.classList.add("d-none");
+            resetBtn.classList.remove("d-none");
+            nextBtn.classList.remove("d-none");
         }
 
 
@@ -1016,7 +1078,8 @@
             const dataToDb = {
                 userId: userId,           // kullanıcı id'si
                 projectName: projectName, // proje adı
-                floorsData: floorsData
+                floorsData: floorsData,
+                selectedDoor: selectedDoorUser
             };
 
             try {  
@@ -1044,8 +1107,8 @@
                 showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
                 console.log('Hata:', error);
             }
-
-            window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
+            console.log(selectedDoorUser);
+            //window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
         });  
 
         function setFloorsData(data) {

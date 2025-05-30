@@ -61,12 +61,13 @@ router.post('/', async (req, res) => {
                 return res.status(404).json({ success: false, message: "Proje bulunamadı." });
             }
 
-            // building ve floorsData'yı dön
+            // building, floorsData ve selectedDoor dön
             return res.json({
                 success: true,
                 message: "Kayıt bulundu!",
                 building: project.building || [],
-                floorsData: project.floorsData || []
+                floorsData: project.floorsData || [],
+                selectedDoor: project.selectedDoor || []
             });
         } catch (err) {
             console.error("Kayıt Hatası:", err);
