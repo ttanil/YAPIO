@@ -1,0 +1,518 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Drawing Bina</title>  
+    <link rel="icon" type="image/png" href="img/icon.png" sizes="32x32">
+    <!-- Bootstrap CSS -->  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">  
+    <link rel="stylesheet" href="css/index.css">
+
+<style>
+    body {  
+        margin: 0;  
+        padding: 0; 
+        background-image: url('/img/sample4.png');
+        background-repeat: repeat;  
+        background-size: auto; 
+        background-position: center;  
+        height: 115vh;  
+        font-family: Arial, sans-serif;  
+      }
+
+      .container-navbar {  
+        display: flex;  
+        flex: 0 0 100%;  
+        flex-wrap: nowrap;  
+        align-items: center;  
+        justify-content: center;  
+        margin: 0px;
+      }  
+      .container-fluid {  
+        display: flex;  
+        flex: 0 0 100%;  
+        flex-wrap: nowrap;  
+        align-items: center;  
+      }  
+      #projectName {  
+        flex: 0 0 90%;  
+        white-space: nowrap;  
+        overflow: hidden;  
+        text-overflow: ellipsis;  
+        font-family: Arial, sans-serif;  
+        font-size: 36px;
+      }  
+      .img-fluid {  
+        flex: 0 0 auto;  
+        height: 30px;  
+        width: 30px;  
+        margin-right: 10px;  
+      }
+      .custom-btn {  
+        background-color: #847539;
+        color: white; /* Yazı rengi */  
+        border: none; /* Kenarlığın kaldırılması */  
+        border-radius: 10px; /* Kenarlıkları yuvarlaklaştırma */  
+        padding: 10px 20px; /* İç boşluklar */  
+        font-family: "Varela Round";  
+        font-size: 16px; /* Yazı boyutu */  
+        font-weight: bold; /* Kalın yazı */  
+        letter-spacing: 2px;
+        cursor: pointer; /* Fare imlecini işaretçi yapma */  
+        transition: background-color 0.3s ease; /* Hover geçiş efekti */
+        margin-right: 40px;
+      }
+    .payment-container {
+      max-width:430px; margin:44px auto; background:#fff;
+      border-radius:16px; box-shadow:0 2px 14px 1px #0002; padding:32px 28px 28px 28px;
+    }
+    .bank-info, .credit-card-fields { display:none; }
+    .selectable { user-select:all; }
+    .modal-lg { max-width: 790px; }
+    /* Yasal metin linkleri ve erişilebilirlik */
+    .form-check-label a {
+      text-decoration: underline;
+      color: #0d6efd !important;
+      transition: color .18s, background .19s;
+      font-weight: 500;
+      padding: 1px 3px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .form-check-label a:hover, .form-check-label a:focus {
+      color: #fff !important;
+      background: #0d6efd;
+      text-decoration: underline !important;
+      outline: none;
+    }
+    .form-check-label { cursor:pointer; }
+
+     @media (max-width: 768px) {
+        body {  
+          height: 100vh;
+        }
+
+        .container-navbar {  
+          flex-wrap: wrap;  
+          justify-content: flex-end;  
+        }  
+        #projectName {
+          flex: 0 0 70%;  
+          overflow: hidden;  
+          text-overflow: ellipsis;  
+          white-space: nowrap;  
+          text-align: left;  
+          font-size: 14px !important;  
+          max-width: 65%;     /* Taşmayı önler */  
+          min-width: 0;       /* flex shrink için gerekli */  
+          margin-right: 0;    /* İstenirse gap için elle ekleyin */
+        }  
+        #buttonHome {
+          flex: 0 0 30px;     /* Eğer 30px'lik bir kutu ise tam sabitlenir */  
+          padding: 0;         /* Ekstra boşlukları engeller */  
+          margin-left: 0;     /* İstenirse 5px gibi küçük bir boşluk eklenebilir */  
+          display: flex;  
+          align-items: center;
+        }
+        .img-fluid {  
+          height: 25px;  
+          width: 25px;  
+          margin-right: 0;    /* Sağdan boşluğu kaldırır */  
+          margin-left: 0;     /* Soldan boşluğu kaldırır */
+        }  
+        .custom-btn {  
+          font-size: 12px; /* Yazı boyutu */
+          padding: 5px 10px;      /* Yan boşlukları biraz artırdım */
+          border-radius: 6px;      /* Köşeler hafif yuvarlatıldı */
+          color: #fff;
+          border: none;
+          margin-right: 12px;
+          display: inline-block; 
+          font-weight: 500;     
+        }
+        .navbar-toggler {  
+          /* background-color: rgb(89, 125, 234);  */
+          background-color: #c2c5c9;
+          flex: 0 0 auto;  
+          margin-left: auto;  
+          justify-content: flex-end;  
+        }
+        .container-fluid {  
+          flex-wrap: wrap;  
+        } 
+        .dropdown-item{
+          display: flex;
+          margin-left: auto;  
+          justify-content: flex-end;
+        }
+        .mobile-navbar-menu {  
+          justify-content: flex-end !important;  
+          text-align: right !important;  
+          margin-top: 10px;
+          margin-bottom: 5px;
+        }  
+        .mobile-navbar-menu .nav-item, .mobile-navbar-menu .dropdown-item-mobile {
+          display: flex;
+          align-items: center;
+          justify-content: space-between !important;  
+          text-align: right !important;
+          font-size: 1.1rem;
+          font-style: bold !important;
+          height: 22px;
+          margin-top: 2px;
+          justify-self: end;
+        }
+        .dropdown-item-mobile {
+          width: 34%;
+          font-family: Arial, sans-serif !important; 
+          color: rgb(94, 93, 93) !important;      /* Varsayılan metin rengini kullan */  
+          text-decoration: none !important; /* Altı çizgiyi kaldır */  
+          font-weight: 400 !important;
+        }
+     }
+
+
+
+  </style>
+</head>
+<body>
+    <!-- Responsive Header -->  
+  <nav class="header d-flex justify-content-between align-items-center px-3">
+    <span class="d-flex align-items-center gap-2">
+        <img src="img/icon.png" alt="Logo" width="32" height="32">
+        Yapıo
+    </span>
+    <button class="btn custom-btn" id="loginButton" style="display: none;">PROJELER</button>  
+  </nav>
+
+  <!-- Navbar -->  
+  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm mt-4 container-navbar">  
+    <div class="container-fluid">  
+      <!-- Proje Adı -->  
+      <h4 class="navbar-brand" id="projectName">Proje Adı</h4>  
+      <!-- Ana Sayfa Butonu -->  
+      <button class="btn d-flex navbar-home-button" id="buttonHome">  
+        <img src="/img/home1_1.png" alt="Katlar Görseli" class="img-fluid rounded">  
+      </button>  
+      <!-- Hamburger Menü -->  
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"  
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">  
+        <span class="navbar-toggler-icon"></span>  
+      </button>  
+  
+      <!-- Menu: Mobilde sağdan, büyük ekranda klasik dropdown -->  
+      <div class="collapse navbar-collapse" id="navbarNav">  
+        <!-- Masaüstü: Dropdown Menüsü -->  
+        <ul class="navbar-nav ms-auto d-none d-lg-flex">  
+            <li class="nav-item dropdown">  
+                <button class="btn nav-link dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">  
+                Menü  
+                </button>  
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">  
+                    <li>
+                      <a class="dropdown-item d-flex align-items-center" id="graphs-button" href="#">
+                          <img src="/img/growth_1.png" alt="" style="width:19px; height:19px; margin-right:8px;">
+                          Analizler
+                      </a>
+                  </li> 
+                  <li>
+                      <a class="dropdown-item d-flex align-items-center" id="sold-button" href="#">
+                          <img src="/img/property.png" alt="" style="width:19px; height:19px; margin-right:8px;">
+                          Satış
+                      </a>
+                  </li> 
+                </ul> 
+              </li>
+        </ul>  
+        <!-- Mobilde: Menü Seçenekleri En Sağa Yaslı -->  
+        <ul class="navbar-nav ms-auto d-lg-none justify-content-end text-end mobile-navbar-menu">
+          <li>
+            <a class="dropdown-item-mobile d-flex align-items-center" id="graphs-button-mobile" href="#">
+                <img src="/img/growth_1.png" alt="" style="width:19px; height:19px; ">
+                Analizler
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item-mobile d-flex align-items-center" id="sold-button-mobile" href="#">
+                <img src="/img/property.png" alt="" style="width:19px; height:19px; ">
+                Satış
+            </a>
+        </li> 
+        </ul>  
+      </div>  
+    </div>
+  </nav>
+
+
+  
+  <div class="payment-container">
+    <div class="text-center mb-3">
+      <h2 class="fw-bold">Üyelik Ücreti Öde</h2>
+      <div class="small text-success text-center mb-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#198754" class="bi bi-shield-check mb-1" viewBox="0 0 16 16">
+            <path d="M5.072 1.176a1 1 0 0 1 .82 0l2.904 1.249c.374.161.765.253 1.166.259.333.005.668-.047.999-.166l1.067-.388a1 1 0 0 1 1.137.508A8.998 8.998 0 0 1 13.857 8.46c0 2.434-.682 4.35-2.222 6.303A16.683 16.683 0 0 1 8 16a16.683 16.683 0 0 1-3.634-1.237C2.825 12.81 2.143 10.894 2.143 8.46c0-1.37.292-2.673.827-3.938a1 1 0 0 1 1.137-.508l1.067.388a4.545 4.545 0 0 0 .999.166c.401-.006.792-.098 1.166-.259z"/>
+            <path d="m10.854 6.854-3.5 3.5-.708-.708L8.793 6.5l-2.646-2.647.707-.707 3.5 3.5z"/>
+        </svg>
+        Ödemeniz <b>256-bit SSL</b>, <b>PCI DSS</b> ve <b>3D Secure</b> ile koruma altındadır.
+        <span class="d-block text-secondary small mt-1">Kart bilgileriniz kesinlikle kaydedilmez ve güvenli ödeme altyapısı kullanılır.</span>
+        </div>
+    </div>
+    <form id="paymentForm" autocomplete="off">
+      <div class="mb-3">
+        <label class="form-label">Üyelik Süresi</label>
+        <div class="btn-group w-100 mb-2" role="group" aria-label="Üyelik Süresi">
+            <input type="radio" class="btn-check" name="subType" id="monthly" autocomplete="off" checked>
+            <label class="btn btn-outline-primary" for="monthly">Aylık</label>
+
+            <input type="radio" class="btn-check" name="subType" id="yearly" autocomplete="off">
+            <label class="btn btn-outline-primary" for="yearly">Yıllık</label>
+        </div>
+        <input type="text" id="feeInput" class="form-control" value="499 ₺" readonly>
+      </div>
+      <div class="mb-3">
+        <label for="userFullName" class="form-label">Ad Soyad</label>
+        <input type="text" class="form-control" id="userFullName" placeholder="Adınızı giriniz" required>
+      </div>
+      <div class="mb-3">
+        <label for="userEmail" class="form-label">E-posta</label>
+        <input type="email" class="form-control" id="userEmail" placeholder="E-posta adresiniz" required>
+      </div>
+      <div class="mb-3">
+        <label for="paymentType" class="form-label">Ödeme Yöntemi</label>
+        <select class="form-select" id="paymentType" required>
+          <option value="" selected disabled>Yöntem seçiniz</option>
+          <option value="banka">Banka Havalesi/EFT</option>
+          <option value="kredi">Kredi Kartı</option>
+        </select>
+      </div>
+
+      <!-- BANKA ALANI -->
+      <div class="bank-info border rounded mb-3 p-3 shadow-sm" id="bankInfo">
+        <div class="mb-2"><strong>Banka Bilgileri</strong></div>
+        <div>
+          <div>Banka: <span class="fw-semibold">X Bankası</span></div>
+          <div>Hesap Adı: <span class="fw-semibold">ABC Eğitim Ltd. Şti.</span></div>
+          <div>IBAN: <span class="selectable fw-semibold" id="ibanNo">TR00 0000 0000 0000 0000 0000 00</span>
+            <button type="button" class="btn btn-sm btn-outline-primary ms-2 py-0 px-2" onclick="navigator.clipboard.writeText(document.getElementById('ibanNo').textContent)">Kopyala</button>
+          </div>
+          <div class="small text-secondary mt-2">Açıklama kısmına <strong>Ad Soyadınızı</strong> ve "<strong>Üyelik Ücreti</strong>" yazınız.</div>
+        </div>
+      </div>
+
+      <!-- KREDİ KARTI ALANI -->
+      <div class="credit-card-fields border rounded mb-3 p-3 shadow-sm" id="ccFields">
+        <div class="mb-3">
+          <label for="ccName" class="form-label">Kart Üzerindeki İsim</label>
+          <input type="text" class="form-control" id="ccName" maxlength="32" placeholder="Kart üzerindeki ad soyad" autocomplete="cc-name">
+        </div>
+        <div class="mb-3">
+          <label for="ccNumber" class="form-label">Kart Numarası</label>
+          <input type="text" class="form-control" id="ccNumber" maxlength="19" placeholder="0000 0000 0000 0000" autocomplete="cc-number" pattern="\d{16}">
+        </div>
+        <div class="row">
+          <div class="col">
+            <label for="ccMonth" class="form-label">Ay</label>
+            <input type="text" class="form-control" id="ccMonth" maxlength="2" placeholder="AA" autocomplete="cc-exp-month">
+          </div>
+          <div class="col">
+            <label for="ccYear" class="form-label">Yıl</label>
+            <input type="text" class="form-control" id="ccYear" maxlength="2" placeholder="YY" autocomplete="cc-exp-year">
+          </div>
+          <div class="col">
+            <label for="ccCVC" class="form-label">CVC</label>
+            <input type="text" class="form-control" id="ccCVC" maxlength="4" placeholder="123" autocomplete="cc-csc">
+          </div>
+        </div>
+      </div>
+      
+      <!-- YASAL ONAYLAR -->
+      <div class="legal-check-fields mb-3" id="legalFields">
+        <div class="form-check mt-2">
+          <input class="form-check-input" type="checkbox" id="kvkkCheck" required>
+          <label class="form-check-label user-select-none" for="kvkkCheck">
+            <a tabindex="0" href="#" data-bs-toggle="modal" data-bs-target="#kvkkModal">Kişisel Verilerin Korunması Aydınlatma Metni</a>’ni okudum, onaylıyorum.
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="mesafeCheck" required>
+          <label class="form-check-label user-select-none" for="mesafeCheck">
+            <a tabindex="0" href="#" data-bs-toggle="modal" data-bs-target="#mesafeModal">Mesafeli Satış Sözleşmesi ve Üyelik Taahhütnamesi</a>’ni kabul ediyorum.
+          </label>
+        </div>
+      </div>
+
+      <!-- SUBMIT -->
+      <div class="d-grid mt-4">
+        <button type="submit" class="btn btn-success btn-lg" id="payBtn" disabled>Ödeme Yap</button>
+      </div>
+      <div class="small text-muted text-center mt-3">Güvenli ödeme ile hemen üyeliğinizi başlatabilirsiniz.</div>
+    </form>
+  </div>
+
+  <!-- KVKK MODAL -->
+  <div class="modal fade" id="kvkkModal" tabindex="-1" aria-labelledby="kvkkModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="kvkkModalLabel">Kişisel Verilerin Korunması Aydınlatma Metni</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+        <div class="modal-body" style="font-size:0.98rem;">
+            <b>KVKK ve Kullanım Şartları:</b>
+            <ul>
+            <li>Ad, soyad ve iletişim bilgileriniz kaydedilir.</li>
+            <li>Bu veriler üyelik, ödeme ve yasal güvenlik amacıyla kullanılır.</li>
+            <li>Daha fazla detay için resmi aydınlatma metnine göz atabilirsiniz.</li>
+            </ul>
+            <hr>
+            <p><strong>1. Genel Bilgilendirme</strong><br>  
+            Bu web ve mobil uygulamayı (“İnşaatHesap”) kullanmaya başladığınızda aşağıdaki kullanım koşullarını kabul etmiş sayılırsınız. 
+            Lütfen uygulamamızı kullanmadan önce metni dikkatlice okuyunuz.  
+            </p>
+            <p><strong>2. Hizmet Tanımı</strong><br>  
+            inşaathesap, kullanıcılarına inşaat maliyet hesaplama, malzeme ve işçilik listeleri oluşturma, proje yönetimi gibi 
+            çeşitli inşaat işlemleri ile ilgili araçlar ve hizmetler sunar. Tüm hesaplamalar, kullanıcının girdiği bilgilere 
+            dayanır ve kullanıcıya kolaylık amacıyla sağlanmaktadır.  
+            </p>
+            <p><strong>3. Üyelik ve Kullanıcı Yükümlülükleri</strong><br>  
+            Uygulamaya üye olurken verdiğiniz bilgilerin doğru ve güncel olması sizin sorumluluğunuzdadır.
+            Hesabınızın güvenliği ve gizliliği size aittir. Şifrenizi ve diğer bilgilerinizi korumak sizin yükümlülüğünüzdedir.
+            Uygulama üzerinden yapılan tüm işlemlerden ve ortaya çıkan sonuçlardan kullanıcı sorumludur. 
+            </p>
+            <p><strong>4. Fikri Mülkiyet Hakları</strong><br>
+            İnşaatHesap uygulamasındaki tüm içerik, tasarım ve hesaplama algoritmaları telif hakları ile korunmaktadır. 
+            İzinsiz olarak kopyalanamaz, çoğaltılamaz, dağıtılamaz veya ticari amaçla kullanılamaz.
+            </p>
+            <p><strong>5. Gizlilik ve Veri Koruma</strong><br> 
+            Kullanıcı bilgileriniz [Gizlilik Politikası/KVKK Metni] kapsamında korunmakta olup, üçüncü kişilerle paylaşılmaz.
+            Hesap ve proje verilerinizin güvenliği bizim için önceliklidir.
+            </p>
+            <p><strong>6. Hizmette Değişiklik ve Sorumluluğun Sınırlandırılması</strong><br> 
+            inşaathesap, önceden bildirimde bulunmaksızın hizmet içeriğinde ve koşullarda değişiklik yapma hakkını saklı 
+            tutar. Uygulamanın sunduğu sonuçlar sadece kullanıcıya yardımcı olmayı amaçlar; resmi veya bağlayıcı bir teknik 
+            veya hukuki belge olarak kullanılamaz. Olası teknik sorunlar, veri kaybı veya hizmet kesintilerinden İnşaatHesap
+            sorumlu tutulamaz.
+            </p>
+            <p><strong>7. Uygulanacak Hukuk ve Yetkili Mahkeme</strong><br> 
+            Bu koşullar Türkiye Cumhuriyeti kanunlarına tabidir. Doğabilecek uyuşmazlıklarda İstanbul Mahkemeleri ve 
+            İcra Daireleri yetkilidir.
+            </p>
+            <p><strong>8. İletişim</strong><br> 
+            Her türlü soru ve sorunlarınız için: <a href="mailto:tahsintanil@gmail.com">tahsintanil@gmail.com</a>
+            </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <!-- MESAFE SÖZLEŞMESİ MODAL -->
+  <div class="modal fade" id="mesafeModal" tabindex="-1" aria-labelledby="mesafeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="mesafeModalLabel">Mesafeli Satış Sözleşmesi ve Üyelik Taahhütnamesi</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+        </div>
+        <div class="modal-body" style="font-size:0.97rem;">
+            <strong>Mesafeli Satış Sözleşmesi ve Üyelik Taahhütnamesi</strong>
+            <p>
+            İşbu sözleşme, www.insaathesap.com veya mobil uygulaması üzerinden dijital ürün ya da üyelik satın alan kullanıcı (Alıcı) ile hizmet sunan firma (Satıcı) arasında 6502 Sayılı Tüketicinin Korunması Hakkında Kanun ve ilgili yönetmelikler çerçevesinde elektronik ortamda akdedilmiştir.
+            </p>
+            <hr>
+            <p><strong>1. Sözleşmenin Tarafları</strong><br>
+            <b>Satıcı:</b> (Firmanın Adı, Adres, Telefon, E-posta)<br>
+            <b>Alıcı (Üye):</b> Üyelik kaydında beyan edilen bilgiler.</p>
+            <p><strong>2. Konu</strong><br>
+            Bu sözleşmenin konusu, satıcının internet sitesinden/yazılım üzerinden sunduğu dijital ürün, hizmet veya üyelik satışı ile ilgili olarak tarafların hak ve yükümlülüklerinin belirlenmesidir.</p>
+            <p><strong>3. Üyelik/Hizmetin Özellikleri</strong><br>
+            Üyelik başlatıldığında kullanıcıya inşaat maliyet hesaplama, malzeme ve işçilik listeleri oluşturma, proje yönetimi gibi çeşitli araçlara erişim ve hizmet sağlanır.</p>
+            <p><strong>4. Ödeme, Üyelik Süresi ve Başlangıcı</strong><br>
+            Alıcı, seçtiği ödeme yöntemi üzerinden hizmet bedelini ödemeyi kabul eder. Üyelik/hizmet, ödeme onaylanır onaylanmaz başlar ve seçilen süre sonunda sona erer.</p>
+            <p><strong>5. Cayma Hakkı</strong><br>
+            Dijital içerik/hizmetlerde hizmetin ifasına başlanması ile birlikte cayma hakkı sona erer. Üyelik/hizmet başlatıldıktan sonra iade hakkı kullanılmaz.</p>
+            <p><strong>6. İptal ve İade Şartları</strong><br>
+            Hizmetin niteliği gereği; üyelik açılıp hizmet sunulmaya başladıktan sonra iade yapılmaz. Teknik sorunlar hariç, kullanılmayan süre için para iadesi talep edilemez.</p>
+            <p><strong>7. Kişisel Verilerin Korunması</strong><br>
+            Alıcının bilgileri sadece hizmet amacıyla kullanılır ve 3. kişilerle paylaşılmaz. Detaylı KVKK metni ayrıca sağlanmıştır.</p>
+            <p><strong>8. Hak ve Yükümlülükler</strong><br>
+            Alıcı, üyelik sırasında verdiği bilgilerin doğruluğunu ve hizmeti etik/yasal kullanımını taahhüt eder. Satıcı, hizmetin güvenli sunulmasından sorumludur; teknik arızalardan dolayı sorumluluğu sınırlıdır.</p>
+            <p><strong>9. Sözleşmenin Yürürlüğü</strong><br>
+            Üyelik işlemi ve ödeme tamamlandığında, işbu sözleşmenin tüm şartları kabul edilmiş olur. Sözleşme dijital ortamda yürürlüktedir ve saklanmaktadır.</p>
+            <p><strong>10. Uyuşmazlıkların Çözümü</strong><br>
+            Tüketicinin başvurabileceği hakem heyeti ve tüketici mahkemeleri Satıcı'nın bulunduğu yerde yetkilidir.</p>
+            <p><strong>11. İletişim Bilgileri</strong><br>
+            Satıcı: (Firma adı, adres)<br>
+            E-posta: tahsintanil@gmail.com<br>
+            Telefon: (...)</p>
+            </div>
+            </div>
+        </div>
+    </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const paymentType = document.getElementById('paymentType');
+    const bankInfo = document.getElementById('bankInfo');
+    const ccFields = document.getElementById('ccFields');
+    const payBtn = document.getElementById('payBtn');
+    const kvkkCheck = document.getElementById('kvkkCheck');
+    const mesafeCheck = document.getElementById('mesafeCheck');
+    const legalFields = document.getElementById('legalFields');
+    const ccInputs = ccFields.querySelectorAll("input");
+
+    paymentType.addEventListener('change', function() {
+      if(this.value === 'banka') {
+        bankInfo.style.display = 'block';
+        ccFields.style.display = 'none';
+        legalFields.style.display = 'none';
+        payBtn.textContent = "Bankaya Yönlendir";
+        payBtn.disabled = false;
+      } else if(this.value === 'kredi') {
+        bankInfo.style.display = 'none';
+        ccFields.style.display = 'block';
+        legalFields.style.display = 'block';
+        payBtn.textContent = "Ödeme Yap";
+        payBtn.disabled = true;
+        kvkkCheck.checked = false;
+        mesafeCheck.checked = false;
+        ccInputs.forEach(inp => inp.value = "");
+      } else {
+        bankInfo.style.display = 'none';
+        ccFields.style.display = 'none';
+        legalFields.style.display = 'none';
+        payBtn.disabled = true;
+      }
+    });
+    // Fiyatları burada belirle
+    const monthlyFee = "499 ₺";
+    const yearlyFee = "4000 ₺";
+
+    document.getElementById('monthly').addEventListener('change', function() {
+        if(this.checked) document.getElementById('feeInput').value = monthlyFee;
+    });
+    document.getElementById('yearly').addEventListener('change', function() {
+        if(this.checked) document.getElementById('feeInput').value = yearlyFee;
+    });
+
+    // Kredi kartı seçiliyse, kutular tıklandıysa ve kart alanları doluysa buton aktif olsun
+    document.getElementById('paymentForm').addEventListener('input', function() {
+      if(paymentType.value === "kredi") {
+        const allFilled = Array.from(ccInputs).every(inp => inp.value.trim().length > 0);
+        payBtn.disabled = !(kvkkCheck.checked && mesafeCheck.checked && allFilled);
+      }
+    });
+
+    document.getElementById('paymentForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      if(paymentType.value === 'banka') {
+        window.open('https://www.isbank.com.tr/TR/kisisel/internet-subesi/para-transferleri', '_blank');
+        alert('Lütfen havale/EFT işleminizi banka ekranında tamamlayınız. Ödeme sonrası dekontu iletiniz.');
+      } else if(paymentType.value === 'kredi') {
+        alert('Kredi kartı ile ödeme şu anda örnek modda, burada gerçek POS entegrasyonunuz yapılmalı.');
+      }
+    });
+  </script>
+</body>
+</html>
