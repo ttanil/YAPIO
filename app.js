@@ -53,7 +53,6 @@ app.use(expressSession({
 }));
 app.use(express.static(path.join(__dirname,'public')));
 
-
 // CORS ayarları  
 app.use(cors({  
     origin: 'http://127.0.0.1:5000', // İzin verilen frontend adresi  
