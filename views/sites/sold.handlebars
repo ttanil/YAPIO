@@ -972,13 +972,13 @@
 
                 // Kaydet ve iptal
                 formDiv.querySelector('#saveEditBtn').onclick = async function () {
-                    const tutarRaw = editTutar.value.replace(/\./g, "");
-                    if (tutarRaw.trim() === "") return; // boşsa fonksiyonu çıkar
+                    let tutarRaw = editTutar.value.replace(/\./g, "");
+                    if (tutarRaw.trim() === "") tutarRaw = oldData.tutar;
                     const newTutar = Number(tutarRaw);
                     const newTarih = formDiv.querySelector('#editTarih').value;
                     const newNot = formDiv.querySelector('#editNot').value;
 
-                    if (!newTutar || !newTarih) {
+                    if (!newTarih) {
                         showWarningMessage("Eksik Giriş Yaptınız!", "tamam", false);
                         return;
                     }

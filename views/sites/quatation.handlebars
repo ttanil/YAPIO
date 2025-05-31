@@ -1139,151 +1139,129 @@
 
 
     searchInput.addEventListener("input", function(event) {
-    const query = searchInput.value.trim();
+        const query = searchInput.value.trim();
 
-    // Her tuşta arama ve sonucu modalda göster
-    const matches = query ? searchButtonInfos(query) : [];
-    showSearchResults(matches);
+        // Her tuşta arama ve sonucu modalda göster
+        const matches = query ? searchButtonInfos(query) : [];
+        showSearchResults(matches);
 
-    // Eğer arama kutusu boşsa ve modal açıksa kapat
-    if (!query) {
-        const searchModalEl = document.getElementById('searchResultModal');
-        const searchModal = bootstrap.Modal.getInstance(searchModalEl);
-        if (searchModal) searchModal.hide();
+        // Eğer arama kutusu boşsa ve modal açıksa kapat
+        if (!query) {
+            const searchModalEl = document.getElementById('searchResultModal');
+            const searchModal = bootstrap.Modal.getInstance(searchModalEl);
+            if (searchModal) searchModal.hide();
+        }
+    });
+
+    // Anahtar/kelimeden sonuçları döndür 
+    function searchButtonInfos(query) {
+        query = query.trim().toLowerCase();
+        if (!query) return [];
+        const results = [];
+        for (const [key, info] of Object.entries(buttonInfos)) {
+            const group = info.group || "";
+            if (
+                key.toLowerCase().includes(query) ||
+                group.toLowerCase().includes(query)
+            ) {
+                results.push({ key, group, ...info });
+            }
+        }
+        return results;
     }
-});
 
-// Anahtar/kelimeden sonuçları döndür 
-function searchButtonInfos(query) {
-    query = query.trim().toLowerCase();
-    if (!query) return [];
-    const results = [];
-    for (const [key, info] of Object.entries(buttonInfos)) {
-        const group = info.group || "";
-        if (
-            key.toLowerCase().includes(query) ||
-            group.toLowerCase().includes(query)
-        ) {
-            results.push({ key, group, ...info });
+    // Sonuçları modalda göster (her çağrıda modalı açmaya zorlar)
+    function showSearchResults(results) {
+        const modalTitle = document.getElementById('searchResultModalLabel');
+        const modalBody = document.getElementById('searchResultModalBody');
+        modalTitle.textContent = "Arama Sonuçları";
+
+        if (results.length === 0) {
+            modalBody.innerHTML = "<div class='alert alert-info'>Hiçbir sonuç bulunamadı.</div>";
+        } else {
+            modalBody.innerHTML = results.map(item => `
+                <div class="card bg-light mb-3 p-2 border-0 shadow-sm search-result-clickable" data-key="${item.key}" style="cursor:pointer;">
+                    <div class="d-flex align-items-center">
+                        <span class="fw-bold">${item.key}</span>
+                        <span class="badge bg-success ms-2">${item.group ?? ""}</span>
+                    </div>
+                    ${item.title ? `<div>${item.title}</div>` : ""}
+                    ${item.desc ? `<div class="text-muted small">${item.desc}</div>` : ""}
+                </div>
+            `).join("");
+        }
+
+        const searchModalEl = document.getElementById('searchResultModal');
+        let searchModal = bootstrap.Modal.getInstance(searchModalEl);
+        if (!searchModal) {
+            searchModal = new bootstrap.Modal(searchModalEl);
+        }
+
+        // Fokus verdiğimiz listener'ı önce kaldıralım (her açışta birikmesin)
+        searchModalEl.removeEventListener('shown.bs.modal', modalFocusHandler);
+
+        // Modal açıldığında input'u focus'la ve imleci sonda yapacak handler'ı tekrar ekle
+        searchModalEl.addEventListener('shown.bs.modal', modalFocusHandler);
+        searchModal.show();
+    }
+
+    // Focus işini yapan fonksiyon (her yerde tekrar kullanabilirsin)
+    function modalFocusHandler() {
+        searchInput.focus();
+        // İmleci inputun sonuna getir (tüm cihazlarda düzgün çalışır)
+        const valLen = searchInput.value.length;
+        searchInput.setSelectionRange(valLen, valLen);
+    }
+
+    // Aramadan gelen bilgiyle uygun modalı dolduran fonksiyon
+    async function fillDataEntryModalFromSearch(key, info) {
+        window.activeType = key; // sisteminde global bir değişken
+
+        document.getElementById('dataEntryModalLabel').innerText = info.title || key;
+        document.getElementById('modalInfoText').innerText = info.desc || "";
+
+        // Yer Sahibi ile Anlaşma ise özel işleyiş
+        if(info.title === "Yer Sahibi ile Anlaşma") {
+            ownerPay.style.display = "flex";
+            ownerPaid.style.display = "flex";
+            ownerDealButton.style.display = "flex";
+            ownerPayButton.style.display = "flex";
+            ownerPaidButton.style.display = "flex";
+            ownerPayInput.style.display = "flex";
+            ownerPaidInput.style.display = "flex";
+            ownerPayInputInfo.style.display = "flex";
+            ownerPaidInputInfo.style.display = "flex";
+            ownerPayButtonActive.textContent = "Kaydet";
+
+            await createIfDbNotExistAndAddItem("getPayment", "0", formatDate(getTodayDate()), "alinacak_para", "adet");
+            await createIfDbNotExistAndAddItem("givePayment", "0", formatDate(getTodayDate()), "verilecek_para", "adet");
+
+            await setPayButtons();
+            await updateSavedEntries(window.activeType, "false");
+        } else {
+            ownerPay.style.display = "none";
+            ownerPaid.style.display = "none";
+            ownerDealButton.style.display = "none";
+            ownerPayButton.style.display = "none";
+            ownerPaidButton.style.display = "none";
+            modalFooterButton.style.display = "flex";
+            ownerPayInput.style.display = "none";
+            ownerPaidInput.style.display = "none";
+            ownerPayInputInfo.style.display = "none";
+            ownerPaidInputInfo.style.display = "none";
+            saveModalButton.textContent = "Kaydet";
+            
+            document.getElementById('modalInput').style.display = "flex"; 
+            document.getElementById('modalNote').style.display = "flex";
+            document.getElementById('modalDate').style.display = "flex";
+            document.getElementById('modalInput').placeholder = info.placeholderTutar || "Tutarı giriniz";
+            document.getElementById('modalNote').placeholder = info.placeholderNot || "Açıklama (Opsiyonel)";
+
+            await updateSavedEntries(window.activeType, "false");
+            document.getElementById('modalInput').value = "";
+            document.getElementById('modalNote').value = "";
         }
     }
-    return results;
-}
-
-// Sonuçları modalda göster (her çağrıda modalı açmaya zorlar)
-function showSearchResults(results) {
-    const modalTitle = document.getElementById('searchResultModalLabel');
-    const modalBody = document.getElementById('searchResultModalBody');
-    modalTitle.textContent = "Arama Sonuçları";
-
-    if (results.length === 0) {
-        modalBody.innerHTML = "<div class='alert alert-info'>Hiçbir sonuç bulunamadı.</div>";
-    } else {
-        modalBody.innerHTML = results.map(item => `
-            <div class="card bg-light mb-3 p-2 border-0 shadow-sm search-result-clickable" data-key="${item.key}" style="cursor:pointer;">
-                <div class="d-flex align-items-center">
-                    <span class="fw-bold">${item.key}</span>
-                    <span class="badge bg-success ms-2">${item.group ?? ""}</span>
-                </div>
-                ${item.title ? `<div>${item.title}</div>` : ""}
-                ${item.desc ? `<div class="text-muted small">${item.desc}</div>` : ""}
-            </div>
-        `).join("");
-    }
-
-    // Modalı HER zaman açmaya çalış (aynı anda tekrar çağırmak sorun değildir)
-    const searchModalEl = document.getElementById('searchResultModal');
-    let searchModal = bootstrap.Modal.getInstance(searchModalEl);
-    if (!searchModal) {
-        searchModal = new bootstrap.Modal(searchModalEl);
-    }
-    searchModal.show();
-
-    // Modal açıldıktan çok kısa bir süre sonra arama input'una focus ver:
-    setTimeout(() => {
-        searchInput.focus();
-        // İmleci input'un en sonuna getirmek için:
-        const val = searchInput.value;
-        searchInput.value = '';
-        searchInput.value = val;
-    }, 150); // 150ms, çoğu cihazda garantili. Gerekirse 100 de yeterli olabilir.
-}
-
-// Modal üzerindeki kartlara tıklama (event delegation ile)
-document.getElementById('searchResultModalBody').onclick = async function(e) {
-    // Bir kart tıklanırsa yukarı doğru çıkarak bul
-    let card = e.target;
-    while (card && !card.classList.contains('search-result-clickable')) {
-        if(card === this) return;
-        card = card.parentElement;
-    }
-    if (!card) return;
-  
-    const key = card.getAttribute('data-key');
-    const info = buttonInfos[key];
-
-    // Data Entry Modalı, bilgiyle doldurulacak
-    await fillDataEntryModalFromSearch(key, info);
-
-    // Sonuçlar modalını kapat
-    const searchModalEl = document.getElementById('searchResultModal');
-    const searchModal = bootstrap.Modal.getInstance(searchModalEl);
-    if (searchModal) searchModal.hide();
-
-    // Data Entry Modalını aç
-    const dataEntryModal = new bootstrap.Modal(document.getElementById('dataEntryModal'));
-    dataEntryModal.show();
-}
-
-// Aramadan gelen bilgiyle uygun modalı dolduran fonksiyon
-async function fillDataEntryModalFromSearch(key, info) {
-    window.activeType = key; // sisteminde global bir değişken
-
-    document.getElementById('dataEntryModalLabel').innerText = info.title || key;
-    document.getElementById('modalInfoText').innerText = info.desc || "";
-
-    // Yer Sahibi ile Anlaşma ise özel işleyiş
-    if(info.title === "Yer Sahibi ile Anlaşma") {
-        ownerPay.style.display = "flex";
-        ownerPaid.style.display = "flex";
-        ownerDealButton.style.display = "flex";
-        ownerPayButton.style.display = "flex";
-        ownerPaidButton.style.display = "flex";
-        ownerPayInput.style.display = "flex";
-        ownerPaidInput.style.display = "flex";
-        ownerPayInputInfo.style.display = "flex";
-        ownerPaidInputInfo.style.display = "flex";
-        ownerPayButtonActive.textContent = "Kaydet";
-
-        await createIfDbNotExistAndAddItem("getPayment", "0", formatDate(getTodayDate()), "alinacak_para", "adet");
-        await createIfDbNotExistAndAddItem("givePayment", "0", formatDate(getTodayDate()), "verilecek_para", "adet");
-
-        await setPayButtons();
-        await updateSavedEntries(window.activeType, "false");
-    } else {
-        ownerPay.style.display = "none";
-        ownerPaid.style.display = "none";
-        ownerDealButton.style.display = "none";
-        ownerPayButton.style.display = "none";
-        ownerPaidButton.style.display = "none";
-        modalFooterButton.style.display = "flex";
-        ownerPayInput.style.display = "none";
-        ownerPaidInput.style.display = "none";
-        ownerPayInputInfo.style.display = "none";
-        ownerPaidInputInfo.style.display = "none";
-        saveModalButton.textContent = "Kaydet";
-        
-        document.getElementById('modalInput').style.display = "flex"; 
-        document.getElementById('modalNote').style.display = "flex";
-        document.getElementById('modalDate').style.display = "flex";
-        document.getElementById('modalInput').placeholder = info.placeholderTutar || "Tutarı giriniz";
-        document.getElementById('modalNote').placeholder = info.placeholderNot || "Açıklama (Opsiyonel)";
-
-        await updateSavedEntries(window.activeType, "false");
-        document.getElementById('modalInput').value = "";
-        document.getElementById('modalNote').value = "";
-    }
-}
 
 
 
