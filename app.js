@@ -70,6 +70,7 @@ const drawPage = require(path.join(__dirname, 'router', 'drawPage.js'));
 const quatationPage = require(path.join(__dirname, 'router', 'quatationPage.js'));  
 const analizPage = require(path.join(__dirname, 'router', 'analizPage.js'));  
 const soldPage = require(path.join(__dirname, 'router', 'soldPage.js'));  
+const paymentPage = require(path.join(__dirname, 'router', 'paymentPage.js'));  
 
 
 // Genel rotalar (kullanıcı girişi yapılmışsa veya misafir erişimi)  
@@ -82,6 +83,7 @@ app.use('/draw', drawPage);
 app.use('/quatation', quatationPage);
 app.use('/analiz', analizPage);
 app.use('/sold', soldPage);
+app.use('/payment', paymentPage);
 
 
 // Sunucuyu başlat  

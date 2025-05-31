@@ -313,7 +313,6 @@
     import { showWarningMessage } from '/js/showMessage.js';
 
     window.addEventListener('DOMContentLoaded', function () {
-        const indexPageButton = document.getElementById("indexPageButton");
         const registerButton = document.getElementById("registerButton");
         const btnSahis = document.getElementById('btnSahis');
         const btnSirket = document.getElementById('btnSirket');
@@ -321,6 +320,7 @@
         const nameInput = document.getElementById('name');
         const form = document.getElementById('registerForm');
         const phoneInput = document.getElementById('phone');
+        
 
         btnSahis.addEventListener('change', updateFields);
         btnSirket.addEventListener('change', updateFields);
@@ -478,9 +478,12 @@
             checkAllFilled();
         }
 
-        indexPageButton.addEventListener("click", () => {
-            window.location.href = "/";
-        });
+        const indexPageButton = document.getElementById("indexPageButton");
+        if (indexPageButton) {
+            indexPageButton.addEventListener("click", () => {
+                window.location.href = "/";
+            });
+        }
 
         updateFields();
 

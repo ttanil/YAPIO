@@ -321,7 +321,10 @@
     const registerButton = document.getElementById('registerButton');
 
     let userId = null;
+    let userType = null;
     let projectName = null;
+    let projectNameFirst = null;
+    let projectNumber = null;
 
     let userNameInfo = null;
     let userPhoneInfo = null;
@@ -537,7 +540,6 @@
       e.preventDefault();
       checkAllFilled();
       if (!registerButton.disabled) {
-          console.log("tt", getRegisterFormData());
           const userInfos = getRegisterFormData();
           await getDb(userInfos);
       }
@@ -699,7 +701,10 @@
           if (!response.ok && !result.success) {
               showWarningMessage(result.message, "tamam", true);
           } else{
+              projectNumber = result.projects.length;
+              userType = result.userType;
               if(Array.isArray(result.projects)){
+                projectNameFirst = result.projects[0].projectName || null;
                 result.projects.forEach(element => { 
                   projects.push(element.projectName);
                 });
@@ -774,7 +779,12 @@
       makeBtn.id = "make-button2";
       makeBtn.className = "btn make-btn2";
       makeBtn.textContent = "Proje Oluştur";
-      makeBtn.onclick = () => window.location.href = "/bina"; // veya eventListener ile
+      if(userType === "free" && projectNumber >= 1){
+        makeBtn.onclick = () => window.location.href = `/payment?projectName=${encodeURIComponent(projectNameFirst)}`;
+      } else{
+        makeBtn.onclick = () => window.location.href = "/bina";
+      }
+      
       projectList.appendChild(makeBtn);
 
       positionProjectList(projects.length);

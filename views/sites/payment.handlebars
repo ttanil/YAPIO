@@ -13,11 +13,11 @@
     body {  
         margin: 0;  
         padding: 0; 
-        background-image: url('/img/sample4.png');
+        background-image: url('/img/bck7_6.png');
         background-repeat: repeat;  
         background-size: auto; 
         background-position: center;  
-        height: 115vh;  
+        height: 150vh;  
         font-family: Arial, sans-serif;  
       }
 
@@ -63,114 +63,140 @@
         transition: background-color 0.3s ease; /* Hover geçiş efekti */
         margin-right: 40px;
       }
-    .payment-container {
-      max-width:430px; margin:44px auto; background:#fff;
-      border-radius:16px; box-shadow:0 2px 14px 1px #0002; padding:32px 28px 28px 28px;
-    }
-    .bank-info, .credit-card-fields { display:none; }
-    .selectable { user-select:all; }
-    .modal-lg { max-width: 790px; }
-    /* Yasal metin linkleri ve erişilebilirlik */
-    .form-check-label a {
-      text-decoration: underline;
-      color: #0d6efd !important;
-      transition: color .18s, background .19s;
-      font-weight: 500;
-      padding: 1px 3px;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-    .form-check-label a:hover, .form-check-label a:focus {
-      color: #fff !important;
-      background: #0d6efd;
-      text-decoration: underline !important;
-      outline: none;
-    }
-    .form-check-label { cursor:pointer; }
+      .payment-container {
+        max-width:430px; margin:44px auto; background:#fff;
+        border-radius:16px; box-shadow:0 2px 14px 1px #0002; padding:32px 28px 28px 28px;
+      }
+      .bank-info, .credit-card-fields { display:none; }
+      .selectable { user-select:all; }
+      .modal-lg { max-width: 790px; }
+      /* Yasal metin linkleri ve erişilebilirlik */
+      .form-check-label a {
+        text-decoration: underline;
+        color: #0d6efd !important;
+        transition: color .18s, background .19s;
+        font-weight: 500;
+        padding: 1px 3px;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+      .form-check-label a:hover, .form-check-label a:focus {
+        color: #fff !important;
+        background: #0d6efd;
+        text-decoration: underline !important;
+        outline: none;
+      }
+      .form-check-label { cursor:pointer; }
 
-     @media (max-width: 768px) {
-        body {  
-          height: 100vh;
-        }
+      @media (max-width: 768px) {
+          body {  
+            margin: 0;  
+            padding: 0; 
+            background-image: url('/img/bck7_5.png');
+            background-repeat: repeat;  
+            background-size: auto; 
+            background-position: center;  
+            height: 130vh;
+          }
 
-        .container-navbar {  
-          flex-wrap: wrap;  
-          justify-content: flex-end;  
-        }  
-        #projectName {
-          flex: 0 0 70%;  
-          overflow: hidden;  
-          text-overflow: ellipsis;  
-          white-space: nowrap;  
-          text-align: left;  
-          font-size: 14px !important;  
-          max-width: 65%;     /* Taşmayı önler */  
-          min-width: 0;       /* flex shrink için gerekli */  
-          margin-right: 0;    /* İstenirse gap için elle ekleyin */
-        }  
-        #buttonHome {
-          flex: 0 0 30px;     /* Eğer 30px'lik bir kutu ise tam sabitlenir */  
-          padding: 0;         /* Ekstra boşlukları engeller */  
-          margin-left: 0;     /* İstenirse 5px gibi küçük bir boşluk eklenebilir */  
-          display: flex;  
-          align-items: center;
-        }
-        .img-fluid {  
-          height: 25px;  
-          width: 25px;  
-          margin-right: 0;    /* Sağdan boşluğu kaldırır */  
-          margin-left: 0;     /* Soldan boşluğu kaldırır */
-        }  
-        .custom-btn {  
-          font-size: 12px; /* Yazı boyutu */
-          padding: 5px 10px;      /* Yan boşlukları biraz artırdım */
-          border-radius: 6px;      /* Köşeler hafif yuvarlatıldı */
-          color: #fff;
-          border: none;
-          margin-right: 12px;
-          display: inline-block; 
-          font-weight: 500;     
-        }
-        .navbar-toggler {  
-          /* background-color: rgb(89, 125, 234);  */
-          background-color: #c2c5c9;
-          flex: 0 0 auto;  
-          margin-left: auto;  
-          justify-content: flex-end;  
-        }
-        .container-fluid {  
-          flex-wrap: wrap;  
-        } 
-        .dropdown-item{
-          display: flex;
-          margin-left: auto;  
-          justify-content: flex-end;
-        }
-        .mobile-navbar-menu {  
-          justify-content: flex-end !important;  
-          text-align: right !important;  
-          margin-top: 10px;
-          margin-bottom: 5px;
-        }  
-        .mobile-navbar-menu .nav-item, .mobile-navbar-menu .dropdown-item-mobile {
-          display: flex;
-          align-items: center;
-          justify-content: space-between !important;  
-          text-align: right !important;
-          font-size: 1.1rem;
-          font-style: bold !important;
-          height: 22px;
-          margin-top: 2px;
-          justify-self: end;
-        }
-        .dropdown-item-mobile {
-          width: 34%;
-          font-family: Arial, sans-serif !important; 
-          color: rgb(94, 93, 93) !important;      /* Varsayılan metin rengini kullan */  
-          text-decoration: none !important; /* Altı çizgiyi kaldır */  
-          font-weight: 400 !important;
-        }
-     }
+          .container-navbar {  
+            flex-wrap: wrap;  
+            justify-content: flex-end;  
+          }  
+          #projectName {
+            flex: 0 0 70%;  
+            overflow: hidden;  
+            text-overflow: ellipsis;  
+            white-space: nowrap;  
+            text-align: left;  
+            font-size: 14px !important;  
+            max-width: 65%;     /* Taşmayı önler */  
+            min-width: 0;       /* flex shrink için gerekli */  
+            margin-right: 0;    /* İstenirse gap için elle ekleyin */
+          }  
+          #buttonHome {
+            flex: 0 0 30px;     /* Eğer 30px'lik bir kutu ise tam sabitlenir */  
+            padding: 0;         /* Ekstra boşlukları engeller */  
+            margin-left: 0;     /* İstenirse 5px gibi küçük bir boşluk eklenebilir */  
+            display: flex;  
+            align-items: center;
+          }
+          .img-fluid {  
+            height: 25px;  
+            width: 25px;  
+            margin-right: 0;    /* Sağdan boşluğu kaldırır */  
+            margin-left: 0;     /* Soldan boşluğu kaldırır */
+          }  
+          .custom-btn {  
+            font-size: 12px; /* Yazı boyutu */
+            padding: 5px 10px;      /* Yan boşlukları biraz artırdım */
+            border-radius: 6px;      /* Köşeler hafif yuvarlatıldı */
+            color: #fff;
+            border: none;
+            margin-right: 12px;
+            display: inline-block; 
+            font-weight: 500;     
+          }
+          .navbar-toggler {  
+            /* background-color: rgb(89, 125, 234);  */
+            background-color: #c2c5c9;
+            flex: 0 0 auto;  
+            margin-left: auto;  
+            justify-content: flex-end;  
+          }
+          .container-fluid {  
+            flex-wrap: wrap;  
+          } 
+          .dropdown-item{
+            display: flex;
+            margin-left: auto;  
+            justify-content: flex-end;
+          }
+          .mobile-navbar-menu {  
+            justify-content: flex-end !important;  
+            text-align: right !important;  
+            margin-top: 10px;
+            margin-bottom: 5px;
+          }  
+          .mobile-navbar-menu .nav-item, .mobile-navbar-menu .dropdown-item-mobile {
+            display: flex;
+            align-items: center;
+            justify-content: space-between !important;  
+            text-align: right !important;
+            font-size: 1.1rem;
+            font-style: bold !important;
+            height: 22px;
+            margin-top: 2px;
+            justify-self: end;
+          }
+          .dropdown-item-mobile {
+            width: 34%;
+            font-family: Arial, sans-serif !important; 
+            color: rgb(94, 93, 93) !important;      /* Varsayılan metin rengini kullan */  
+            text-decoration: none !important; /* Altı çizgiyi kaldır */  
+            font-weight: 400 !important;
+          }
+
+
+          .payment-container {
+            max-width: 85vw;
+            /*margin: 20px 0 0 0;        üstten biraz boşluk bırak, yandan sıfır */
+            border-radius: 0;          /* köşe yumuşaklığı kalkabilir mobilde */
+            box-shadow: none;          /* ister kaldır, ister azalt */
+            padding: 18px 7vw 20px 7vw; /* sağ-sol padding sayfa kenarından biraz içeride */
+          }
+          .bank-info, .credit-card-fields {
+            padding: 12px 6px;          /* kutu içeriği mobilde daha dar */
+            font-size: 0.98em;
+          }
+          .modal-lg {
+            max-width: 90vw;
+          }
+          .form-check-label a {
+            font-size: 0.85em;
+            padding: 1px 1.5px;
+          }
+      }
 
 
 
@@ -183,14 +209,14 @@
         <img src="img/icon.png" alt="Logo" width="32" height="32">
         Yapıo
     </span>
-    <button class="btn custom-btn" id="loginButton" style="display: none;">PROJELER</button>  
+    <button class="btn custom-btn" id="loginButton">PROJELER</button>  
   </nav>
 
   <!-- Navbar -->  
   <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm mt-4 container-navbar">  
     <div class="container-fluid">  
       <!-- Proje Adı -->  
-      <h4 class="navbar-brand" id="projectName">Proje Adı</h4>  
+      <h4 class="navbar-brand" id="projectName"></h4>  
       <!-- Ana Sayfa Butonu -->  
       <button class="btn d-flex navbar-home-button" id="buttonHome">  
         <img src="/img/home1_1.png" alt="Katlar Görseli" class="img-fluid rounded">  
@@ -210,6 +236,12 @@
                 Menü  
                 </button>  
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">  
+                  <li>
+                      <a class="dropdown-item d-flex align-items-center" id="quatation-button" href="#">
+                          <img src="img/pay1_1.png" alt="" style="width:19px; height:19px; margin-right:8px;">
+                          Giderler
+                      </a>
+                    </li>
                     <li>
                       <a class="dropdown-item d-flex align-items-center" id="graphs-button" href="#">
                           <img src="/img/growth_1.png" alt="" style="width:19px; height:19px; margin-right:8px;">
@@ -227,6 +259,12 @@
         </ul>  
         <!-- Mobilde: Menü Seçenekleri En Sağa Yaslı -->  
         <ul class="navbar-nav ms-auto d-lg-none justify-content-end text-end mobile-navbar-menu">
+          <li>
+              <a class="dropdown-item-mobile d-flex align-items-center" id="quatation-button-mobile" href="#">
+                  <img src="img/pay1_1.png" alt="" style="width:19px; height:19px; ">
+                  Giderler
+              </a>
+          </li>
           <li>
             <a class="dropdown-item-mobile d-flex align-items-center" id="graphs-button-mobile" href="#">
                 <img src="/img/growth_1.png" alt="" style="width:19px; height:19px; ">
@@ -246,9 +284,9 @@
 
 
   
-  <div class="payment-container">
+  <div class="payment-container pb-5 mb-5">
     <div class="text-center mb-3">
-      <h2 class="fw-bold">Üyelik Ücreti Öde</h2>
+      <h2 class="fw-bold">Premium Üyelik</h2>
       <div class="small text-success text-center mb-2">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#198754" class="bi bi-shield-check mb-1" viewBox="0 0 16 16">
             <path d="M5.072 1.176a1 1 0 0 1 .82 0l2.904 1.249c.374.161.765.253 1.166.259.333.005.668-.047.999-.166l1.067-.388a1 1 0 0 1 1.137.508A8.998 8.998 0 0 1 13.857 8.46c0 2.434-.682 4.35-2.222 6.303A16.683 16.683 0 0 1 8 16a16.683 16.683 0 0 1-3.634-1.237C2.825 12.81 2.143 10.894 2.143 8.46c0-1.37.292-2.673.827-3.938a1 1 0 0 1 1.137-.508l1.067.388a4.545 4.545 0 0 0 .999.166c.401-.006.792-.098 1.166-.259z"/>
@@ -367,11 +405,11 @@
             </ul>
             <hr>
             <p><strong>1. Genel Bilgilendirme</strong><br>  
-            Bu web ve mobil uygulamayı (“İnşaatHesap”) kullanmaya başladığınızda aşağıdaki kullanım koşullarını kabul etmiş sayılırsınız. 
+            Bu web ve mobil uygulamayı (“Yapıo”) kullanmaya başladığınızda aşağıdaki kullanım koşullarını kabul etmiş sayılırsınız. 
             Lütfen uygulamamızı kullanmadan önce metni dikkatlice okuyunuz.  
             </p>
             <p><strong>2. Hizmet Tanımı</strong><br>  
-            inşaathesap, kullanıcılarına inşaat maliyet hesaplama, malzeme ve işçilik listeleri oluşturma, proje yönetimi gibi 
+            Yapıo, kullanıcılarına inşaat maliyet hesaplama, malzeme ve işçilik listeleri oluşturma, proje yönetimi gibi 
             çeşitli inşaat işlemleri ile ilgili araçlar ve hizmetler sunar. Tüm hesaplamalar, kullanıcının girdiği bilgilere 
             dayanır ve kullanıcıya kolaylık amacıyla sağlanmaktadır.  
             </p>
@@ -389,7 +427,7 @@
             Hesap ve proje verilerinizin güvenliği bizim için önceliklidir.
             </p>
             <p><strong>6. Hizmette Değişiklik ve Sorumluluğun Sınırlandırılması</strong><br> 
-            inşaathesap, önceden bildirimde bulunmaksızın hizmet içeriğinde ve koşullarda değişiklik yapma hakkını saklı 
+            Yapıo, önceden bildirimde bulunmaksızın hizmet içeriğinde ve koşullarda değişiklik yapma hakkını saklı 
             tutar. Uygulamanın sunduğu sonuçlar sadece kullanıcıya yardımcı olmayı amaçlar; resmi veya bağlayıcı bir teknik 
             veya hukuki belge olarak kullanılamaz. Olası teknik sorunlar, veri kaybı veya hizmet kesintilerinden İnşaatHesap
             sorumlu tutulamaz.
@@ -452,7 +490,10 @@
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
+  <script type="module">
+    import { showWarningMessage } from '/js/showMessage.js';
+    const navbarCollapse = document.getElementById('navbarNav');  
+    const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
     const paymentType = document.getElementById('paymentType');
     const bankInfo = document.getElementById('bankInfo');
     const ccFields = document.getElementById('ccFields');
@@ -461,6 +502,91 @@
     const mesafeCheck = document.getElementById('mesafeCheck');
     const legalFields = document.getElementById('legalFields');
     const ccInputs = ccFields.querySelectorAll("input");
+    const quatationButton = document.getElementById("quatation-button"); 
+    const quatationButtonMobile = document.getElementById("quatation-button-mobile");
+    const graphsButton = document.getElementById("graphs-button"); 
+    const graphsButtonMobile = document.getElementById("graphs-button-mobile");
+    const buildingContainer = document.getElementById("building-container");
+    const soldButton = document.getElementById("sold-button"); 
+    const soldButtonMobile = document.getElementById("sold-button-mobile");
+    const buttonHome = document.getElementById("buttonHome");
+
+    let userId = null;
+    let projectNumber = null;
+    let projectName = null;
+    let userType = null;
+
+    // DOM yüklendiğinde işlem başlat  
+    document.addEventListener("DOMContentLoaded", () => {  
+      event.preventDefault();
+      // 1- Menü dışındaki herhangi bir yere tıklanınca  
+      document.addEventListener('click', function (event) {  
+          if (navbarCollapse.classList.contains('show')) {  
+              // Eğer tıklanan yer menü veya hamburger değilse menüyü kapat  
+              if (!navbarCollapse.contains(event.target) &&  
+                  event.target !== document.querySelector('.navbar-toggler')  
+                  ) { bsCollapse.hide(); }  
+          }  
+      });  
+
+      // 2- Menü içerisindeki bir bağlantıya tıklanırsa kapansın
+      navbarCollapse.querySelectorAll('.nav-link').forEach(function (link) {  
+          link.addEventListener('click', function () {  
+          if (navbarCollapse.classList.contains('show')) {  
+              bsCollapse.hide();  
+          }  
+          });  
+      });
+
+      showWarningMessage("Daha fazla proje oluşturmak için üyeliğinizi yenileyin", "tamam", false);
+
+      window.user = {{#if user}}
+          { "userId": "{{user.id}}", "projectNumber": "{{projectNumber}}", "userType": "{{userType}}", "project": {{{json project}}} }
+      {{else}}
+          { "role": "{{role}}" }
+      {{/if}};
+
+      userId = window.user.userId;
+      projectNumber = window.user.projectNumber;
+      projectName = window.user.project.projectName;
+      userType = window.user.userType;
+
+      if(userId){
+          loginButton.style.display = "block";
+      } else{
+          loginButton.style.display = "none";
+      }
+
+      //console.log(userId);
+      //console.log(projectNumber);
+      //console.log(projectName);
+      //console.log(userType);
+
+  });
+
+    quatationButton.addEventListener("click", () => {
+        window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
+    });
+    quatationButtonMobile.addEventListener("click", () => {
+        window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
+    });
+
+    graphsButton.addEventListener("click", () => {
+        window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
+    });
+    graphsButtonMobile.addEventListener("click", () => {
+        window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
+    });
+    soldButton.addEventListener("click", () => {
+        window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
+    });
+    soldButtonMobile.addEventListener("click", () => {
+        window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
+    });
+    buttonHome.addEventListener("click", () => {  
+        window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
+    });
+
 
     paymentType.addEventListener('change', function() {
       if(this.value === 'banka') {

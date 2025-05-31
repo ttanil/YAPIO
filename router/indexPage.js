@@ -24,6 +24,8 @@ router.post('/', async (req, res) => {
             if (!user) {
                 return res.status(401).json({ success: false, message: 'Geçersiz giriş!' });
             }
+
+            const userType = user.userType;
             
             let projects = null;
             if (user.userInputs && user.userInputs.length > 0) {
@@ -56,7 +58,7 @@ router.post('/', async (req, res) => {
                     userVergiNo : user.vergiNo
                 }
             }
-            return res.json({ success: true, projects });
+            return res.json({ success: true, projects, userType: userType });
 
         } catch (err) {
             console.error("Kayıt Hatası:", err);
