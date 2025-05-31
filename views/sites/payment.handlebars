@@ -510,6 +510,7 @@
     const soldButton = document.getElementById("sold-button"); 
     const soldButtonMobile = document.getElementById("sold-button-mobile");
     const buttonHome = document.getElementById("buttonHome");
+    const loginButton = document.getElementById("loginButton");
 
     let userId = null;
     let projectNumber = null;
@@ -585,6 +586,9 @@
     });
     buttonHome.addEventListener("click", () => {  
         window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
+    });
+    loginButton.addEventListener("click", () => {
+        window.location.href = "/";
     });
 
 
