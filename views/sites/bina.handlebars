@@ -204,6 +204,12 @@
             animation: kapipulse 1s infinite;
         }
 
+        .img-wall.selected {
+            border: 3px solid #d32f2f; /* Kırmızı örnek, dilediğin rengi verebilirsin */
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
 
         #reset-btn {  
             background-color: #dc3545; /* Reset Butonu Rengi */  
@@ -518,6 +524,7 @@
 
         let selectedDoorUser = null;
         let selectedWallUser = "none";
+        let wallManager = null;
         let rowCounter = 2;
 
         let userId = null;
@@ -949,7 +956,6 @@
             buildingContainer.classList.remove("d-none");
             buildingContainer.innerHTML = "";
 
-
             // Çatı ekle
             buildingContainer.insertAdjacentHTML('beforeend', roofSVG);
 
@@ -975,10 +981,8 @@
                 if (i === 0) {
                     floor.style.position = "relative";
 
-                    // Duvarları ekleyip referansları kaydet
-                    const { wallLeft, wallRight } = addWallsToFloor(
-                        floor, nextBtn, girisYazisi, buildingHeight
-                    );
+                    wallManager = addWallsToFloor(floor, nextBtn, girisYazisi, buildingHeight);
+                    const { wallLeft, wallRight, showWallsAfterDoorSelection } = wallManager;
 
                     // Kapıları ekle
                     const doorLeft = document.createElement("img");
@@ -1002,47 +1006,71 @@
                     floor.appendChild(doorLeft);
                     floor.appendChild(doorRight);
 
-                    // Kapı eventleri - seçildiğinde duvarları gösterir
+                    let doorSelected = null; // "left" veya "right" veya null
+
                     doorLeft.addEventListener("click", () => {
+                        if(doorSelected === "left") {
+                            doorSelected = null;
+                            doorLeft.classList.remove("selected");
+                            doorLeft.style.display = "block";
+                            doorRight.style.display = "block";
+                            wallLeft.style.display = "none";
+                            wallRight.style.display = "none";
+                            nextBtn.disabled = true;
+                            nextBtn.style.opacity = "0.3";
+                            girisYazisi.innerHTML = "Giriş kapısını seçiniz";
+                            selectedDoorUser = null;
+                            window.selectedDoor = null;
+                            // Kapıdan sonra duvarlar gizli, duvar seçme sıfırlanır
+                            return;
+                        }
+                        // Kapı seçiliyse
+                        doorSelected = "left";
                         doorLeft.classList.add("selected");
                         doorRight.classList.remove("selected");
                         doorLeft.style.display = "block";
                         doorRight.style.display = "none";
-                        doorLeft.classList.remove('kapi-animasyon');
-                        doorRight.classList.remove('kapi-animasyon');
-                        window.selectedDoor = "left";
+                        // --- DUVARLARI GÖSTER ---
+                        showWallsAfterDoorSelection();
+                        girisYazisi.innerHTML = "Yol olmayan tarafları seçiniz <br> boş bırakmak için sonraki butonuyla devam ediniz.";
                         selectedDoorUser = "left";
-                        nextBtn.disabled = false;
-                        nextBtn.style.opacity = "1";
-
-                        // Sol kapı seçildiyse sadece sağ duvar açılır
-                        wallLeft.style.display = "none";
-                        wallRight.style.display = "block";
-                        girisYazisi.innerHTML = "Bitişik yapı varsa seçiniz <br>yoksa sonraki butonuyla devam ediniz.";
+                        window.selectedDoor = "left";
                     });
 
                     doorRight.addEventListener("click", () => {
+                        if(doorSelected === "right") {
+                            doorSelected = null;
+                            doorLeft.classList.remove("selected");
+                            doorRight.classList.remove("selected");
+                            doorLeft.style.display = "block";
+                            doorRight.style.display = "block";
+                            wallLeft.style.display = "none";
+                            wallRight.style.display = "none";
+                            nextBtn.disabled = true;
+                            nextBtn.style.opacity = "0.3";
+                            girisYazisi.innerHTML = "Giriş kapısını seçiniz";
+                            selectedDoorUser = null;
+                            window.selectedDoor = null;
+                            // Kapıdan sonra duvarlar gizli, duvar seçme sıfırlanır
+                            return;
+                        }
+                        // Kapı seçiliyse
+                        doorSelected = "right";
                         doorRight.classList.add("selected");
                         doorLeft.classList.remove("selected");
                         doorRight.style.display = "block";
                         doorLeft.style.display = "none";
-                        doorLeft.classList.remove('kapi-animasyon');
-                        doorRight.classList.remove('kapi-animasyon');
-                        window.selectedDoor = "right";
+                        // --- DUVARLARI GÖSTER ---
+                        showWallsAfterDoorSelection();
+                        girisYazisi.innerHTML = "Yol olmayan tarafları seçiniz <br> boş bırakmak için sonraki butonuyla devam ediniz.";
                         selectedDoorUser = "right";
-                        nextBtn.disabled = false;
-                        nextBtn.style.opacity = "1";
-
-                        // Sağ kapı seçildiyse sadece sol duvar açılır
-                        wallLeft.style.display = "block";
-                        wallRight.style.display = "none";
-                        girisYazisi.innerHTML = "Bitişik yapı varsa seçiniz <br>yoksa sonraki butonuyla devam ediniz.";
+                        window.selectedDoor = "right";
                     });
+
                 }
 
                 buildingContainer.appendChild(floor);
             }
-
 
             // Form, butonlar
             buildingForm.classList.add("d-none");
@@ -1050,8 +1078,10 @@
             nextBtn.classList.remove("d-none");
         }
 
+
+
         function addWallsToFloor(floor, nextBtn, girisYazisi, height) {
-            // Sol duvar
+            // Duvarlar
             const wallLeft = document.createElement("img");
             wallLeft.src = "img/wall_left.png";
             wallLeft.alt = "Sol Duvar";
@@ -1062,9 +1092,8 @@
             wallLeft.style.width = "40px";
             wallLeft.style.height = `${height+10}px`;
             wallLeft.style.cursor = "pointer";
-            wallLeft.style.display = "none"; // Başlangıçta gizli
+            wallLeft.style.display = "none";
 
-            // Sağ duvar
             const wallRight = document.createElement("img");
             wallRight.src = "img/wall_right.png";
             wallRight.alt = "Sağ Duvar";
@@ -1075,48 +1104,68 @@
             wallRight.style.width = "40px";
             wallRight.style.height = `${height+10}px`;
             wallRight.style.cursor = "pointer";
-            wallRight.style.display = "none"; // Başlangıçta gizli
+            wallRight.style.display = "none";
 
-            // Sol duvar tıklama
-            wallLeft.addEventListener("click", () => {
-                wallLeft.classList.add("selected");
-                wallRight.classList.remove("selected");
-                wallLeft.style.display = "block";
-                wallRight.style.display = "none";
-                wallLeft.classList.remove('kapi-animasyon');
-                wallRight.classList.remove('kapi-animasyon');
-                window.selectedDoor = "wall_left";
-                selectedWallUser = "left";
-                if (girisYazisi && girisYazisi.parentNode) {
-                    girisYazisi.parentNode.removeChild(girisYazisi);
-                }
-                nextBtn.disabled = false;
-                nextBtn.style.opacity = "1";
-            });
-
-            // Sağ duvar tıklama
-            wallRight.addEventListener("click", () => {
-                wallRight.classList.add("selected");
-                wallLeft.classList.remove("selected");
-                wallRight.style.display = "block";
-                wallLeft.style.display = "none";
-                wallLeft.classList.remove('kapi-animasyon');
-                wallRight.classList.remove('kapi-animasyon');
-                window.selectedDoor = "wall_right";
-                selectedWallUser = "right";
-                if (girisYazisi && girisYazisi.parentNode) {
-                    girisYazisi.parentNode.removeChild(girisYazisi);
-                }
-                nextBtn.disabled = false;
-                nextBtn.style.opacity = "1";
-            });
-
-            // DOM'a ekle
             floor.appendChild(wallLeft);
             floor.appendChild(wallRight);
 
-            // Fonksiyon sonunda duvara erişim gerekirse return dönebilirsin
-            return { wallLeft, wallRight };
+            let isLeftSelected = false;
+            let isRightSelected = false;
+
+            let selectedWallUser = null; // Durumu dışarıdan sorgulayabilirim
+
+            function updateSelectedWalls() {
+                if (isLeftSelected && isRightSelected) {
+                    selectedWallUser = "both";
+                } else if (isLeftSelected) {
+                    selectedWallUser = "left";
+                } else if (isRightSelected) {
+                    selectedWallUser = "right";
+                } else {
+                    selectedWallUser = null;
+                }
+                nextBtn.disabled = false;
+                nextBtn.style.opacity = "1";
+                console.log("selectedWallUser ",selectedWallUser);
+            }
+
+            wallLeft.addEventListener("click", () => {
+                isLeftSelected = !isLeftSelected;
+                wallLeft.classList.toggle("selected", isLeftSelected);
+                updateSelectedWalls();
+            });
+
+            wallRight.addEventListener("click", () => {
+                isRightSelected = !isRightSelected;
+                wallRight.classList.toggle("selected", isRightSelected);
+                updateSelectedWalls();
+            });
+
+            function showBothWalls() {
+                wallLeft.style.display = "block";
+                wallRight.style.display = "block";
+                wallLeft.classList.remove("selected");
+                wallRight.classList.remove("selected");
+                isLeftSelected = false;
+                isRightSelected = false;
+                selectedWallUser = null;
+                nextBtn.disabled = false;
+                nextBtn.style.opacity = "1";
+            }
+
+            function showWallsAfterDoorSelection() {
+                showBothWalls();
+            }
+
+            return {
+                wallLeft,
+                wallRight,
+                showWallsAfterDoorSelection,
+                /** Aktüel seçili durumu string olarak verir: null, "left", "right", "both" */
+                getSelectedWallUser: function() {
+                    return selectedWallUser;
+                }
+            };
         }
 
 
@@ -1159,13 +1208,14 @@
 
             const floorsData = setFloorsData(regularBuilding);
 
-            console.log("selectedDoor ",selectedDoor);
+            const selectedWall = wallManager ? wallManager.getSelectedWallUser() : null;
+            //console.log("selectedWall", selectedWall);
             const dataToDb = {
                 userId: userId,           // kullanıcı id'si
                 projectName: projectName, // proje adı
                 floorsData: floorsData,
                 selectedDoor: selectedDoorUser,
-                selectedWall : selectedWallUser
+                selectedWall : selectedWall
             };
 
             try {  
@@ -1185,7 +1235,6 @@
                     showWarningMessage(result.message, "tamam", true);
                 } else{
                     floorsDataFromDb = result.floorsData;
-                    console.log("floorsDataFromDb ",floorsDataFromDb);
                 }
 
             } catch (error) {
@@ -1193,7 +1242,6 @@
                 showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
                 console.log('Hata:', error);
             }
-            console.log(selectedDoorUser);
             window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
         });  
 

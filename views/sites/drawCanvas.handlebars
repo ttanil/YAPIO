@@ -946,7 +946,6 @@
                     wallLeft.style.width = "25px";
                     wallLeft.style.height = `${90 * numberOfFloors}px`;
                     wallLeft.style.cursor = "pointer";
-                    wallLeft.style.display = "none"; // Başlangıçta gizli
 
                     const wallRight = document.createElement("img");
                     wallRight.src = "img/wall_right.png";
@@ -958,10 +957,7 @@
                     wallRight.style.width = "25px";
                     wallRight.style.height = `${90 * numberOfFloors}px`;
                     wallRight.style.cursor = "pointer";
-                    wallRight.style.display = "none"; // Başlangıçta gizli
 
-                    floor.appendChild(wallLeft);
-                    floor.appendChild(wallRight);
 
                     if(selectedDoor === "right"){
                         floor.appendChild(doorRight);
@@ -970,11 +966,12 @@
                     }
 
                     if(selectedWall === "right"){
-                        wallRight.style.display = "block";
-                        wallLeft.style.display = "none";
+                        floor.appendChild(wallRight);
                     } else if(selectedWall === "left"){
-                        wallLeft.style.display = "block";
-                        wallRight.style.display = "none";
+                        floor.appendChild(wallLeft);
+                    } else if(selectedWall === "both"){
+                        floor.appendChild(wallRight);
+                        floor.appendChild(wallLeft);
                     } else if(selectedWall === "none"){
                         wallLeft.style.display = "none";
                         wallRight.style.display = "none";
