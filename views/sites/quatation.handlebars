@@ -285,6 +285,10 @@
         color: #222;  
       }
 
+      .custom-modal-search {
+        margin-top: 8.5rem !important;   /* mt-4 gibi */
+      }
+
       /* Mobil cihazlar için duyarlılık (%75 genişlik) */  
       @media (max-width: 768px) {
         body {  
@@ -452,6 +456,10 @@
         .modal-edit {  
           width:80%;
         }
+
+        .custom-modal-search {
+          margin-top: 6.5rem !important;   /* mt-4 gibi */
+        }
       }
     </style>  
 </head>  
@@ -534,7 +542,7 @@
         </svg>
       </span>
       <input type="text" class="search-input" id="searchInput" placeholder="Aramak istediğiniz kelimeyi yazın..." />
-      <button type="submit" class="search-btn" id="searchBtn">ARA</button>
+      <!--<button type="submit" class="search-btn" id="searchBtn">ARA</button>-->
     </form>
   </div> 
 
@@ -918,8 +926,8 @@
   </div> 
 
   <!-- Sonuçlar Modalı -->
-  <div class="modal fade" id="searchResultModal" tabindex="-1" aria-labelledby="searchResultModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+  <div class="modal fade custom-modal-search" id="searchResultModal" tabindex="-1" aria-labelledby="searchResultModalLabel" data-bs-focus="false">
+    <div class="modal-dialog custom-modal-search">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="searchResultModalLabel">Arama Sonuçları</h5>
@@ -1126,88 +1134,116 @@
 
     });
 
-    searchForm.addEventListener("submit", function(event) {
-        event.preventDefault();
-        const query = searchInput.value.trim();
-        if (!query) {
-            showSearchResults([]);
-            return;
-        }
-        const matches = searchButtonInfos(query);
-        showSearchResults(matches);
-    });
-    function searchButtonInfos(query) {
-        query = query.trim().toLowerCase();
-        if (!query) return [];
-        const results = [];
-        for (const [key, info] of Object.entries(buttonInfos)) {
-            // Hem KEY'de hem GROUP'da arama -- includes, ikisi de küçük harf
-            const group = info.group || "";
-            if (
-                key.toLowerCase().includes(query) ||
-                group.toLowerCase().includes(query)
-            ) {
-                results.push({ key, group, ...info });
-            }
-        }
-        return results;
-    }
-    function showSearchResults(results) {
-        const modalTitle = document.getElementById('searchResultModalLabel');
-        const modalBody = document.getElementById('searchResultModalBody');
-        modalTitle.textContent = "Arama Sonuçları";
 
-        if (results.length === 0) {
-            modalBody.innerHTML = "<div class='alert alert-info'>Hiçbir sonuç bulunamadı.</div>";
-        } else {
-            modalBody.innerHTML = results.map(item => `
-                <div class="card bg-light mb-3 p-2 border-0 shadow-sm search-result-clickable" data-key="${item.key}" style="cursor:pointer;">
-                    <div class="d-flex align-items-center">
-                        <span class="fw-bold">${item.key}</span>
-                        <span class="badge bg-success ms-2">${item.group ?? ""}</span>
-                    </div>
+
+
+
+    searchInput.addEventListener("input", function(event) {
+    const query = searchInput.value.trim();
+
+    // Her tuşta arama ve sonucu modalda göster
+    const matches = query ? searchButtonInfos(query) : [];
+    showSearchResults(matches);
+
+    // Eğer arama kutusu boşsa ve modal açıksa kapat
+    if (!query) {
+        const searchModalEl = document.getElementById('searchResultModal');
+        const searchModal = bootstrap.Modal.getInstance(searchModalEl);
+        if (searchModal) searchModal.hide();
+    }
+});
+
+// Anahtar/kelimeden sonuçları döndür 
+function searchButtonInfos(query) {
+    query = query.trim().toLowerCase();
+    if (!query) return [];
+    const results = [];
+    for (const [key, info] of Object.entries(buttonInfos)) {
+        const group = info.group || "";
+        if (
+            key.toLowerCase().includes(query) ||
+            group.toLowerCase().includes(query)
+        ) {
+            results.push({ key, group, ...info });
+        }
+    }
+    return results;
+}
+
+// Sonuçları modalda göster (her çağrıda modalı açmaya zorlar)
+function showSearchResults(results) {
+    const modalTitle = document.getElementById('searchResultModalLabel');
+    const modalBody = document.getElementById('searchResultModalBody');
+    modalTitle.textContent = "Arama Sonuçları";
+
+    if (results.length === 0) {
+        modalBody.innerHTML = "<div class='alert alert-info'>Hiçbir sonuç bulunamadı.</div>";
+    } else {
+        modalBody.innerHTML = results.map(item => `
+            <div class="card bg-light mb-3 p-2 border-0 shadow-sm search-result-clickable" data-key="${item.key}" style="cursor:pointer;">
+                <div class="d-flex align-items-center">
+                    <span class="fw-bold">${item.key}</span>
+                    <span class="badge bg-success ms-2">${item.group ?? ""}</span>
                 </div>
-            `).join("");
-        }
-
-        // Modalı aç
-        const modal = new bootstrap.Modal(document.getElementById('searchResultModal'));
-        modal.show();
+                ${item.title ? `<div>${item.title}</div>` : ""}
+                ${item.desc ? `<div class="text-muted small">${item.desc}</div>` : ""}
+            </div>
+        `).join("");
     }
 
-    document.getElementById('searchResultModalBody').onclick = async function(e) {
-      // Bir kart tıklanırsa yukarı doğru çıkarak 'search-result-clickable' olanı bul
-      let card = e.target;
-      while (card && !card.classList.contains('search-result-clickable')) {
+    // Modalı HER zaman açmaya çalış (aynı anda tekrar çağırmak sorun değildir)
+    const searchModalEl = document.getElementById('searchResultModal');
+    let searchModal = bootstrap.Modal.getInstance(searchModalEl);
+    if (!searchModal) {
+        searchModal = new bootstrap.Modal(searchModalEl);
+    }
+    searchModal.show();
+
+    // Modal açıldıktan çok kısa bir süre sonra arama input'una focus ver:
+    setTimeout(() => {
+        searchInput.focus();
+        // İmleci input'un en sonuna getirmek için:
+        const val = searchInput.value;
+        searchInput.value = '';
+        searchInput.value = val;
+    }, 150); // 150ms, çoğu cihazda garantili. Gerekirse 100 de yeterli olabilir.
+}
+
+// Modal üzerindeki kartlara tıklama (event delegation ile)
+document.getElementById('searchResultModalBody').onclick = async function(e) {
+    // Bir kart tıklanırsa yukarı doğru çıkarak bul
+    let card = e.target;
+    while (card && !card.classList.contains('search-result-clickable')) {
         if(card === this) return;
         card = card.parentElement;
-      }
-      if (!card) return;
-      
-      const key = card.getAttribute('data-key');
-      const info = buttonInfos[key];
-
-      // Modalı bilgisiyle doldur
-      await fillDataEntryModalFromSearch(key, info);
-
-      // Sonuçlar modalını kapat
-      const searchModal = bootstrap.Modal.getInstance(document.getElementById('searchResultModal'));
-      if (searchModal) searchModal.hide();
-
-      // Data Entry Modalı aç (iş mantığı aynı kalsın)
-      const dataEntryModal = new bootstrap.Modal(document.getElementById('dataEntryModal'));
-      dataEntryModal.show();
     }
+    if (!card) return;
+  
+    const key = card.getAttribute('data-key');
+    const info = buttonInfos[key];
 
-    async function fillDataEntryModalFromSearch(key, info) {
-      // Butonlara tıklandığında olan aktifType datası gibi
-      window.activeType = key; // globalde aynı değişken, scriptin başında da let activeType = null var.
-      // Başlığı ve bilgi metnini doldur
-      document.getElementById('dataEntryModalLabel').innerText = info.title || key;
-      document.getElementById('modalInfoText').innerText = info.desc || "";
+    // Data Entry Modalı, bilgiyle doldurulacak
+    await fillDataEntryModalFromSearch(key, info);
 
-      // Yer Sahibi ile Anlaşma ise özel davranışlar:
-      if(info.title === "Yer Sahibi ile Anlaşma") {
+    // Sonuçlar modalını kapat
+    const searchModalEl = document.getElementById('searchResultModal');
+    const searchModal = bootstrap.Modal.getInstance(searchModalEl);
+    if (searchModal) searchModal.hide();
+
+    // Data Entry Modalını aç
+    const dataEntryModal = new bootstrap.Modal(document.getElementById('dataEntryModal'));
+    dataEntryModal.show();
+}
+
+// Aramadan gelen bilgiyle uygun modalı dolduran fonksiyon
+async function fillDataEntryModalFromSearch(key, info) {
+    window.activeType = key; // sisteminde global bir değişken
+
+    document.getElementById('dataEntryModalLabel').innerText = info.title || key;
+    document.getElementById('modalInfoText').innerText = info.desc || "";
+
+    // Yer Sahibi ile Anlaşma ise özel işleyiş
+    if(info.title === "Yer Sahibi ile Anlaşma") {
         ownerPay.style.display = "flex";
         ownerPaid.style.display = "flex";
         ownerDealButton.style.display = "flex";
@@ -1223,10 +1259,8 @@
         await createIfDbNotExistAndAddItem("givePayment", "0", formatDate(getTodayDate()), "verilecek_para", "adet");
 
         await setPayButtons();
-
-        // Liste güncelle  
         await updateSavedEntries(window.activeType, "false");
-      } else {
+    } else {
         ownerPay.style.display = "none";
         ownerPaid.style.display = "none";
         ownerDealButton.style.display = "none";
@@ -1242,17 +1276,14 @@
         document.getElementById('modalInput').style.display = "flex"; 
         document.getElementById('modalNote').style.display = "flex";
         document.getElementById('modalDate').style.display = "flex";
-        document.getElementById('modalInput').placeholder = info.placeholderTutar || "Tutarı giriniz";  
+        document.getElementById('modalInput').placeholder = info.placeholderTutar || "Tutarı giriniz";
         document.getElementById('modalNote').placeholder = info.placeholderNot || "Açıklama (Opsiyonel)";
 
-        // Liste güncelle  
-        await updateSavedEntries(window.activeType, "false");  
-
-        // Inputları temizle  
-        document.getElementById('modalInput').value = "";  
-        document.getElementById('modalNote').value = "";  
-      }
+        await updateSavedEntries(window.activeType, "false");
+        document.getElementById('modalInput').value = "";
+        document.getElementById('modalNote').value = "";
     }
+}
 
 
 
