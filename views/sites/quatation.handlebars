@@ -1194,7 +1194,7 @@
         const searchModalEl = document.getElementById('searchResultModal');
         let searchModal = bootstrap.Modal.getInstance(searchModalEl);
         if (!searchModal) {
-            searchModal = new bootstrap.Modal(searchModalEl);
+            searchModal = new bootstrap.Modal(searchModalEl, { backdrop: 'static', keyboard: false });
         }
 
         // Fokus verdiğimiz listener'ı önce kaldıralım (her açışta birikmesin)
@@ -1212,6 +1212,28 @@
         const valLen = searchInput.value.length;
         searchInput.setSelectionRange(valLen, valLen);
     }
+
+    document.getElementById('searchResultModalBody').onclick = async function (e) {
+        let card = e.target;
+        while (card && !card.classList.contains('search-result-clickable')) {
+            if(card === this) return;
+            card = card.parentElement;
+        }
+        if (!card) return;
+
+        const key = card.getAttribute('data-key');
+        const info = buttonInfos[key];
+        await fillDataEntryModalFromSearch(key, info);
+
+        const searchModalEl = document.getElementById('searchResultModal');
+        const searchModal = bootstrap.Modal.getInstance(searchModalEl);
+        if (searchModal) searchModal.hide();
+
+        const dataEntryModalEl = document.getElementById('dataEntryModal');
+        let dataEntryModal = bootstrap.Modal.getInstance(dataEntryModalEl);
+        if (!dataEntryModal) dataEntryModal = new bootstrap.Modal(dataEntryModalEl);
+        dataEntryModal.show();
+    };
 
     // Aramadan gelen bilgiyle uygun modalı dolduran fonksiyon
     async function fillDataEntryModalFromSearch(key, info) {
