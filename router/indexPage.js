@@ -16,7 +16,7 @@ router.get('/', authenticateUser, (req, res) => {
 });
 
 router.post('/', async (req, res) => { 
-    const { userId, projectName, activeType = null, process = null } = req.body;
+    const { userId, projectName, activeType = null, process = null } = req.body || {};
     
     if(userId && !projectName && !process){
         try {
