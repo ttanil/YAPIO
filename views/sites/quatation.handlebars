@@ -13,7 +13,7 @@
       body {  
         margin: 0;  
         padding: 0; 
-        background-image: url('/img/sample4.png');
+        background-image: url('/img/sample4_1.png');
         background-repeat: repeat;  
         background-size: auto; 
         background-position: center;  
@@ -28,7 +28,52 @@
         align-items: center;  
         justify-content: center;  
         margin: 0px;
-      }  
+      }
+
+      .custom-short-menu {
+        display: flex;
+        gap: 22px;
+        justify-content: center;   /* Ortala */
+        align-items: flex-start;
+        width: 100%;
+        margin-top: 18px;
+        margin-bottom: 10px;
+      }
+
+      .menu-btn {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 70px;
+          text-decoration: none;
+          background: none;
+          border: none;
+          outline: none;
+          transition: color 0.18s, background 0.18s;
+      }
+
+      .menu-btn img {
+          width: 32px;
+          height: 32px;
+          margin-bottom: 4px;
+      }
+
+      .menu-btn span {
+          font-size: 14px;
+          color: #333;
+      }
+
+      .menu-btn:hover span,
+      .menu-btn:focus span {
+          color: #1d67c4;
+          font-weight: 500;
+      }
+
+      #buttonHome {
+          margin-right: 18px; /* Sağdan istediğin kadar boşluk (arttırabilirsin) */
+      }
+
+
       .container-fluid {  
         display: flex;  
         flex: 0 0 100%;  
@@ -283,7 +328,7 @@
           text-overflow: ellipsis;  
           white-space: nowrap;  
           text-align: left;  
-          font-size: 14px !important;  
+          font-size: 17px !important;  
           max-width: 65%;     /* Taşmayı önler */  
           min-width: 0;       /* flex shrink için gerekli */  
           margin-right: 0;    /* İstenirse gap için elle ekleyin */
@@ -295,6 +340,41 @@
           display: flex;  
           align-items: center;
         }
+
+        .custom-short-menu {
+          display: flex;
+          gap: 12px;
+          justify-content: center;
+          align-items: flex-start;
+          width: 90% !important;
+          margin-top: 12px;
+          margin-left: auto;
+          margin-right: auto; /* Ortalamak için */
+        }
+        .menu-btn {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          flex: 1 1 0;    /* EŞİT yayılır, min 0 olur, büyüyebilir */
+          text-decoration: none;
+          background: none;
+          border: none;
+          outline: none;
+          transition: color 0.18s, background 0.18s;
+          min-width: 0;   /* Sıkışmaya izin verir */
+        }
+        .menu-btn img {
+          width: 25px;
+          height: 25px;
+          margin-bottom: 4px;
+        }
+        .menu-btn span {
+          font-size: 0.8rem;
+          white-space: nowrap; /* Çok taşmasını önlemek için */
+          text-align: center;
+        }
+
+
         .img-fluid {  
           height: 25px;  
           width: 25px;  
@@ -454,61 +534,30 @@
 
   <!-- Navbar -->  
   <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm mt-4 container-navbar">  
-    <div class="container-fluid">  
-      <!-- Proje Adı -->  
-      <h4 class="navbar-brand" id="projectName">Proje Adı</h4>  
-      <!-- Ana Sayfa Butonu -->  
-      <button class="btn d-flex navbar-home-button" id="buttonHome">  
-        <img src="/img/home1_1.png" alt="Katlar Görseli" class="img-fluid rounded">  
-      </button>  
-      <!-- Hamburger Menü -->  
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"  
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">  
-        <span class="navbar-toggler-icon"></span>  
-      </button>  
-  
-      <!-- Menu: Mobilde sağdan, büyük ekranda klasik dropdown -->  
-      <div class="collapse navbar-collapse" id="navbarNav">  
-        <!-- Masaüstü: Dropdown Menüsü -->  
-        <ul class="navbar-nav ms-auto d-none d-lg-flex">  
-            <li class="nav-item dropdown">  
-                <button class="btn nav-link dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">  
-                Menü  
-                </button>  
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">  
-                    <li>
-                      <a class="dropdown-item d-flex align-items-center" id="graphs-button" href="#">
-                          <img src="/img/growth_1.png" alt="" style="width:19px; height:19px; margin-right:8px;">
-                          Analizler
-                      </a>
-                  </li> 
-                  <li>
-                      <a class="dropdown-item d-flex align-items-center" id="sold-button" href="#">
-                          <img src="/img/property.png" alt="" style="width:19px; height:19px; margin-right:8px;">
-                          Satış
-                      </a>
-                  </li> 
-                </ul> 
-              </li>
-        </ul>  
-        <!-- Mobilde: Menü Seçenekleri En Sağa Yaslı -->  
-        <ul class="navbar-nav ms-auto d-lg-none justify-content-end text-end mobile-navbar-menu">
-          <li>
-            <a class="dropdown-item-mobile d-flex align-items-center" id="graphs-button-mobile" href="#">
-                <img src="/img/growth_1.png" alt="" style="width:19px; height:19px; ">
-                Analizler
-            </a>
-        </li>
-        <li>
-            <a class="dropdown-item-mobile d-flex align-items-center" id="sold-button-mobile" href="#">
-                <img src="/img/property.png" alt="" style="width:19px; height:19px; ">
-                Satış
-            </a>
-        </li> 
-        </ul>  
+      <div class="container-fluid">  
+          <!-- Proje Adı -->  
+          <h4 class="navbar-brand" id="projectName">Proje Adı</h4>  
+          <!-- Ana Sayfa Butonu -->  
+          <button class="btn d-flex navbar-home-button" id="buttonHome">  
+              <img src="img/home1_1.png" alt="Katlar Görseli" class="img-fluid rounded">  
+          </button>
       </div>  
-    </div>
-  </nav>
+  </nav> 
+
+  <div class="custom-short-menu" id="regulation-button-area">
+      <a class="menu-btn" id="quatation-button" href="#">
+          <img src="img/pay1_1.png" alt="">
+          <span>Giderler</span>
+      </a>
+      <a class="menu-btn" id="graphs-button" href="#">
+          <img src="img/growth_1.png" alt="">
+          <span>Analizler</span>
+      </a>
+      <a class="menu-btn" id="sold-button" href="#">
+          <img src="/img/property.png" alt="">
+          <span>Satış</span>
+      </a>
+  </div>
 
   <!-- Search Alanı -->
   <div class="pastel-search-box-wrapper">
@@ -948,12 +997,8 @@
     import { showWarningMessage } from '/js/showMessage.js';
 
     const projectNameString = document.getElementById("projectName");
-    const navbarCollapse = document.getElementById('navbarNav');  
-    const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
     const quatationButton = document.getElementById("quatation-button"); 
-    const quatationButtonMobile = document.getElementById("quatation-button-mobile"); 
     const graphsButton = document.getElementById("graphs-button"); 
-    const graphsButtonMobile = document.getElementById("graphs-button-mobile"); 
     const buttonHome = document.getElementById("buttonHome");
     const modalFooterButton = document.getElementById("modalFooterButton");
     const saveModalButton = document.getElementById("saveModalButton");
@@ -967,7 +1012,6 @@
     const ownerPayInput = document.getElementById("ownerPayInput");
     const ownerPaidInput = document.getElementById("ownerPaidInput");
     const soldButton = document.getElementById("sold-button"); 
-    const soldButtonMobile = document.getElementById("sold-button-mobile");
     const searchInput = document.getElementById("searchInput");
     const searchBtn = document.getElementById("searchBtn");
     const searchForm = document.querySelector('.pastel-search-box');
@@ -993,26 +1037,7 @@
 
     // DOM yüklendiğinde işlem başlat  
     document.addEventListener("DOMContentLoaded", () => {  
-        event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle  
-
-        // 1- Menü dışındaki herhangi bir yere tıklanınca  
-        document.addEventListener('click', function (event) {  
-            if (navbarCollapse.classList.contains('show')) {  
-                // Eğer tıklanan yer menü veya hamburger değilse menüyü kapat  
-                if (!navbarCollapse.contains(event.target) &&  
-                    event.target !== document.querySelector('.navbar-toggler')  
-                    ) { bsCollapse.hide(); }  
-            }  
-        });  
-
-        // 2- Menü içerisindeki bir bağlantıya tıklanırsa kapansın
-        navbarCollapse.querySelectorAll('.nav-link').forEach(function (link) {  
-            link.addEventListener('click', function () {  
-            if (navbarCollapse.classList.contains('show')) {  
-                bsCollapse.hide();  
-            }  
-            });  
-        });
+        event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
 
         window.user = {{#if user}}
             { "email": "{{user.email}}", "role": "{{user.role}}", "userId": "{{user.id}}", "project": {{{json project}}} }
@@ -1111,9 +1136,6 @@
         }
 
     });
-
-
-
 
 
     searchInput.addEventListener("input", function(event) {
@@ -1297,16 +1319,10 @@
     graphsButton.addEventListener("click", () => {
         window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
     });
-    graphsButtonMobile.addEventListener("click", () => {
-        window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
-    });
     buttonHome.addEventListener("click", () => {  
         window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
     });
     soldButton.addEventListener("click", () => {
-        window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
-    });
-    soldButtonMobile.addEventListener("click", () => {
         window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
     });
 
