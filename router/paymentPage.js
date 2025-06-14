@@ -12,6 +12,7 @@ const authenticateUser = require('../middleware/authenticateUser');
 const PAYTEN_STORE_KEY = process.env.PAYTEN_STORE_KEY || 'PLGytr930485!';
 const PAYTEN_CLIENT_ID = process.env.PAYTEN_CLIENT_ID || '191797468';
 const PAYTEN_FORM_ACTION = process.env.PAYTEN_FORM_ACTION || 'https://sanalpos2.ziraatbank.com.tr/fim/est3Dgate';
+const SITE_URL = 'https://www.yapio.net';
 
 // Helper: Hash üret
 function createPaytenHash(paramObj, storeKey) {
@@ -99,9 +100,9 @@ router.post('/', authenticateUser, async (req, res) => {
     try {
         const amount = String(Number(req.body.amount || '91.96').toFixed(2));
         const oid = "order" + Date.now() + String(Math.floor(Math.random()*1000));
-        const okUrl = process.env.SITE_URL + "/payment/payment-success";
-        const failUrl = process.env.SITE_URL + "/payment/payment-fail";
-        const callbackUrl = process.env.SITE_URL + "/payment/payment-callback";
+        const okUrl = SITE_URL + "/payment/payment-success";
+        const failUrl = SITE_URL + "/payment/payment-fail";
+        const callbackUrl = SITE_URL + "/payment/payment-callback";
         const currency = "949";
         const storetype = "3d_pay_hosting";
         const rnd = Math.random().toString(36).substring(2, 15);
