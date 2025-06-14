@@ -779,7 +779,10 @@
       makeBtn.id = "make-button2";
       makeBtn.className = "btn make-btn2";
       makeBtn.textContent = "Proje Oluştur";
-      if(userType === "free" && projectNumber >= 1){
+      if((userType === "free" && projectNumber >= 1) || 
+          (userType === "premium2" && projectNumber >= 2) || 
+          (userType === "premium4" && projectNumber >= 4))
+        {
         makeBtn.onclick = () => window.location.href = `/payment?projectName=${encodeURIComponent(projectNameFirst)}`;
       } else{
         makeBtn.onclick = () => window.location.href = "/bina";

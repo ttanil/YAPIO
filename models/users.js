@@ -83,6 +83,17 @@ const defaultFields = {
     unit: { type: String, required: true }
 };
 
+// ---- Kullanıcıya gömülecek ödeme/sipariş şeması ----
+const paymentOrderSchema = new mongoose.Schema({
+  oid:       { type: String, required: true, unique: true }, // Sipariş numarası
+  amount:    { type: String, required: true }, // Ödeme tutarı
+  status:    { type: String, default: 'pending', enum: ['pending', 'success', 'fail'] },
+  paymentStartedAt: { type: Date, default: Date.now },
+  finalizedAt:      { type: Date },
+  paytenRawData:    { type: mongoose.Schema.Types.Mixed }, // Payten'dan dönen herşeyi saklayabilirsin
+  meta:             { type: mongoose.Schema.Types.Mixed }, // Ek bilgi (kullanıcı, kampanya, not, vs)
+}, { _id: false }); // ek ObjectId gerekmez
+
 const arsaBedeliSchema = new mongoose.Schema(defaultFields, { _id: false });
 const santiyeKurulumuSchema = new mongoose.Schema(defaultFields, { _id: false });
 const yerdenCikartmakSchema = new mongoose.Schema(defaultFields, { _id: false });
@@ -269,8 +280,9 @@ const userSchema = new mongoose.Schema({
     sirketIlce: { type: String, required: function() { return this.tipi === "sirket"; } }, // şirket için ilçe
     createdAt: { type: Date, default: Date.now },
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
-    userType: { type: String, enum: ['free', 'premium'], default: 'free' },
+    userType: { type: String, enum: ['free', 'premium', 'premium2', 'premium4'], default: 'free' },
     userInputs: [userInputSchema],
+    pendingPayments: [paymentOrderSchema] // Ödeme ilişkisi
 });
 
 const Users = mongoose.model('Users', userSchema);
