@@ -29,16 +29,34 @@ function createPaytenHash(paramObj, storeKey) {
 
 // Helper: Parametrelerden hash’i tekrar üret, karşılaştır
 function validatePaytenHash(postedData, storeKey) {
-    const paramOrder = [
-        'amount', 'clientid', 'currency', 'failUrl', 'hashAlgorithm',
-        'Instalment', 'lang', 'okUrl', 'oid', 'rnd', 'storetype', 'TranType'
-    ];
-    const arr = paramOrder.map(key => postedData[key] || '');
-    arr.push(storeKey);
-    const toHash = arr.join('|');
-    const sha = crypto.createHash('sha512').update(toHash, 'utf8').digest();
-    const calculated = Buffer.from(sha).toString('base64');
-    return calculated === postedData.hash;
+  const bankHash = postedData.HASH || postedData.hash;
+  if (!bankHash) return false;
+
+  // 1- "hash" ve "encoding" hariç, tüm parametrelerin KÜÇÜK harfli keylerini al
+  const exclude = ['hash', 'encoding'];
+  const keys = Object.keys(postedData)
+    .filter(key => !exclude.includes(key.toLowerCase()));
+
+  // 2- Alfabetik sırala
+  const sortedKeys = keys.sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
+
+  // 3- Değerlerde \ ve | karakterlerini düzgün kaçışla yaz
+  function escapeVal(x) {
+    return String(x || '').replace(/\\/g, '\\\\').replace(/\|/g, '\\|');
+  }
+  const values = sortedKeys.map(k => escapeVal(postedData[k]));
+
+  // 4- storeKey ekle
+  values.push(storeKey);
+
+  // 5- Tek string
+  const plain = values.join('|');
+  // 6- SHA512+base64
+  const digest = crypto.createHash('sha512').update(plain, 'utf8').digest();
+  const myHash = Buffer.from(digest).toString('base64');
+
+  // Karşılaştır
+  return (myHash === bankHash);
 }
 
 // Gerekli middleware
@@ -168,6 +186,7 @@ router.post('/', authenticateUser, async (req, res) => {
 router.post('/payment-success', async (req, res) => {
     try {
         const data = req.body;
+        logHashDebug(data, PAYTEN_STORE_KEY);
         if (!validatePaytenHash(data, PAYTEN_STORE_KEY)) {
             console.warn('[Payten] Başarısız hash doğrulaması/success:', data);
             return res.status(400).send('Geçersiz istek.');
@@ -194,6 +213,7 @@ router.post('/payment-success', async (req, res) => {
 router.post('/payment-fail', async (req, res) => {
     try {
         const data = req.body;
+        logHashDebug(data, PAYTEN_STORE_KEY);
         if (!validatePaytenHash(data, PAYTEN_STORE_KEY)) {
             console.warn('[Payten] Başarısız hash doğrulaması/fail:', data);
             return res.status(400).send('Geçersiz istek.');
@@ -216,6 +236,7 @@ router.post('/payment-fail', async (req, res) => {
 router.post('/payment-callback', async (req, res) => {
     try {
         const data = req.body;
+        logHashDebug(data, PAYTEN_STORE_KEY);
         if (!validatePaytenHash(data, PAYTEN_STORE_KEY)) {
             console.warn('[Payten] Başarısız hash doğrulaması/callback:', data);
             return res.status(400).send('Geçersiz istek.');
@@ -243,5 +264,27 @@ router.post('/payment-callback', async (req, res) => {
         return res.status(500).send("Sunucu hatası.");
     }
 });
+function logHashDebug(data, storeKey) {
+  const bankHash = data.HASH || data.hash;
+  // Hash datası oluştur (aynı fonksiyonun ile)
+  const exclude = ['hash', 'encoding'];
+  const keys = Object.keys(data)
+    .filter(key => !exclude.includes(key.toLowerCase()));
+  const sortedKeys = keys.sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
+  function escapeVal(x) {
+    return String(x || '').replace(/\\/g, '\\\\').replace(/\|/g, '\\|');
+  }
+  const values = sortedKeys.map(k => escapeVal(data[k]));
+  values.push(storeKey);
+  const plain = values.join('|');
+  const calculated = crypto.createHash('sha512').update(plain, 'utf8').digest();
+  const myHash = Buffer.from(calculated).toString('base64');
+  // Detaylı log:
+  console.log('\nPAYTEN HASH DEBUG:');
+  console.log('--- GELEN POST ---\n', JSON.stringify(data, null, 2));
+  console.log('--- İŞLENEN HASH DATA ---\n', plain);
+  console.log('--- BANKADAN GELEN HASH ---\n', bankHash);
+  console.log('--- BİZİM HESAPLANAN HASH ---\n', myHash, '\n');
+}
 
 module.exports = router;
