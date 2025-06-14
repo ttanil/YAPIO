@@ -1,298 +1,285 @@
-const express = require('express');
-const router = express.Router();
-const path = require('path');
-const mongoose = require('mongoose');
-const Users = require(path.join(__dirname, '..', 'models', 'users'));
-const crypto = require('crypto');
-require('dotenv').config();
+const express = require('express');  
+const router = express.Router();  
+const path = require('path');  
+const Users = require(path.join(__dirname, '..', 'models', 'users'));  
+const crypto = require('crypto');  
+require('dotenv').config();  
 
-const authenticateUser = require('../middleware/authenticateUser');
+const authenticateUser = require('../middleware/authenticateUser');  
 
-// Storekey ve ClientID environment'tan alınmalı! (örn: process.env.PAYTEN_STORE_KEY)
-const PAYTEN_STORE_KEY = 'PLGytr930485!';
-const PAYTEN_CLIENT_ID = '191797468';
-const PAYTEN_FORM_ACTION = 'https://sanalpos2.ziraatbank.com.tr/fim/est3Dgate';
-const SITE_URL = 'https://www.yapio.net';
+// Ziraat'in taksit yetkili tüm BIN'leri (6 ve 8 haneli)  
+const ziraatInstallmentBins = [  
+    '65877600', '65877601', '65877602', '65877700',  
+    '525329', '542941', '53376451', '53647928'  
+];  
+// BIN kontrol fonksiyonu  
+function isZiraatInstallmentBin(cardNumber = '') {  
+    const bin6 = cardNumber.substring(0, 6);  
+    const bin8 = cardNumber.substring(0, 8);  
+    return ziraatInstallmentBins.includes(bin6) || ziraatInstallmentBins.includes(bin8);  
+}  
 
-// Parametrelerin doğru sırada toplanması şart!
-function createPaytenHash(paramObj, storeKey) {
-    // Dikkat: callbackUrl parametresi eklendi ve sırası düzeltildi!
-    const paramOrder = [
-        'amount', 'callbackUrl', 'clientid', 'currency', 'failUrl',
-        'hashAlgorithm', 'Instalment', 'lang', 'oid', 'okUrl',
-        'rnd', 'storetype', 'TranType'
-    ];
-    const arr = paramOrder.map(key => paramObj[key] || '');
-    arr.push(storeKey);
-    // Kaçış!
-    const toHash = arr.map(x => String(x).replace(/\\/g, '\\\\').replace(/\|/g, '\\|')).join('|');
-    const sha = crypto.createHash('sha512').update(toHash, 'utf8').digest();
-    return Buffer.from(sha).toString('base64');
-}
+// Storekey ve clientId IDEALDE  process.env'den alınmalıdır!  
+const PAYTEN_STORE_KEY = process.env.PAYTEN_STORE_KEY || 'PLGytr930485!';  
+const PAYTEN_CLIENT_ID = process.env.PAYTEN_CLIENT_ID || '191797468';  
+const PAYTEN_FORM_ACTION = 'https://sanalpos2.ziraatbank.com.tr/fim/est3Dgate';  
+const SITE_URL = 'https://www.yapio.net';  
 
-// Hash kontrol fonksiyonunda `encoding` ve `hash` parametreleri işlem dışı kalacak!
-// POST body'de alfabetik değil, BANKA'nın belirttiği SIRA önemli (callback'te banka kendi sırasıyla gönderdiği için hash hesaplaması orada alfabetik!)
-function validatePaytenHash(postedData, storeKey) {
-    const bankHash = postedData.HASH || postedData.hash;
-    if (!bankHash) return false;
+// Hash fonksiyonu  
+function createPaytenHash(paramObj, storeKey) {  
+    const paramOrder = [  
+        'amount', 'callbackUrl', 'clientid', 'currency', 'failUrl',  
+        'hashAlgorithm', 'Instalment', 'lang', 'oid', 'okUrl',  
+        'rnd', 'storetype', 'TranType'  
+    ];  
+    const arr = paramOrder.map(key => paramObj[key] || '');  
+    arr.push(storeKey);  
+    const toHash = arr.map(x => String(x).replace(/\\/g, '\\\\').replace(/\|/g, '\\|')).join('|');  
+    const sha = crypto.createHash('sha512').update(toHash, 'utf8').digest();  
+    return Buffer.from(sha).toString('base64');  
+}  
 
-    // Dokümana uygun şekilde: hash, encoding, countdown KATILMAZ!
-    const exclude = ['hash', 'encoding', 'countdown'];
-    // Bankadan dönen (callback, success, fail) POST'da: alfabetik sıralama şart:
-    const keys = Object.keys(postedData)
-        .filter(key => !exclude.includes(key.toLowerCase()));
+function validatePaytenHash(postedData, storeKey) {  
+    const bankHash = postedData.HASH || postedData.hash;  
+    if (!bankHash) return false;  
+    const exclude = ['hash', 'encoding', 'countdown'];  
+    const keys = Object.keys(postedData)  
+        .filter(key => !exclude.includes(key.toLowerCase()));  
+    const sortedKeys = keys.sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));  
 
-    const sortedKeys = keys.sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
+    function escapeVal(x) {  
+        return String(x || '').replace(/\\/g, '\\\\').replace(/\|/g, '\\|');  
+    }  
+    const values = sortedKeys.map(k => escapeVal(postedData[k]));  
+    values.push(storeKey);  
 
-    function escapeVal(x) {
-        return String(x || '').replace(/\\/g, '\\\\').replace(/\|/g, '\\|');
-    }
-    const values = sortedKeys.map(k => escapeVal(postedData[k]));
-    values.push(storeKey);
+    const plain = values.join('|');  
+    const digest = crypto.createHash('sha512').update(plain, 'utf8').digest();  
+    const myHash = Buffer.from(digest).toString('base64');  
 
-    const plain = values.join('|');
-    const digest = crypto.createHash('sha512').update(plain, 'utf8').digest();
-    const myHash = Buffer.from(digest).toString('base64');
+    return (myHash === bankHash);  
+}  
 
-    return (myHash === bankHash);
-}
+// (Opsiyonel) Kart BIN’i ile taksitli işlemi destekleyip desteklemediğini gösteren endpoint  
+router.post('/check-bin', (req, res) => {  
+    const { cardNumber } = req.body;  
+    const isInstallment = isZiraatInstallmentBin(cardNumber);  
+    res.json({ isInstallment });  
+});  
 
-// Middleware
-router.use(express.urlencoded({ extended: true }));
+// GET /payment  
+router.get('/', authenticateUser, async (req, res) => {  
+    const { projectName } = req.query;  
+    const userId = res.locals.user._id || res.locals.user.id;  
+    if (res.locals.userRole === "misafir") {  
+        return res.redirect('/login');  
+    }  
+    try {  
+        const user = await Users.findById(userId);  
+        if (!user || !user.userInputs) {  
+            return res.status(404).send("Kullanıcı ve projeleri bulunamadı!");  
+        }  
+        const projectNumber = user.userInputs.length;  
+        const userType = user.userType;  
+        let selectedProject = null;  
+        if (projectName) {  
+            selectedProject = user.userInputs.find(prj => prj.projectName === projectName);  
+            if (!selectedProject) {  
+                return res.status(404).send("Proje bulunamadı!");  
+            }  
+        }  
+        res.render('sites/payment', {  
+            project: selectedProject,  
+            user: res.locals.user,  
+            role: res.locals.userRole,  
+            projectNumber: projectNumber,  
+            userType: userType  
+        });  
+    } catch (err) {  
+        console.error(err);  
+        return res.status(500).send("Sunucu hatası.");  
+    }  
+});  
 
-// GET /payment
-router.get('/', authenticateUser, async (req, res) => {
-    const { projectName } = req.query;
-    const userId = res.locals.user._id || res.locals.user.id;
-    if (res.locals.userRole === "misafir") {
-        return res.redirect('/login');
-    }
+// 1) Ödeme başlatıcı  
+router.post('/', authenticateUser, async (req, res) => {  
+    const { fullName, email, projectNumber, userType, projectLimit, cardNumber = '', instalment } = req.body || {};  
+    const userId = res.locals.user._id || res.locals.user.id;  
 
-    try {
-        const user = await Users.findById(userId);
-        if (!user || !user.userInputs) {
-            return res.status(404).send("Kullanıcı ve projeleri bulunamadı!");
-        }
+    if (!userId || !fullName || !email || !projectNumber || !userType || !projectLimit)  
+        return res.status(400).json({ success: false, message: "Eksik bilgi." });  
 
-        const projectNumber = user.userInputs.length;
-        const userType = user.userType;
+    if ((projectLimit === 2 && userType === "premium2" && projectNumber === "2") ||  
+        (projectLimit === 4 && userType === "premium4" && projectNumber === "4"))  
+        return res.status(401).json({ success: false, message: 'Seçtiğiniz üyelik daha fazla proje oluşturmayı içermemektedir' });  
+    if (projectLimit === 2 && userType === "premium4" && parseInt(projectNumber) >= 2)  
+        return res.status(401).json({ success: false, message: 'Seçtiğiniz üyelik ile bazı projelerinizi kaybedeceksiniz!' });  
 
-        let selectedProject = null;
-        if (projectName) {
-            selectedProject = user.userInputs.find(prj => prj.projectName === projectName);
-            if (!selectedProject) {
-                return res.status(404).send("Proje bulunamadı!");
-            }
-        }
+    try {  
+        let amount;  
+        if (projectLimit === 2 || projectLimit === "2") {  
+            amount = "2400.00";  
+        } else if (projectLimit === 4 || projectLimit === "4") {  
+            amount = "3800.00";  
+        } else {  
+            amount = String(Number(req.body.amount || '91.96').toFixed(2));  
+        }  
 
-        res.render('sites/payment', {
-            project: selectedProject,
-            user: res.locals.user,
-            role: res.locals.userRole,
-            projectNumber: projectNumber,
-            userType: userType
-        });
-    } catch (err) {
-        console.error(err);
-        return res.status(500).send("Sunucu hatası.");
-    }
-});
+        const oid = "order" + Date.now() + String(Math.floor(Math.random() * 1000));  
+        const okUrl = SITE_URL + "/payment/payment-success";  
+        const failUrl = SITE_URL + "/payment/payment-fail";  
+        const callbackUrl = SITE_URL + "/payment/payment-callback";  
+        const currency = "949";  
+        const storetype = "3d_pay_hosting";  
+        const rnd = Math.random().toString(36).substring(2, 15);  
+        const lang = "tr";  
+        const hashAlgorithm = "ver3";  
+        const TranType = "Auth";  
 
-// 1) Ödeme başlatıcı
-router.post('/', authenticateUser, async (req, res) => {
-    const { fullName, email, projectNumber, userType, projectLimit } = req.body || {};
-    const userId = res.locals.user._id || res.locals.user.id;
-    if (!userId || !fullName || !email || !projectNumber || !userType || !projectLimit)
-        return res.status(400).json({ success: false, message: "Eksik bilgi." });
+        // TAKSİT kontrolü: Sadece izinli BIN'de taksit işliyor!  
+        let Instalment = "";  
+        if (  
+            instalment &&   
+            String(instalment).trim() !== "" &&  
+            isZiraatInstallmentBin(cardNumber)  
+        ) {  
+            Instalment = String(Number(instalment)); // örn: "3", "6"  
+        }  
 
-    // ...üyelik geçiş kuralları...
-    if ((projectLimit === 2 && userType === "premium2" && projectNumber === "2") ||
-        (projectLimit === 4 && userType === "premium4" && projectNumber === "4"))
-        return res.status(401).json({ success: false, message: 'Seçtiğiniz üyelik daha fazla proje oluşturmayı içermemektedir' });
-    if (projectLimit === 2 && userType === "premium4" && parseInt(projectNumber) >= 2)
-        return res.status(401).json({ success: false, message: 'Seçtiğiniz üyelik ile bazı projelerinizi kaybedeceksiniz!' });
+        // Kullanıcıya yeni ödeme kaydı ekle  
+        await Users.findByIdAndUpdate(userId, {  
+            $push: {  
+                pendingPayments: {  
+                    oid: oid,  
+                    amount: amount,  
+                    instalment: Instalment,  
+                    status: "pending",  
+                    paymentStartedAt: new Date(),  
+                    meta: { fullName, email, userType, projectNumber }  
+                }  
+            }  
+        });  
 
-    try {
-        let amountSelected;
-        if (projectLimit === 2 || projectLimit === "2") {
-            amountSelected = "2400.00";
-        } else if (projectLimit === 4 || projectLimit === "4") {
-            amountSelected = "3800.00";
-        }
-        const amount = String(Number(amountSelected || '91.96').toFixed(2));
-        const oid = "order" + Date.now() + String(Math.floor(Math.random()*1000));
-        const okUrl = SITE_URL + "/payment/payment-success";
-        const failUrl = SITE_URL + "/payment/payment-fail";
-        const callbackUrl = SITE_URL + "/payment/payment-callback";
-        const currency = "949";
-        const storetype = "3d_pay_hosting";
-        const rnd = Math.random().toString(36).substring(2, 15);
-        const lang = "tr";
-        const hashAlgorithm = "ver3";
-        const TranType = "Auth";
-        const Instalment = "";
+        // --- FORM VE HASH TAMAMEN BANKANIN SIRASIYLA ---  
+        const params = {  
+            amount,  
+            callbackUrl,  
+            clientid: PAYTEN_CLIENT_ID,  
+            currency,  
+            failUrl,  
+            hashAlgorithm,  
+            Instalment,  
+            lang,  
+            oid,  
+            okUrl,  
+            rnd,  
+            storetype,  
+            TranType  
+        };  
+        const hash = createPaytenHash(params, PAYTEN_STORE_KEY);  
 
-        // Kullanıcıya yeni ödeme kaydı ekle
-        await Users.findByIdAndUpdate(userId, {
-            $push: {
-                pendingPayments: {
-                    oid: oid,
-                    amount: amount,
-                    status: "pending",
-                    paymentStartedAt: new Date(),
-                    meta: { fullName, email, userType, projectNumber }
-                }
-            }
-        });
+        const html = `  
+        <html>  
+        <body onload="document.forms[0].submit()">  
+            <form method="post" action="${PAYTEN_FORM_ACTION}">  
+                <input type="hidden" name="amount" value="${amount}" />  
+                <input type="hidden" name="callbackUrl" value="${callbackUrl}" />  
+                <input type="hidden" name="clientid" value="${PAYTEN_CLIENT_ID}" />  
+                <input type="hidden" name="currency" value="${currency}" />  
+                <input type="hidden" name="failUrl" value="${failUrl}" />  
+                <input type="hidden" name="hashAlgorithm" value="${hashAlgorithm}" />  
+                <input type="hidden" name="Instalment" value="${Instalment}" />  
+                <input type="hidden" name="lang" value="${lang}" />  
+                <input type="hidden" name="oid" value="${oid}" />  
+                <input type="hidden" name="okUrl" value="${okUrl}" />  
+                <input type="hidden" name="rnd" value="${rnd}" />  
+                <input type="hidden" name="storetype" value="${storetype}" />  
+                <input type="hidden" name="TranType" value="${TranType}" />  
+                <input type="hidden" name="encoding" value="UTF-8" />  
+                <input type="hidden" name="hash" value="${hash}" />  
+            </form>  
+            <p>Lütfen bekleyiniz. Banka ödeme sayfasına yönlendiriliyorsunuz...</p>  
+        </body>  
+        </html>  
+        `;  
+        res.json({ paymentFormHtml: html });  
+    } catch (err) {  
+        console.error("Hata:", err);  
+        return res.status(500).json({ success: false, message: "Sunucu hatası." });  
+    }  
+});  
 
-        // --- FORM VE HASH TAMAMEN BANKANIN SIRASIYLA ---
-        const params = {
-            amount,
-            callbackUrl, // << MUTLAKA EKLENMELİ!
-            clientid: PAYTEN_CLIENT_ID,
-            currency,
-            failUrl,
-            hashAlgorithm,
-            Instalment,
-            lang,
-            oid,
-            okUrl,
-            rnd,
-            storetype,
-            TranType
-        };
-        const hash = createPaytenHash(params, PAYTEN_STORE_KEY);
+// 2) Success  
+router.post('/payment-success', async (req, res) => {  
+    try {  
+        const data = req.body;  
+        if (!validatePaytenHash(data, PAYTEN_STORE_KEY)) {  
+            return res.status(400).send('Geçersiz istek.');  
+        }  
+        const user = await Users.findOne({ 'pendingPayments.oid': data.oid });  
+        if (!user) return res.status(404).send("Order/bilgisi bulunamadı.");  
 
-        const html = `
-        <html>
-        <body onload="document.forms[0].submit()">
-            <form method="post" action="${PAYTEN_FORM_ACTION}">
-                <input type="hidden" name="amount" value="${amount}" />
-                <input type="hidden" name="callbackUrl" value="${callbackUrl}" />
-                <input type="hidden" name="clientid" value="${PAYTEN_CLIENT_ID}" />
-                <input type="hidden" name="currency" value="${currency}" />
-                <input type="hidden" name="failUrl" value="${failUrl}" />
-                <input type="hidden" name="hashAlgorithm" value="${hashAlgorithm}" />
-                <input type="hidden" name="Instalment" value="${Instalment}" />
-                <input type="hidden" name="lang" value="${lang}" />
-                <input type="hidden" name="oid" value="${oid}" />
-                <input type="hidden" name="okUrl" value="${okUrl}" />
-                <input type="hidden" name="rnd" value="${rnd}" />
-                <input type="hidden" name="storetype" value="${storetype}" />
-                <input type="hidden" name="TranType" value="${TranType}" />
-                <input type="hidden" name="encoding" value="UTF-8" />
-                <input type="hidden" name="hash" value="${hash}" />
-            </form>
-            <p>Lütfen bekleyiniz. Banka ödeme sayfasına yönlendiriliyorsunuz...</p>
-        </body>
-        </html>
-        `;
-        res.json({ paymentFormHtml: html });
-    } catch (err) {
-        console.error("Hata:", err);
-        return res.status(500).json({ success: false, message: "Sunucu hatası." });
-    }
-});
+        const isSuccess = data.Response === "Approved" && data.ProcReturnCode === "00";  
+        res.render(isSuccess ? 'payment-ok' : 'payment-fail', {  
+            orderId: data.oid,  
+            message: isSuccess  
+                ? "Ödeme başarıyla gerçekleşti. Üyeliğiniz birazdan aktifleşecek!"  
+                : "Ödeme alınamadı veya banka işlemde hata oluştu."  
+        });  
+    } catch (err) {  
+        console.error("Payten success handler:", err);  
+        return res.status(500).send("Sunucu hatası.");  
+    }  
+});  
 
-// 2) Success
-router.post('/payment-success', async (req, res) => {
-    try {
-        const data = req.body;
-        //logHashDebug(data, PAYTEN_STORE_KEY);
-        if (!validatePaytenHash(data, PAYTEN_STORE_KEY)) {
-            //console.warn('[Payten] Başarısız hash doğrulaması/success:', data);
-            return res.status(400).send('Geçersiz istek.');
-        }
-        const user = await Users.findOne({ 'pendingPayments.oid': data.oid });
-        if (!user) return res.status(404).send("Order/bilgisi bulunamadı.");
+// 3) Fail  
+router.post('/payment-fail', async (req, res) => {  
+    try {  
+        const data = req.body;  
+        if (!validatePaytenHash(data, PAYTEN_STORE_KEY)) {  
+            return res.status(400).send('Geçersiz istek.');  
+        }  
+        const user = await Users.findOne({ 'pendingPayments.oid': data.oid });  
+        if (!user) return res.status(404).send("Order/bilgisi bulunamadı.");  
 
-        const isSuccess = data.Response === "Approved" && data.ProcReturnCode === "00";
-        res.render(isSuccess ? 'payment-ok' : 'payment-fail', {
-            orderId: data.oid,
-            message: isSuccess
-                ? "Ödeme başarıyla gerçekleşti. Üyeliğiniz birazdan aktifleşecek!"
-                : "Ödeme alınamadı veya banka işlemde hata oluştu."
-        });
-    } catch (err) {
-        console.error("Payten success handler:", err);
-        return res.status(500).send("Sunucu hatası.");
-    }
-});
+        res.render('payment-fail', {  
+            orderId: data.oid,  
+            message: `Ödeme başarısız: ${data.Response} ${data.ProcReturnCode || ""} ${data.ErrMsg || ""}`  
+        });  
+    } catch (err) {  
+        console.error("Payten fail handler:", err);  
+        return res.status(500).send("Sunucu hatası.");  
+    }  
+});  
 
-// 3) Fail
-router.post('/payment-fail', async (req, res) => {
-    try {
-        const data = req.body;
-        //logHashDebug(data, PAYTEN_STORE_KEY);
-        if (!validatePaytenHash(data, PAYTEN_STORE_KEY)) {
-            //console.warn('[Payten] Başarısız hash doğrulaması/fail:', data);
-            return res.status(400).send('Geçersiz istek.');
-        }
-        const user = await Users.findOne({ 'pendingPayments.oid': data.oid });
-        if (!user) return res.status(404).send("Order/bilgisi bulunamadı.");
+// 4) Callback  
+router.post('/payment-callback', async (req, res) => {  
+    try {  
+        const data = req.body;  
+        if (!validatePaytenHash(data, PAYTEN_STORE_KEY)) {  
+            return res.status(400).send('Geçersiz istek.');  
+        }  
+        const isSuccess = data.Response === "Approved" && data.ProcReturnCode === "00";  
+        const newStatus = isSuccess ? 'success' : 'fail';  
 
-        res.render('payment-fail', {
-            orderId: data.oid,
-            message: `Ödeme başarısız: ${data.Response} ${data.ProcReturnCode || ""} ${data.ErrMsg || ""}`
-        });
-    } catch (err) {
-        console.error("Payten fail handler:", err);
-        return res.status(500).send("Sunucu hatası.");
-    }
-});
+        const user = await Users.findOneAndUpdate(  
+            { 'pendingPayments.oid': data.oid },  
+            {  
+                $set: {  
+                    'pendingPayments.$.status': newStatus,  
+                    'pendingPayments.$.finalizedAt': new Date(),  
+                    'pendingPayments.$.paytenRawData': data,  
+                    ...(isSuccess && { userType: 'premium', userTypeDate: new Date() })  
+                }  
+            }  
+        );  
+        if (!user) return res.status(404).send("Order/bilgisi bulunamadı.");  
 
-// 4) Callback
-router.post('/payment-callback', async (req, res) => {
-    try {
-        const data = req.body;
-        //logHashDebug(data, PAYTEN_STORE_KEY);
-        if (!validatePaytenHash(data, PAYTEN_STORE_KEY)) {
-            //console.warn('[Payten] Başarısız hash doğrulaması/callback:', data);
-            return res.status(400).send('Geçersiz istek.');
-        }
-        const isSuccess = data.Response === "Approved" && data.ProcReturnCode === "00";
-        const newStatus = isSuccess ? 'success' : 'fail';
-
-        const user = await Users.findOneAndUpdate(
-            { 'pendingPayments.oid': data.oid },
-            {
-                $set: {
-                    'pendingPayments.$.status': newStatus,
-                    'pendingPayments.$.finalizedAt': new Date(),
-                    'pendingPayments.$.paytenRawData': data,
-                    ...(isSuccess && { userType: 'premium', userTypeDate: new Date() })
-                }
-            }
-        );
-        if (!user) return res.status(404).send("Order/bilgisi bulunamadı.");
-
-        res.status(200).send(isSuccess ? "OK" : "Fail");
-    } catch (err) {
-        console.error("Payten callback handler:", err);
-        return res.status(500).send("Sunucu hatası.");
-    }
-});
-
-// Log fonksiyonu
-function logHashDebug(data, storeKey) {
-    const bankHash = data.HASH || data.hash;
-    const exclude = ['hash', 'encoding', 'countdown'];
-    const keys = Object.keys(data)
-        .filter(key => !exclude.includes(key.toLowerCase()));
-    const sortedKeys = keys.sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
-    function escapeVal(x) {
-        return String(x || '').replace(/\\/g, '\\\\').replace(/\|/g, '\\|');
-    }
-    const values = sortedKeys.map(k => escapeVal(data[k]));
-    values.push(storeKey);
-    const plain = values.join('|');
-    const calculated = crypto.createHash('sha512').update(plain, 'utf8').digest();
-    const myHash = Buffer.from(calculated).toString('base64');
-    console.log('\nPAYTEN HASH DEBUG:');
-    console.log('--- GELEN POST ---\n', JSON.stringify(data, null, 2));
-    console.log('--- İŞLENEN HASH DATA ---\n', plain);
-    console.log('--- BANKADAN GELEN HASH ---\n', bankHash);
-    console.log('--- BİZİM HESAPLANAN HASH ---\n', myHash, '\n');
-}
+        res.status(200).send(isSuccess ? "OK" : "Fail");  
+    } catch (err) {  
+        console.error("Payten callback handler:", err);  
+        return res.status(500).send("Sunucu hatası.");  
+    }  
+});  
 
 module.exports = router;
