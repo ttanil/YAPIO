@@ -113,7 +113,13 @@ router.post('/', authenticateUser, async (req, res) => {
         return res.status(401).json({ success: false, message: 'Seçtiğiniz üyelik ile bazı projelerinizi kaybedeceksiniz!' });
 
     try {
-        const amount = String(Number(req.body.amount || '91.96').toFixed(2));
+        let amountSelected;
+        if (projectLimit === 2 || projectLimit === "2") {
+            amountSelected = "2400.00";
+        } else if (projectLimit === 4 || projectLimit === "4") {
+            amountSelected = "3800.00";
+        }
+        const amount = String(Number(amountSelected || '91.96').toFixed(2));
         const oid = "order" + Date.now() + String(Math.floor(Math.random()*1000));
         const okUrl = SITE_URL + "/payment/payment-success";
         const failUrl = SITE_URL + "/payment/payment-fail";
@@ -192,9 +198,9 @@ router.post('/', authenticateUser, async (req, res) => {
 router.post('/payment-success', async (req, res) => {
     try {
         const data = req.body;
-        logHashDebug(data, PAYTEN_STORE_KEY);
+        //logHashDebug(data, PAYTEN_STORE_KEY);
         if (!validatePaytenHash(data, PAYTEN_STORE_KEY)) {
-            console.warn('[Payten] Başarısız hash doğrulaması/success:', data);
+            //console.warn('[Payten] Başarısız hash doğrulaması/success:', data);
             return res.status(400).send('Geçersiz istek.');
         }
         const user = await Users.findOne({ 'pendingPayments.oid': data.oid });
@@ -217,9 +223,9 @@ router.post('/payment-success', async (req, res) => {
 router.post('/payment-fail', async (req, res) => {
     try {
         const data = req.body;
-        logHashDebug(data, PAYTEN_STORE_KEY);
+        //logHashDebug(data, PAYTEN_STORE_KEY);
         if (!validatePaytenHash(data, PAYTEN_STORE_KEY)) {
-            console.warn('[Payten] Başarısız hash doğrulaması/fail:', data);
+            //console.warn('[Payten] Başarısız hash doğrulaması/fail:', data);
             return res.status(400).send('Geçersiz istek.');
         }
         const user = await Users.findOne({ 'pendingPayments.oid': data.oid });
@@ -239,9 +245,9 @@ router.post('/payment-fail', async (req, res) => {
 router.post('/payment-callback', async (req, res) => {
     try {
         const data = req.body;
-        logHashDebug(data, PAYTEN_STORE_KEY);
+        //logHashDebug(data, PAYTEN_STORE_KEY);
         if (!validatePaytenHash(data, PAYTEN_STORE_KEY)) {
-            console.warn('[Payten] Başarısız hash doğrulaması/callback:', data);
+            //console.warn('[Payten] Başarısız hash doğrulaması/callback:', data);
             return res.status(400).send('Geçersiz istek.');
         }
         const isSuccess = data.Response === "Approved" && data.ProcReturnCode === "00";
