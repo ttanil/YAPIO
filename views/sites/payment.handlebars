@@ -285,84 +285,59 @@
 
   
   <div class="payment-container pb-5 mb-5">
-    <div class="text-center mb-3">
-      <h2 class="fw-bold">Premium Üyelik</h2>
-      <div class="small text-success text-center mb-2">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#198754" class="bi bi-shield-check mb-1" viewBox="0 0 16 16">
-            <path d="M5.072 1.176a1 1 0 0 1 .82 0l2.904 1.249c.374.161.765.253 1.166.259.333.005.668-.047.999-.166l1.067-.388a1 1 0 0 1 1.137.508A8.998 8.998 0 0 1 13.857 8.46c0 2.434-.682 4.35-2.222 6.303A16.683 16.683 0 0 1 8 16a16.683 16.683 0 0 1-3.634-1.237C2.825 12.81 2.143 10.894 2.143 8.46c0-1.37.292-2.673.827-3.938a1 1 0 0 1 1.137-.508l1.067.388a4.545 4.545 0 0 0 .999.166c.401-.006.792-.098 1.166-.259z"/>
-            <path d="m10.854 6.854-3.5 3.5-.708-.708L8.793 6.5l-2.646-2.647.707-.707 3.5 3.5z"/>
-        </svg>
-        Ödemeniz <b>256-bit SSL</b>, <b>PCI DSS</b> ve <b>3D Secure</b> ile koruma altındadır.
-        <span class="d-block text-secondary small mt-1">Kart bilgileriniz kesinlikle kaydedilmez ve güvenli ödeme altyapısı kullanılır.</span>
+        <div class="text-center mb-3">
+            <h2 class="fw-bold">Premium Üyelik</h2>
+            <div class="small text-success text-center mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#198754" class="bi bi-shield-check mb-1" viewBox="0 0 16 16">
+                    <path d="M5.072 1.176a1 1 0 0 1 .82 0l2.904 1.249c.374.161.765.253 1.166.259.333.005.668-.047.999-.166l1.067-.388a1 1 0 0 1 1.137.508A8.998 8.998 0 0 1 13.857 8.46c0 2.434-.682 4.35-2.222 6.303A16.683 16.683 0 0 1 8 16a16.683 16.683 0 0 1-3.634-1.237C2.825 12.81 2.143 10.894 2.143 8.46c0-1.37.292-2.673.827-3.938a1 1 0 0 1 1.137-.508l1.067.388a4.545 4.545 0 0 0 .999.166c.401-.006.792-.098 1.166-.259z"/>
+                    <path d="m10.854 6.854-3.5 3.5-.708-.708L8.793 6.5l-2.646-2.647.707-.707 3.5 3.5z"/>
+                </svg>
+                Ödemeniz <b>256-bit SSL</b>, <b>PCI DSS</b> ve <b>3D Secure</b> ile koruma altındadır.
+                <span class="d-block text-secondary small mt-1">Kart bilgileriniz kesinlikle kaydedilmez ve güvenli ödeme altyapısı kullanılır.</span>
+            </div>
         </div>
-    </div>
-    <form id="paymentForm" autocomplete="off">
-      <div class="mb-3">
-        <label class="form-label">Üyelik Süresi</label>
-        <div class="btn-group w-100 mb-2" role="group" aria-label="Üyelik Süresi">
-            <input type="radio" class="btn-check" name="subType" id="monthly" autocomplete="off" checked>
-            <label class="btn btn-outline-primary" for="monthly">Aylık</label>
+        <form id="paymentForm" autocomplete="off">
+            <div class="mb-3">
+                <label class="form-label">Üyelik Süresi</label>
+                <div class="btn-group w-100 mb-2" role="group" aria-label="Üyelik Süresi">
+                    <input type="radio" class="btn-check" name="subType" id="yearly" autocomplete="off" checked>
+                    <label class="btn btn-outline-primary" for="yearly">Yıllık</label>
+                </div>
 
-            <input type="radio" class="btn-check" name="subType" id="yearly" autocomplete="off">
-            <label class="btn btn-outline-primary" for="yearly">Yıllık</label>
-        </div>
-        <input type="text" id="feeInput" class="form-control" value="499 ₺" readonly>
-      </div>
-      <div class="mb-3">
-        <label for="userFullName" class="form-label">Ad Soyad</label>
-        <input type="text" class="form-control" id="userFullName" placeholder="Adınızı giriniz" required>
-      </div>
-      <div class="mb-3">
-        <label for="userEmail" class="form-label">E-posta</label>
-        <input type="email" class="form-control" id="userEmail" placeholder="E-posta adresiniz" required>
-      </div>
-      <div class="mb-3">
-        <label for="paymentType" class="form-label">Ödeme Yöntemi</label>
-        <select class="form-select" id="paymentType" required>
-          <option value="" selected disabled>Yöntem seçiniz</option>
-          <option value="banka">Banka Havalesi/EFT</option>
-          <option value="kredi">Kredi Kartı</option>
-        </select>
-      </div>
+                <!-- Proje seçim kutuları -->
+                <div class="mt-3">
+                    <label class="form-label">Proje Limiti</label>
+                    <div class="btn-group w-100" role="group" aria-label="Proje Limiti">
+                        <input type="radio" class="btn-check" name="projectLimit" id="limit2" autocomplete="off">
+                        <label class="btn btn-outline-secondary" for="limit2" style="min-width:0;width:50%;">2 Proje</label>
+                        <input type="radio" class="btn-check" name="projectLimit" id="limit4" autocomplete="off" checked>
+                        <label class="btn btn-outline-secondary" for="limit4" style="min-width:0;width:50%;">4 Proje</label>
+                    </div>
+                </div>
 
-      <!-- BANKA ALANI -->
-      <div class="bank-info border rounded mb-3 p-3 shadow-sm" id="bankInfo">
-        <div class="mb-2"><strong>Banka Bilgileri</strong></div>
-        <div>
-          <div>Banka: <span class="fw-semibold">X Bankası</span></div>
-          <div>Hesap Adı: <span class="fw-semibold">ABC Eğitim Ltd. Şti.</span></div>
-          <div>IBAN: <span class="selectable fw-semibold" id="ibanNo">TR00 0000 0000 0000 0000 0000 00</span>
-            <button type="button" class="btn btn-sm btn-outline-primary ms-2 py-0 px-2" onclick="navigator.clipboard.writeText(document.getElementById('ibanNo').textContent)">Kopyala</button>
-          </div>
-          <div class="small text-secondary mt-2">Açıklama kısmına <strong>Ad Soyadınızı</strong> ve "<strong>Üyelik Ücreti</strong>" yazınız.</div>
-        </div>
-      </div>
-
-      <!-- KREDİ KARTI ALANI -->
-      <div class="credit-card-fields border rounded mb-3 p-3 shadow-sm" id="ccFields">
-        <div class="mb-3">
-          <label for="ccName" class="form-label">Kart Üzerindeki İsim</label>
-          <input type="text" class="form-control" id="ccName" maxlength="32" placeholder="Kart üzerindeki ad soyad" autocomplete="cc-name">
-        </div>
-        <div class="mb-3">
-          <label for="ccNumber" class="form-label">Kart Numarası</label>
-          <input type="text" class="form-control" id="ccNumber" maxlength="19" placeholder="0000 0000 0000 0000" autocomplete="cc-number" pattern="\d{16}">
-        </div>
-        <div class="row">
-          <div class="col">
-            <label for="ccMonth" class="form-label">Ay</label>
-            <input type="text" class="form-control" id="ccMonth" maxlength="2" placeholder="AA" autocomplete="cc-exp-month">
-          </div>
-          <div class="col">
-            <label for="ccYear" class="form-label">Yıl</label>
-            <input type="text" class="form-control" id="ccYear" maxlength="2" placeholder="YY" autocomplete="cc-exp-year">
-          </div>
-          <div class="col">
-            <label for="ccCVC" class="form-label">CVC</label>
-            <input type="text" class="form-control" id="ccCVC" maxlength="4" placeholder="123" autocomplete="cc-csc">
-          </div>
-        </div>
-      </div>
+                <!-- Fiyat kutusu -->
+                <div class="mt-3">
+                    <label class="form-label" for="feeInput">Fiyat</label>
+                    <input type="text" id="feeInput" class="form-control" value="3800 ₺" readonly>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="userFullName" class="form-label">Ad Soyad</label>
+                <input type="text" class="form-control" id="userFullName" placeholder="Adınızı giriniz" required>
+            </div>
+            <div class="mb-3">
+                <label for="userEmail" class="form-label">E-posta</label>
+                <input type="email" class="form-control" id="userEmail" placeholder="E-posta adresiniz" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label d-block mb-2">Ödeme Yöntemi</label>
+                <div>
+                    <input type="radio" class="btn-check" name="paymentType" id="bankaRadio" value="banka" autocomplete="off">
+                    <label class="btn btn-outline-primary me-2" for="bankaRadio">Banka Havalesi/EFT</label>
+                    <input type="radio" class="btn-check" name="paymentType" id="krediRadio" value="kredi" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="krediRadio">Kredi Kartı</label>
+                </div>
+            </div>
       
       <!-- YASAL ONAYLAR -->
       <div class="legal-check-fields mb-3" id="legalFields">
@@ -494,14 +469,6 @@
     import { showWarningMessage } from '/js/showMessage.js';
     const navbarCollapse = document.getElementById('navbarNav');  
     const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
-    const paymentType = document.getElementById('paymentType');
-    const bankInfo = document.getElementById('bankInfo');
-    const ccFields = document.getElementById('ccFields');
-    const payBtn = document.getElementById('payBtn');
-    const kvkkCheck = document.getElementById('kvkkCheck');
-    const mesafeCheck = document.getElementById('mesafeCheck');
-    const legalFields = document.getElementById('legalFields');
-    const ccInputs = ccFields.querySelectorAll("input");
     const quatationButton = document.getElementById("quatation-button"); 
     const quatationButtonMobile = document.getElementById("quatation-button-mobile");
     const graphsButton = document.getElementById("graphs-button"); 
@@ -511,6 +478,16 @@
     const soldButtonMobile = document.getElementById("sold-button-mobile");
     const buttonHome = document.getElementById("buttonHome");
     const loginButton = document.getElementById("loginButton");
+    const fullName = document.getElementById('userFullName');
+    const email = document.getElementById('userEmail');
+    const bankaRadio = document.getElementById('bankaRadio');
+    const krediRadio = document.getElementById('krediRadio');
+    const payBtn = document.getElementById('payBtn');
+    const kvkkCheck = document.getElementById('kvkkCheck');
+    const mesafeCheck = document.getElementById('mesafeCheck');
+    const feeInput = document.getElementById('feeInput');
+    const limit2 = document.getElementById('limit2');
+    const limit4 = document.getElementById('limit4');
 
     let userId = null;
     let projectNumber = null;
@@ -591,58 +568,41 @@
         window.location.href = "/";
     });
 
-
-    paymentType.addEventListener('change', function() {
-      if(this.value === 'banka') {
-        bankInfo.style.display = 'block';
-        ccFields.style.display = 'none';
-        legalFields.style.display = 'none';
-        payBtn.textContent = "Bankaya Yönlendir";
-        payBtn.disabled = false;
-      } else if(this.value === 'kredi') {
-        bankInfo.style.display = 'none';
-        ccFields.style.display = 'block';
-        legalFields.style.display = 'block';
-        payBtn.textContent = "Ödeme Yap";
-        payBtn.disabled = true;
-        kvkkCheck.checked = false;
-        mesafeCheck.checked = false;
-        ccInputs.forEach(inp => inp.value = "");
-      } else {
-        bankInfo.style.display = 'none';
-        ccFields.style.display = 'none';
-        legalFields.style.display = 'none';
-        payBtn.disabled = true;
-      }
+    // ilk açılışta doğru fiyatı göster
+    function setInitialFee() {
+      feeInput.value = limit4.checked ? "3800 ₺" : "2400 ₺";
+    }
+    setInitialFee();
+    // Proje limitleri değiştikçe fiyatı güncelle
+    limit2.addEventListener('change', function() {
+      if (this.checked) feeInput.value = "2400 ₺";
     });
-    // Fiyatları burada belirle
-    const monthlyFee = "499 ₺";
-    const yearlyFee = "4000 ₺";
-
-    document.getElementById('monthly').addEventListener('change', function() {
-        if(this.checked) document.getElementById('feeInput').value = monthlyFee;
-    });
-    document.getElementById('yearly').addEventListener('change', function() {
-        if(this.checked) document.getElementById('feeInput').value = yearlyFee;
+    limit4.addEventListener('change', function() {
+      if (this.checked) feeInput.value = "3800 ₺";
     });
 
-    // Kredi kartı seçiliyse, kutular tıklandıysa ve kart alanları doluysa buton aktif olsun
     document.getElementById('paymentForm').addEventListener('input', function() {
-      if(paymentType.value === "kredi") {
-        const allFilled = Array.from(ccInputs).every(inp => inp.value.trim().length > 0);
-        payBtn.disabled = !(kvkkCheck.checked && mesafeCheck.checked && allFilled);
-      }
+      // Ad soyad, mail, ödeme seçili ve iki onay kutusu işaretli olursa buton enable
+      const adDolu = fullName.value.trim().length > 0;
+      const mailDolu = email.value.trim().length > 0;
+      const odemeSecili = bankaRadio.checked || krediRadio.checked;
+      const kvkkOk = kvkkCheck.checked;
+      const mesafeOk = mesafeCheck.checked;
+      payBtn.disabled = !(adDolu && mailDolu && odemeSecili && kvkkOk && mesafeOk);
     });
-
     document.getElementById('paymentForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      if(paymentType.value === 'banka') {
-        window.open('https://www.isbank.com.tr/TR/kisisel/internet-subesi/para-transferleri', '_blank');
-        alert('Lütfen havale/EFT işleminizi banka ekranında tamamlayınız. Ödeme sonrası dekontu iletiniz.');
-      } else if(paymentType.value === 'kredi') {
-        alert('Kredi kartı ile ödeme şu anda örnek modda, burada gerçek POS entegrasyonunuz yapılmalı.');
+      if(bankaRadio.checked) {
+        //alert('Banka havalesi/EFT seçtiniz. Lütfen ödeme bilgileri için bize ulaşın.');
+      }
+      else if(krediRadio.checked){
+        //alert('Kredi kartı ile ödeme için yönlendirileceksiniz.');
       }
     });
+        
+            
+        
+    
   </script>
 </body>
 </html>
