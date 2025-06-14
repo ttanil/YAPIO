@@ -8,65 +8,62 @@ require('dotenv').config();
 
 const authenticateUser = require('../middleware/authenticateUser');
 
-// Payten storeKey .env dosyandan gelsin!
-const PAYTEN_STORE_KEY = process.env.PAYTEN_STORE_KEY || 'PLGytr930485!';
-const PAYTEN_CLIENT_ID = process.env.PAYTEN_CLIENT_ID || '191797468';
-const PAYTEN_FORM_ACTION = process.env.PAYTEN_FORM_ACTION || 'https://sanalpos2.ziraatbank.com.tr/fim/est3Dgate';
+// Storekey ve ClientID environment'tan alınmalı! (örn: process.env.PAYTEN_STORE_KEY)
+const PAYTEN_STORE_KEY = 'PLGytr930485!';
+const PAYTEN_CLIENT_ID = '191797468';
+const PAYTEN_FORM_ACTION = 'https://sanalpos2.ziraatbank.com.tr/fim/est3Dgate';
 const SITE_URL = 'https://www.yapio.net';
 
-// Helper: Hash üret
+// Parametrelerin doğru sırada toplanması şart!
 function createPaytenHash(paramObj, storeKey) {
+    // Dikkat: callbackUrl parametresi eklendi ve sırası düzeltildi!
     const paramOrder = [
-        'amount', 'clientid', 'currency', 'failUrl', 'hashAlgorithm',
-        'Instalment', 'lang', 'okUrl', 'oid', 'rnd', 'storetype', 'TranType'
+        'amount', 'callbackUrl', 'clientid', 'currency', 'failUrl',
+        'hashAlgorithm', 'Instalment', 'lang', 'oid', 'okUrl',
+        'rnd', 'storetype', 'TranType'
     ];
     const arr = paramOrder.map(key => paramObj[key] || '');
     arr.push(storeKey);
-    const toHash = arr.join('|');
+    // Kaçış!
+    const toHash = arr.map(x => String(x).replace(/\\/g, '\\\\').replace(/\|/g, '\\|')).join('|');
     const sha = crypto.createHash('sha512').update(toHash, 'utf8').digest();
     return Buffer.from(sha).toString('base64');
 }
 
-// Helper: Parametrelerden hash’i tekrar üret, karşılaştır
+// Hash kontrol fonksiyonunda `encoding` ve `hash` parametreleri işlem dışı kalacak!
+// POST body'de alfabetik değil, BANKA'nın belirttiği SIRA önemli (callback'te banka kendi sırasıyla gönderdiği için hash hesaplaması orada alfabetik!)
 function validatePaytenHash(postedData, storeKey) {
-  const bankHash = postedData.HASH || postedData.hash;
-  if (!bankHash) return false;
+    const bankHash = postedData.HASH || postedData.hash;
+    if (!bankHash) return false;
 
-  // 1- "hash" ve "encoding" hariç, tüm parametrelerin KÜÇÜK harfli keylerini al
-  const exclude = ['hash', 'encoding'];
-  const keys = Object.keys(postedData)
-    .filter(key => !exclude.includes(key.toLowerCase()));
+    // Dokümana uygun şekilde: hash, encoding, countdown KATILMAZ!
+    const exclude = ['hash', 'encoding', 'countdown'];
+    // Bankadan dönen (callback, success, fail) POST'da: alfabetik sıralama şart:
+    const keys = Object.keys(postedData)
+        .filter(key => !exclude.includes(key.toLowerCase()));
 
-  // 2- Alfabetik sırala
-  const sortedKeys = keys.sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
+    const sortedKeys = keys.sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
 
-  // 3- Değerlerde \ ve | karakterlerini düzgün kaçışla yaz
-  function escapeVal(x) {
-    return String(x || '').replace(/\\/g, '\\\\').replace(/\|/g, '\\|');
-  }
-  const values = sortedKeys.map(k => escapeVal(postedData[k]));
+    function escapeVal(x) {
+        return String(x || '').replace(/\\/g, '\\\\').replace(/\|/g, '\\|');
+    }
+    const values = sortedKeys.map(k => escapeVal(postedData[k]));
+    values.push(storeKey);
 
-  // 4- storeKey ekle
-  values.push(storeKey);
+    const plain = values.join('|');
+    const digest = crypto.createHash('sha512').update(plain, 'utf8').digest();
+    const myHash = Buffer.from(digest).toString('base64');
 
-  // 5- Tek string
-  const plain = values.join('|');
-  // 6- SHA512+base64
-  const digest = crypto.createHash('sha512').update(plain, 'utf8').digest();
-  const myHash = Buffer.from(digest).toString('base64');
-
-  // Karşılaştır
-  return (myHash === bankHash);
+    return (myHash === bankHash);
 }
 
-// Gerekli middleware
-router.use(express.urlencoded({ extended: true })); // Payten POST (form-data) için
+// Middleware
+router.use(express.urlencoded({ extended: true }));
 
-// GET /payment  — Kullanıcı ödeme sayfası
+// GET /payment
 router.get('/', authenticateUser, async (req, res) => {
     const { projectName } = req.query;
     const userId = res.locals.user._id || res.locals.user.id;
-
     if (res.locals.userRole === "misafir") {
         return res.redirect('/login');
     }
@@ -101,14 +98,14 @@ router.get('/', authenticateUser, async (req, res) => {
     }
 });
 
-// 1) Ödeme başlatıcı endpoint
+// 1) Ödeme başlatıcı
 router.post('/', authenticateUser, async (req, res) => {
     const { fullName, email, projectNumber, userType, projectLimit } = req.body || {};
     const userId = res.locals.user._id || res.locals.user.id;
     if (!userId || !fullName || !email || !projectNumber || !userType || !projectLimit)
         return res.status(400).json({ success: false, message: "Eksik bilgi." });
 
-    // ... üyelik geçiş kuralları ...
+    // ...üyelik geçiş kuralları...
     if ((projectLimit === 2 && userType === "premium2" && projectNumber === "2") ||
         (projectLimit === 4 && userType === "premium4" && projectNumber === "4"))
         return res.status(401).json({ success: false, message: 'Seçtiğiniz üyelik daha fazla proje oluşturmayı içermemektedir' });
@@ -129,7 +126,7 @@ router.post('/', authenticateUser, async (req, res) => {
         const TranType = "Auth";
         const Instalment = "";
 
-        // Kullanıcıya yeni ödeme kaydı ekle (gidip OrderTemp'e eklemeye gerek yok!)
+        // Kullanıcıya yeni ödeme kaydı ekle
         await Users.findByIdAndUpdate(userId, {
             $push: {
                 pendingPayments: {
@@ -142,10 +139,21 @@ router.post('/', authenticateUser, async (req, res) => {
             }
         });
 
-        // Hash ve Payten formu üret
+        // --- FORM VE HASH TAMAMEN BANKANIN SIRASIYLA ---
         const params = {
-            amount, clientid: PAYTEN_CLIENT_ID, currency, failUrl, hashAlgorithm,
-            Instalment, lang, okUrl, oid, rnd, storetype, TranType
+            amount,
+            callbackUrl, // << MUTLAKA EKLENMELİ!
+            clientid: PAYTEN_CLIENT_ID,
+            currency,
+            failUrl,
+            hashAlgorithm,
+            Instalment,
+            lang,
+            oid,
+            okUrl,
+            rnd,
+            storetype,
+            TranType
         };
         const hash = createPaytenHash(params, PAYTEN_STORE_KEY);
 
@@ -153,28 +161,26 @@ router.post('/', authenticateUser, async (req, res) => {
         <html>
         <body onload="document.forms[0].submit()">
             <form method="post" action="${PAYTEN_FORM_ACTION}">
-                <input type="hidden" name="clientid" value="${PAYTEN_CLIENT_ID}" />
-                <input type="hidden" name="storetype" value="${storetype}" />
                 <input type="hidden" name="amount" value="${amount}" />
+                <input type="hidden" name="callbackUrl" value="${callbackUrl}" />
+                <input type="hidden" name="clientid" value="${PAYTEN_CLIENT_ID}" />
                 <input type="hidden" name="currency" value="${currency}" />
+                <input type="hidden" name="failUrl" value="${failUrl}" />
+                <input type="hidden" name="hashAlgorithm" value="${hashAlgorithm}" />
+                <input type="hidden" name="Instalment" value="${Instalment}" />
+                <input type="hidden" name="lang" value="${lang}" />
                 <input type="hidden" name="oid" value="${oid}" />
                 <input type="hidden" name="okUrl" value="${okUrl}" />
-                <input type="hidden" name="failUrl" value="${failUrl}" />
-                <input type="hidden" name="callbackUrl" value="${callbackUrl}" />
                 <input type="hidden" name="rnd" value="${rnd}" />
-                <input type="hidden" name="lang" value="${lang}" />
-                <input type="hidden" name="hashAlgorithm" value="${hashAlgorithm}" />
+                <input type="hidden" name="storetype" value="${storetype}" />
                 <input type="hidden" name="TranType" value="${TranType}" />
-                <input type="hidden" name="Instalment" value="${Instalment}" />
+                <input type="hidden" name="encoding" value="UTF-8" />
                 <input type="hidden" name="hash" value="${hash}" />
             </form>
             <p>Lütfen bekleyiniz. Banka ödeme sayfasına yönlendiriliyorsunuz...</p>
         </body>
         </html>
         `;
-        //console.log("Giden Payten formu:\n", html);
-        // özel olarak params dizisini de loglayın:
-        //console.log("Hash için kullanılan parametreler:", params);
         res.json({ paymentFormHtml: html });
     } catch (err) {
         console.error("Hata:", err);
@@ -182,7 +188,7 @@ router.post('/', authenticateUser, async (req, res) => {
     }
 });
 
-// 2) Success (Kullanıcıya sadece başarı/fail göster)
+// 2) Success
 router.post('/payment-success', async (req, res) => {
     try {
         const data = req.body;
@@ -191,10 +197,8 @@ router.post('/payment-success', async (req, res) => {
             console.warn('[Payten] Başarısız hash doğrulaması/success:', data);
             return res.status(400).send('Geçersiz istek.');
         }
-        // İlgili kullanıcıyı, ödemeyi bul:
         const user = await Users.findOne({ 'pendingPayments.oid': data.oid });
         if (!user) return res.status(404).send("Order/bilgisi bulunamadı.");
-        const payment = user.pendingPayments.find(p => p.oid === data.oid);
 
         const isSuccess = data.Response === "Approved" && data.ProcReturnCode === "00";
         res.render(isSuccess ? 'payment-ok' : 'payment-fail', {
@@ -209,7 +213,7 @@ router.post('/payment-success', async (req, res) => {
     }
 });
 
-// 3) Fail (Kullanıcıya sadece başarısız ekranı gösterir)
+// 3) Fail
 router.post('/payment-fail', async (req, res) => {
     try {
         const data = req.body;
@@ -220,7 +224,6 @@ router.post('/payment-fail', async (req, res) => {
         }
         const user = await Users.findOne({ 'pendingPayments.oid': data.oid });
         if (!user) return res.status(404).send("Order/bilgisi bulunamadı.");
-        const payment = user.pendingPayments.find(p => p.oid === data.oid);
 
         res.render('payment-fail', {
             orderId: data.oid,
@@ -232,7 +235,7 @@ router.post('/payment-fail', async (req, res) => {
     }
 });
 
-// 4) Callback—Kritik DB güncellemesi burada yapılır!
+// 4) Callback
 router.post('/payment-callback', async (req, res) => {
     try {
         const data = req.body;
@@ -244,7 +247,6 @@ router.post('/payment-callback', async (req, res) => {
         const isSuccess = data.Response === "Approved" && data.ProcReturnCode === "00";
         const newStatus = isSuccess ? 'success' : 'fail';
 
-        // Kullanıcının içinde ilgili ödemeyi bulup güncelle:
         const user = await Users.findOneAndUpdate(
             { 'pendingPayments.oid': data.oid },
             {
@@ -252,7 +254,7 @@ router.post('/payment-callback', async (req, res) => {
                     'pendingPayments.$.status': newStatus,
                     'pendingPayments.$.finalizedAt': new Date(),
                     'pendingPayments.$.paytenRawData': data,
-                    ...(isSuccess && { userType: 'premium', userTypeDate: new Date() }) // Başarılı ise üyelik yükselt!
+                    ...(isSuccess && { userType: 'premium', userTypeDate: new Date() })
                 }
             }
         );
@@ -264,27 +266,27 @@ router.post('/payment-callback', async (req, res) => {
         return res.status(500).send("Sunucu hatası.");
     }
 });
+
+// Log fonksiyonu
 function logHashDebug(data, storeKey) {
-  const bankHash = data.HASH || data.hash;
-  // Hash datası oluştur (aynı fonksiyonun ile)
-  const exclude = ['hash', 'encoding'];
-  const keys = Object.keys(data)
-    .filter(key => !exclude.includes(key.toLowerCase()));
-  const sortedKeys = keys.sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
-  function escapeVal(x) {
-    return String(x || '').replace(/\\/g, '\\\\').replace(/\|/g, '\\|');
-  }
-  const values = sortedKeys.map(k => escapeVal(data[k]));
-  values.push(storeKey);
-  const plain = values.join('|');
-  const calculated = crypto.createHash('sha512').update(plain, 'utf8').digest();
-  const myHash = Buffer.from(calculated).toString('base64');
-  // Detaylı log:
-  console.log('\nPAYTEN HASH DEBUG:');
-  console.log('--- GELEN POST ---\n', JSON.stringify(data, null, 2));
-  console.log('--- İŞLENEN HASH DATA ---\n', plain);
-  console.log('--- BANKADAN GELEN HASH ---\n', bankHash);
-  console.log('--- BİZİM HESAPLANAN HASH ---\n', myHash, '\n');
+    const bankHash = data.HASH || data.hash;
+    const exclude = ['hash', 'encoding', 'countdown'];
+    const keys = Object.keys(data)
+        .filter(key => !exclude.includes(key.toLowerCase()));
+    const sortedKeys = keys.sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
+    function escapeVal(x) {
+        return String(x || '').replace(/\\/g, '\\\\').replace(/\|/g, '\\|');
+    }
+    const values = sortedKeys.map(k => escapeVal(data[k]));
+    values.push(storeKey);
+    const plain = values.join('|');
+    const calculated = crypto.createHash('sha512').update(plain, 'utf8').digest();
+    const myHash = Buffer.from(calculated).toString('base64');
+    console.log('\nPAYTEN HASH DEBUG:');
+    console.log('--- GELEN POST ---\n', JSON.stringify(data, null, 2));
+    console.log('--- İŞLENEN HASH DATA ---\n', plain);
+    console.log('--- BANKADAN GELEN HASH ---\n', bankHash);
+    console.log('--- BİZİM HESAPLANAN HASH ---\n', myHash, '\n');
 }
 
 module.exports = router;
