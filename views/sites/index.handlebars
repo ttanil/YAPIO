@@ -412,7 +412,12 @@
           ? `Premium sürenizin bitmesine <b>${kalanGun} gün</b> kaldı.<br>Bitiş tarihi: <b>${endDate}</b>`
           : "Premium süreniz dolmuş.";
         premiumTimeAlert.innerHTML =
-          `<div class="alert alert-warning py-2 mb-2" role="alert">${kalanStr}</div>`;
+          `<div class="alert alert-warning py-2 mb-2" role="alert">
+          ${kalanStr}
+            <div class="d-grid mt-2">
+              <button id="renewMembershipBtn" type="button" class="btn btn-outline-primary btn-sm">Üyeliği Yenile</button>
+            </div>
+          </div>`;
       } else if(userType === "free") {
         premiumTimeAlert.innerHTML = `<div class="alert alert-success py-2 mb-2" role="alert"><b>Süresiz</b></div>`;
       } else if(userType === "premium") {
@@ -420,6 +425,15 @@
       } else {
         premiumTimeAlert.innerHTML = "";
       }
+
+      setTimeout(() => {
+        const renewBtn = document.getElementById("renewMembershipBtn");
+        if (renewBtn) {
+          renewBtn.onclick = function() {
+            window.location.href = "/payment";
+          };
+        }
+      }, 0);
       
       const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
       registerModal.show();
