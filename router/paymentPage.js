@@ -254,32 +254,59 @@ router.post('/payment-fail', async (req, res) => {
 
 // 4) Callback  
 router.post('/payment-callback', async (req, res) => {  
-    try {  
-        const data = req.body;  
-        if (!validatePaytenHash(data, PAYTEN_STORE_KEY)) {  
-            return res.status(400).send('Geçersiz istek.');  
-        }  
-        const isSuccess = data.Response === "Approved" && data.ProcReturnCode === "00";  
-        const newStatus = isSuccess ? 'success' : 'fail';  
+    try {
+        const data = req.body;
+        if (!validatePaytenHash(data, PAYTEN_STORE_KEY)) {
+            return res.status(400).send('Geçersiz istek.');
+        }
+        const isSuccess = data.Response === "Approved" && data.ProcReturnCode === "00";
+        const newStatus = isSuccess ? 'success' : 'fail';
 
-        const user = await Users.findOneAndUpdate(  
-            { 'pendingPayments.oid': data.oid },  
-            {  
-                $set: {  
-                    'pendingPayments.$.status': newStatus,  
-                    'pendingPayments.$.finalizedAt': new Date(),  
-                    'pendingPayments.$.paytenRawData': data,  
-                    ...(isSuccess && { userType: 'premium', userTypeDate: new Date() })  
-                }  
-            }  
-        );  
-        if (!user) return res.status(404).send("Order/bilgisi bulunamadı.");  
+        // Kullanıcıyı ve ödemeyi bul
+        const user = await Users.findOne({ 'pendingPayments.oid': data.oid });
+        if (!user) return res.status(404).send("Order/bilgisi bulunamadı.");
 
-        res.status(200).send(isSuccess ? "OK" : "Fail");  
-    } catch (err) {  
-        console.error("Payten callback handler:", err);  
-        return res.status(500).send("Sunucu hatası.");  
-    }  
-});  
+        // İlgili ödeme kaydını bul
+        const payment = user.pendingPayments.find(p => p.oid === data.oid);
+
+        let newUserType = user.userType; // Varsayılan olarak mevcut userType
+        if (isSuccess && payment) {
+            // Öncelik: payment.meta.projectLimit'ten, yoksa amount'tan userType seç
+            const limit = payment.meta?.projectLimit;
+            if (limit === 2 || limit === "2")
+                newUserType = "premium2";
+            else if (limit === 4 || limit === "4")
+                newUserType = "premium4";
+            else
+                newUserType = "premium";
+        }
+
+        // GÜNCELLEME işlemi (userTypeDate yok! Sadece userType değişiyor.)
+        const updateFields = {
+            'pendingPayments.$.status': newStatus,
+            'pendingPayments.$.finalizedAt': new Date(),
+            'pendingPayments.$.paytenRawData': data,
+        };
+        if (isSuccess) {
+            updateFields['userType'] = newUserType;
+            // `userTypeDate` EKLEME! Onun yerine finalizedAt tarihini, gerektiğinde payment içinden okumak yeterli.
+        }
+
+        const updatedUser = await Users.findOneAndUpdate(
+            { 'pendingPayments.oid': data.oid },
+            { $set: updateFields },
+            { new: true }
+        );
+        if (!updatedUser) return res.status(404).send("Order/bilgisi bulunamadı.");
+
+        // KULLANICININ premium başlangıç tarihi lazım olursa:
+        // const abonelikTarihi = payment?.finalizedAt || payment?.paymentStartedAt;
+
+        res.status(200).send(isSuccess ? "OK" : "Fail");
+    } catch (err) {
+        console.error("Payten callback handler:", err);
+        return res.status(500).send("Sunucu hatası.");
+    }
+});
 
 module.exports = router;

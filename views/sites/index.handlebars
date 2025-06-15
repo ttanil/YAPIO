@@ -701,6 +701,10 @@
           if (!response.ok && !result.success) {
               showWarningMessage(result.message, "tamam", true);
           } else{
+              const premiumWarningDiv = document.getElementById('premium-warning');
+              if (result.premiumExpiryMessage) {
+                showWarningMessage(result.premiumExpiryMessage, "tamam", false);
+              }
               projectNumber = result.projects.length;
               userType = result.userType;
               if(Array.isArray(result.projects)){

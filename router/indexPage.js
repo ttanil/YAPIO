@@ -18,15 +18,45 @@ router.get('/', authenticateUser, (req, res) => {
 router.post('/', async (req, res) => { 
     const { userId, projectName, activeType = null, process = null } = req.body || {};
     
-    if(userId && !projectName && !process){
+    if (userId && !projectName && !process){
         try {
             const user = await Users.findById(userId);
             if (!user) {
                 return res.status(401).json({ success: false, message: 'Geçersiz giriş!' });
             }
 
-            const userType = user.userType;
-            
+            // Premium süresi bitti mi, ve/veya uyarı zamanı mı kontrolü:
+            let premiumExpiryMessage = null;
+            let updatedUserType = user.userType;
+
+            if(user.userType !== 'free') {
+                // Son başarılı premium ödeme kaydı bulunur
+                const lastPremium = user.pendingPayments
+                    .filter(p => p.status === 'success')
+                    .sort((a, b) => new Date(b.finalizedAt || 0) - new Date(a.finalizedAt || 0))[0];
+
+                if (lastPremium) {
+                    const premiumStartDate = lastPremium.finalizedAt || lastPremium.paymentStartedAt;
+                    const expiryDate = new Date(premiumStartDate);
+                    expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+
+                    const now = new Date();
+                    const diffMs = expiryDate - now;
+                    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+                    if (diffDays > 0 && diffDays <= 14) {
+                        premiumExpiryMessage = `Premium üyeliğinizin bitmesine ${diffDays} gün kaldı!`;
+                    } else if (diffDays <= 0) {
+                        // Otomatik olarak free'ye düşür
+                        await Users.findByIdAndUpdate(userId, { userType: 'free' });
+                        updatedUserType = 'free';
+                        premiumExpiryMessage = 'Premium üyeliğiniz sona erdi. Hesabınız free oldu.';
+                    }
+                }
+            }
+
+            const userType = updatedUserType;
+
             let projects = null;
             if (user.userInputs && user.userInputs.length > 0) {
                 projects = user.userInputs.map(input => ({
@@ -44,7 +74,7 @@ router.post('/', async (req, res) => {
                     building: input.building,
                     floorsData: input.floorsData
                 }));
-            } else{
+            } else {
                 projects = {
                     userNameInfo : user.name,
                     userPhoneInfo : user.phone,
@@ -56,9 +86,15 @@ router.post('/', async (req, res) => {
                     userSirketIlce : user.sirketIlce,
                     userTipiInfo : user.tipi,
                     userVergiNo : user.vergiNo
-                }
+                };
             }
-            return res.json({ success: true, projects, userType: userType });
+
+            return res.json({
+                success: true,
+                projects,
+                userType,
+                premiumExpiryMessage
+            });
 
         } catch (err) {
             console.error("Kayıt Hatası:", err);
