@@ -270,6 +270,8 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
         </div>
         <div class="modal-body">
+          <div id="userTypeAlert"></div>
+          <div id="premiumTimeAlert" class="mt-2"></div>
           <form id="registerForm">
             <input type="text" class="form-control mb-2" id="name" name="name" placeholder="Adınız veya Şirket Adı">
             <input type="text" class="form-control mb-2" id="phone" name="phone" placeholder="Telefon numarası (0..)" maxlength="11" minlength="11" pattern="^\d{11}$">
@@ -383,6 +385,40 @@
         tcno.placeholder = userVergiNo;
         il.placeholder = userSirketIl;
         ilce.placeholder = userSirketIlce;
+      }
+
+      const userTypeAlert = document.getElementById("userTypeAlert");
+      const premiumTimeAlert = document.getElementById("premiumTimeAlert");
+
+      // Kullanıcı tipi kutusu
+      console.log("userType ",userType);
+      if(userType){
+        let typeStr = "";
+        if(userType === "free") typeStr = "<b>Ücretsiz</b>";
+        else if(userType === "premium") typeStr = "<b>Premium</b>";
+        else if(userType === "premium2") typeStr = "<b>Premium (2 proje)</b>";
+        else if(userType === "premium4") typeStr = "<b>Premium (4 proje)</b>";
+        userTypeAlert.innerHTML = `<div class="alert alert-info py-2 mb-2" role="alert">${typeStr}</div>`;
+      } else {
+        userTypeAlert.innerHTML = "";
+      }
+
+      // Süre kutusu
+      if(userType === "premium2" || userType === "premium4") {
+        // Bunlar window veya global bir değişkende tutulmalı!
+        let kalanGun = window.premiumRemainingDays || 0;
+        let endDate = window.premiumEndDate || ""; // "2025-06-29" gibi 
+        let kalanStr = (kalanGun > 0)
+          ? `Premium sürenizin bitmesine <b>${kalanGun} gün</b> kaldı.<br>Bitiş tarihi: <b>${endDate}</b>`
+          : "Premium süreniz dolmuş.";
+        premiumTimeAlert.innerHTML =
+          `<div class="alert alert-warning py-2 mb-2" role="alert">${kalanStr}</div>`;
+      } else if(userType === "free") {
+        premiumTimeAlert.innerHTML = `<div class="alert alert-success py-2 mb-2" role="alert"><b>Süresiz</b></div>`;
+      } else if(userType === "premium") {
+        premiumTimeAlert.innerHTML = `<div class="alert alert-success py-2 mb-2" role="alert"><b>Süresiz</b></div>`;
+      } else {
+        premiumTimeAlert.innerHTML = "";
       }
       
       const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
