@@ -109,8 +109,9 @@ router.post('/', authenticateUser, async (req, res) => {
     if (!userId || !fullName || !email || !projectNumber || !userType || !projectLimit)  
         return res.status(400).json({ success: false, message: "Eksik bilgi." });  
 
-    if ((projectLimit === 2 && userType === "premium2" && projectNumber === "2") ||  
-        (projectLimit === 4 && userType === "premium4" && projectNumber === "4"))  
+    if ((projectLimit === 2 && userType === "premium2" && parseInt(projectNumber) > 2)   
+        //|| (projectLimit === 4 && userType === "premium4" && projectNumber === "4")
+    )  
         return res.status(401).json({ success: false, message: 'Seçtiğiniz üyelik daha fazla proje oluşturmayı içermemektedir' });  
     if (projectLimit === 2 && userType === "premium4" && parseInt(projectNumber) >= 2)  
         return res.status(401).json({ success: false, message: 'Seçtiğiniz üyelik ile bazı projelerinizi kaybedeceksiniz!' });  
