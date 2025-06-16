@@ -546,10 +546,6 @@
   </nav> 
 
   <div class="custom-short-menu" id="regulation-button-area">
-      <a class="menu-btn" id="quatation-button" href="#">
-          <img src="img/pay1_1.png" alt="">
-          <span>Giderler</span>
-      </a>
       <a class="menu-btn" id="graphs-button" href="#">
           <img src="img/growth_1.png" alt="">
           <span>Analizler</span>
@@ -557,6 +553,10 @@
       <a class="menu-btn" id="sold-button" href="#">
           <img src="/img/property.png" alt="">
           <span>Satış</span>
+      </a>
+      <a class="menu-btn" id="document-button" href="#">
+          <img src="/img/document.png" alt="">
+          <span>Evraklar</span>
       </a>
   </div>
 
@@ -1016,6 +1016,7 @@
     const searchInput = document.getElementById("searchInput");
     const searchBtn = document.getElementById("searchBtn");
     const searchForm = document.querySelector('.pastel-search-box');
+    const documentButton = document.getElementById("document-button");
     
     // Tabs geçişleri  
     const tab1Btn = document.getElementById('tab1Btn');  
@@ -1325,6 +1326,9 @@
     });
     soldButton.addEventListener("click", () => {
         window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
+    });
+    documentButton.addEventListener("click", () => {
+        window.location.href = `/evrak?projectName=${encodeURIComponent(projectName)}`;
     });
 
 

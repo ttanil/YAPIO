@@ -373,13 +373,13 @@
           <img src="img/pay1_1.png" alt="">
           <span>Giderler</span>
       </a>
-      <a class="menu-btn" id="graphs-button" href="#">
-          <img src="img/growth_1.png" alt="">
-          <span>Analizler</span>
-      </a>
       <a class="menu-btn" id="sold-button" href="#">
           <img src="/img/property.png" alt="">
           <span>Satış</span>
+      </a>
+      <a class="menu-btn" id="document-button" href="#">
+          <img src="/img/document.png" alt="">
+          <span>Evraklar</span>
       </a>
   </div>
 
@@ -431,6 +431,7 @@
     const genelToplamText = document.getElementById("genelToplamText");
     const mKareMaliyetText = document.getElementById("mKareMaliyetText");
     const loginButton = document.getElementById("loginButton");
+    const documentButton = document.getElementById("document-button");
 
     let userId = null;
     let projectName = null;
@@ -1456,6 +1457,9 @@
     });
     buttonHome.addEventListener("click", () => {  
         window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
+    });
+    documentButton.addEventListener("click", () => {
+        window.location.href = `/evrak?projectName=${encodeURIComponent(projectName)}`;
     });
 
     function toMongoFieldName(text) {

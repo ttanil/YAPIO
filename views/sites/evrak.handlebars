@@ -1,0 +1,883 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Bina Planı</title>  
+    <link rel="icon" type="image/png" href="img/icon.png" sizes="32x32">
+    <!-- Bootstrap CSS -->  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">  
+    <link rel="stylesheet" href="css/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>  
+
+    <style>  
+    body {
+      background: linear-gradient(to bottom, #ede9de 0%, #eef1f7 100%);
+      min-height: 100vh;
+      font-family: "Varela Round", Arial, sans-serif;
+    }
+
+    .custom-short-menu {
+            display: flex;
+            gap: 22px;
+            justify-content: center;   /* Ortala */
+            align-items: flex-start;
+            width: 100%;
+            margin-top: 18px;
+            margin-bottom: 10px;
+        }
+
+        .menu-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 70px;
+            text-decoration: none;
+            background: none;
+            border: none;
+            outline: none;
+            transition: color 0.18s, background 0.18s;
+        }
+
+        .menu-btn img {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 4px;
+        }
+
+        .menu-btn span {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .menu-btn:hover span,
+        .menu-btn:focus span {
+            color: #1d67c4;
+            font-weight: 500;
+        }
+
+        #buttonHome {
+            margin-right: 18px; /* Sağdan istediğin kadar boşluk (arttırabilirsin) */
+        }
+
+    
+      
+        .container-fluid {  
+            display: flex;  
+            flex: 0 0 100%;  
+            flex-wrap: nowrap;  
+            align-items: center;  
+        }  
+        #projectName {  
+            flex: 0 0 90%;  
+            white-space: nowrap;  
+            overflow: hidden;  
+            text-overflow: ellipsis;  
+            font-family: Arial, sans-serif;  
+            font-size: 36px;
+        }  
+        .img-fluid {  
+            flex: 0 0 auto;  
+            height: 30px;  
+            width: 30px;  
+            margin-right: 10px;  
+        }
+        .custom-btn {  
+            background-color: #847539;
+            color: white; /* Yazı rengi */  
+            border: none; /* Kenarlığın kaldırılması */  
+            border-radius: 10px; /* Kenarlıkları yuvarlaklaştırma */  
+            padding: 10px 20px; /* İç boşluklar */  
+            font-family: "Varela Round";  
+            font-size: 16px; /* Yazı boyutu */  
+            font-weight: bold; /* Kalın yazı */  
+            letter-spacing: 2px;
+            cursor: pointer; /* Fare imlecini işaretçi yapma */  
+            transition: background-color 0.3s ease; /* Hover geçiş efekti */
+            margin-right: 40px;
+        }
+
+
+    .surec-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2.1rem;
+      font-weight: bold;
+      text-align: center;
+      color: #67552A;
+      margin-top: 32px;
+      margin-bottom: 36px;
+    }
+    .flow-tabs-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.2rem;
+    }
+    .flow-tab-btn {
+      font-family: "Oswald", Arial, sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      padding: 0.7rem 2.1rem;
+      border: none;
+      background: linear-gradient(90deg, #f7ecd2 0%, #e3e7fa 100%);
+      color: #67552A;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background .18s, color .18s, box-shadow .14s;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 10px 0 rgba(180,180,180,0.10);
+      position: relative;
+      z-index: 2;
+    }
+    .flow-tab-btn.active,
+    .flow-tab-btn:focus {
+      background: linear-gradient(90deg, #e3e7fa 40%, #d3f4fd 100%);
+      color: #3560bd;
+      box-shadow: 0 4px 17px 1px rgba(80,100,200,0.08);
+      outline: none;
+    }
+    .flow-arrow {
+      display: flex;
+      align-items: center;
+      margin: 0 0.1rem;
+      height: 2.2rem;
+      z-index: 1;
+    }
+    .flow-arrow svg {
+      width: 2.2rem;
+      height: 1.2rem;
+      color: #d6b739;
+      stroke-width: 6px;
+      stroke: #d6b739;
+      fill: none;
+      transition: width .18s, height .18s;
+    }
+    /* Mobilde tab butonları ve oklar yine yatay, oklar küçülüyor, yönü değişmiyor! */
+    @media (max-width:600px){
+      .flow-tabs-wrapper {
+        flex-direction: row;
+        gap: 0.27rem;
+      }
+      .flow-tab-btn {
+        font-size: 0.91rem;
+        padding: 0.43rem 1.1rem;
+      }
+      .flow-arrow {
+        height: 1.2rem;
+        margin: 0 0.06rem;
+      }
+      .flow-arrow svg {
+        width: 1.1rem;
+        height: 0.6rem;
+      }
+    }
+    /* Diğer stiller değişmedi - aşağıdan aynen devam ediyoruz */
+    .surec-section { display: none; }
+    .surec-section.active { display: block; animation: fadein 0.5s; }
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(20px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .bolum-baslik {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.26rem;
+      color: #5b74e6;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.5px;
+      text-align: center;
+      margin-top: 4px;
+    }
+    /* Evrak işleri kutuları */
+    .er-kutular {
+      width: 100%;
+      max-width: 750px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+    .alt-baslik-kutu {
+      background: linear-gradient(90deg, #f7ecd2 0%, #e3e7fa 100%);
+      border-radius: 1.4rem;
+      box-shadow: 0 4px 14px 0 rgba(160,160,160,0.07);
+      padding: 1.0rem 1.25rem 1.08rem 1.31rem;
+      border: none;
+      display: flex;
+      width: 100%;
+      cursor: pointer;
+      position: relative;
+      font-family: 'Oswald', Arial, sans-serif;
+      font-size: 1.07rem;
+      font-weight: 700;
+      color: #2c2c21;
+      transition: background .18s, box-shadow .18s, color .17s;
+      text-align: left;
+    }
+    .alt-baslik-kutu:hover, .alt-baslik-kutu:focus {
+      background: linear-gradient(90deg, #f2e5be 0%, #cbd8f3 100%);
+      color: #2857ad;
+      box-shadow: 0 8px 22px 0 rgba(120,140,190,0.12);
+      outline: none;
+    }
+    .evrak-ekle-btn {
+        display: block;
+        margin: 50px auto 0 auto;
+        font-family: "Oswald", Arial, sans-serif;
+        font-size: 1.15rem;
+        background: linear-gradient(90deg, #e3e7fa 0%, #f7ecd2 100%);
+        border-radius: 14px;
+        border: none;
+        color: #3560bd;
+        padding: 0.8rem 1.7rem;
+        font-weight: 700;
+        box-shadow: 0 2px 10px 0 rgba(180,180,180,0.10);
+        transition: background .2s, color .2s, box-shadow .14s;
+        letter-spacing: 1px;
+      }
+      .evrak-ekle-btn:hover, .evrak-ekle-btn:focus {
+        background: linear-gradient(90deg, #f7ecd2 0%, #e3e7fa 100%);
+        color: #1d4188;
+        box-shadow: 0 4px 17px 1px rgba(80,100,200,0.13);
+        outline: none;
+      }
+    .alt-kutu-arrow {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%) rotate(0deg);
+      transition: transform .25s cubic-bezier(.43,1.16,.45,1.13);
+      font-size: 1.08em;
+      pointer-events: none;
+      color: #caad2e;
+    }
+    .alt-baslik-kutu[aria-expanded="true"] .alt-kutu-arrow {
+      transform: translateY(-50%) rotate(90deg);
+      color: #4a75e0;
+    }
+    .alt-kutu-icerik {
+      background: #f7ecd2;
+      border-radius: 0 0 1rem 1rem;
+      margin-top: -6px;
+      box-shadow: 0 2px 8px 0 rgba(180,180,180,0.08);
+      padding: 0.7rem 1.7rem 1.08rem 1.7rem;
+      animation: fadein .4s;
+      width: 100%;
+    }
+    .alt-kutu-icerik ul {
+      margin-bottom: 0;
+    }
+    .alt-kutu-icerik li {
+      font-family: "Varela Round", Arial, sans-serif;
+      font-size: 1rem;
+      color: #312e21;
+      margin-bottom: 0.43rem;
+    }
+    /* Üretim adımları */
+    .uretim-steps-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+      margin: 20px 0 0 0;
+    }
+    .uretim-step-btn {
+      background: linear-gradient(90deg, #f7ecd2 0%, #e3e7fa 100%);
+      color: #2c2c21;
+      border-radius: 12px;
+      border: none;
+      font-family: 'Oswald', Arial, sans-serif;
+      font-size: 1.01rem;
+      font-weight: 700;
+      padding: 0.33rem 1.17rem;
+      transition: background .14s, color .13s, box-shadow .14s;
+      box-shadow: 0 2px 8px 0 rgba(120,140,190,0.09);
+      cursor: pointer;
+      margin: 5px 0;
+      position: relative;
+      white-space: nowrap;
+    }
+    .uretim-step-btn:hover, .uretim-step-btn:focus {
+      background: linear-gradient(90deg, #f2e5be 0%, #cbd8f3 100%);
+      color: #3560bd;
+      box-shadow: 0 6px 18px 0 rgba(120,140,190,0.17);
+      outline: none;
+    }
+    .uretim-step-ok {
+      display: flex;
+      align-items: center;
+      margin: 0 3px;
+      z-index: 1;
+    }
+    .uretim-step-ok svg {
+      width: 34px;
+      height: 14px;
+      color: #d6b739;
+      stroke-width: 5px;
+      stroke: #d6b739;
+      fill: none;
+      vertical-align: middle;
+    }
+
+
+    .uretim-tab-btn {
+    background: linear-gradient(90deg, #f7ecd2 0%, #e3e7fa 100%);
+    border: none;
+    border-radius: 16px;
+    font-family: 'Oswald',Arial,sans-serif;
+    font-size:1.15rem;font-weight:700;
+    color: #67552A;
+    padding: 0.8rem 2.1rem;
+    cursor: pointer;
+    box-shadow: 0 2px 10px 0 rgba(180,180,180,0.10);
+    transition: background .16s, color .15s, box-shadow .13s;
+    letter-spacing: 1px;
+  }
+  .uretim-tab-btn.active,
+  .uretim-tab-btn:focus {
+    background: linear-gradient(90deg, #e3e7fa 20%, #d3f4fd 100%);
+    color: #3560bd;
+    box-shadow: 0 4px 17px 1px rgba(80,100,200,0.08);
+    outline: none;
+  }
+
+
+
+    /* Üretim okları - masaüstünde sağa bakan, mobilde aşağı bakan */
+    .uretim-ok-horizontal { stroke: #d6b739; stroke-width: 5px; fill: none; }
+    .uretim-ok-vertical   { stroke: #d6b739; stroke-width: 5px; fill: none; display: none; }
+    .uretim-ok-svg { width: 34px; height: 24px; }
+    @media (max-width:820px){
+      .uretim-steps-row{flex-wrap:wrap;}
+      .uretim-step-btn{font-size:0.98rem;padding:.28rem 0.87rem;}
+      .uretim-step-ok svg{width:22px;height:10px;}
+    }
+    /* Mobilde üretim kutuları dikey, oklar aşağıya döner */
+    @media (max-width:600px){
+        .container-navbar {  
+                flex-wrap: wrap;  
+                justify-content: flex-end;  
+            }  
+            #projectName {
+                flex: 0 0 70%;  
+                overflow: hidden;  
+                text-overflow: ellipsis;  
+                white-space: nowrap;  
+                text-align: left;  
+                font-size: 17px !important;  
+                max-width: 65%;     /* Taşmayı önler */  
+                min-width: 0;       /* flex shrink için gerekli */  
+                margin-right: 0;    /* İstenirse gap için elle ekleyin */
+            }  
+            #buttonHome {
+                flex: 0 0 30px;     /* Eğer 30px'lik bir kutu ise tam sabitlenir */  
+                padding: 0;         /* Ekstra boşlukları engeller */  
+                margin-left: 0;     /* İstenirse 5px gibi küçük bir boşluk eklenebilir */  
+                display: flex;  
+                align-items: center;
+            }
+            .img-fluid {  
+                height: 28px;  
+                width: 28px;  
+                margin-right: 0;    /* Sağdan boşluğu kaldırır */  
+                margin-left: 0;     /* Soldan boşluğu kaldırır */
+            }  
+            .custom-btn {  
+                font-size: 12px; /* Yazı boyutu */
+                padding: 5px 10px;      /* Yan boşlukları biraz artırdım */
+                border-radius: 6px;      /* Köşeler hafif yuvarlatıldı */
+                color: #fff;
+                border: none;
+                margin-right: 12px;
+                display: inline-block; 
+                font-weight: 500;     
+            }
+            .navbar-toggler {  
+               /* background-color: rgb(89, 125, 234);  */
+                background-color: #c2c5c9;  
+                flex: 0 0 auto;  
+                margin-left: auto;  
+                justify-content: flex-end;
+            }
+            .container-fluid {  
+                flex-wrap: wrap;  
+            } 
+            .dropdown-item{
+                display: flex;
+                margin-left: auto;  
+                
+            }
+            .mobile-navbar-menu {  
+                justify-content: flex-end !important;  
+                text-align: right !important;  
+                margin-top: 10px;
+                margin-bottom: 5px;
+            }  
+            .mobile-navbar-menu .nav-item, .mobile-navbar-menu .dropdown-item-mobile {
+                display: flex;
+                align-items: center;
+                justify-content: space-between !important;  
+                text-align: right !important;
+                font-size: 1.1rem;
+                font-style: bold !important;
+                height: 22px;
+                margin-top: 2px;
+                justify-self: end;
+            }
+            .dropdown-item-mobile {
+                width: 34%;
+                font-family: Arial, sans-serif !important; 
+                color: rgb(94, 93, 93) !important;      /* Varsayılan metin rengini kullan */  
+                text-decoration: none !important; /* Altı çizgiyi kaldır */  
+                font-weight: 400 !important;
+            }
+
+
+            .custom-short-menu {
+                display: flex;
+                gap: 12px;
+                justify-content: center;
+                align-items: flex-start;
+                width: 90% !important;
+                margin-top: 12px;
+                margin-left: auto;
+                margin-right: auto; /* Ortalamak için */
+            }
+            .menu-btn {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                flex: 1 1 0;    /* EŞİT yayılır, min 0 olur, büyüyebilir */
+                text-decoration: none;
+                background: none;
+                border: none;
+                outline: none;
+                transition: color 0.18s, background 0.18s;
+                min-width: 0;   /* Sıkışmaya izin verir */
+            }
+            .menu-btn img {
+                width: 25px;
+                height: 25px;
+                margin-bottom: 4px;
+            }
+            .menu-btn span {
+                font-size: 0.8rem;
+                white-space: nowrap; /* Çok taşmasını önlemek için */
+                text-align: center;
+            }
+
+
+      .uretim-steps-row{
+        flex-direction:column;
+        gap:7px;
+        align-items:stretch;
+      }
+      .uretim-step-btn{
+        width:100%;
+        border-radius:13px;
+      }
+      .uretim-step-ok{
+        justify-content:center;
+        margin:0;
+      }
+      .uretim-step-ok svg{
+        width:26px;
+        height:24px;
+      }
+      .uretim-ok-horizontal { display: none; }
+      .uretim-ok-vertical   { display: inline; }
+
+      .surec-title { font-size: 1.07rem; margin: 13px 0 13px 0;}
+      .bolum-baslik {font-size: 1.03rem;}
+      .evrak-ekle-btn { font-size: 0.9rem; padding: 0.6rem 1.4rem;}
+      .alt-baslik-kutu{font-size:0.95rem;padding:.75rem 1.1rem;}
+
+      .evrak-ekle-btn {
+        display: block;
+        margin: 50px auto 0 auto;
+        font-family: "Oswald", Arial, sans-serif;
+        font-size: 1.05rem;
+        background: linear-gradient(90deg, #e3e7fa 0%, #f7ecd2 100%);
+        border-radius: 14px;
+        border: none;
+        color: #3560bd;
+        padding: 0.4rem 1.2rem;
+        font-weight: 700;
+        box-shadow: 0 2px 10px 0 rgba(180,180,180,0.10);
+        transition: background .2s, color .2s, box-shadow .14s;
+        letter-spacing: 1px;
+      }
+      .evrak-ekle-btn:hover, .evrak-ekle-btn:focus {
+        background: linear-gradient(90deg, #f7ecd2 0%, #e3e7fa 100%);
+        color: #1d4188;
+        box-shadow: 0 4px 17px 1px rgba(80,100,200,0.13);
+        outline: none;
+      }
+    }
+  </style>  
+</head>  
+<body>  
+
+    <!-- Responsive Header -->  
+    <nav class="header d-flex justify-content-between align-items-center px-3">
+        <span class="d-flex align-items-center gap-2">
+            <img src="img/icon.png" alt="Logo" width="32" height="32">
+            Yapıo
+        </span>
+        <button class="btn custom-btn" id="loginButton" style="display: none;">PROJELER</button>  
+    </nav>
+
+    <!-- Navbar -->  
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm mt-4 container-navbar">  
+        <div class="container-fluid">  
+            <!-- Proje Adı -->  
+            <h4 class="navbar-brand" id="projectName">Proje Adı</h4>  
+            <!-- Ana Sayfa Butonu -->  
+            <button class="btn d-flex navbar-home-button" id="buttonHome">  
+                <img src="img/home1_1.png" alt="Katlar Görseli" class="img-fluid rounded">  
+            </button>
+        </div>  
+    </nav> 
+
+    <div class="custom-short-menu" id="regulation-button-area">
+        <a class="menu-btn" id="quatation-button" href="#">
+            <img src="img/pay1_1.png" alt="">
+            <span>Giderler</span>
+        </a>
+        <a class="menu-btn" id="graphs-button" href="#">
+            <img src="img/growth_1.png" alt="">
+            <span>Analizler</span>
+        </a>
+        <a class="menu-btn" id="sold-button" href="#">
+            <img src="/img/property.png" alt="">
+            <span>Satış</span>
+        </a>
+    </div>
+
+    <div id="loader" style="display:none;">
+        <div class="spinner"></div>
+        <span>Yükleniyor...</span>
+    </div>
+
+    <div class="container pt-3 pb-4">  
+    <div class="surec-title">Yapı Üretim Süreci</div>  
+
+    <!-- TAB BUTTONS WITH ARROWS -->  
+    <div class="flow-tabs-wrapper">  
+      <button class="flow-tab-btn active" data-tab="evrak">Evrak İşleri</button>  
+      <span class="flow-arrow">  
+        <svg viewBox="0 0 44 24"><polyline points="2,12 38,12"/><polyline points="29,6 38,12 29,18"/></svg>  
+      </span>  
+      <button class="flow-tab-btn" data-tab="ruhsat">Yapı Ruhsatı</button>  
+      <span class="flow-arrow">  
+        <svg viewBox="0 0 44 24"><polyline points="2,12 38,12"/><polyline points="29,6 38,12 29,18"/></svg>  
+      </span>  
+      <button class="flow-tab-btn" data-tab="uretim">Üretim</button>  
+    </div>  
+
+    <!-- Evrak İşleri Bölümü -->  
+    <div class="surec-section active" id="tab-evrak">  
+      <div class="bolum-baslik">Evrak İşleri</div>  
+      <div class="er-kutular">  
+        <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
+          Belediye  
+          <span class="alt-kutu-arrow">&#9654;</span>  
+        </div>  
+        <div class="alt-kutu-icerik" style="display: none;">  
+          <ul>  
+            <li>Aflikasyon</li>  
+            <li>İmar durumu</li>  
+            <li>Kanal kotu</li>  
+            <li>Ruhsat harcı</li>  
+            <li>Zemin etüdü harcı</li>  
+          </ul>  
+        </div>  
+        <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
+          Noter  
+          <span class="alt-kutu-arrow">&#9654;</span>  
+        </div>  
+        <div class="alt-kutu-icerik" style="display: none;">  
+          <ul>  
+            <li>Müteahhitlik sözleşmesi</li>  
+            <li>Vekalet sözleşmesi</li>  
+          </ul>  
+        </div>  
+        <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
+          Yapı Denetim  
+          <span class="alt-kutu-arrow">&#9654;</span>  
+        </div>  
+        <div class="alt-kutu-icerik" style="display: none;">  
+          <ul>  
+            <li>Yapı denetim harcı</li>  
+            <li>Fenni Jüri</li>  
+            <li>Fenni harita/g</li>  
+          </ul>  
+        </div>  
+        <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
+          Zemin Etüdü  
+          <span class="alt-kutu-arrow">&#9654;</span>  
+        </div>  
+        <div class="alt-kutu-icerik" style="display: none;">  
+          <ul>  
+            <li>Zemin etüdü raporu</li>  
+            <li>Zemin iyileştirme</li>  
+          </ul>  
+        </div>  
+        <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
+          Projeler  
+          <span class="alt-kutu-arrow">&#9654;</span>  
+        </div>  
+        <div class="alt-kutu-icerik" style="display: none;">  
+          <ul>  
+            <li>Mimari</li>  
+            <li>Statik</li>  
+            <li>Elektrik</li>  
+            <li>Tesisat</li>  
+            <li>HES</li>  
+            <li>Akustik</li>  
+            <li>Asansör</li>  
+          </ul>  
+        </div>  
+      </div>  
+    </div>  
+
+    <!-- Yapı Ruhsatı Bölümü -->  
+    <div class="surec-section" id="tab-ruhsat">  
+      <div class="bolum-baslik">Yapı Ruhsatı</div>  
+      <button class="evrak-ekle-btn">Evrak Ekle</button>  
+    </div>  
+
+    <!-- Üretim Bölümü -->
+    <div class="surec-section" id="tab-uretim">
+      <div class="bolum-baslik">Üretim</div>
+      <!-- Üretim Tipi Sekmeleri -->
+      <div class="uretim-tabs-row" style="margin-bottom:1.5rem; display:flex; gap:14px; justify-content:center;">
+        <button type="button" id="btnKaba" class="uretim-tab-btn active">Kaba Üretim</button>
+        <button type="button" id="btnInce" class="uretim-tab-btn">İnce Üretim</button>
+      </div>
+
+      <!-- Kaba Üretim Adımları -->
+    <div class="uretim-kategori" id="kabaUretim" style="display:block;">
+      <div class="uretim-steps-row w-100 mx-auto" style="max-width:980px;">
+        <button type="button" class="uretim-step-btn" data-bs-toggle="modal" data-bs-target="#modal-uretim"
+          data-title="Şantiye kurma"
+          data-content="<ul><li>Şantiye alanının hazırlanması, güvenlik önlemleri</li></ul>"
+        >Şantiye kurma</button>
+        <span class="uretim-step-ok"><svg class="uretim-ok-svg" viewBox="0 0 34 24"><polyline class="uretim-ok-horizontal" points="2,12 28,12"/><polyline class="uretim-ok-horizontal" points="22,6 28,12 22,18"/><polyline class="uretim-ok-vertical" points="17,2 17,20"/><polyline class="uretim-ok-vertical" points="11,14 17,20 23,14"/></svg></span>
+        
+        <button type="button" class="uretim-step-btn" data-bs-toggle="modal" data-bs-target="#modal-uretim"
+          data-title="Temel kazma"
+          data-content="<ul><li>Zemin üzerinde kazı ve iyileştirme işlemleri</li></ul>"
+        >Temel kazma</button>
+        <span class="uretim-step-ok"><svg class="uretim-ok-svg" viewBox="0 0 34 24"><polyline class="uretim-ok-horizontal" points="2,12 28,12"/><polyline class="uretim-ok-horizontal" points="22,6 28,12 22,18"/><polyline class="uretim-ok-vertical" points="17,2 17,20"/><polyline class="uretim-ok-vertical" points="11,14 17,20 23,14"/></svg></span>
+        
+        <button type="button" class="uretim-step-btn" data-bs-toggle="modal" data-bs-target="#modal-uretim"
+          data-title="Gro beton"
+          data-content="<ul><li>Temel gro betonu uygulanması</li></ul>"
+        >Gro beton</button>
+        <span class="uretim-step-ok"><svg class="uretim-ok-svg" viewBox="0 0 34 24"><polyline class="uretim-ok-horizontal" points="2,12 28,12"/><polyline class="uretim-ok-horizontal" points="22,6 28,12 22,18"/><polyline class="uretim-ok-vertical" points="17,2 17,20"/><polyline class="uretim-ok-vertical" points="11,14 17,20 23,14"/></svg></span>
+
+        <button type="button" class="uretim-step-btn" data-bs-toggle="modal" data-bs-target="#modal-uretim"
+          data-title="Radye temel"
+          data-content="<ul><li>Radye temel donatısı ve beton dökümü</li></ul>"
+        >Radye temel</button>
+        <span class="uretim-step-ok"><svg class="uretim-ok-svg" viewBox="0 0 34 24"><polyline class="uretim-ok-horizontal" points="2,12 28,12"/><polyline class="uretim-ok-horizontal" points="22,6 28,12 22,18"/><polyline class="uretim-ok-vertical" points="17,2 17,20"/><polyline class="uretim-ok-vertical" points="11,14 17,20 23,14"/></svg></span>
+
+        <button type="button" class="uretim-step-btn" data-bs-toggle="modal" data-bs-target="#modal-uretim"
+          data-title="Perde betonu"
+          data-content="<ul><li>Perde duvar kalıp ve betonları</li></ul>"
+        >Perde betonu</button>
+        <span class="uretim-step-ok"><svg class="uretim-ok-svg" viewBox="0 0 34 24"><polyline class="uretim-ok-horizontal" points="2,12 28,12"/><polyline class="uretim-ok-horizontal" points="22,6 28,12 22,18"/><polyline class="uretim-ok-vertical" points="17,2 17,20"/><polyline class="uretim-ok-vertical" points="11,14 17,20 23,14"/></svg></span>
+
+        <button type="button" class="uretim-step-btn" data-bs-toggle="modal" data-bs-target="#modal-uretim"
+          data-title="Temel izolasyonu"
+          data-content="<ul><li>Temel su yalıtımı uygulamaları</li></ul>"
+        >Temel izolasyonu</button>
+        <span class="uretim-step-ok"><svg class="uretim-ok-svg" viewBox="0 0 34 24"><polyline class="uretim-ok-horizontal" points="2,12 28,12"/><polyline class="uretim-ok-horizontal" points="22,6 28,12 22,18"/><polyline class="uretim-ok-vertical" points="17,2 17,20"/><polyline class="uretim-ok-vertical" points="11,14 17,20 23,14"/></svg></span>
+
+        <button type="button" class="uretim-step-btn" data-bs-toggle="modal" data-bs-target="#modal-uretim"
+          data-title="Dolgu"
+          data-content="<ul><li>Temel etrafının dolgusu ve sıkıştırma işlemleri</li></ul>"
+        >Dolgu</button>
+        <span class="uretim-step-ok"><svg class="uretim-ok-svg" viewBox="0 0 34 24"><polyline class="uretim-ok-horizontal" points="2,12 28,12"/><polyline class="uretim-ok-horizontal" points="22,6 28,12 22,18"/><polyline class="uretim-ok-vertical" points="17,2 17,20"/><polyline class="uretim-ok-vertical" points="11,14 17,20 23,14"/></svg></span>
+
+        <button type="button" class="uretim-step-btn" data-bs-toggle="modal" data-bs-target="#modal-uretim"
+          data-title="Subasman"
+          data-content="<ul><li>Subasman betonu ve hazırlıkları</li></ul>"
+        >Subasman</button>
+        <span class="uretim-step-ok"><svg class="uretim-ok-svg" viewBox="0 0 34 24"><polyline class="uretim-ok-horizontal" points="2,12 28,12"/><polyline class="uretim-ok-horizontal" points="22,6 28,12 22,18"/><polyline class="uretim-ok-vertical" points="17,2 17,20"/><polyline class="uretim-ok-vertical" points="11,14 17,20 23,14"/></svg></span>
+
+        <button type="button" class="uretim-step-btn" data-bs-toggle="modal" data-bs-target="#modal-uretim"
+          data-title="Zemin betonu"
+          data-content="<ul><li>Zemin kat betonu uygulamaları</li></ul>"
+        >Zemin betonu</button>
+        <span class="uretim-step-ok"><svg class="uretim-ok-svg" viewBox="0 0 34 24"><polyline class="uretim-ok-horizontal" points="2,12 28,12"/><polyline class="uretim-ok-horizontal" points="22,6 28,12 22,18"/><polyline class="uretim-ok-vertical" points="17,2 17,20"/><polyline class="uretim-ok-vertical" points="11,14 17,20 23,14"/></svg></span>
+
+        <button type="button" class="uretim-step-btn" data-bs-toggle="modal" data-bs-target="#modal-uretim"
+          data-title="1-2-3-4. kat betonları"
+          data-content="<ul><li>Kat kat beton dökümleri; kolon, kiriş, döşeme işlemleri</li></ul>"
+        >1-2-3-4. kat betonları</button>
+        <span class="uretim-step-ok"><svg class="uretim-ok-svg" viewBox="0 0 34 24"><polyline class="uretim-ok-horizontal" points="2,12 28,12"/><polyline class="uretim-ok-horizontal" points="22,6 28,12 22,18"/><polyline class="uretim-ok-vertical" points="17,2 17,20"/><polyline class="uretim-ok-vertical" points="11,14 17,20 23,14"/></svg></span>
+
+        <button type="button" class="uretim-step-btn" data-bs-toggle="modal" data-bs-target="#modal-uretim"
+          data-title="Soğuk beton"
+          data-content="<ul><li>Soğuk derz, geçiş ve bağlantı betonları</li></ul>"
+        >Soğuk beton</button>
+        <span class="uretim-step-ok"><svg class="uretim-ok-svg" viewBox="0 0 34 24"><polyline class="uretim-ok-horizontal" points="2,12 28,12"/><polyline class="uretim-ok-horizontal" points="22,6 28,12 22,18"/><polyline class="uretim-ok-vertical" points="17,2 17,20"/><polyline class="uretim-ok-vertical" points="11,14 17,20 23,14"/></svg></span>
+
+        <button type="button" class="uretim-step-btn" data-bs-toggle="modal" data-bs-target="#modal-uretim"
+          data-title="Kapanma betonu"
+          data-content="<ul><li>Kapanma betonu dökümü</li></ul>"
+        >Kapanma betonu</button>
+        <span class="uretim-step-ok"><svg class="uretim-ok-svg" viewBox="0 0 34 24"><polyline class="uretim-ok-horizontal" points="2,12 28,12"/><polyline class="uretim-ok-horizontal" points="22,6 28,12 22,18"/><polyline class="uretim-ok-vertical" points="17,2 17,20"/><polyline class="uretim-ok-vertical" points="11,14 17,20 23,14"/></svg></span>
+
+        <button type="button" class="uretim-step-btn" data-bs-toggle="modal" data-bs-target="#modal-uretim"
+          data-title="Duvar örme"
+          data-content="<ul><li>Tuğla/gaz beton duvar örme işlemleri</li></ul>"
+        >Duvar örme</button>
+        <span class="uretim-step-ok"><svg class="uretim-ok-svg" viewBox="0 0 34 24"><polyline class="uretim-ok-horizontal" points="2,12 28,12"/><polyline class="uretim-ok-horizontal" points="22,6 28,12 22,18"/><polyline class="uretim-ok-vertical" points="17,2 17,20"/><polyline class="uretim-ok-vertical" points="11,14 17,20 23,14"/></svg></span>
+
+        <button type="button" class="uretim-step-btn" data-bs-toggle="modal" data-bs-target="#modal-uretim"
+          data-title="Çatı uygulamaları"
+          data-content="<ul><li>Çatı konstrüksiyonu, yalıtım işleri</li></ul>"
+        >Çatı uygulamaları</button>
+      </div>
+    </div>
+    <!-- İnce Üretim Adımları (boş şablon) -->
+    <div class="uretim-kategori" id="inceUretim" style="display:none;">
+      <div class="uretim-steps-row w-100 mx-auto" style="max-width:980px;justify-content:center;">
+          <span style="font-family:'Varela Round', Arial,sans-serif;color:#7b8399;font-size:1.13rem;opacity:0.8;">İnce üretim adımları burada listelenecek…</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tek Modal -->
+  <div class="modal fade" id="modal-uretim" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="uretimModalTitle"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="uretimModalContent"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const projectNameString = document.getElementById("projectName");
+    const quatationButton = document.getElementById("quatation-button"); 
+    const graphsButton = document.getElementById("graphs-button");
+    const soldButton = document.getElementById("sold-button");
+
+    let userId = null;
+    let projectName = null;
+    let building = null;
+    let floorsDataFromDb = null;
+    
+
+    // DOM yüklendiğinde işlem başlat  
+    document.addEventListener("DOMContentLoaded", () => {  
+        event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle  
+
+        window.user = {{#if user}}
+        { "email": "{{user.email}}", "role": "{{user.role}}", "userId": "{{user.id}}", "project": {{{json project}}} }
+        {{else}}
+            { "role": "{{role}}" }
+        {{/if}};
+
+        userId = window.user.userId;
+        const projectNameDb = window.user.project.projectName;
+        projectName = projectNameDb;
+        if(projectName){
+            const projectNameText = projectNameDb.toUpperCase();
+            projectNameString.textContent = projectNameText;
+        }
+        if(userId){
+            loginButton.style.display = "block";
+        } else{
+            loginButton.style.display = "none";
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);  
+        const cameFrom = urlParams.get('from');  
+        if (cameFrom) {  
+            fromControl = true;
+            regulationButtonMobileArea.style.display = "none";
+            regulationButtonArea.style.display = "none";
+        }
+ 
+    });
+
+
+    // Sekmeler arasında geçiş (Kaba & İnce Üretim)
+    document.getElementById('btnKaba').onclick = function() {
+        document.getElementById('kabaUretim').style.display = 'block';
+        document.getElementById('inceUretim').style.display = 'none';
+        this.classList.add('active');
+        document.getElementById('btnInce').classList.remove('active');
+    };
+    document.getElementById('btnInce').onclick = function() {
+        document.getElementById('kabaUretim').style.display = 'none';
+        document.getElementById('inceUretim').style.display = 'block';
+        this.classList.add('active');
+        document.getElementById('btnKaba').classList.remove('active');
+    };
+
+    // Dinamik Modal İçeriği
+    document.querySelectorAll('.uretim-step-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            document.getElementById('uretimModalTitle').innerHTML = btn.getAttribute('data-title') || '';
+            document.getElementById('uretimModalContent').innerHTML = btn.getAttribute('data-content') || '';
+        });
+    });
+
+    // (Eğer birden fazla flow sekmesi varsa kullan)
+    // Flow tab switch
+    document.querySelectorAll('.flow-tab-btn').forEach(function(tab){
+    tab.addEventListener('click', function(){
+        document.querySelectorAll('.flow-tab-btn').forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        const sectionId = 'tab-' + this.getAttribute('data-tab');
+        document.querySelectorAll('.surec-section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+    });
+    });
+
+    // Evrak işleri kutuları için accordion mantığı
+    function toggleBox(box) {
+    var isOpen = box.getAttribute('aria-expanded') === 'true';
+    box.parentNode.querySelectorAll('.alt-baslik-kutu').forEach(function(bx){
+        bx.setAttribute('aria-expanded', 'false');
+        var content = bx.nextElementSibling;
+        if(content && content.classList.contains('alt-kutu-icerik')) content.style.display = 'none';
+    });
+    if(!isOpen){
+        box.setAttribute('aria-expanded', 'true');
+        var content = box.nextElementSibling;
+        if(content && content.classList.contains('alt-kutu-icerik')) content.style.display = '';
+    }
+    }
+    document.querySelectorAll('.alt-baslik-kutu').forEach(function(kutu){
+        kutu.addEventListener('click', function(){ toggleBox(this); });
+        kutu.addEventListener('keydown', function(e){
+            if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleBox(this); }
+        });
+    });
+
+    quatationButton.addEventListener("click", () => {
+        window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
+    });
+    graphsButton.addEventListener("click", () => {
+        window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
+    });
+    soldButton.addEventListener("click", () => {
+        window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
+    });
+</script>
+</body>
+</html>

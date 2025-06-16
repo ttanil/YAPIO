@@ -497,6 +497,10 @@
             <img src="/img/property.png" alt="">
             <span>Satış</span>
         </a>
+        <a class="menu-btn" id="document-button" href="#">
+            <img src="/img/document.png" alt="">
+            <span>Evraklar</span>
+        </a>
     </div>
 
     <div id="loader" style="display:none;">
@@ -586,7 +590,8 @@
         const buttonHome = document.getElementById("buttonHome");
         const roof = document.createElement("div"); 
         const loginButton = document.getElementById("loginButton");
-        const soldButton = document.getElementById("sold-button"); 
+        const soldButton = document.getElementById("sold-button");
+        const documentButton = document.getElementById("document-button"); 
         const totalBrutArea = document.getElementById("totalBrutArea");
 
         const buttonGroup = document.getElementById("buttonGroup");  
@@ -987,6 +992,9 @@
         });
         soldButton.addEventListener("click", () => {
             window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
+        });
+        documentButton.addEventListener("click", () => {
+            window.location.href = `/evrak?projectName=${encodeURIComponent(projectName)}`;
         });
 
         function syncTotalAreaWidth() {
