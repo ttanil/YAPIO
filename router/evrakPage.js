@@ -31,11 +31,27 @@ router.get('/', authenticateUser, async (req, res) => {
             }
         }
 
+        return res.send(`
+            <html>
+            <head>
+                <title>Sayfa Yapımda</title>
+                <meta charset="utf-8">
+            </head>
+            <body style="font-family:sans-serif;background:#f1f5f9;color:#222;display:flex;align-items:center;justify-content:center;height:100vh;text-align:center;">
+                <div>
+                <h1>Sayfa yapım aşamasında</h1>
+                <p>Kısa süre sonra burada olacağız.</p>
+                </div>
+            </body>
+            </html>
+        `);
+/*
         res.render('sites/evrak', {
             project: selectedProject,
             user: res.locals.user,
             role: res.locals.userRole
         });
+*/
     } catch (err) {
         console.error(err);
         return res.status(500).send("Sunucu hatası.");
