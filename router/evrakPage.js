@@ -30,7 +30,7 @@ router.get('/', authenticateUser, async (req, res) => {
                 return res.status(404).send("Proje bulunamadı!");
             }
         }
-
+/*
         return res.send(`
             <html>
             <head>
@@ -45,13 +45,13 @@ router.get('/', authenticateUser, async (req, res) => {
             </body>
             </html>
         `);
-/*
+*/
         res.render('sites/evrak', {
             project: selectedProject,
             user: res.locals.user,
             role: res.locals.userRole
         });
-*/
+
     } catch (err) {
         console.error(err);
         return res.status(500).send("Sunucu hatası.");
