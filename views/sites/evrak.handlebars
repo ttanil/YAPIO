@@ -863,6 +863,13 @@ const SAP = [
   { id:"cimento",   ad:"Çimento", icon:"fa-cube" },
   { id:"diger",     ad:"Diğer",   icon:"fa-ellipsis" }
 ];
+const DUVAR_ORME = [
+  { id:"cimento",   ad:"Çimento", icon:"fa-cube" },
+  { id:"duvar_blogu", ad:"Duvar Bloğu", icon:"fa-th-large" },   // veya fa-cubes (örülü blok için uygun)
+  { id:"kirec",       ad:"Kireç",       icon:"fa-flask" },      // laboratuvar/doğal malzeme takibi için, yoksa fa-snowflake (beyaz toz temsili)
+  { id:"kum_cakil",   ad:"Kum-Çakıl",   icon:"fa-mound" },      // kum/çakıl yığını için modern ve uygun!
+  { id:"diger",   ad:"Diğer",   icon:"fa-ellipsis" }
+];
 
 // Her kombinasyonda ayrı veri
 const odemeData = {};
@@ -916,6 +923,8 @@ document.querySelectorAll('.uretim-step-btn').forEach(btn => {
       showKapamaBetonuKalemler();
     } else if(aktifAdimId==='sap'){
       showSapKalemler();
+    } else if(aktifAdimId==='duvarOrme'){
+      showDuvarOrmeKalemler();
     }
     else {  
       showOdemeEvrakForm();  
@@ -1141,7 +1150,30 @@ function showSapKalemler(){
     }  
   });  
 }
+function showDuvarOrmeKalemler(){  
+  document.getElementById('modalContentGenel').innerHTML =  
+    `<div class="mb-3">  
+      <div class="fw-bold fs-5 mb-2 text-center">Duvar Örme - Alt Kalem Seçiniz:</div>  
+      <div class="d-flex flex-wrap justify-content-center gap-3 mb-3" id="duvarOrmeKalemBtnGrup">${  
+        DUVAR_ORME.map(kal =>  
+          `<button type="button" class="btn btn-outline-primary duvar-orme-altkalem-btn mb-2"  
+            data-kalem="${kal.id}">  
+              <i class="fa-solid ${kal.icon} me-1"></i>${kal.ad}  
+          </button>`  
+        ).join("")  
+      }</div>  
+    </div>  
+    <div id="duvarOrmeAltKalemForm"></div>`;  
 
+  document.querySelectorAll('.duvar-orme-altkalem-btn').forEach(b=>{  
+    b.onclick = function(){  
+      aktifAltKalem = this.getAttribute('data-kalem');  
+      document.getElementById('modalBaslikText').textContent =  
+        "Duvar Örme - "+ DUVAR_ORME.find(x=>x.id===aktifAltKalem).ad;  
+      showOdemeEvrakForm(true, false, showDuvarOrmeKalemler);
+    }  
+  });  
+}
 
 
 // 2. Ödeme/Evrak Formu
