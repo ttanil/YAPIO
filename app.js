@@ -43,6 +43,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // middleware sunucuya atılan istekler json olsun vb işlemler için
 app.use(express.json());  //sunucu ile istemci yani frontend ile backend arasındaki iletişim json olacak
+app.use(express.urlencoded({ extended: true }));
 app.use(fileUpload());  //resim vb dosyalar için
 app.use(cookieParser());    // Cookie'leri işlemek için 
 app.use(expressSession({
