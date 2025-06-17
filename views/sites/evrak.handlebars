@@ -536,7 +536,7 @@ body {
     </div>  
     <div class="alt-kutu-icerik">  
       <ul>  
-        <li data-kurum="Belediye" data-detay="Aflikasyon">Aflikasyon</li>  
+        <li data-kurum="Belediye" data-detay="Aflikasyon">Aplikasyon</li>  
         <li data-kurum="Belediye" data-detay="İmar durumu">İmar durumu</li>  
         <li data-kurum="Belediye" data-detay="Kanal kotu">Kanal kotu</li>  
         <li data-kurum="Belediye" data-detay="Ruhsat harcı">Ruhsat harcı</li>  
@@ -562,8 +562,8 @@ body {
     <div class="alt-kutu-icerik">  
       <ul>  
         <li data-kurum="Yapı Denetim" data-detay="Yapı denetim harcı">Yapı denetim harcı</li>  
-        <li data-kurum="Yapı Denetim" data-detay="Fenni Jüri">Fenni Jüri</li>  
-        <li data-kurum="Yapı Denetim" data-detay="Fenni harita/g">Fenni harita/g</li>  
+        <li data-kurum="Yapı Denetim" data-detay="Fenni Jüri">Fenni Jeoloji</li>  
+        <li data-kurum="Yapı Denetim" data-detay="Fenni harita/g">Fenni haritacı</li>  
       </ul>  
     </div>  
     <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
@@ -1171,6 +1171,439 @@ function showDuvarOrmeKalemler(){
       document.getElementById('modalBaslikText').textContent =  
         "Duvar Örme - "+ DUVAR_ORME.find(x=>x.id===aktifAltKalem).ad;  
       showOdemeEvrakForm(true, false, showDuvarOrmeKalemler);
+    }  
+  });  
+}
+
+
+const INCE_URETIM_ADIMLARI = [
+  { id: 'zeminUygulamalari',  ad: "Zemin Uygulamaları",  icon: "fa-grip-lines" }, // veya "fa-border-none", "fa-th-large"
+  { id: 'icCephe',            ad: "İç Cephe",            icon: "fa-home" }, // "fa-paint-roller" da olabilir
+  { id: 'islakMekanlar',      ad: "Islak Mekanlar",      icon: "fa-shower" },
+  { id: 'mutfak',             ad: "Mutfak",              icon: "fa-utensils" }, // veya "fa-kitchen-set" FA6+
+  { id: 'pimapen',            ad: "Pimapen",             icon: "fa-window-maximize" }, // pencere için
+  { id: 'kapilar',            ad: "Kapılar",             icon: "fa-door-open" },
+  { id: 'korkuluklar',        ad: "Korkuluklar",         icon: "fa-grip-vertical" }, // veya "fa-archway" veya "fa-bars"
+  { id: 'disCephe',           ad: "Dış Cephe",           icon: "fa-city" }, // veya "fa-building", "fa-warehouse"
+  { id: 'tavan',              ad: "Tavan",               icon: "fa-border-top-left" }, // En uygun FA6+, FA5 yoksa "fa-grip-lines"
+  { id: 'elektrikTesisat',    ad: "Elektrik Tesisat",    icon: "fa-bolt" }, // yıldırım
+  { id: 'sihhiTesisat',       ad: "Sıhhi Tesisat",       icon: "fa-faucet" }, // musluk (FA6+), FA5'te "fa-tint"
+  { id: 'dogalgaz',           ad: "Doğalgaz",            icon: "fa-fire-flame-simple" }, // alev FA6+, FA5 "fa-fire"
+  { id: 'asansorKurulumu',    ad: "Asansör Kurulumu",    icon: "fa-elevator" }, // FA6+; FA5'te "fa-arrow-up", "fa-arrow-down"
+  { id: 'iklimlendirme',      ad: "İklimlendirme",       icon: "fa-fan" }, // veya "fa-wind", "fa-snowflake" (klima/ısıtma)
+  { id: 'peyzaj',             ad: "Peyzaj",              icon: "fa-seedling" } // bitki, çim
+];
+
+const ZEMIN_UYGULAMALARI = [
+  { id:"seramik",     ad:"Seramik",        icon:"fa-border-none" },  // karo/seramik için en uygun
+  { id:"parke",       ad:"Parke",          icon:"fa-grip-lines" },   // parke veya zemin döşeme imajı
+  { id:"mermer",      ad:"Mermer",         icon:"fa-gem" },          // kristal, değerli taş - alternatifi yoksa fa-cube
+  { id:"zeminBoyasi", ad:"Zemin Boyası",   icon:"fa-paint-roller" }, // FA6+, yoksa "fa-brush" veya "fa-tint"
+  { id:"epoksi",      ad:"Epoksi",         icon:"fa-flask" },        // sıvı/kimyasal temsili için
+  { id:"diger",       ad:"Diğer",           icon:"fa-ellipsis" }
+];
+
+const SIHHI_TESISAT = [
+  { id:"pisSu",     ad:"Pis Su",      icon:"fa-toilet" },         // Pis su/atıksu için 'tuvalet' teması uygun
+  { id:"temizSu",   ad:"Temiz Su",    icon:"fa-faucet" },         // Temiz su/musluk için en uygun
+  { id:"isitma",    ad:"Isıtma",      icon:"fa-temperature-high" },// Isıtma (radyatör, sıcaklık göstergesi)
+  { id:"diger",     ad:"Diğer",       icon:"fa-ellipsis" }
+];
+
+const IC_CEPHE = [
+  { id:"korKasa",       ad:"Kör Kasa",         icon:"fa-door-closed" },      // Kapı kasası/kasa için
+  { id:"kosebent",      ad:"Köşebent",         icon:"fa-ruler-combined" },   // Profil/Mil/Köşe için uygun
+  { id:"betonAstari",   ad:"Beton Astarı",     icon:"fa-fill-drip" },        // Sıvı/astar için
+  { id:"alci",          ad:"Alçı",             icon:"fa-snowflake" },        // Toz/beyaz/pudra için bu sık tercih edilir
+  { id:"cimento",       ad:"Çimento",          icon:"fa-cube" },             // Malzeme/blok gibi
+  { id:"kum",           ad:"Kum",              icon:"fa-mound" },            // Kum yığını
+  { id:"hazirSivaIc",   ad:"Hazır Sıva İç",    icon:"fa-trowel" },           // FA6+ (Sıva aleti), yoksa "fa-layer-group"
+  { id:"icCepheBoyasi", ad:"İç Cephe Boyası",  icon:"fa-paint-roller" },     // FA6+, yoksa "fa-paint-brush"
+  { id:"boyaAstari",    ad:"Boya Astarı",      icon:"fa-brush" },            // Fırça/astar için
+  { id:"diger",         ad:"Diğer",            icon:"fa-ellipsis" }
+];
+const TAVAN = [
+  { id:"stropiyer", ad:"Stropiyer", icon:"fa-wave-square" },      // Dalga/köpük yapısı için
+  { id:"alcipan",   ad:"Alçıpan",   icon:"fa-layer-group" },      // Tabaka/panel/Laminar yapı için
+  { id:"karolem",   ad:"Karolem",   icon:"fa-th-large" },         // Kare tavan paneli/döşeme için
+  { id:"diger",     ad:"Diğer",     icon:"fa-ellipsis" }
+];
+const PIMAPEN = [
+  { id:"pencereler",    ad:"Pencereler",      icon:"fa-window-maximize" },  // Pencere için
+  { id:"zeminDograma",  ad:"Zemin Doğrama",   icon:"fa-vector-square" },    // Zemin/profil/doğrama için
+  { id:"diger",         ad:"Diğer",           icon:"fa-ellipsis" }
+];
+const KAPILAR = [
+  { id:"odaKapilari",   ad:"Oda Kapıları",     icon:"fa-door-open" },      // İç kapı için en uygunu
+  { id:"celikKapilar",  ad:"Çelik Kapılar",    icon:"fa-shield-alt" },     // Güvenlik/çelik kapı için kalkan (FA6+'da 'fa-shield-halved' da olabilir)
+  { id:"diger",         ad:"Diğer",            icon:"fa-ellipsis" }
+];
+const PEYZAJ = [
+  { id:"bahceDuvari",   ad:"Bahçe Duvarı",     icon:"fa-border-style" },     // Duvar/çit görünümü için
+  { id:"bitkilendirme", ad:"Bitkilendirme",    icon:"fa-seedling" },         // Bitki/yeşillik için
+  { id:"perforje",      ad:"Perforje",         icon:"fa-grip-lines-vertical" }, // Demir parmaklık/ferforje için
+  { id:"diger",         ad:"Diğer",            icon:"fa-ellipsis" }
+];
+const MUTFAK = [
+  { id:"tezgah",           ad:"Tezgah",           icon:"fa-grip-horizontal" },    // Tezgah, yüzey için ideal
+  { id:"mutfakEvye",       ad:"Mutfak Evye",      icon:"fa-sink" },               // Evye/Lavabo için (FA6+)
+  { id:"mutfakDolabi",     ad:"Mutfak Dolabı",    icon:"fa-box-archive" },     // Dolap için (FA6+); yoksa fa-box-archive
+  { id:"mutfakBataryasi",  ad:"Mutfak Bataryası", icon:"fa-faucet" },             // Musluk/batarya için (FA6+); yoksa fa-tint
+  { id:"ankastre",         ad:"Ankastre",         icon:"FA6+" },               // Fırın/ankastre için (FA6+)
+  { id:"diger",            ad:"Diğer",            icon:"fa-ellipsis" }
+];
+const ISLAK_MEKANLAR = [
+  { id:"zeminYalitimi",    ad:"Zemin Yalıtımı",      icon:"fa-water" },             // Su yalıtımı için
+  { id:"seramikFayans",    ad:"Seramik Fayans",      icon:"fa-th" },                // Fayans/seramik karo için (kutu şeklinde)
+  { id:"klozetler",        ad:"Klozetler",           icon:"fa-toilet" },            // Klozet için
+  { id:"lavabolar",        ad:"Lavabolar",           icon:"fa-sink" },              // Lavabo için (FA6+), yoksa fa-tint
+  { id:"banyoDolabi",      ad:"Banyo Dolabı",        icon:"fa-box-archive" },    // Dolap için (FA6+), yoksa fa-box-archive veya fa-box
+  { id:"dusTeknesi",       ad:"Duş Teknesi",         icon:"fa-shower" },            // Duş için
+  { id:"banyoBataryasi",   ad:"Banyo Bataryası",     icon:"fa-faucet" },            // Batarya için, yoksa fa-tint
+  { id:"lavaboBataryasi",  ad:"Lavabo Bataryası",    icon:"fa-faucet-drip" },       // FA6+; yoksa fa-faucet
+  { id:"diger",            ad:"Diğer",               icon:"fa-ellipsis" }
+];
+const IKLIMLENDIRME = [
+  { id:"kombi",         ad:"Kombi",           icon:"fa-fire" },          // Isı/kombi için en geneli
+  { id:"kombiDolabi",   ad:"Kombi Dolabı",    icon:"fa-box-archive" },// Dolap için (FA6+), yoksa fa-box
+  { id:"klima",         ad:"Klima",           icon:"fa-wind" },          // Soğutma/iklimlendirme için uygun
+  { id:"diger",         ad:"Diğer",           icon:"fa-ellipsis" }
+];
+const DIS_CEPHE = [
+  { id:"hazirSivaDis",   ad:"Hazır Sıva Dış",    icon:"fa-fill-drip" },      // Sıva/şantiye için
+  { id:"cimento",        ad:"Çimento",           icon:"fa-cube" },           // Çimento paketi/küp gibi
+  { id:"kum",            ad:"Kum",               icon:"fa-mountain" },       // Kum/taş yığını için (veya fa-archway)
+  { id:"karbonluEps",    ad:"Karbonlu Eps",      icon:"fa-dice-d6" },        // Köpük, blok benzeri malzemeler için
+  { id:"xps",            ad:"XPS",               icon:"fa-layer-group" },    // Tabaka/panel tipleri için
+  { id:"tasYunu",        ad:"Taş Yünü",          icon:"fa-feather-alt" },    // Hafifliği yansıtmak için (veya fa-layer-group)
+  { id:"disCepheBoyasi", ad:"Dış cephe Boyası",  icon:"fa-paint-roller" },  // Dış cephe boyası için
+  { id:"boyaAstari",     ad:"Boya Astarı",       icon:"fa-brush" },
+  { id:"korKasa",       ad:"Kör Kasa",           icon:"fa-door-closed" },
+  { id:"kosebent",      ad:"Köşebent",           icon:"fa-ruler-combined" },
+  { id:"betonAstari",   ad:"Beton Astarı",       icon:"fa-fill-drip" },
+  { id:"alci",          ad:"Alçı",               icon:"fa-snowflake" },
+  { id:"diger",         ad:"Diğer",              icon:"fa-ellipsis" }
+];
+
+// İnce Üretim adımlarını buton olarak oluştur
+const inceStepsRowEl = document.querySelector('#inceUretim .uretim-steps-row');
+if(inceStepsRowEl){
+  inceStepsRowEl.innerHTML = '';
+  INCE_URETIM_ADIMLARI.forEach((adim, idx) => {
+    const btn = document.createElement('button');
+    btn.type = "button";
+    btn.className = "uretim-step-btn btn btn-outline-secondary"; // Rengi ayır edebilirsin
+    btn.setAttribute('data-adimid', adim.id);
+    btn.innerHTML = `<i class="fa-solid ${adim.icon} me-1"></i>${adim.ad}`;
+    inceStepsRowEl.appendChild(btn);
+
+    // Ok ekle
+    if (idx < INCE_URETIM_ADIMLARI.length - 1) {
+      const ok = document.createElement('span');
+      ok.className = "uretim-step-ok";
+      ok.innerHTML = `<svg class="uretim-ok-svg" viewBox="0 0 34 24"><polyline points="2,12 28,12"/><polyline points="22,6 28,12 22,18"/></svg>`;
+      inceStepsRowEl.appendChild(ok);
+    }
+  });
+
+  // Event listener ekle
+  inceStepsRowEl.querySelectorAll('.uretim-step-btn').forEach(btn => {
+    btn.addEventListener('click', function(){
+      aktifAdimId = btn.getAttribute('data-adimid');
+      aktifAltKalem = null;
+      const adim = INCE_URETIM_ADIMLARI.find(a=>a.id === aktifAdimId);
+      document.getElementById('modalBaslikIkon').innerHTML = `<i class="fa-solid ${adim.icon} me-1"></i>`;
+      document.getElementById('modalBaslikText').textContent = adim.ad;
+      if (aktifAdimId === 'zeminUygulamalari') {
+        showZeminUygulamalari();
+      } else if(aktifAdimId === 'sihhiTesisat'){
+        showSihhiTesisat();
+      } else if(aktifAdimId === 'icCephe'){
+        showIcCephe();
+      } else if(aktifAdimId === 'tavan'){
+        showTavan();
+      } else if(aktifAdimId === 'pimapen'){
+        showPimapen();
+      } else if(aktifAdimId === 'kapilar'){
+        showKapilar();
+      } else if(aktifAdimId === 'peyzaj'){
+        showPeyzaj();
+      } else if(aktifAdimId === 'mutfak'){
+        showMutfak();
+      } else if(aktifAdimId === 'islakMekanlar'){
+        showIslakMekanlar();
+      } else if(aktifAdimId === 'iklimlendirme'){
+        showIklimlendirme();
+      } else if(aktifAdimId === 'disCephe'){
+        showDisCephe();
+      }
+      //showOdemeEvrakForm();
+      bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
+    });
+  });
+}
+
+function showZeminUygulamalari(){  
+  document.getElementById('modalContentGenel').innerHTML =  
+    `<div class="mb-3">  
+      <div class="fw-bold fs-5 mb-2 text-center">Zemin Uygulamaları - Alt Kalem Seçiniz:</div>  
+      <div class="d-flex flex-wrap justify-content-center gap-3 mb-3" id="zeminUygulamalariBtnGrup">${  
+        ZEMIN_UYGULAMALARI.map(kal =>  
+          `<button type="button" class="btn btn-outline-primary zemin-uygulamalari-altkalem-btn mb-2"  
+            data-kalem="${kal.id}">  
+              <i class="fa-solid ${kal.icon} me-1"></i>${kal.ad}  
+          </button>`  
+        ).join("")  
+      }</div>  
+    </div>  
+    <div id="zeminUygulamalariAltKalemForm"></div>`;  
+
+  document.querySelectorAll('.zemin-uygulamalari-altkalem-btn').forEach(b=>{  
+    b.onclick = function(){  
+      aktifAltKalem = this.getAttribute('data-kalem');  
+      document.getElementById('modalBaslikText').textContent =  
+        "Zemin Uygulamaları - "+ ZEMIN_UYGULAMALARI.find(x=>x.id===aktifAltKalem).ad;  
+      showOdemeEvrakForm(true, false, showZeminUygulamalari);
+    }  
+  });  
+}
+function showSihhiTesisat(){  
+  document.getElementById('modalContentGenel').innerHTML =  
+    `<div class="mb-3">  
+      <div class="fw-bold fs-5 mb-2 text-center">Sıhhi Tesisat - Alt Kalem Seçiniz:</div>  
+      <div class="d-flex flex-wrap justify-content-center gap-3 mb-3" id="sihhiTesisatBtnGrup">${  
+        SIHHI_TESISAT.map(kal =>  
+          `<button type="button" class="btn btn-outline-primary sihhi-tesisat-altkalem-btn mb-2"  
+            data-kalem="${kal.id}">  
+              <i class="fa-solid ${kal.icon} me-1"></i>${kal.ad}  
+          </button>`  
+        ).join("")  
+      }</div>  
+    </div>  
+    <div id="sihhiTesisatAltKalemForm"></div>`;  
+
+  document.querySelectorAll('.sihhi-tesisat-altkalem-btn').forEach(b=>{  
+    b.onclick = function(){  
+      aktifAltKalem = this.getAttribute('data-kalem');  
+      document.getElementById('modalBaslikText').textContent =  
+        "Sıhhi Tesisat - "+ SIHHI_TESISAT.find(x=>x.id===aktifAltKalem).ad;  
+      showOdemeEvrakForm(true, false, showSihhiTesisat);
+    }  
+  });  
+}
+function showIcCephe(){  
+  document.getElementById('modalContentGenel').innerHTML =  
+    `<div class="mb-3">  
+      <div class="fw-bold fs-5 mb-2 text-center">İç Cephe - Alt Kalem Seçiniz:</div>  
+      <div class="d-flex flex-wrap justify-content-center gap-3 mb-3" id="icCepheBtnGrup">${  
+        IC_CEPHE.map(kal =>  
+          `<button type="button" class="btn btn-outline-primary ic-cephe-altkalem-btn mb-2"  
+            data-kalem="${kal.id}">  
+              <i class="fa-solid ${kal.icon} me-1"></i>${kal.ad}  
+          </button>`  
+        ).join("")  
+      }</div>  
+    </div>  
+    <div id="icCepheAltKalemForm"></div>`;  
+
+  document.querySelectorAll('.ic-cephe-altkalem-btn').forEach(b=>{  
+    b.onclick = function(){  
+      aktifAltKalem = this.getAttribute('data-kalem');  
+      document.getElementById('modalBaslikText').textContent =  
+        "İç Cephe - "+ IC_CEPHE.find(x=>x.id===aktifAltKalem).ad;  
+      showOdemeEvrakForm(true, false, showIcCephe);
+    }  
+  });  
+}
+function showTavan(){  
+  document.getElementById('modalContentGenel').innerHTML =  
+    `<div class="mb-3">  
+      <div class="fw-bold fs-5 mb-2 text-center">Tavan - Alt Kalem Seçiniz:</div>  
+      <div class="d-flex flex-wrap justify-content-center gap-3 mb-3" id="tavanBtnGrup">${  
+        TAVAN.map(kal =>  
+          `<button type="button" class="btn btn-outline-primary tavan-altkalem-btn mb-2"  
+            data-kalem="${kal.id}">  
+              <i class="fa-solid ${kal.icon} me-1"></i>${kal.ad}  
+          </button>`  
+        ).join("")  
+      }</div>  
+    </div>  
+    <div id="tavanAltKalemForm"></div>`;  
+
+  document.querySelectorAll('.tavan-altkalem-btn').forEach(b=>{  
+    b.onclick = function(){  
+      aktifAltKalem = this.getAttribute('data-kalem');  
+      document.getElementById('modalBaslikText').textContent =  
+        "Tavan - "+ TAVAN.find(x=>x.id===aktifAltKalem).ad;  
+      showOdemeEvrakForm(true, false, showTavan);
+    }  
+  });  
+}
+function showPimapen(){  
+  document.getElementById('modalContentGenel').innerHTML =  
+    `<div class="mb-3">  
+      <div class="fw-bold fs-5 mb-2 text-center">Pimapen - Alt Kalem Seçiniz:</div>  
+      <div class="d-flex flex-wrap justify-content-center gap-3 mb-3" id="pimapenBtnGrup">${  
+        PIMAPEN.map(kal =>  
+          `<button type="button" class="btn btn-outline-primary pimapen-altkalem-btn mb-2"  
+            data-kalem="${kal.id}">  
+              <i class="fa-solid ${kal.icon} me-1"></i>${kal.ad}  
+          </button>`  
+        ).join("")  
+      }</div>  
+    </div>  
+    <div id="pimapenAltKalemForm"></div>`;  
+
+  document.querySelectorAll('.pimapen-altkalem-btn').forEach(b=>{  
+    b.onclick = function(){  
+      aktifAltKalem = this.getAttribute('data-kalem');  
+      document.getElementById('modalBaslikText').textContent =  
+        "Pimapen - "+ PIMAPEN.find(x=>x.id===aktifAltKalem).ad;  
+      showOdemeEvrakForm(true, false, showPimapen);
+    }  
+  });  
+}
+function showKapilar(){  
+  document.getElementById('modalContentGenel').innerHTML =  
+    `<div class="mb-3">  
+      <div class="fw-bold fs-5 mb-2 text-center">Kapılar - Alt Kalem Seçiniz:</div>  
+      <div class="d-flex flex-wrap justify-content-center gap-3 mb-3" id="kapilarBtnGrup">${  
+        KAPILAR.map(kal =>  
+          `<button type="button" class="btn btn-outline-primary kapilar-altkalem-btn mb-2"  
+            data-kalem="${kal.id}">  
+              <i class="fa-solid ${kal.icon} me-1"></i>${kal.ad}  
+          </button>`  
+        ).join("")  
+      }</div>  
+    </div>  
+    <div id="kapilarAltKalemForm"></div>`;  
+
+  document.querySelectorAll('.kapilar-altkalem-btn').forEach(b=>{  
+    b.onclick = function(){  
+      aktifAltKalem = this.getAttribute('data-kalem');  
+      document.getElementById('modalBaslikText').textContent =  
+        "Kapılar - "+ KAPILAR.find(x=>x.id===aktifAltKalem).ad;  
+      showOdemeEvrakForm(true, false, showKapilar);
+    }  
+  });  
+}
+function showPeyzaj(){  
+  document.getElementById('modalContentGenel').innerHTML =  
+    `<div class="mb-3">  
+      <div class="fw-bold fs-5 mb-2 text-center">Peyzaj - Alt Kalem Seçiniz:</div>  
+      <div class="d-flex flex-wrap justify-content-center gap-3 mb-3" id="peyzajBtnGrup">${  
+        PEYZAJ.map(kal =>  
+          `<button type="button" class="btn btn-outline-primary peyzaj-altkalem-btn mb-2"  
+            data-kalem="${kal.id}">  
+              <i class="fa-solid ${kal.icon} me-1"></i>${kal.ad}  
+          </button>`  
+        ).join("")  
+      }</div>  
+    </div>  
+    <div id="peyzajAltKalemForm"></div>`;  
+
+  document.querySelectorAll('.peyzaj-altkalem-btn').forEach(b=>{  
+    b.onclick = function(){  
+      aktifAltKalem = this.getAttribute('data-kalem');  
+      document.getElementById('modalBaslikText').textContent =  
+        "Peyzaj - "+ PEYZAJ.find(x=>x.id===aktifAltKalem).ad;  
+      showOdemeEvrakForm(true, false, showPeyzaj);
+    }  
+  });  
+}
+function showMutfak(){  
+  document.getElementById('modalContentGenel').innerHTML =  
+    `<div class="mb-3">  
+      <div class="fw-bold fs-5 mb-2 text-center">Mutfak - Alt Kalem Seçiniz:</div>  
+      <div class="d-flex flex-wrap justify-content-center gap-3 mb-3" id="mutfakBtnGrup">${  
+        MUTFAK.map(kal =>  
+          `<button type="button" class="btn btn-outline-primary mutfak-altkalem-btn mb-2"  
+            data-kalem="${kal.id}">  
+              <i class="fa-solid ${kal.icon} me-1"></i>${kal.ad}  
+          </button>`  
+        ).join("")  
+      }</div>  
+    </div>  
+    <div id="mutfakAltKalemForm"></div>`;  
+
+  document.querySelectorAll('.mutfak-altkalem-btn').forEach(b=>{  
+    b.onclick = function(){  
+      aktifAltKalem = this.getAttribute('data-kalem');  
+      document.getElementById('modalBaslikText').textContent =  
+        "Mutfak - "+ MUTFAK.find(x=>x.id===aktifAltKalem).ad;  
+      showOdemeEvrakForm(true, false, showMutfak);
+    }  
+  });  
+}
+function showIslakMekanlar(){  
+  document.getElementById('modalContentGenel').innerHTML =  
+    `<div class="mb-3">  
+      <div class="fw-bold fs-5 mb-2 text-center">Islak Mekanlar - Alt Kalem Seçiniz:</div>  
+      <div class="d-flex flex-wrap justify-content-center gap-3 mb-3" id="islakMekanlarBtnGrup">${  
+        ISLAK_MEKANLAR.map(kal =>  
+          `<button type="button" class="btn btn-outline-primary islak-mekanlar-altkalem-btn mb-2"  
+            data-kalem="${kal.id}">  
+              <i class="fa-solid ${kal.icon} me-1"></i>${kal.ad}  
+          </button>`  
+        ).join("")  
+      }</div>  
+    </div>  
+    <div id="islakMekanlarAltKalemForm"></div>`;  
+
+  document.querySelectorAll('.islak-mekanlar-altkalem-btn').forEach(b=>{  
+    b.onclick = function(){  
+      aktifAltKalem = this.getAttribute('data-kalem');  
+      document.getElementById('modalBaslikText').textContent =  
+        "Islak Mekanlar - "+ ISLAK_MEKANLAR.find(x=>x.id===aktifAltKalem).ad;  
+      showOdemeEvrakForm(true, false, showIslakMekanlar);
+    }  
+  });  
+}
+function showIklimlendirme(){  
+  document.getElementById('modalContentGenel').innerHTML =  
+    `<div class="mb-3">  
+      <div class="fw-bold fs-5 mb-2 text-center">İklimlendirme - Alt Kalem Seçiniz:</div>  
+      <div class="d-flex flex-wrap justify-content-center gap-3 mb-3" id="iklimlendirmeBtnGrup">${  
+        IKLIMLENDIRME.map(kal =>  
+          `<button type="button" class="btn btn-outline-primary iklimlendirme-altkalem-btn mb-2"  
+            data-kalem="${kal.id}">  
+              <i class="fa-solid ${kal.icon} me-1"></i>${kal.ad}  
+          </button>`  
+        ).join("")  
+      }</div>  
+    </div>  
+    <div id="iklimlendirmeAltKalemForm"></div>`;  
+
+  document.querySelectorAll('.iklimlendirme-altkalem-btn').forEach(b=>{  
+    b.onclick = function(){  
+      aktifAltKalem = this.getAttribute('data-kalem');  
+      document.getElementById('modalBaslikText').textContent =  
+        "İklimlendirme - "+ IKLIMLENDIRME.find(x=>x.id===aktifAltKalem).ad;  
+      showOdemeEvrakForm(true, false, showIklimlendirme);
+    }  
+  });  
+}
+function showDisCephe(){  
+  document.getElementById('modalContentGenel').innerHTML =  
+    `<div class="mb-3">  
+      <div class="fw-bold fs-5 mb-2 text-center">Dış Cephe - Alt Kalem Seçiniz:</div>  
+      <div class="d-flex flex-wrap justify-content-center gap-3 mb-3" id="disCepheBtnGrup">${  
+        DIS_CEPHE.map(kal =>  
+          `<button type="button" class="btn btn-outline-primary dis-cephe-altkalem-btn mb-2"  
+            data-kalem="${kal.id}">  
+              <i class="fa-solid ${kal.icon} me-1"></i>${kal.ad}  
+          </button>`  
+        ).join("")  
+      }</div>  
+    </div>  
+    <div id="disCepheAltKalemForm"></div>`;  
+
+  document.querySelectorAll('.dis-cephe-altkalem-btn').forEach(b=>{  
+    b.onclick = function(){  
+      aktifAltKalem = this.getAttribute('data-kalem');  
+      document.getElementById('modalBaslikText').textContent =  
+        "Dış Cephe - "+ DIS_CEPHE.find(x=>x.id===aktifAltKalem).ad;  
+      showOdemeEvrakForm(true, false, showDisCephe);
     }  
   });  
 }

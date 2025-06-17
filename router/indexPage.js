@@ -103,7 +103,7 @@ router.post('/', async (req, res) => {
                 };
             }
 
-            console.log("premiumExpiryDate ",premiumExpiryDate);
+            //console.log("premiumExpiryDate ",premiumExpiryDate);
             // --- CEVAP ---
             return res.json({
                 success: true,
