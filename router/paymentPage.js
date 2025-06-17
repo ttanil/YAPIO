@@ -302,6 +302,7 @@ router.post('/payment-callback', async (req, res) => {
         if (!validatePaytenHash(data, PAYTEN_STORE_KEY)) {
             return res.status(400).send('Geçersiz istek.');
         }
+
         const isSuccess = data.Response === "Approved" && data.ProcReturnCode === "00";
         const newStatus = isSuccess ? 'success' : 'fail';
 
@@ -316,23 +317,24 @@ router.post('/payment-callback', async (req, res) => {
         if (isSuccess && payment) {
             // Öncelik: payment.meta.projectLimit'ten, yoksa amount'tan userType seç
             const limit = payment.meta?.projectLimit;
-            if (limit === 2 || limit === "2")
+            if (limit === 2 || limit === "2") {
                 newUserType = "premium2";
-            else if (limit === 4 || limit === "4")
+            } else if (limit === 4 || limit === "4") {
                 newUserType = "premium4";
-            else
-                newUserType = "premium";
+            } else {
+                newUserType = "premium"; // default, eğer limit bilinmiyorsa
+            }
         }
 
-        // GÜNCELLEME işlemi (userTypeDate yok! Sadece userType değişiyor.)
+        // Veritabanı güncellemesi
         const updateFields = {
             'pendingPayments.$.status': newStatus,
             'pendingPayments.$.finalizedAt': new Date(),
             'pendingPayments.$.paytenRawData': data,
         };
-        if (isSuccess) {
+        // Başarılı ise userType da güncellenir!
+        if (isSuccess && (newUserType === "premium2" || newUserType === "premium4" || newUserType === "premium")) {
             updateFields['userType'] = newUserType;
-            // `userTypeDate` EKLEME! Onun yerine finalizedAt tarihini, gerektiğinde payment içinden okumak yeterli.
         }
 
         const updatedUser = await Users.findOneAndUpdate(
@@ -341,9 +343,6 @@ router.post('/payment-callback', async (req, res) => {
             { new: true }
         );
         if (!updatedUser) return res.status(404).send("Order/bilgisi bulunamadı.");
-
-        // KULLANICININ premium başlangıç tarihi lazım olursa:
-        // const abonelikTarihi = payment?.finalizedAt || payment?.paymentStartedAt;
 
         res.status(200).send(isSuccess ? "OK" : "Fail");
     } catch (err) {
