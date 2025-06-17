@@ -221,18 +221,39 @@ router.post('/payment-success', async (req, res) => {
         const user = await Users.findOne({ 'pendingPayments.oid': data.oid });  
         if (!user) return res.status(404).send("Order/bilgisi bulunamadı.");  
 
-        const isSuccess = data.Response === "Approved" && data.ProcReturnCode === "00";  
-        res.render(isSuccess ? 'payment-ok' : 'payment-fail', {  
-            orderId: data.oid,  
-            message: isSuccess  
-                ? "Ödeme başarıyla gerçekleşti. Üyeliğiniz birazdan aktifleşecek!"  
-                : "Ödeme alınamadı veya banka işlemde hata oluştu."  
-        });  
+        const isSuccess = data.Response === "Approved" && data.ProcReturnCode === "00";
+
+        // Kısa mesaj ve yönlendirme
+        res.send(`
+            <!DOCTYPE html>
+            <html lang="tr">
+            <head>
+                <meta charset="UTF-8">
+                <meta http-equiv="refresh" content="5;url=/" />
+                <title>Ödeme Başarılı</title>
+                <style>
+                  body { font-family: sans-serif; text-align:center; margin-top:80px; }
+                  .success { color: #198754; font-size:1.3em; }
+                </style>
+            </head>
+            <body>
+                <div class="success">
+                  <h2>✅ Ödemeniz Başarıyla Alındı</h2>
+                  <p>Üyeliğiniz birazdan aktifleşecek.<br>
+                  5 saniye içinde ana sayfaya yönlendirileceksiniz...</p>
+                  <p><a href="/">Ana sayfaya git</a></p>
+                </div>
+                <script>
+                  setTimeout(function(){ window.location.href = "/"; }, 5000);
+                </script>
+            </body>
+            </html>
+        `);  
     } catch (err) {  
         console.error("Payten success handler:", err);  
         return res.status(500).send("Sunucu hatası.");  
     }  
-});  
+});
 
 // 3) Fail  
 router.post('/payment-fail', async (req, res) => {  
@@ -244,15 +265,35 @@ router.post('/payment-fail', async (req, res) => {
         const user = await Users.findOne({ 'pendingPayments.oid': data.oid });  
         if (!user) return res.status(404).send("Order/bilgisi bulunamadı.");  
 
-        res.render('payment-fail', {  
-            orderId: data.oid,  
-            message: `Ödeme başarısız: ${data.Response} ${data.ProcReturnCode || ""} ${data.ErrMsg || ""}`  
-        });  
+        res.send(`
+            <!DOCTYPE html>
+            <html lang="tr">
+            <head>
+                <meta charset="UTF-8">
+                <meta http-equiv="refresh" content="8;url=/" />
+                <title>Ödeme Başarısız</title>
+                <style>
+                  body { font-family: sans-serif; text-align:center; margin-top:80px; }
+                  .fail { color:#b93228; font-size:1.1em; }
+                </style>
+            </head>
+            <body>
+                <div class="fail">
+                  <h2>❌ Ödeme Başarısız Oldu</h2>
+                  <p>İşlem tamamlanamadı. 8 saniye içinde ana sayfaya yönlendirileceksiniz.</p>
+                  <p><a href="/">Ana sayfaya git</a></p>
+                </div>
+                <script>
+                  setTimeout(function(){ window.location.href = "/"; }, 8000);
+                </script>
+            </body>
+            </html>
+        `);   
     } catch (err) {  
         console.error("Payten fail handler:", err);  
         return res.status(500).send("Sunucu hatası.");  
     }  
-});  
+});
 
 // 4) Callback  
 router.post('/payment-callback', async (req, res) => {  
