@@ -571,12 +571,12 @@
 
     // ilk açılışta doğru fiyatı göster
     function setInitialFee() {
-      feeInput.value = limit4.checked ? "3800 ₺" : "2400 ₺";
+      feeInput.value = limit4.checked ? "3800 ₺" : "1 ₺";
     }
     setInitialFee();
     // Proje limitleri değiştikçe fiyatı güncelle
     limit2.addEventListener('change', function() {
-      if (this.checked) feeInput.value = "2400 ₺";
+      if (this.checked) feeInput.value = "1 ₺";
     });
     limit4.addEventListener('change', function() {
       if (this.checked) feeInput.value = "3800 ₺";
