@@ -119,8 +119,8 @@ router.post('/', authenticateUser, async (req, res) => {
     try {  
         let amount;  
         if (projectLimit === 2 || projectLimit === "2") {  
-            amount = "2400.00";
-            //amount = "1.00";
+            //amount = "2400.00";
+            amount = "1.00";
         } else if (projectLimit === 4 || projectLimit === "4") {  
             amount = "3800.00";  
         } else {  
