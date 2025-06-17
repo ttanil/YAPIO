@@ -18,82 +18,101 @@ router.get('/', authenticateUser, (req, res) => {
 router.post('/', async (req, res) => { 
     const { userId, projectName, activeType = null, process = null } = req.body || {};
     
-    if (userId && !projectName && !process){
+    if (userId && !projectName && !process) {
         try {
             const user = await Users.findById(userId);
             if (!user) {
                 return res.status(401).json({ success: false, message: 'Geçersiz giriş!' });
             }
 
-            // Premium süresi bitti mi, ve/veya uyarı zamanı mı kontrolü:
+            // --- PREMIUM SÜRESİ KONTROLÜ ---
             let premiumExpiryMessage = null;
             let updatedUserType = user.userType;
+            let premiumExpiryDate = null;
+            let premiumStartDate = null;
+            let premiumDaysLeft = null;
 
-            if(user.userType !== 'free') {
-                // Son başarılı premium ödeme kaydı bulunur
+            if (user.userType !== 'free') {
+                // SADECE premium içeren başarılı ödemeleri filtrele
                 const lastPremium = user.pendingPayments
-                    .filter(p => p.status === 'success')
-                    .sort((a, b) => new Date(b.finalizedAt || 0) - new Date(a.finalizedAt || 0))[0];
+                    .filter(p =>
+                        p.status === 'success' &&
+                        (
+                            (p.meta && (
+                                p.meta.userType === 'premium2' ||
+                                p.meta.userType === 'premium4' ||
+                                p.meta.userType === 'premium'
+                            )) ||
+                            (user.userType && user.userType.startsWith('premium'))
+                        )
+                    )
+                    .sort((a, b) => new Date(b.finalizedAt || b.paymentStartedAt || 0) - new Date(a.finalizedAt || a.paymentStartedAt || 0))[0];
 
                 if (lastPremium) {
-                    const premiumStartDate = lastPremium.finalizedAt || lastPremium.paymentStartedAt;
-                    const expiryDate = new Date(premiumStartDate);
-                    expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+                    // Premium başlangıç tarihi (öncelik finalizedAt, yoksa paymentStartedAt)
+                    premiumStartDate = lastPremium.finalizedAt || lastPremium.paymentStartedAt;
+                    // 1 yıl sonrası bitiş tarihi
+                    premiumExpiryDate = new Date(premiumStartDate);
+                    premiumExpiryDate.setFullYear(premiumExpiryDate.getFullYear() + 1);
 
                     const now = new Date();
-                    const diffMs = expiryDate - now;
-                    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+                    const diffMs = premiumExpiryDate - now;
+                    premiumDaysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24)); // Kaç gün kaldı?
 
-                    if (diffDays > 0 && diffDays <= 14) {
-                        premiumExpiryMessage = `Premium üyeliğinizin bitmesine ${diffDays} gün kaldı!`;
-                    } else if (diffDays <= 0) {
-                        // Otomatik olarak free'ye düşür
+                    if (premiumDaysLeft > 0 && premiumDaysLeft <= 14) {
+                        premiumExpiryMessage = `Premium üyeliğinizin bitmesine ${premiumDaysLeft} gün kaldı!`;
+                    } else if (premiumDaysLeft <= 0) {
+                        // Süre dolduysa free'ye düşür
                         await Users.findByIdAndUpdate(userId, { userType: 'free' });
                         updatedUserType = 'free';
-                        premiumExpiryMessage = 'Premium üyeliğiniz sona erdi. Hesabınız free oldu.';
+                        premiumExpiryMessage = 'Premium üyeliğiniz sona erdi. Hesabınız ücretsiz üyeliğe döndü.';
                     }
                 }
             }
 
-            const userType = updatedUserType;
-
+            // --- PROJECTLERİ DÜZENLE ---
             let projects = null;
             if (user.userInputs && user.userInputs.length > 0) {
                 projects = user.userInputs.map(input => ({
-                    userNameInfo : user.name,
-                    userPhoneInfo : user.phone,
-                    userEmailInfo : user.email,
-                    userTCnoInfo : user.TCno,
-                    userIlInfo : user.il,
-                    userIlceInfo : user.ilce,
-                    userSirketIl : user.sirketIl,
-                    userSirketIlce : user.sirketIlce,
-                    userTipiInfo : user.tipi,
-                    userVergiNo : user.vergiNo,
+                    userNameInfo: user.name,
+                    userPhoneInfo: user.phone,
+                    userEmailInfo: user.email,
+                    userTCnoInfo: user.TCno,
+                    userIlInfo: user.il,
+                    userIlceInfo: user.ilce,
+                    userSirketIl: user.sirketIl,
+                    userSirketIlce: user.sirketIlce,
+                    userTipiInfo: user.tipi,
+                    userVergiNo: user.vergiNo,
                     projectName: input.projectName,
                     building: input.building,
                     floorsData: input.floorsData
                 }));
             } else {
                 projects = {
-                    userNameInfo : user.name,
-                    userPhoneInfo : user.phone,
-                    userEmailInfo : user.email,
-                    userTCnoInfo : user.TCno,
-                    userIlInfo : user.il,
-                    userIlceInfo : user.ilce,
-                    userSirketIl : user.sirketIl,
-                    userSirketIlce : user.sirketIlce,
-                    userTipiInfo : user.tipi,
-                    userVergiNo : user.vergiNo
+                    userNameInfo: user.name,
+                    userPhoneInfo: user.phone,
+                    userEmailInfo: user.email,
+                    userTCnoInfo: user.TCno,
+                    userIlInfo: user.il,
+                    userIlceInfo: user.ilce,
+                    userSirketIl: user.sirketIl,
+                    userSirketIlce: user.sirketIlce,
+                    userTipiInfo: user.tipi,
+                    userVergiNo: user.vergiNo
                 };
             }
 
+            console.log("premiumExpiryDate ",premiumExpiryDate);
+            // --- CEVAP ---
             return res.json({
                 success: true,
                 projects,
-                userType,
-                premiumExpiryMessage
+                userType: updatedUserType,
+                premiumExpiryMessage,
+                premiumExpiryDate: premiumExpiryDate ? premiumExpiryDate.toISOString() : null,
+                premiumStartDate: premiumStartDate ? new Date(premiumStartDate).toISOString() : null,
+                premiumDaysLeft
             });
 
         } catch (err) {

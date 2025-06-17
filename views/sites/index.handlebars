@@ -391,7 +391,7 @@
       const premiumTimeAlert = document.getElementById("premiumTimeAlert");
 
       // Kullanıcı tipi kutusu
-      console.log("userType ",userType);
+      console.log("userType ",window.premiumEndDate);
       if(userType){
         let typeStr = "";
         if(userType === "free") typeStr = "<b>Ücretsiz</b>";
@@ -735,59 +735,70 @@
     async function renderProjects(userId) {
       const projects = [];
       const data = {
-          userId : userId
+        userId: userId
       };
-      try {  
-          const response = await fetch('/', {  
-              method: 'POST',  
-              headers: {  
-                  'Content-Type': 'application/json'  
-              },
-              credentials: 'include',
-              body: JSON.stringify(data)  
-          });  
-      
-          const result = await response.json();
-          if (!response.ok && !result.success) {
-              showWarningMessage(result.message, "tamam", true);
-          } else{
-              const premiumWarningDiv = document.getElementById('premium-warning');
-              if (result.premiumExpiryMessage) {
-                showWarningMessage(result.premiumExpiryMessage, "tamam", false);
-              }
-              projectNumber = result.projects.length;
-              userType = result.userType;
-              if(Array.isArray(result.projects)){
-                projectNameFirst = result.projects[0].projectName || null;
-                result.projects.forEach(element => { 
-                  projects.push(element.projectName);
-                });
-                userNameInfo = result.projects[0].userNameInfo;
-                userPhoneInfo = result.projects[0].userPhoneInfo;
-                userEmailInfo = result.projects[0].userEmailInfo;
-                userTCnoInfo = result.projects[0].userTCnoInfo;
-                userIlInfo = result.projects[0].userIlInfo;
-                userIlceInfo = result.projects[0].userIlceInfo;
-                userSirketIl = result.projects[0].userSirketIl;
-                userSirketIlce = result.projects[0].userSirketIlce;
-                userTipiInfo = result.projects[0].userTipiInfo;
-                userVergiNo = result.projects[0].userVergiNo;
-              } else{
-                userNameInfo = result.projects.userNameInfo;
-                userPhoneInfo = result.projects.userPhoneInfo;
-                userEmailInfo = result.projects.userEmailInfo;
-                userTCnoInfo = result.projects.userTCnoInfo;
-                userIlInfo = result.projects.userIlInfo;
-                userIlceInfo = result.projects.userIlceInfo;
-                userSirketIl = result.projects.userSirketIl;
-                userSirketIlce = result.projects.userSirketIlce;
-                userTipiInfo = result.projects.userTipiInfo;
-                userVergiNo = result.projects.userVergiNo;
-              }
+      try {
+        const response = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        if (!response.ok && !result.success) {
+          showWarningMessage(result.message, "tamam", true);
+        } else {
+          // --- Premium üyelik tarihi ve kalan günleri GLOBAL'e AYARLA ---
+          if (result.premiumExpiryDate) {
+            // Tarih ISO string, bunu Date'e çevir ve locale string olarak sakla:
+            const premiumEndObj = new Date(result.premiumExpiryDate);
+            window.premiumEndDate = premiumEndObj.toLocaleDateString('tr-TR');
+            window.premiumEndDateObject = premiumEndObj;
+          } else {
+            window.premiumEndDate = null;
+            window.premiumEndDateObject = null;
           }
+          window.premiumRemainingDays = typeof result.premiumDaysLeft === "number" ? result.premiumDaysLeft : 0;
+          // -------------------------------------------------------------
+
+          const premiumWarningDiv = document.getElementById('premium-warning');
+          if (result.premiumExpiryMessage) {
+            showWarningMessage(result.premiumExpiryMessage, "tamam", false);
+          }
+          projectNumber = result.projects.length;
+          userType = result.userType;
+          if (Array.isArray(result.projects)) {
+            projectNameFirst = result.projects[0].projectName || null;
+            result.projects.forEach(element => { 
+              projects.push(element.projectName);
+            });
+            userNameInfo = result.projects[0].userNameInfo;
+            userPhoneInfo = result.projects[0].userPhoneInfo;
+            userEmailInfo = result.projects[0].userEmailInfo;
+            userTCnoInfo = result.projects[0].userTCnoInfo;
+            userIlInfo = result.projects[0].userIlInfo;
+            userIlceInfo = result.projects[0].userIlceInfo;
+            userSirketIl = result.projects[0].userSirketIl;
+            userSirketIlce = result.projects[0].userSirketIlce;
+            userTipiInfo = result.projects[0].userTipiInfo;
+            userVergiNo = result.projects[0].userVergiNo;
+          } else{
+            userNameInfo = result.projects.userNameInfo;
+            userPhoneInfo = result.projects.userPhoneInfo;
+            userEmailInfo = result.projects.userEmailInfo;
+            userTCnoInfo = result.projects.userTCnoInfo;
+            userIlInfo = result.projects.userIlInfo;
+            userIlceInfo = result.projects.userIlceInfo;
+            userSirketIl = result.projects.userSirketIl;
+            userSirketIlce = result.projects.userSirketIlce;
+            userTipiInfo = result.projects.userTipiInfo;
+            userVergiNo = result.projects.userVergiNo;
+          }
+        }
       } catch (error) {
-          showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
-          console.log('Hata:', error);
+        showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+        console.log('Hata:', error);
       }
       
       const projectList = document.querySelector('.project-list');
