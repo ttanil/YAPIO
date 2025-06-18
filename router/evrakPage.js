@@ -81,6 +81,9 @@ router.get('/', authenticateUser, async (req, res) => {
 router.post('/', upload.single('file'), async (req, res) => {
     const process = req.body.process;
 
+    console.log("Gelen BODY:", req.body);
+    console.log("Gelen FILE:", req.file);
+
     if(process === "saveEvrak"){
         try {
             const { userId, projectName, aciklama, key } = req.body;
