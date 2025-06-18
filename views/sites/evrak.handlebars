@@ -1972,15 +1972,38 @@ async function silEvrakSunucu(evrakId){
 }
 function showEvrakModal(fileUrl, fileName) {
     let content = '';
-
     const ext = fileName.split('.').pop().toLowerCase();
+    const isMobile = isMobileDevice();
 
-    if(['jpg','jpeg','png','gif','webp','bmp'].includes(ext)) {
+    if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].includes(ext)) {
         content = `<img src="${fileUrl}" class="img-fluid" alt="${fileName}">`;
-    } else if(['pdf'].includes(ext)) {
-        content = `<iframe src="${fileUrl}" style="width:100%; min-height:60vh; border:none"></iframe>`;
+    } else if (['pdf'].includes(ext)) {
+        if (isMobile) {
+            // Sadece buton, uyarı metni
+            content = `
+                <a href="${fileUrl}" target="_blank" class="btn btn-secondary my-2 w-100 mb-2">
+                    PDF'i Yeni Sekmede Aç
+                </a>
+                <div class="alert alert-warning small text-center mt-2 mb-0">
+                    PDF görüntüleme mobil tarayıcılarda desteklenmeyebilir.<br>
+                    Yukarıdaki butonu kullanın.
+                </div>
+            `;
+        } else {
+            // Hem iframe hem buton (masaüstü)
+            content = `
+                <a href="${fileUrl}" target="_blank" class="btn btn-secondary my-2 w-100 mb-2">
+                    PDF'i Yeni Sekmede Aç
+                </a>
+                <iframe src="${fileUrl}" style="width:100%;min-height:60vh;border:none"></iframe>
+                <div class="text-muted small mt-2">
+                    PDF'i burada görüntüleyemiyorsanız butonu kullanın.
+                </div>
+            `;
+        }
     } else {
-        content = `Bu dosya türü görüntülenemiyor.<br><a href="${fileUrl}" download class="btn btn-primary mt-3">İndir (${fileName})</a>`;
+        content = `Bu dosya türü görüntülenemiyor.<br>
+                   <a href="${fileUrl}" download class="btn btn-primary mt-3">İndir (${fileName})</a>`;
     }
 
     document.getElementById('evrakModalLabel').textContent = fileName;
@@ -1988,6 +2011,10 @@ function showEvrakModal(fileUrl, fileName) {
 
     const modal = new bootstrap.Modal(document.getElementById('evrakModal'));
     modal.show();
+}
+function isMobileDevice() {
+  // Modern tarayıcılar için oldukça güvenli kontrol
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 window.silEvrakSunucu = silEvrakSunucu;
 window.evrakGuncelleDinamik = evrakGuncelleDinamik;
