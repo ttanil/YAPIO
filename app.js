@@ -1,3 +1,91 @@
+const express = require('express');
+const exphbs = require('express-handlebars');
+const handlebars = require('handlebars');
+const expressSession = require('express-session');
+const dotenv = require('dotenv');
+const path = require('path');
+const dbs = require(path.join(__dirname,'dbs.js'));
+const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
+const cors = require('cors');
+const crypto = require('crypto');
+
+dotenv.config();
+dbs();
+
+const app = express();
+
+const time = 1000*60*30;    // 30 dk oturum süresi
+const SECRET_VALUE = process.env.SECRET_VALUE || 'insaathesap';
+
+// Handlebars şablon ayarları
+const hbs = exphbs.create({
+  helpers: {
+    ifEquals: function (arg1, arg2, options) {
+      return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
+    },
+    json: function (context) {
+      return JSON.stringify(context);
+    }
+  }
+});
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
+app.set('views', path.join(__dirname, 'views'));
+
+// GLOBAL middleware'ler
+app.use(express.json());                   // Sadece JSON istekler için (dosya upload hariç!)
+app.use(express.urlencoded({ extended: true }));  // Standart form istekler için (dosya upload hariç!)
+app.use(cookieParser());
+app.use(expressSession({
+    secret: SECRET_VALUE,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { path: '/', httpOnly: true, secure: 'auto', maxAge: time }
+}));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// CORS
+app.use(cors({
+    origin: 'http://127.0.0.1:5000',
+    credentials: true
+}));
+
+// Dosya upload için sadece MULTER kullanıyoruz! (express-fileupload SİLİNDİ)
+// Dosya yükleme gereken tüm routerlarda MULTER ile route seviyesinde upload.single('file') çağrılır!
+// Ayrı bir 'fileUpload' middleware yok!
+
+// ROUTER'lar
+const indexPage = require(path.join(__dirname, 'router', 'indexPage.js'));
+const loginPage = require(path.join(__dirname, 'router', 'loginPage.js'));
+const registerPage = require(path.join(__dirname, 'router', 'registerPage.js'));
+const logoutPage = require(path.join(__dirname, 'router', 'logoutPage.js'));
+const binaPage = require(path.join(__dirname, 'router', 'binaPage.js'));
+const drawPage = require(path.join(__dirname, 'router', 'drawPage.js'));
+const quatationPage = require(path.join(__dirname, 'router', 'quatationPage.js'));
+const analizPage = require(path.join(__dirname, 'router', 'analizPage.js'));
+const soldPage = require(path.join(__dirname, 'router', 'soldPage.js'));
+const paymentPage = require(path.join(__dirname, 'router', 'paymentPage.js'));
+const evrakPage = require(path.join(__dirname, 'router', 'evrakPage.js')); // BU ROUTER'DA multer ile dosya yükleniyor
+
+app.use('/', indexPage);
+app.use('/login', loginPage);
+app.use('/register', registerPage);
+app.use('/logout', logoutPage);
+app.use('/bina', binaPage);
+app.use('/draw', drawPage);
+app.use('/quatation', quatationPage);
+app.use('/analiz', analizPage);
+app.use('/sold', soldPage);
+app.use('/payment', paymentPage);
+app.use('/evrak', evrakPage); // → Yalnızca MULTER var, başka upload middleware yok!
+
+// Sunucuyu başlat
+app.listen(5000, () => {
+    console.log("Server is running at http://127.0.0.1:5000");
+});
+
+/*
 const express = require('express'); //sunucuya atılan istekleri yakalar request/response
 const exphbs = require('express-handlebars'); //html sayfasını böl, parçala, yönet işlemleri için
 const handlebars = require('handlebars');
@@ -93,3 +181,4 @@ app.use('/evrak', evrakPage);
 app.listen(5000, () => {  
     console.log("Server is running at http://127.0.0.1:5000");  
 });
+*/

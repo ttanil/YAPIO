@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const path = require('path');
 const Users = require(path.join(__dirname, '..', 'models', 'users'));
+const multer  = require('multer');
+const { S3Client, PutObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 
 
 const authenticateUser = require('../middleware/authenticateUser');
@@ -58,5 +60,206 @@ router.get('/', authenticateUser, async (req, res) => {
     }
 });
 
+
+const upload = multer({ storage: multer.memoryStorage() });
+
+router.post('/', upload.single('file'), async (req, res) => {
+    const process = req.body.process;
+
+    if(process === "save"){
+        const { userId, projectName, tarih, tutar, aciklama } = req.body;
+
+        const user = await Users.findById(userId);
+        if (!user) return res.status(404).json({ error: "Kullanıcı bulunamadı" });
+
+        // Projeyi projectName ile bul
+        const userInput = user.userInputs.find(ui => ui.projectName === projectName);
+        if (!userInput) return res.status(404).json({ error: "Proje bulunamadı" });
+
+        const odeme = { tarih, tutar: Number(tutar), aciklama };
+
+        // Eğer daha önce hiç imarDurumu girilmemişse, yeni oluştur ve ekle
+        if (!userInput.imarDurumu || !userInput.imarDurumu.length) {
+            userInput.imarDurumu = [{ odemeDetaylari: [odeme], dokumanlar: [] }];
+        } else {
+            userInput.imarDurumu[0].odemeDetaylari.push(odeme);
+        }
+
+        await user.save();
+        res.json({ success: true, odeme });
+
+    } else if(process === "read"){
+        const { userId, projectName, imarDurumuIndex = 0 } = req.body;
+
+        const user = await Users.findById(userId);
+        if (!user) return res.status(404).json({ error: 'Kullanıcı yok' });
+
+        const userInput = user.userInputs.find(p => p.projectName === projectName);
+        if (!userInput) return res.status(404).json({ error: 'Proje yok' });
+
+        if (!userInput.imarDurumu || !userInput.imarDurumu[imarDurumuIndex])
+            return res.status(404).json({ error: 'İmar durumu yok' });
+
+        res.json(userInput.imarDurumu[imarDurumuIndex].odemeDetaylari || []);
+
+    } else if(process === "delete"){
+        const { process, userId, projectName, odemeId } = req.body;
+        if(process !== "delete") return res.status(400).json({ error:"Process bilinmiyor" });
+
+        // Adım 1: Kullanıcı ve Proje bul
+        const user = await Users.findById(userId);
+        if(!user) return res.status(404).json({ error: "Kullanıcı bulunamadı" });
+
+        const userInput = user.userInputs.find(ui => ui.projectName === projectName);
+        if(!userInput) return res.status(404).json({ error: "Proje bulunamadı" });
+
+        // Adım 2: İlgili imarDurumu'ndan sil
+        // (varsayım: ilk imarDurumu'na ekleniyor ve siliniyor. Birden fazla varsa imarDurumuIndex ekle)
+        const imarDurumu = userInput.imarDurumu[0]; 
+        if(!imarDurumu) return res.status(404).json({ error: "İmar durumu bulunamadı" });
+
+        const index = imarDurumu.odemeDetaylari.findIndex(o => o && o._id && o._id.toString() === odemeId);
+        if(index === -1) return res.status(404).json({ error: "Ödeme bulunamadı" });
+
+        imarDurumu.odemeDetaylari.splice(index, 1);
+        await user.save();
+
+        return res.json({ success: true });
+    } else if(process === "saveEvrak"){
+        try {
+            //Form verilerini çek
+            const { userId, projectName, aciklama, key } = req.body;
+            const file = req.file;
+            if (!file) return res.status(400).json({ error: 'Dosya yok' });
+
+            // Benzersiz dosya adı
+            const ext = path.extname(file.originalname);
+            const r2Filename = `evraklar/${userId}_${Date.now()}${ext}`;
+
+            const s3 = new S3Client({
+                region: "auto", // Cloudflare R2 için genelde 'auto' bırakılır
+                endpoint: "https://eb7b69f469c33ce6338e878ac08bcdd6.r2.cloudflarestorage.com",
+                credentials: {
+                    accessKeyId: "c0e8fdf9159831b36b651a2057859393",
+                    secretAccessKey: "6149db1f74a193f49dd11e3f4a3ac8ff0250c8ef9ed6cadee5646f5db9d5b7f1"
+                }
+            });
+
+            const command = new PutObjectCommand({
+                Bucket: "yapio",
+                Key: r2Filename,
+                Body: file.buffer,
+                ContentType: file.mimetype,
+                ACL: "public-read"
+            });
+            const result = await s3.send(command);
+
+            const fileUrl = `https://pub-12f70a7bb4ea46e9b01afa008a5228d1.r2.dev/${r2Filename}`;
+
+            //MongoDB'ye kaydet; projenin ilgili imarDurumu/dokumanlar altına Ekle
+            const user = await Users.findById(userId);
+            if (!user) return res.status(404).json({ error: 'Kullanıcı bulunamadı' });
+
+            const userInput = user.userInputs.find(p => p.projectName === projectName);
+            if (!userInput) return res.status(404).json({ error: 'Proje yok' });
+
+            const imar = userInput.imarDurumu[0];
+            if (!imar) return res.status(404).json({ error: 'İmar yok!' });
+
+            imar.dokumanlar.push({
+                path: fileUrl,
+                fileName: file.originalname,
+                uploadedAt: new Date(),
+                aciklama
+            });
+
+            user.markModified('userInputs');
+
+            await user.save();
+
+            res.json({ success:true, fileUrl });
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Kayıt sırasında hata oluştu' });
+        }
+
+    } else if(process === "readEvrak") {
+        const { userId, projectName, imarDurumuIndex = 0 } = req.body;
+        const user = await Users.findById(userId);
+        if (!user) return res.status(404).json({ error: "Kullanıcı bulunamadı!" });
+
+        const userInput = user.userInputs.find(p => p.projectName === projectName);
+        if (!userInput) return res.status(404).json({ error: "Proje yok!" });
+
+        if (!userInput.imarDurumu || !userInput.imarDurumu[imarDurumuIndex]) {
+            return res.json([]); // Hiç evrak yoksa boş dizi gönder
+        }
+        const dokumanlar = userInput.imarDurumu[imarDurumuIndex].dokumanlar || [];
+        res.json(dokumanlar);
+
+    } else if(process === "deleteEvrak") {
+        const { userId, projectName, imarDurumuIndex = 0, evrakId } = req.body;
+
+        const user = await Users.findById(userId);
+        if (!user) return res.status(404).json({ error: "Kullanıcı yok" });
+
+        const userInput = user.userInputs.find(p => p.projectName === projectName);
+        if (!userInput) return res.status(404).json({ error: "Proje yok" });
+
+        const imar = userInput.imarDurumu[imarDurumuIndex];
+        if (!imar) return res.status(404).json({ error: "İmar yok!" });
+
+        const i = imar.dokumanlar.findIndex(doc => doc._id.toString() === evrakId);
+        if(i > -1) {
+            // --- BULUT DOSYA SİL ---
+
+            // 1. Dosya path'inden key'i bul
+            let dosyaKey = '';
+            const dosya = imar.dokumanlar[i];
+            if (dosya && dosya.path) {
+                // https://pub-...r2.dev/evraklar/...
+                const urlPrefix = '.r2.dev/';
+                const urlIndex = dosya.path.indexOf(urlPrefix);
+                if (urlIndex !== -1) {
+                    dosyaKey = dosya.path.substring(urlIndex + urlPrefix.length);
+                }
+            }
+
+            // 2. Cloudflare R2 bağlantısı (anahtarlarını .env’e taşı, canlıda buraya yazma!)
+            const s3 = new S3Client({
+                region: "auto",
+                endpoint: "https://eb7b69f469c33ce6338e878ac08bcdd6.r2.cloudflarestorage.com",
+                credentials: {
+                    accessKeyId: "c0e8fdf9159831b36b651a2057859393",
+                    secretAccessKey: "6149db1f74a193f49dd11e3f4a3ac8ff0250c8ef9ed6cadee5646f5db9d5b7f1"
+                    // Canlıda şunu tercih et!
+                    // accessKeyId: process.env.CF_ACCESS_KEY,
+                    // secretAccessKey: process.env.CF_SECRET_KEY
+                }
+            });
+
+            // 3. Buluttan sil (hata olursa sadece logla)
+            if(dosyaKey){
+                try {
+                    await s3.send(new DeleteObjectCommand({
+                        Bucket: "yapio",
+                        Key: dosyaKey
+                    }));
+                } catch (err) {
+                    console.error("Buluttan dosya silinirken hata:", err);
+                    // Burada direkt hataya düşmek yerine, kullanıcının MongoDB kaydını yine de silersin.
+                }
+            }
+
+            // 4. MongoDB kayıttan sil (her durumda)
+            imar.dokumanlar.splice(i, 1);
+            user.markModified('userInputs');
+            await user.save();
+            return res.json({ success: true });
+        } else {
+            return res.status(404).json({ error: "Evrak bulunamadı!" });
+        }
+    }
+});
 
 module.exports = router;

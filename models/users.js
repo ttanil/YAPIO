@@ -94,6 +94,30 @@ const paymentOrderSchema = new mongoose.Schema({
   meta:             { type: mongoose.Schema.Types.Mixed }, // Ek bilgi (kullanıcı, kampanya, not, vs)
 }, { _id: false }); // ek ObjectId gerekmez
 
+
+
+const OdemeDetaySchema = new mongoose.Schema({
+    tarih:    { type: String, required: true },
+    tutar:    { type: Number, required: true },
+    aciklama: { type: String }
+    // unit:  { type: String, required: true } // Açmak istersen ekleyebilirsin
+}, { _id: true }); // _id'yi otomatik ekler
+
+const DokumanSchema = new mongoose.Schema({
+    path:       { type: String, required: true },   // PDF yolu (sunucuda ya da bulutta)
+    uploadedAt: { type: Date, default: Date.now },
+    fileName:   { type: String },
+    aciklama:   { type: String }
+}, { _id: true }); // _id otomatik
+
+// ANA ŞEMA
+const imarDurumuSchema = new mongoose.Schema({
+    odemeDetaylari: [OdemeDetaySchema],
+    dokumanlar: [DokumanSchema]
+}, { _id: false }); // imarDurumu için id yok, alt diziler için var!
+
+
+
 const arsaBedeliSchema = new mongoose.Schema(defaultFields, { _id: false });
 const santiyeKurulumuSchema = new mongoose.Schema(defaultFields, { _id: false });
 const yerdenCikartmakSchema = new mongoose.Schema(defaultFields, { _id: false });
@@ -183,6 +207,9 @@ const userInputSchema = new mongoose.Schema({
   soldItems: [soldItemsSchema],
   selectedDoor: [selectedDoorSchema],
   selectedWall: [selectedWallSchema],
+
+  imarDurumu:[imarDurumuSchema],
+
 
   arsaBedeli: [arsaBedeliSchema],
   santiyeKurulumu: [santiyeKurulumuSchema],

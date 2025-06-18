@@ -639,10 +639,27 @@ body {
       </div>  
     </div>  
   </div>  
-</div>   
+</div>
+
+<div class="modal fade" id="evrakModal" tabindex="-1" aria-labelledby="evrakModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="evrakModalLabel">Evrak Görüntüle</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+      </div>
+      <div class="modal-body" id="evrakModalBody" style="min-height:350px;">
+        <!-- İçerik buraya yüklenecek -->
+      </div>
+    </div>
+  </div>
+</div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script type="module">
+    import { showWarningMessage } from '/js/showMessage.js';
+
     const projectNameString = document.getElementById("projectName");
     const quatationButton = document.getElementById("quatation-button"); 
     const graphsButton = document.getElementById("graphs-button");
@@ -1703,119 +1720,278 @@ function showOdemeEvrakForm(isRadyal=false, isEvrakIsleri=false, geriHandler=nul
   evrakGuncelleDinamik(isEvrakIsleri);
 }  
 // -- Dinamik ödemeler
+// Odeme formunu gönder
 function odemeFormSubmit(e){
   e.preventDefault();
   const aciklama = document.getElementById('odemeAciklama').value.trim();
   const tutar = Number(document.getElementById('odemeTutar').value);
   const tarih = document.getElementById('odemeTarih').value;
-  let key;
-  if(aktifAdimId){
-    key = aktifAltKalem ? aktifAdimId+"_"+aktifAltKalem : aktifAdimId;
-  } else if(aktifEvrakKey) {
-    key = aktifEvrakKey;
-  }
-  if(aciklama && tutar > 0 && tarih) {
-    if(!odemeData[key]) odemeData[key] = [];
-    odemeData[key].push({ id:Date.now(), aciklama, tutar, tarih });
-    tabloGuncelleDinamik(!!aktifEvrakKey);
+  let key = aktifAdimId ? (aktifAltKalem ? aktifAdimId+"_"+aktifAltKalem : aktifAdimId) : aktifEvrakKey;
+  if(aciklama && tutar > 0 && tarih && key) {
+    showLoader();
+    fetch('/evrak', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          process:"save",
+          userId, 
+          projectName,
+          aciklama, 
+          tutar,
+          tarih 
+        })
+      })
+    .then(r => r.json())
+    .then(() => tabloGuncelleDinamik(!!aktifEvrakKey))
+    .finally(() => {
+      hideLoader();
+  });
     e.target.reset();
   }
 }
 function tabloGuncelleDinamik(isEvrakIsleri) {
   const tbody = document.querySelector('#odemeTablosu tbody');
-  let key;
-  if(aktifAdimId){
-    key = aktifAltKalem ? aktifAdimId+"_"+aktifAltKalem : aktifAdimId;
-  } else if(aktifEvrakKey) {
-    key = aktifEvrakKey;
-  }
-  const veri = odemeData[key] || [];
-  tbody.innerHTML = '';
-  if(veri.length === 0){
-    document.getElementById('odemeBosMesaj').style.display = '';
-    document.getElementById('odemeTablosu').style.display = 'none';
-  } else {
-    document.getElementById('odemeBosMesaj').style.display = 'none';
-    document.getElementById('odemeTablosu').style.display = '';
-    veri.forEach((o,idx) => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${idx+1}</td>
-        <td>${o.aciklama}</td>
-        <td>${o.tutar}</td>
-        <td>${o.tarih}</td>
-        <td>
-          <button class="btn btn-sm btn-danger" title="Sil" onclick="silOdemeDinamik('${key}',${o.id},${isEvrakIsleri})"><i class="fa-solid fa-trash"></i></button>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
-  }
-}
-function silOdemeDinamik(key, id, isEvrakIsleri) {
-  if(confirm("Silinsin mi?")){
-    odemeData[key] = (odemeData[key]||[]).filter(o=>o.id!==id);
-    tabloGuncelleDinamik(isEvrakIsleri);
-  }
-}
 
-function evrakFormSubmit(e){
+  showLoader();
+
+  fetch('/evrak', {
+    method: 'POST',  
+    headers: {  
+        'Content-Type': 'application/json'  
+    },
+    credentials: 'include',
+    body: JSON.stringify({
+      process :"read",
+      userId,
+      projectName
+    })
+  })
+    .then(r => r.json())
+    .then(veri => {
+      console.log("veri ",veri);
+      tbody.innerHTML = '';
+      if (!Array.isArray(veri) || veri.length === 0) {
+        document.getElementById('odemeBosMesaj').style.display = '';
+        document.getElementById('odemeTablosu').style.display = 'none';
+      } else {
+        document.getElementById('odemeBosMesaj').style.display = 'none';
+        document.getElementById('odemeTablosu').style.display = '';
+        veri.forEach((o, idx) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${idx + 1}</td>
+            <td>${o.aciklama || ''}</td>
+            <td>${o.tutar}</td>
+            <td>${o.tarih}</td>
+            <td>
+              <button class="btn btn-sm btn-danger" title="Sil" onclick="silOdemeSunucu('${o._id}')">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    })
+    .finally(() => {
+      hideLoader();
+  });
+}
+async function silOdemeSunucu(odemeId) {
+  const userConfirm = await showWarningMessage("Kayıt silinsin mi?","evet", false);
+  if(!userConfirm) return;
+  const userInputIndex = typeof aktifUserInputIndex !== 'undefined' ? aktifUserInputIndex : 0;
+  const imarDurumuIndex = typeof aktifImarDurumuIndex !== 'undefined' ? aktifImarDurumuIndex : 0;
+
+  showLoader();
+
+  fetch('/evrak', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      process:"delete",
+      userId,
+      projectName,
+      odemeId
+    })
+  })
+  .then(r => r.json())
+  .then(() => tabloGuncelleDinamik())
+  .finally(() => {
+      hideLoader(); // Artık ne olursa olsun loader kapanır (başarı ya da hata)
+  });
+}
+window.silOdemeSunucu = silOdemeSunucu;
+window.tabloGuncelleDinamik = tabloGuncelleDinamik;
+
+
+async function evrakFormSubmit(e){
   e.preventDefault();
   const dosyaInput = document.getElementById('evrakDosya');
+  const aciklamaInput = document.getElementById('evrakAciklama');
   const dosya = dosyaInput.files[0];
   if (!dosya) return;
   const aciklama = document.getElementById('evrakAciklama').value.trim();
+  let key = aktifAdimId ? (aktifAltKalem ? aktifAdimId+"_"+aktifAltKalem : aktifAdimId) : aktifEvrakKey;
+  if (!key) return;
 
-  let key;
-  if(aktifAdimId){
-    key = aktifAltKalem ? aktifAdimId+"_"+aktifAltKalem : aktifAdimId;
-  } else if(aktifEvrakKey) {
-    key = aktifEvrakKey;
+  // Dosyayı önce PDF’e çevir
+  let pdfFile;
+  try {
+    pdfFile = await fileToPdfBlob(dosya);
+  } catch(e) {
+    dosyaInput.value = "";
+    aciklamaInput.value = "";
+    showWarningMessage("Dosya PDF veya resim değil!", "tamam", false);
+    return;
   }
 
-  if (!evrakData[key]) evrakData[key] = [];
-  evrakData[key].push({
-    id: Date.now(),
-    dosyaAdi: dosya.name,
-    aciklama,
-    dosyaUrl: URL.createObjectURL(dosya)
+  showLoader();
+
+  const formData = new FormData();
+  formData.append('file', pdfFile);
+  formData.append('aciklama', aciklama);
+  formData.append('key', key);
+  formData.append('process', "saveEvrak");
+  formData.append('projectName', projectName);
+  formData.append('userId', userId);
+
+  fetch('/evrak', {
+    method: 'POST',
+    body: formData
+  })
+  .then(r => r.json())
+  .then(() => {
+      evrakGuncelleDinamik(!!aktifEvrakKey); 
+
+      // --- Kutu içeriklerini temizle ---
+      dosyaInput.value = "";
+      aciklamaInput.value = "";
+    })
+    .finally(() => {
+      hideLoader();
   });
-  evrakGuncelleDinamik(!!aktifEvrakKey);
-  e.target.reset();
-}
-function evrakGuncelleDinamik(isEvrakIsleri) {
-  const ul = document.getElementById('evrakListesi');
-  let key;
-  if(aktifAdimId){
-    key = aktifAltKalem ? aktifAdimId+"_"+aktifAltKalem : aktifAdimId;
-  } else if(aktifEvrakKey) {
-    key = aktifEvrakKey;
+
+  // Eğer form elemanı ise, resetle (özellikle onsubmit ile çağrılıyorsa)
+  if (e.target && typeof e.target.reset === 'function') {
+    e.target.reset();
   }
-  const veri = evrakData[key] || [];
-  ul.innerHTML = '';
-  if (veri.length === 0) {
-    ul.innerHTML = `<li class="list-group-item text-secondary">Evrak yüklenmemiş.</li>`;
-  } else {
-    veri.forEach(ev => {
-      const li = document.createElement('li');
-      li.className = "list-group-item d-flex justify-content-between align-items-center";
-      li.innerHTML = `
-        <span>
-          <i class="fa-solid fa-file-arrow-down me-1"></i>
-          <b>${ev.dosyaAdi}</b>
-          <small class="text-muted">${ev.aciklama||''}</small>
-          <a href="${ev.dosyaUrl}" download="${ev.dosyaAdi}" class="btn btn-link btn-sm px-0" title="İndir"><i class="fa fa-download"></i></a>
-        </span>
-        <button class="btn btn-outline-danger btn-sm" title="Sil" onclick="silEvrakDinamik('${key}',${ev.id},${isEvrakIsleri})"><i class="fa-solid fa-trash"></i></button>
-      `;
-      ul.appendChild(li);
+}
+function fileToPdfBlob(file) {
+  return new Promise((resolve, reject) => {
+    if (file.type === "application/pdf") {
+      // Zaten pdf, dosyayı aynen kullan.
+      resolve(file);
+    } else if (file.type.startsWith("image/")) {
+      // jsPDF ile resmi PDFe koyup blob yapalım
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const imgData = e.target.result;
+        const pdf = new window.jspdf.jsPDF(); // veya new jsPDF();
+        pdf.addImage(imgData, 'JPEG', 10, 10, 180, 250);
+        const pdfBlob = pdf.output("blob");
+        resolve(new File([pdfBlob], file.name.replace(/\..+$/, ".pdf"), { type: "application/pdf" }));
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    } else {
+      // Diğer dosya türleri için uyarı
+      //alert("Sadece PDF veya resim yükleyebilirsiniz!");
+      reject("Desteklenmeyen dosya türü");
+    }
+  });
+}
+
+function evrakGuncelleDinamik() {
+    const ul = document.getElementById('evrakListesi');
+    fetch('/evrak', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            process:"readEvrak",
+            userId,
+            projectName // ve gerekirse imarDurumuIndex
+        })
+    })
+    .then(r => r.json())
+    .then(veri => {
+        ul.innerHTML = '';
+        if (!veri || veri.length === 0) {
+            ul.innerHTML = `<li class="list-group-item text-secondary">Evrak yok veya yüklenmemiş.</li>`;
+        } else {
+            veri.forEach(ev => {
+                const fileName = ev.fileName || ev.dosyaAdi || "evrak";
+                const filePath = ev.path;
+                const li = document.createElement('li');
+                li.className = "list-group-item d-flex justify-content-between align-items-center";
+                li.innerHTML = `
+                    <span>
+                        <i class="fa-solid fa-file-arrow-down me-1"></i>
+                        <b>${fileName}</b>
+                        <small class="text-muted">${ev.aciklama || ''}</small>
+                        <button type="button"
+                            class="btn btn-link btn-sm px-0 ms-1"
+                            title="Görüntüle"
+                            onclick="showEvrakModal('${filePath.replace(/'/g,"\\'")}', '${fileName.replace(/'/g,"\\'") }')">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                        <a href="${filePath}" download="${fileName}"
+                            class="btn btn-link btn-sm px-0 ms-1" title="İndir">
+                            <i class="fa fa-download"></i>
+                        </a>
+                    </span>
+                    <button class="btn btn-outline-danger btn-sm" title="Sil" onclick="silEvrakSunucu('${ev._id}')">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                `;
+                ul.appendChild(li);
+            });
+        }
     });
-  }
 }
-function silEvrakDinamik(key, id, isEvrakIsleri) {
-  evrakData[key] = (evrakData[key]||[]).filter(o=>o.id!==id);
-  evrakGuncelleDinamik(isEvrakIsleri);
+async function silEvrakSunucu(evrakId){
+    const userConfirm = await showWarningMessage("Kayıt silinsin mi?","evet", false);
+    if(!userConfirm) return;
+    showLoader();
+    fetch('/evrak', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+            process:"deleteEvrak",
+            userId,
+            projectName,
+            evrakId
+        })
+    })
+    .then(r => r.json())
+    .then(() => evrakGuncelleDinamik())
+    .finally(() => {
+      hideLoader();
+  });
 }
+function showEvrakModal(fileUrl, fileName) {
+    let content = '';
+
+    const ext = fileName.split('.').pop().toLowerCase();
+
+    if(['jpg','jpeg','png','gif','webp','bmp'].includes(ext)) {
+        content = `<img src="${fileUrl}" class="img-fluid" alt="${fileName}">`;
+    } else if(['pdf'].includes(ext)) {
+        content = `<iframe src="${fileUrl}" style="width:100%; min-height:60vh; border:none"></iframe>`;
+    } else {
+        content = `Bu dosya türü görüntülenemiyor.<br><a href="${fileUrl}" download class="btn btn-primary mt-3">İndir (${fileName})</a>`;
+    }
+
+    document.getElementById('evrakModalLabel').textContent = fileName;
+    document.getElementById('evrakModalBody').innerHTML = content;
+
+    const modal = new bootstrap.Modal(document.getElementById('evrakModal'));
+    modal.show();
+}
+window.silEvrakSunucu = silEvrakSunucu;
+window.evrakGuncelleDinamik = evrakGuncelleDinamik;
+
+
 
     quatationButton.addEventListener("click", () => {
         window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
@@ -1830,87 +2006,13 @@ function silEvrakDinamik(key, id, isEvrakIsleri) {
         window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
     });
 
+    function showLoader() {
+        document.getElementById('loader').style.display = 'flex';
+    }
+    function hideLoader() {
+        document.getElementById('loader').style.display = 'none';
+    }
 
-    /*
-const imageInput = document.getElementById('modalImageInput');
-const previewArea = document.getElementById('modalPreviewArea');
-const btn = document.getElementById('modalToPdfBtn');
-let imgDataUrl = null;
-
-// Modal temizleme fonksiyonu (kapatınca resetle)
-function clearModalFields() {
-  imageInput.value = '';
-  previewArea.innerHTML = '<span style="color:#bbb;">Seçilen görsel burada görünecek</span>';
-  btn.disabled = true;
-  imgDataUrl = null;
-}
-
-// Modal açılırken ve kapanırken temizleyelim
-const modalEl = document.getElementById('imageToPdfModal');
-modalEl.addEventListener('hidden.bs.modal', clearModalFields);
-modalEl.addEventListener('show.bs.modal', clearModalFields);
-
-// Dosya seçimi:
-imageInput.addEventListener('change', function () {
-  const file = this.files[0];
-  imgDataUrl = null;
-  previewArea.innerHTML = '';
-  btn.disabled = true;
-  if (!file) {
-    previewArea.innerHTML = '<span style="color:#bbb;">Seçilen görsel burada görünecek</span>';
-    return;
-  }
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    imgDataUrl = e.target.result;
-    const img = document.createElement('img');
-    img.src = imgDataUrl;
-    img.style.maxWidth = "100%";
-    img.style.maxHeight = "100%";
-    img.onload = () => btn.disabled = false;
-    previewArea.appendChild(img);
-  };
-  reader.readAsDataURL(file);
-});
-
-// Varsayılan PDF ismi (tarihli)
-function defaultPdfName() {
-  const now = new Date();
-  return 'resim_' +
-    now.getFullYear() +
-    ('0'+(now.getMonth()+1)).slice(-2) +
-    ('0'+now.getDate()).slice(-2) + '_' +
-    ('0'+now.getHours()).slice(-2) +
-    ('0'+now.getMinutes()).slice(-2) +
-    ('0'+now.getSeconds()).slice(-2) + '.pdf';
-}
-
-// PDF'e dönüştürme işlemi:
-btn.addEventListener('click', function () {
-  if (!imgDataUrl) return;
-  let filename = prompt("Oluşturulan PDF dosyasının adını giriniz:", "");
-  if (!filename || !filename.trim()) filename = defaultPdfName();
-  if (!filename.toLowerCase().endsWith('.pdf')) filename += ".pdf";
-
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  const pageHeight = pdf.internal.pageSize.getHeight();
-  const img = new window.Image();
-  img.onload = function () {
-    const imgWidth = img.width;
-    const imgHeight = img.height;
-    const scale = Math.min((pageWidth * 0.9) / imgWidth, (pageHeight * 0.9) / imgHeight, 1);
-    const pdfWidth = imgWidth * scale;
-    const pdfHeight = imgHeight * scale;
-    const x = (pageWidth - pdfWidth) / 2;
-    const y = (pageHeight - pdfHeight) / 2;
-    pdf.addImage(imgDataUrl, 'JPEG', x, y, pdfWidth, pdfHeight);
-    pdf.save(filename);
-  };
-  img.src = imgDataUrl;
-});
-    */
 </script>
 </body>
 </html>
