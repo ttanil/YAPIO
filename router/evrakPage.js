@@ -32,7 +32,7 @@ const BUCKET_NAME = CF_R2_BUCKET;
 const PUBLIC_BASE_URL = CF_R2_PUBLIC_URL;
 const upload = multer({ 
     storage: multer.memoryStorage(),
-    limits: { fileSize: 20 * 1024 * 1024 } // 20mb
+    //limits: { fileSize: 20 * 1024 * 1024 } // 20mb
 });
 
 // Public URL'den R2 key çıkar (silme için)
