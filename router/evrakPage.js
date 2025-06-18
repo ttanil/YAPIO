@@ -84,7 +84,68 @@ router.post('/', upload.single('file'), async (req, res) => {
     console.log("Gelen BODY:", req.body);
     console.log("Gelen FILE:", req.file);
 
-    if(process === "saveEvrak"){
+    if(process === "save"){
+        const { userId, projectName, tarih, tutar, aciklama } = req.body;
+
+        const user = await Users.findById(userId);
+        if (!user) return res.status(404).json({ error: "Kullanıcı bulunamadı" });
+
+        // Projeyi projectName ile bul
+        const userInput = user.userInputs.find(ui => ui.projectName === projectName);
+        if (!userInput) return res.status(404).json({ error: "Proje bulunamadı" });
+
+        const odeme = { tarih, tutar: Number(tutar), aciklama };
+
+        // Eğer daha önce hiç imarDurumu girilmemişse, yeni oluştur ve ekle
+        if (!userInput.imarDurumu || !userInput.imarDurumu.length) {
+            userInput.imarDurumu = [{ odemeDetaylari: [odeme], dokumanlar: [] }];
+        } else {
+            userInput.imarDurumu[0].odemeDetaylari.push(odeme);
+        }
+
+        await user.save();
+        res.json({ success: true, odeme });
+
+    } else if(process === "read"){
+        const { userId, projectName, imarDurumuIndex = 0 } = req.body;
+
+        const user = await Users.findById(userId);
+        if (!user) return res.status(404).json({ error: 'Kullanıcı yok' });
+
+        const userInput = user.userInputs.find(p => p.projectName === projectName);
+        if (!userInput) return res.status(404).json({ error: 'Proje yok' });
+
+        if (!userInput.imarDurumu || !userInput.imarDurumu[imarDurumuIndex])
+            return res.status(404).json({ error: 'İmar durumu yok' });
+
+        res.json(userInput.imarDurumu[imarDurumuIndex].odemeDetaylari || []);
+
+    } else if(process === "delete"){
+        const { process, userId, projectName, odemeId } = req.body;
+        if(process !== "delete") return res.status(400).json({ error:"Process bilinmiyor" });
+
+        // Adım 1: Kullanıcı ve Proje bul
+        const user = await Users.findById(userId);
+        if(!user) return res.status(404).json({ error: "Kullanıcı bulunamadı" });
+
+        const userInput = user.userInputs.find(ui => ui.projectName === projectName);
+        if(!userInput) return res.status(404).json({ error: "Proje bulunamadı" });
+
+        // Adım 2: İlgili imarDurumu'ndan sil
+        // (varsayım: ilk imarDurumu'na ekleniyor ve siliniyor. Birden fazla varsa imarDurumuIndex ekle)
+        const imarDurumu = userInput.imarDurumu[0]; 
+        if(!imarDurumu) return res.status(404).json({ error: "İmar durumu bulunamadı" });
+
+        const index = imarDurumu.odemeDetaylari.findIndex(o => o && o._id && o._id.toString() === odemeId);
+        if(index === -1) return res.status(404).json({ error: "Ödeme bulunamadı" });
+
+        imarDurumu.odemeDetaylari.splice(index, 1);
+        await user.save();
+
+        return res.json({ success: true });
+
+
+    } else if(process === "saveEvrak"){
         try {
             const { userId, projectName, aciklama, key } = req.body;
             const file = req.file;
