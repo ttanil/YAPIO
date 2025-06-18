@@ -30,7 +30,10 @@ function getS3Client() {
 
 const BUCKET_NAME = CF_R2_BUCKET;
 const PUBLIC_BASE_URL = CF_R2_PUBLIC_URL;
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({ 
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 6 * 1024 * 1024 } // 6mb
+});
 
 // Public URL'den R2 key çıkar (silme için)
 function getR2KeyFromUrl(url) {
