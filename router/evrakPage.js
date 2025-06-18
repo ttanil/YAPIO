@@ -37,12 +37,12 @@ const upload = multer({
 
 // Public URL'den R2 key çıkar (silme için)
 function getR2KeyFromUrl(url) {
-    const urlPrefix = ".r2.dev/";
-    const urlIndex = url.indexOf(urlPrefix);
-    if (urlIndex !== -1) {
-        return url.substring(urlIndex + urlPrefix.length);
+    try {
+        const u = new URL(url);
+        return u.pathname.replace(/^\//, ""); // ilk / karakterini kaldır
+    } catch {
+        return ""; // Bozuk url gelirse güvenli tarafta kal
     }
-    return "";
 }
 
 // --- Giriş View ---
