@@ -13,7 +13,7 @@ const CF_R2_ACCESS_KEY   = "26272cf5a77ffec381949db19c6a9964";
 const CF_R2_SECRET_KEY   = "211b08b35f224a33a7a1f011cd40f7719f675e6c39a138aedb2429bd299c993c";
 const CF_R2_ACCOUNT_ID   = "eb7b69f469c33ce6338e878ac08bcdd6";
 const CF_R2_ENDPOINT     = "https://eb7b69f469c33ce6338e878ac08bcdd6.r2.cloudflarestorage.com";
-const CF_R2_PUBLIC_URL   = "https://pub-12f70a7bb4ea46e9b01afa008a5228d1.r2.dev";
+const CF_R2_PUBLIC_URL   = "https://www.yapio.net";
 const CF_R2_BUCKET       = "yapio";
 
 // S3 Client'ı oluştur
