@@ -138,10 +138,10 @@ body {
   background: #fff;
   color: #333;
   border: 2px solid #e2e8f0;
-  border-radius: 2em;
+  border-radius: 2.4em;
   font-weight: 500;
-  font-size: 1.08em;
-  padding: 0.65em 1.5em;
+  font-size: 1.18em;
+  padding: 0.88em 2.3em;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -149,6 +149,7 @@ body {
   transition: color 0.14s, background 0.16s, border-color 0.16s;
   outline: none;
   position: relative;
+  min-width: 176px;
 }
 .flow-step-btn.active, .flow-step-btn:focus {
   background: linear-gradient(90deg, #2563eb 0%, #60a5fa 70%);
@@ -291,16 +292,16 @@ body {
 .uretim-step-btn {
   background: linear-gradient(90deg, #f7ecd2 0%, #e3e7fa 100%);
   color: #2c2c21;
-  border-radius: 12px;
+  border-radius: 16px;                           /* Daha yuvarlak */
   border: none;
   font-family: 'Oswald', Arial, sans-serif;
-  font-size: 1.01rem;
+  font-size: 1.15rem;                            /* Font büyüdü */
   font-weight: 700;
-  padding: 0.33rem 1.17rem;
+  padding: 0.56rem 2rem;                         /* Üst-alt ve sağ-sol padding arttı */
   transition: background .14s, color .13s, box-shadow .14s;
-  box-shadow: 0 2px 8px 0 rgba(120,140,190,0.09);
+  box-shadow: 0 4px 14px 0 rgba(120,140,190,0.12); /* Gölge biraz güçlendi */
   cursor: pointer;
-  margin: 5px 0;
+  margin: 8px 0;                                /* Dikey aralık arttı */
   position: relative;
   white-space: nowrap;
 }
@@ -353,23 +354,22 @@ body {
   outline: none;
   border: none;
   font-family: 'Oswald', Arial, sans-serif;
-  font-size: 1.17rem;
+  font-size: 0.97rem;                     /* Font daha küçük */
   font-weight: 700;
-  padding: .86em 2.2em .86em 2.6em;
-  border-radius: 18px;
-  /* Daha açık mavi ton -- blue-50'den blue-200'e gradyan */
+  padding: .62em 1.4em .62em 1.7em;       /* Üst-alt ve sağ-sol padding azaldı */
+  border-radius: 14px;                    /* Köşe biraz küçüldü */
   background: linear-gradient(92deg, #f0f9ff 0%, #dbeafe 60%, #bae6fd 100%);
   color: #446398;
-  box-shadow: 0 4px 16px 0 #bcdffd44;
+  box-shadow: 0 2px 8px 0 #bcdffd44;      /* Gölge daha yumuşak */
   backdrop-filter: blur(7px) saturate(130%);
   transition: all .18s cubic-bezier(.47,1.7,.39,.88);
   letter-spacing: .07em;
-  border: 2.2px solid #dbeafe; /* Oldukça hafif mavi sınır */
+  border: 1.4px solid #dbeafe;           /* Kenarlık inceldi */
   margin-bottom: 0;
   cursor: pointer;
-  min-width: 140px;
+  min-width: 86px;                        /* Minimum genişlik daha az */
   display: flex;
-  gap: .5em;
+  gap: .4em;
   align-items: center;
 }
 
@@ -449,12 +449,28 @@ body {
   .flow-steps-container { flex-direction: column; gap: .1em; }
   .flow-step-arrow { transform: rotate(90deg); height: 24px; }
   .flow-step-arrow svg { width: 22px; height: 20px; }
-  .flow-step-btn { width: 100%; justify-content: center; }
+  .flow-step-btn { 
+    width: 60%; 
+    justify-content: center;
+    font-size: 1em;                 /* Metin biraz küçültüldü */
+    padding: 0.57em 1.2em;          /* Yastıklar azaltıldı */
+    border-radius: 1.4em;           /* Köşeler biraz daraldı */
+    box-sizing: border-box;         /* Padding genişliğe dahil edilir */
+    margin: 7px 0;
+    }
   .surec-title { font-size: 1.5em; margin-bottom: 10px; }
   #tab-uretim .bolum-baslik { font-size:1.29rem; padding:.9em .33em .7em .33em; }
   .uretim-tabs-row{ gap:7px;}
   .uretim-tab-btn{ font-size:1.01rem; padding:.6em 1em .66em 1.4em; border-radius:13px; min-width:94px;}
   .uretim-tab-btn .uretim-ikon {font-size:1em;}
+  .uretim-step-btn {
+    font-size: 0.98rem;           /* Yazı bir miktar küçüldü */
+    padding: 0.48rem 1.1rem;      /* Daha dar padding */
+    border-radius: 13px;          /* Biraz daha az yuvarlaklık */
+    box-shadow: 0 2px 8px 0 rgba(120,140,190,0.10);
+    width: 60%;                  /* Tam satır genişliği (opsiyonel) */
+    margin: 7px 0;                /* Dikey aralık korundu */
+  }
   .evrak-ekle-btn { font-size: 0.9rem; padding: 0.6rem 1.4rem;}
   .alt-baslik-kutu{font-size:0.95rem; padding:.75rem 1.1rem;}
 
@@ -574,25 +590,15 @@ body {
     <div class="container pt-3 pb-4">  
       <div class="surec-title">Yapı Üretim Süreci</div>  
       <div class="flow-steps-container">
-        <button class="flow-step-btn active" data-tab="evrak">
+        <button class="flow-step-btn active mb-2" data-tab="evrak">
           Evrak İşleri
         </button>
-        <span class="flow-step-arrow">
-          <svg viewBox="0 0 24 24">
-            <polyline points="4,12 20,12"/>
-            <polyline points="16,7 20,12 16,17"/>
-          </svg>
-        </span>
-        <button class="flow-step-btn" data-tab="ruhsat">
+        
+        <button class="flow-step-btn mb-2" data-tab="ruhsat">
           Yapı Ruhsatı
         </button>
-        <span class="flow-step-arrow">
-          <svg viewBox="0 0 24 24">
-            <polyline points="4,12 20,12"/>
-            <polyline points="16,7 20,12 16,17"/>
-          </svg>
-        </span>
-          <button class="flow-step-btn" data-tab="uretim">
+      
+          <button class="flow-step-btn mb-2" data-tab="uretim">
             Üretim
           </button>
         </div>
@@ -600,7 +606,7 @@ body {
 
     <!-- Evrak İşleri Bölümü -->  
     <div class="surec-section mb-4 active" id="tab-evrak">  
-  <div class="bolum-baslik">Evrak İşleri</div>  
+    
   <div class="er-kutular">  
     <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
       <span class="alt-baslik-ikon">🏛️</span>  
@@ -671,13 +677,13 @@ body {
 
     <!-- Yapı Ruhsatı Bölümü -->  
     <div class="surec-section" id="tab-ruhsat">  
-      <div class="bolum-baslik">Yapı Ruhsatı</div>  
+       
       <button class="evrak-ekle-btn">Evrak Ekle</button>  
     </div>  
 
     <!-- Üretim Bölümü -->
     <div class="surec-section mb-4" id="tab-uretim">
-      <div class="bolum-baslik">Üretim</div>
+      
       <div class="uretim-tabs-row">
         <button id="btnKaba" class="uretim-tab-btn active"><span class="uretim-ikon">🧱</span> Kaba Üretim</button>
         <button id="btnInce" class="uretim-tab-btn"><span class="uretim-ikon">🎨</span> İnce Üretim</button>
