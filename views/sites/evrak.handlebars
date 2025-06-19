@@ -1973,7 +1973,8 @@ async function silEvrakSunucu(evrakId){
 function showEvrakModal(fileUrl, fileName) {
     let content = '';
     const ext = fileName.split('.').pop().toLowerCase();
-    const isMobile = isMobileDevice();
+    //const isMobile = isMobileDevice();
+    isMobile = false;
 
     if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].includes(ext)) {
         content = `<img src="${fileUrl}" class="img-fluid" alt="${fileName}">`;
