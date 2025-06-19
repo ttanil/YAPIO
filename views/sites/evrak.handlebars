@@ -910,63 +910,71 @@ const URETIM_ADIMLARI = [
 ];
 
 const RADYAL_ALTKALEM = [
-  { id:"demir",   ad:"Demir",   icon:"fa-dna" },
-  { id:"beton",   ad:"Beton",   icon:"fa-mountain" },
-  { id:"tel",     ad:"Tel",     icon:"fa-wave-square" },
-  { id:"civi",    ad:"Çivi",    icon:"fa-thumbtack" },
-  { id:"diger",   ad:"Diğer",   icon:"fa-ellipsis" }
+  { id:"demir",   ad:"Demir",   icon:"fa-dna",           birimler:["kg", "ton", "adet"] },
+  { id:"beton",   ad:"Beton",   icon:"fa-mountain",      birimler:["m³"] },
+  { id:"tel",     ad:"Tel",     icon:"fa-wave-square",   birimler:["kg", "m", "rulo"] },
+  { id:"civi",    ad:"Çivi",    icon:"fa-thumbtack",     birimler:["kg", "kutu", "adet"] },
+  { id:"diger",   ad:"Diğer",   icon:"fa-ellipsis",      birimler:["adet"] }
 ];
+
 const TEMEL_IZALASYONU = [
-  { id:"su_tutucu_bant",    ad:"Su Tutucu Bant",    icon:"fa-tape" },                   // veya "fa-tape", "fa-grip-lines"
-  { id:"mebran",            ad:"Mebran",            icon:"fa-layer-group" },           // katman mantığı için
-  { id:"likit_mebran",      ad:"Likit Mebran",      icon:"fa-tint" },                  // sıvı/sembol için
-  { id:"drenaj_levhasi",    ad:"Drenaj Levhası",    icon:"fa-water" },                 // su/drenaj imajı için
-  { id:"diger",             ad:"Diğer",             icon:"fa-ellipsis" }
+  { id:"su_tutucu_bant", ad:"Su Tutucu Bant",    icon:"fa-tape",           birimler:["metre", "rulo", "adet"] },
+  { id:"mebran",         ad:"Mebran",            icon:"fa-layer-group",    birimler:["m²", "rulo", "adet"] },
+  { id:"likit_mebran",   ad:"Likit Mebran",      icon:"fa-tint",           birimler:["kg", "kova", "litre"] },
+  { id:"drenaj_levhasi", ad:"Drenaj Levhası",    icon:"fa-water",          birimler:["m²", "adet"] },
+  { id:"diger",          ad:"Diğer",             icon:"fa-ellipsis",       birimler:["adet"] }
 ];
+
 const SU_BASMAN = [
-  { id:"celik_hasir",       ad:"Çelik Hasır",       icon:"fa-border-all" },                   
-  { id:"beton",             ad:"Beton",             icon:"fa-mountain" },
-  { id:"diger",             ad:"Diğer",             icon:"fa-ellipsis" }
+  { id:"celik_hasir",    ad:"Çelik Hasır",       icon:"fa-border-all",     birimler:["m²", "adet", "rulo"] },            
+  { id:"beton",          ad:"Beton",             icon:"fa-mountain",       birimler:["m³"] },
+  { id:"diger",          ad:"Diğer",             icon:"fa-ellipsis",       birimler:["adet"] }
 ];
+
 const ZEMIN_BETONU = [
-  { id:"demir",   ad:"Demir",   icon:"fa-dna" },
-  { id:"beton",   ad:"Beton",   icon:"fa-mountain" },
-  { id:"tel",     ad:"Tel",     icon:"fa-wave-square" },
-  { id:"civi",    ad:"Çivi",    icon:"fa-thumbtack" },
-  { id:"diger",   ad:"Diğer",   icon:"fa-ellipsis" }
+  { id:"demir",   ad:"Demir",   icon:"fa-dna",           birimler:["kg", "ton", "adet"] },
+  { id:"beton",   ad:"Beton",   icon:"fa-mountain",      birimler:["m³"] },
+  { id:"tel",     ad:"Tel",     icon:"fa-wave-square",   birimler:["kg", "m", "rulo"] },
+  { id:"civi",    ad:"Çivi",    icon:"fa-thumbtack",     birimler:["kg", "kutu", "adet"] },
+  { id:"diger",   ad:"Diğer",   icon:"fa-ellipsis",      birimler:["adet"] }
 ];
+
 const KAT_BETONLARI = [
-  { id:"demir",   ad:"Demir",   icon:"fa-dna" },
-  { id:"beton",   ad:"Beton",   icon:"fa-mountain" },
-  { id:"tel",     ad:"Tel",     icon:"fa-wave-square" },
-  { id:"civi",    ad:"Çivi",    icon:"fa-thumbtack" },
-  { id:"diger",   ad:"Diğer",   icon:"fa-ellipsis" }
+  { id:"demir",   ad:"Demir",   icon:"fa-dna",           birimler:["kg", "ton", "adet"] },
+  { id:"beton",   ad:"Beton",   icon:"fa-mountain",      birimler:["m³"] },
+  { id:"tel",     ad:"Tel",     icon:"fa-wave-square",   birimler:["kg", "m", "rulo"] },
+  { id:"civi",    ad:"Çivi",    icon:"fa-thumbtack",     birimler:["kg", "kutu", "adet"] },
+  { id:"diger",   ad:"Diğer",   icon:"fa-ellipsis",      birimler:["adet"] }
 ];
+
 const CATI = [
-  { id:"kereste",             ad:"Kereste",             icon:"fa-tree" },
-  { id:"osb",                 ad:"OSB",                 icon:"fa-layer-group" },
-  { id:"cati_izalasyonu",     ad:"Çatı İzalasyonu",     icon:"fa-fill-drip" },
-  { id:"kiremit",             ad:"Kiremit",             icon:"fa-th" },
-  { id:"diger",               ad:"Diğer",               icon:"fa-ellipsis" }
+  { id:"kereste",             ad:"Kereste",             icon:"fa-tree",                birimler:["m³", "adet", "metre"] },
+  { id:"osb",                 ad:"OSB",                 icon:"fa-layer-group",         birimler:["adet", "plaka", "m²"] },
+  { id:"cati_izalasyonu",     ad:"Çatı İzalasyonu",     icon:"fa-fill-drip",           birimler:["m²", "rulo", "paket"] },
+  { id:"kiremit",             ad:"Kiremit",             icon:"fa-th",                  birimler:["adet", "paket", "m²"] },
+  { id:"diger",               ad:"Diğer",               icon:"fa-ellipsis",            birimler:["adet"] }
 ];
+
 const KAPAMA_BETONU = [
-  { id:"demir",   ad:"Demir",   icon:"fa-dna" },
-  { id:"beton",   ad:"Beton",   icon:"fa-mountain" },
-  { id:"tel",     ad:"Tel",     icon:"fa-wave-square" },
-  { id:"civi",    ad:"Çivi",    icon:"fa-thumbtack" },
-  { id:"diger",   ad:"Diğer",   icon:"fa-ellipsis" }
+  { id:"demir",   ad:"Demir",   icon:"fa-dna",           birimler:["kg", "ton", "adet"] },
+  { id:"beton",   ad:"Beton",   icon:"fa-mountain",      birimler:["m³"] },
+  { id:"tel",     ad:"Tel",     icon:"fa-wave-square",   birimler:["kg", "m", "rulo"] },
+  { id:"civi",    ad:"Çivi",    icon:"fa-thumbtack",     birimler:["kg", "kutu", "adet"] },
+  { id:"diger",   ad:"Diğer",   icon:"fa-ellipsis",      birimler:["adet"] }
 ];
+
 const SAP = [
-  { id:"kum",       ad:"Kum",     icon:"fa-mound" },
-  { id:"cimento",   ad:"Çimento", icon:"fa-cube" },
-  { id:"diger",     ad:"Diğer",   icon:"fa-ellipsis" }
+  { id:"kum",       ad:"Kum",     icon:"fa-mound",       birimler:["ton", "kg", "m³"] },
+  { id:"cimento",   ad:"Çimento", icon:"fa-cube",        birimler:["kg", "ton", "torba"] },
+  { id:"diger",     ad:"Diğer",   icon:"fa-ellipsis",    birimler:["adet"] }
 ];
+
 const DUVAR_ORME = [
-  { id:"cimento",   ad:"Çimento", icon:"fa-cube" },
-  { id:"duvar_blogu", ad:"Duvar Bloğu", icon:"fa-th-large" },   // veya fa-cubes (örülü blok için uygun)
-  { id:"kirec",       ad:"Kireç",       icon:"fa-flask" },      // laboratuvar/doğal malzeme takibi için, yoksa fa-snowflake (beyaz toz temsili)
-  { id:"kum_cakil",   ad:"Kum-Çakıl",   icon:"fa-mound" },      // kum/çakıl yığını için modern ve uygun!
-  { id:"diger",   ad:"Diğer",   icon:"fa-ellipsis" }
+  { id:"cimento",     ad:"Çimento",         icon:"fa-cube",         birimler:["kg", "ton", "torba"] },
+  { id:"duvar_blogu", ad:"Duvar Bloğu",    icon:"fa-th-large",     birimler:["adet", "palet", "m²"] },
+  { id:"kirec",       ad:"Kireç",          icon:"fa-flask",        birimler:["kg", "ton", "torba"] },
+  { id:"kum_cakil",   ad:"Kum-Çakıl",      icon:"fa-mound",        birimler:["ton", "kg", "m³"] },
+  { id:"diger",       ad:"Diğer",          icon:"fa-ellipsis",     birimler:["adet"] }
 ];
 
 // Her kombinasyonda ayrı veri
@@ -1045,7 +1053,7 @@ function showRadyalKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Radyal Temel - "+ RADYAL_ALTKALEM.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showRadyalKalemler);
+      showOdemeEvrakForm(true, false, showRadyalKalemler, aktifAltKalem, RADYAL_ALTKALEM);
     }  
   });  
 }
@@ -1069,7 +1077,7 @@ function showPerdeKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Perde Beton - "+ RADYAL_ALTKALEM.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showPerdeKalemler);
+      showOdemeEvrakForm(true, false, showPerdeKalemler, aktifAltKalem, RADYAL_ALTKALEM);
     }  
   });  
 }
@@ -1093,7 +1101,7 @@ function showTemelIzalasyonuKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Temel İzalasyonu - "+ TEMEL_IZALASYONU.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showTemelIzalasyonuKalemler);
+      showOdemeEvrakForm(true, false, showTemelIzalasyonuKalemler, aktifAltKalem, TEMEL_IZALASYONU);
     }  
   });  
 }
@@ -1117,7 +1125,7 @@ function showSuBasmanKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Subasman - "+ SU_BASMAN.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showSuBasmanKalemler);
+      showOdemeEvrakForm(true, false, showSuBasmanKalemler, aktifAltKalem, SU_BASMAN);
     }  
   });  
 }
@@ -1141,7 +1149,7 @@ function showZeminBetonuKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Zemin Betonu - "+ ZEMIN_BETONU.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showZeminBetonuKalemler);
+      showOdemeEvrakForm(true, false, showZeminBetonuKalemler, aktifAltKalem, ZEMIN_BETONU);
     }  
   });  
 }
@@ -1165,7 +1173,7 @@ function showKatBetonlariKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Kat Betonları - "+ KAT_BETONLARI.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showKatBetonlariKalemler);
+      showOdemeEvrakForm(true, false, showKatBetonlariKalemler, aktifAltKalem, KAT_BETONLARI);
     }  
   });  
 }
@@ -1189,7 +1197,7 @@ function showCatiKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Çatı - "+ CATI.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showCatiKalemler);
+      showOdemeEvrakForm(true, false, showCatiKalemler, aktifAltKalem, CATI);
     }  
   });  
 }
@@ -1213,7 +1221,7 @@ function showKapamaBetonuKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Kapama Betonu - "+ KAPAMA_BETONU.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showKapamaBetonuKalemler);
+      showOdemeEvrakForm(true, false, showKapamaBetonuKalemler, aktifAltKalem, KAPAMA_BETONU);
     }  
   });  
 }
@@ -1237,7 +1245,7 @@ function showSapKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "ŞAP - "+ SAP.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showSapKalemler);
+      showOdemeEvrakForm(true, false, showSapKalemler, aktifAltKalem, SAP);
     }  
   });  
 }
@@ -1261,7 +1269,7 @@ function showDuvarOrmeKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Duvar Örme - "+ DUVAR_ORME.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showDuvarOrmeKalemler);
+      showOdemeEvrakForm(true, false, showDuvarOrmeKalemler, aktifAltKalem, DUVAR_ORME);
     }  
   });  
 }
@@ -1286,94 +1294,98 @@ const INCE_URETIM_ADIMLARI = [
 ];
 
 const ZEMIN_UYGULAMALARI = [
-  { id:"seramik",     ad:"Seramik",        icon:"fa-border-none" },  // karo/seramik için en uygun
-  { id:"parke",       ad:"Parke",          icon:"fa-grip-lines" },   // parke veya zemin döşeme imajı
-  { id:"mermer",      ad:"Mermer",         icon:"fa-gem" },          // kristal, değerli taş - alternatifi yoksa fa-cube
-  { id:"zeminBoyasi", ad:"Zemin Boyası",   icon:"fa-paint-roller" }, // FA6+, yoksa "fa-brush" veya "fa-tint"
-  { id:"epoksi",      ad:"Epoksi",         icon:"fa-flask" },        // sıvı/kimyasal temsili için
-  { id:"diger",       ad:"Diğer",           icon:"fa-ellipsis" }
+  { id:"seramik",     ad:"Seramik",        icon:"fa-border-none",      birimler:["m²", "kutu", "adet"] },
+  { id:"parke",       ad:"Parke",          icon:"fa-grip-lines",       birimler:["m²", "paket", "adet"] },
+  { id:"mermer",      ad:"Mermer",         icon:"fa-gem",              birimler:["m²", "adet", "plaka"] },
+  { id:"zeminBoyasi", ad:"Zemin Boyası",   icon:"fa-paint-roller",     birimler:["kg", "litre", "kova"] },
+  { id:"epoksi",      ad:"Epoksi",         icon:"fa-flask",            birimler:["kg", "litre", "set"] },
+  { id:"diger",       ad:"Diğer",          icon:"fa-ellipsis",         birimler:["adet"] }
 ];
 
 const SIHHI_TESISAT = [
-  { id:"pisSu",     ad:"Pis Su",      icon:"fa-toilet" },         // Pis su/atıksu için 'tuvalet' teması uygun
-  { id:"temizSu",   ad:"Temiz Su",    icon:"fa-faucet" },         // Temiz su/musluk için en uygun
-  { id:"isitma",    ad:"Isıtma",      icon:"fa-temperature-high" },// Isıtma (radyatör, sıcaklık göstergesi)
-  { id:"diger",     ad:"Diğer",       icon:"fa-ellipsis" }
+  { id:"pisSu",     ad:"Pis Su",      icon:"fa-toilet",              birimler:["m", "boru", "adet"] },
+  { id:"temizSu",   ad:"Temiz Su",    icon:"fa-faucet",              birimler:["m", "boru", "adet"] },
+  { id:"isitma",    ad:"Isıtma",      icon:"fa-temperature-high",    birimler:["m", "boru", "adet"] },
+  { id:"diger",     ad:"Diğer",       icon:"fa-ellipsis",            birimler:["adet"] }
 ];
 
 const IC_CEPHE = [
-  { id:"korKasa",       ad:"Kör Kasa",         icon:"fa-door-closed" },      // Kapı kasası/kasa için
-  { id:"kosebent",      ad:"Köşebent",         icon:"fa-ruler-combined" },   // Profil/Mil/Köşe için uygun
-  { id:"betonAstari",   ad:"Beton Astarı",     icon:"fa-fill-drip" },        // Sıvı/astar için
-  { id:"alci",          ad:"Alçı",             icon:"fa-snowflake" },        // Toz/beyaz/pudra için bu sık tercih edilir
-  { id:"cimento",       ad:"Çimento",          icon:"fa-cube" },             // Malzeme/blok gibi
-  { id:"kum",           ad:"Kum",              icon:"fa-mound" },            // Kum yığını
-  { id:"hazirSivaIc",   ad:"Hazır Sıva İç",    icon:"fa-trowel" },           // FA6+ (Sıva aleti), yoksa "fa-layer-group"
-  { id:"icCepheBoyasi", ad:"İç Cephe Boyası",  icon:"fa-paint-roller" },     // FA6+, yoksa "fa-paint-brush"
-  { id:"boyaAstari",    ad:"Boya Astarı",      icon:"fa-brush" },            // Fırça/astar için
-  { id:"diger",         ad:"Diğer",            icon:"fa-ellipsis" }
+  { id:"korKasa",       ad:"Kör Kasa",         icon:"fa-door-closed",      birimler:["metre", "adet"] },
+  { id:"kosebent",      ad:"Köşebent",         icon:"fa-ruler-combined",   birimler:["metre", "adet"] },
+  { id:"betonAstari",   ad:"Beton Astarı",     icon:"fa-fill-drip",        birimler:["kg", "litre"] },
+  { id:"alci",          ad:"Alçı",             icon:"fa-snowflake",        birimler:["kg", "torba"] },
+  { id:"cimento",       ad:"Çimento",          icon:"fa-cube",             birimler:["kg", "torba"] },
+  { id:"kum",           ad:"Kum",              icon:"fa-mound",            birimler:["ton", "kg", "m³"] },
+  { id:"hazirSivaIc",   ad:"Hazır Sıva İç",    icon:"fa-trowel",           birimler:["kg", "torba", "adet"] },
+  { id:"icCepheBoyasi", ad:"İç Cephe Boyası",  icon:"fa-paint-roller",     birimler:["kg", "litre", "kova"] },
+  { id:"boyaAstari",    ad:"Boya Astarı",      icon:"fa-brush",            birimler:["kg", "litre"] },
+  { id:"diger",         ad:"Diğer",            icon:"fa-ellipsis",         birimler:["adet"] }
 ];
+
 const TAVAN = [
-  { id:"stropiyer", ad:"Stropiyer", icon:"fa-wave-square" },      // Dalga/köpük yapısı için
-  { id:"alcipan",   ad:"Alçıpan",   icon:"fa-layer-group" },      // Tabaka/panel/Laminar yapı için
-  { id:"karolem",   ad:"Karolem",   icon:"fa-th-large" },         // Kare tavan paneli/döşeme için
-  { id:"diger",     ad:"Diğer",     icon:"fa-ellipsis" }
+  { id:"stropiyer", ad:"Stropiyer", icon:"fa-wave-square",        birimler:["metre", "adet", "paket"] },
+  { id:"alcipan",   ad:"Alçıpan",   icon:"fa-layer-group",        birimler:["m²", "levha", "adet"] },
+  { id:"karolem",   ad:"Karolem",   icon:"fa-th-large",           birimler:["adet", "kutu"] },
+  { id:"diger",     ad:"Diğer",     icon:"fa-ellipsis",           birimler:["adet"] }
 ];
+
 const PIMAPEN = [
-  { id:"pencereler",    ad:"Pencereler",      icon:"fa-window-maximize" },  // Pencere için
-  { id:"zeminDograma",  ad:"Zemin Doğrama",   icon:"fa-vector-square" },    // Zemin/profil/doğrama için
-  { id:"diger",         ad:"Diğer",           icon:"fa-ellipsis" }
+  { id:"pencereler",    ad:"Pencereler",      icon:"fa-window-maximize",   birimler:["adet", "m²"] },
+  { id:"zeminDograma",  ad:"Zemin Doğrama",   icon:"fa-vector-square",     birimler:["metre", "adet"] },
+  { id:"diger",         ad:"Diğer",           icon:"fa-ellipsis",          birimler:["adet"] }
 ];
+
 const KAPILAR = [
-  { id:"odaKapilari",   ad:"Oda Kapıları",     icon:"fa-door-open" },      // İç kapı için en uygunu
-  { id:"celikKapilar",  ad:"Çelik Kapılar",    icon:"fa-shield-alt" },     // Güvenlik/çelik kapı için kalkan (FA6+'da 'fa-shield-halved' da olabilir)
-  { id:"diger",         ad:"Diğer",            icon:"fa-ellipsis" }
+  { id:"odaKapilari",   ad:"Oda Kapıları",     icon:"fa-door-open",      birimler:["adet"] },
+  { id:"celikKapilar",  ad:"Çelik Kapılar",    icon:"fa-shield-alt",     birimler:["adet"] },
+  { id:"diger",         ad:"Diğer",            icon:"fa-ellipsis",       birimler:["adet"] }
 ];
+
 const PEYZAJ = [
-  { id:"bahceDuvari",   ad:"Bahçe Duvarı",     icon:"fa-border-style" },     // Duvar/çit görünümü için
-  { id:"bitkilendirme", ad:"Bitkilendirme",    icon:"fa-seedling" },         // Bitki/yeşillik için
-  { id:"perforje",      ad:"Perforje",         icon:"fa-grip-lines-vertical" }, // Demir parmaklık/ferforje için
-  { id:"diger",         ad:"Diğer",            icon:"fa-ellipsis" }
+  { id:"bahceDuvari",   ad:"Bahçe Duvarı",     icon:"fa-border-style",          birimler:["metre", "adet", "m²"] },
+  { id:"bitkilendirme", ad:"Bitkilendirme",    icon:"fa-seedling",              birimler:["adet", "m²"] },
+  { id:"perforje",      ad:"Perforje",         icon:"fa-grip-lines-vertical",   birimler:["metre", "adet"] },
+  { id:"diger",         ad:"Diğer",            icon:"fa-ellipsis",              birimler:["adet"] }
 ];
 const MUTFAK = [
-  { id:"tezgah",           ad:"Tezgah",           icon:"fa-grip-horizontal" },    // Tezgah, yüzey için ideal
-  { id:"mutfakEvye",       ad:"Mutfak Evye",      icon:"fa-sink" },               // Evye/Lavabo için (FA6+)
-  { id:"mutfakDolabi",     ad:"Mutfak Dolabı",    icon:"fa-box-archive" },     // Dolap için (FA6+); yoksa fa-box-archive
-  { id:"mutfakBataryasi",  ad:"Mutfak Bataryası", icon:"fa-faucet" },             // Musluk/batarya için (FA6+); yoksa fa-tint
-  { id:"ankastre",         ad:"Ankastre",         icon:"FA6+" },               // Fırın/ankastre için (FA6+)
-  { id:"diger",            ad:"Diğer",            icon:"fa-ellipsis" }
+  { id: "tezgah",           ad: "Tezgah",           icon: "fa-grip-horizontal", birimler: ["m", "m²"] },
+  { id: "mutfakEvye",       ad: "Mutfak Evye",      icon: "fa-sink",           birimler: ["adet", "takım"] },
+  { id: "mutfakDolabi",     ad: "Mutfak Dolabı",    icon: "fa-box-archive",    birimler: ["m", "m²", "adet", "takım"] },
+  { id: "mutfakBataryasi",  ad: "Mutfak Bataryası", icon: "fa-faucet",         birimler: ["adet", "takım"] },
+  { id: "ankastre",         ad: "Ankastre",         icon: "fa-rectangle-list", birimler: ["adet", "set"] },
+  { id: "diger",            ad: "Diğer",            icon: "fa-ellipsis",       birimler: ["adet"] }
 ];
 const ISLAK_MEKANLAR = [
-  { id:"zeminYalitimi",    ad:"Zemin Yalıtımı",      icon:"fa-water" },             // Su yalıtımı için
-  { id:"seramikFayans",    ad:"Seramik Fayans",      icon:"fa-th" },                // Fayans/seramik karo için (kutu şeklinde)
-  { id:"klozetler",        ad:"Klozetler",           icon:"fa-toilet" },            // Klozet için
-  { id:"lavabolar",        ad:"Lavabolar",           icon:"fa-sink" },              // Lavabo için (FA6+), yoksa fa-tint
-  { id:"banyoDolabi",      ad:"Banyo Dolabı",        icon:"fa-box-archive" },    // Dolap için (FA6+), yoksa fa-box-archive veya fa-box
-  { id:"dusTeknesi",       ad:"Duş Teknesi",         icon:"fa-shower" },            // Duş için
-  { id:"banyoBataryasi",   ad:"Banyo Bataryası",     icon:"fa-faucet" },            // Batarya için, yoksa fa-tint
-  { id:"lavaboBataryasi",  ad:"Lavabo Bataryası",    icon:"fa-faucet-drip" },       // FA6+; yoksa fa-faucet
-  { id:"diger",            ad:"Diğer",               icon:"fa-ellipsis" }
+  { id:"zeminYalitimi",   ad:"Zemin Yalıtımı",    icon:"fa-water",        birimler:["m²"] },
+  { id:"seramikFayans",   ad:"Seramik Fayans",    icon:"fa-th",           birimler:["m²", "kutu", "adet"] },
+  { id:"klozetler",       ad:"Klozetler",         icon:"fa-toilet",       birimler:["adet", "takım"] },
+  { id:"lavabolar",       ad:"Lavabolar",         icon:"fa-sink",         birimler:["adet", "takım"] },
+  { id:"banyoDolabi",     ad:"Banyo Dolabı",      icon:"fa-box-archive",  birimler:["adet", "takım"] },
+  { id:"dusTeknesi",      ad:"Duş Teknesi",       icon:"fa-shower",       birimler:["adet", "takım"] },
+  { id:"banyoBataryasi",  ad:"Banyo Bataryası",   icon:"fa-faucet",       birimler:["adet", "takım"] },
+  { id:"lavaboBataryasi", ad:"Lavabo Bataryası",  icon:"fa-faucet-drip",  birimler:["adet", "takım"] },
+  { id:"diger",           ad:"Diğer",             icon:"fa-ellipsis",     birimler:["adet"] }
 ];
 const IKLIMLENDIRME = [
-  { id:"kombi",         ad:"Kombi",           icon:"fa-fire" },          // Isı/kombi için en geneli
-  { id:"kombiDolabi",   ad:"Kombi Dolabı",    icon:"fa-box-archive" },// Dolap için (FA6+), yoksa fa-box
-  { id:"klima",         ad:"Klima",           icon:"fa-wind" },          // Soğutma/iklimlendirme için uygun
-  { id:"diger",         ad:"Diğer",           icon:"fa-ellipsis" }
+  { id: "kombi", ad: "Kombi", icon: "fa-fire", birimler: ["adet", "set"] },
+  { id: "kombiDolabi", ad: "Kombi Dolabı", icon: "fa-box-archive", birimler: ["adet"] },
+  { id: "klima", ad: "Klima", icon: "fa-wind", birimler: ["adet", "set"] },
+  { id: "diger", ad: "Diğer", icon: "fa-ellipsis", birimler: ["adet"] }
 ];
 const DIS_CEPHE = [
-  { id:"hazirSivaDis",   ad:"Hazır Sıva Dış",    icon:"fa-fill-drip" },      // Sıva/şantiye için
-  { id:"cimento",        ad:"Çimento",           icon:"fa-cube" },           // Çimento paketi/küp gibi
-  { id:"kum",            ad:"Kum",               icon:"fa-mountain" },       // Kum/taş yığını için (veya fa-archway)
-  { id:"karbonluEps",    ad:"Karbonlu Eps",      icon:"fa-dice-d6" },        // Köpük, blok benzeri malzemeler için
-  { id:"xps",            ad:"XPS",               icon:"fa-layer-group" },    // Tabaka/panel tipleri için
-  { id:"tasYunu",        ad:"Taş Yünü",          icon:"fa-feather-alt" },    // Hafifliği yansıtmak için (veya fa-layer-group)
-  { id:"disCepheBoyasi", ad:"Dış cephe Boyası",  icon:"fa-paint-roller" },  // Dış cephe boyası için
-  { id:"boyaAstari",     ad:"Boya Astarı",       icon:"fa-brush" },
-  { id:"korKasa",       ad:"Kör Kasa",           icon:"fa-door-closed" },
-  { id:"kosebent",      ad:"Köşebent",           icon:"fa-ruler-combined" },
-  { id:"betonAstari",   ad:"Beton Astarı",       icon:"fa-fill-drip" },
-  { id:"alci",          ad:"Alçı",               icon:"fa-snowflake" },
-  { id:"diger",         ad:"Diğer",              icon:"fa-ellipsis" }
+  { id: "hazirSivaDis", ad: "Hazır Sıva Dış", icon: "fa-fill-drip", birimler: ["kg", "torba", "adet"] },
+  { id: "cimento", ad: "Çimento", icon: "fa-cube", birimler: ["kg", "torba"] },
+  { id: "kum", ad: "Kum", icon: "fa-mountain", birimler: ["ton", "kg", "m³"] },
+  { id: "karbonluEps", ad: "Karbonlu Eps", icon: "fa-dice-d6", birimler: ["m²", "m³", "adet"] },
+  { id: "xps", ad: "XPS", icon: "fa-layer-group", birimler: ["m²", "m³", "adet"] },
+  { id: "tasYunu", ad: "Taş Yünü", icon: "fa-feather-alt", birimler: ["m²", "m³", "adet"] },
+  { id: "disCepheBoyasi", ad: "Dış cephe Boyası", icon: "fa-paint-roller", birimler: ["kg", "litre", "kova"] },
+  { id: "boyaAstari", ad: "Boya Astarı", icon: "fa-brush", birimler: ["kg", "litre"] },
+  { id: "korKasa", ad: "Kör Kasa", icon: "fa-door-closed", birimler: ["metre", "adet"] },
+  { id: "kosebent", ad: "Köşebent", icon: "fa-ruler-combined", birimler: ["metre", "adet"] },
+  { id: "betonAstari", ad: "Beton Astarı", icon: "fa-fill-drip", birimler: ["kg", "litre"] },
+  { id: "alci", ad: "Alçı", icon: "fa-snowflake", birimler: ["kg", "torba"] },
+  { id: "diger", ad: "Diğer", icon: "fa-ellipsis", birimler: ["adet"] }
 ];
 
 // İnce Üretim adımlarını buton olarak oluştur
@@ -1447,7 +1459,7 @@ function showZeminUygulamalari(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Zemin Uygulamaları - "+ ZEMIN_UYGULAMALARI.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showZeminUygulamalari);
+      showOdemeEvrakForm(true, false, showZeminUygulamalari, aktifAltKalem, ZEMIN_UYGULAMALARI);
     }  
   });  
 }
@@ -1471,7 +1483,7 @@ function showSihhiTesisat(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Sıhhi Tesisat - "+ SIHHI_TESISAT.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showSihhiTesisat);
+      showOdemeEvrakForm(true, false, showSihhiTesisat, aktifAltKalem, SIHHI_TESISAT);
     }  
   });  
 }
@@ -1495,7 +1507,7 @@ function showIcCephe(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "İç Cephe - "+ IC_CEPHE.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showIcCephe);
+      showOdemeEvrakForm(true, false, showIcCephe, aktifAltKalem, IC_CEPHE);
     }  
   });  
 }
@@ -1519,7 +1531,7 @@ function showTavan(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Tavan - "+ TAVAN.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showTavan);
+      showOdemeEvrakForm(true, false, showTavan, aktifAltKalem, TAVAN);
     }  
   });  
 }
@@ -1543,7 +1555,7 @@ function showPimapen(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Pimapen - "+ PIMAPEN.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showPimapen);
+      showOdemeEvrakForm(true, false, showPimapen, aktifAltKalem, PIMAPEN);
     }  
   });  
 }
@@ -1567,7 +1579,7 @@ function showKapilar(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Kapılar - "+ KAPILAR.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showKapilar);
+      showOdemeEvrakForm(true, false, showKapilar, aktifAltKalem, KAPILAR);
     }  
   });  
 }
@@ -1591,7 +1603,7 @@ function showPeyzaj(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Peyzaj - "+ PEYZAJ.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showPeyzaj);
+      showOdemeEvrakForm(true, false, showPeyzaj, aktifAltKalem, PEYZAJ);
     }  
   });  
 }
@@ -1615,7 +1627,7 @@ function showMutfak(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Mutfak - "+ MUTFAK.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showMutfak);
+      showOdemeEvrakForm(true, false, showMutfak, aktifAltKalem, MUTFAK);
     }  
   });  
 }
@@ -1639,7 +1651,7 @@ function showIslakMekanlar(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Islak Mekanlar - "+ ISLAK_MEKANLAR.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showIslakMekanlar);
+      showOdemeEvrakForm(true, false, showIslakMekanlar, aktifAltKalem, ISLAK_MEKANLAR);
     }  
   });  
 }
@@ -1663,7 +1675,7 @@ function showIklimlendirme(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "İklimlendirme - "+ IKLIMLENDIRME.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showIklimlendirme);
+      showOdemeEvrakForm(true, false, showIklimlendirme, aktifAltKalem, IKLIMLENDIRME);
     }  
   });  
 }
@@ -1683,21 +1695,25 @@ function showDisCephe(){
     <div id="disCepheAltKalemForm"></div>`;  
 
   document.querySelectorAll('.dis-cephe-altkalem-btn').forEach(b=>{  
-    b.onclick = function(){  
-      aktifAltKalem = this.getAttribute('data-kalem');  
-      document.getElementById('modalBaslikText').textContent =  
-        "Dış Cephe - "+ DIS_CEPHE.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showDisCephe);
-    }  
+    b.onclick = function() {
+      aktifAltKalem = this.getAttribute('data-kalem');
+      document.getElementById('modalBaslikText').textContent =
+        "Dış Cephe - " + DIS_CEPHE.find(x=>x.id===aktifAltKalem).ad;
+      showOdemeEvrakForm(true, false, showDisCephe, aktifAltKalem, DIS_CEPHE);
+    }
   });  
 }
 
 
-function showOdemeEvrakForm(isRadyal=false, isEvrakIsleri=false, geriHandler=null){
+function showOdemeEvrakForm(isRadyal = false, isEvrakIsleri = false, geriHandler = null, altKalemId = null, kayitDizisi = null) {
   let alanAciklamasi = '';
   if(isEvrakIsleri) {
     alanAciklamasi = `<div class="alert alert-info py-2 mb-2"> <b>${aktifEvrakKurum} - ${aktifEvrakDetay}</b> işlemi için ödeme ve evrak ekleyin.</div>`;
   }
+  // Hangisini gönderdiyse oradan bak!
+  kayitDizisi = kayitDizisi || DIS_CEPHE; // eski kod devam etsin diye varsayılanı DIS_CEPHE bırakıyoruz
+  const secilenKalem = kayitDizisi.find(x => x.id === altKalemId);
+  const birimListesi = (secilenKalem && secilenKalem.birimler) ? secilenKalem.birimler : ['adet'];
 
   document.getElementById('modalContentGenel').innerHTML = `
     ${isRadyal? `  
@@ -1721,8 +1737,7 @@ function showOdemeEvrakForm(isRadyal=false, isEvrakIsleri=false, geriHandler=nul
                 </div>
                 <div class="col-md-2">
                   <select class="form-select" id="odemeBirim" required>
-                    <option value="kg">kg</option>
-                    <option value="adet">adet</option>
+                    ${birimListesi.map(birim => `<option value="${birim}">${birim}</option>`).join("")}
                   </select>
                 </div>
                 <div class="col-md-2">
@@ -1795,7 +1810,7 @@ function showOdemeEvrakForm(isRadyal=false, isEvrakIsleri=false, geriHandler=nul
   tabloGuncelleDinamik(isEvrakIsleri);
   evrakGuncelleDinamik(isEvrakIsleri);
 
-  // --- YENİ: Otomatik Toplam Hesaplama ---
+  // Otomatik Toplam Hesaplama
   function updateToplamTutar() {
     const miktar = parseFloat(document.getElementById('odemeMiktar').value) || 0;
     const birimFiyat = parseFloat(document.getElementById('odemeBirimFiyat').value) || 0;
@@ -1806,8 +1821,6 @@ function showOdemeEvrakForm(isRadyal=false, isEvrakIsleri=false, geriHandler=nul
     document.getElementById(id).addEventListener('input', updateToplamTutar)
   );
   updateToplamTutar();
-
-  // --- Birim tıklandığında açılır menü zaten select ile sağlanıyor. Ekstra JS gerekmez.---
 }
 // -- Dinamik ödemeler
 // Odeme formunu gönder
