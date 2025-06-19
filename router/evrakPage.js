@@ -173,8 +173,12 @@ router.post('/', upload.single('file'), async (req, res) => {
             const userInput = user.userInputs.find(p => p.projectName === projectName);
             if (!userInput) return res.status(404).json({ error: 'Proje yok' });
 
-            const imar = userInput.imarDurumu[0];
-            if (!imar) return res.status(404).json({ error: 'İmar yok!' });
+            // Eğer hiç imarDurumu yoksa önce oluştur
+            if (!userInput.imarDurumu || !userInput.imarDurumu.length) {
+                userInput.imarDurumu = [{ odemeDetaylari: [], dokumanlar: [] }];
+            }
+
+            const imar = userInput.imarDurumu[0]; // Artık garanti var!
 
             imar.dokumanlar.push({
                 path: fileUrl,
@@ -186,7 +190,7 @@ router.post('/', upload.single('file'), async (req, res) => {
             user.markModified('userInputs');
             await user.save();
 
-            res.json({ success:true, fileUrl });
+            res.json({ success: true, fileUrl });
         } catch (err) {
             console.error("saveEvrak HATA:", err);
             if (err.$metadata || err.message)

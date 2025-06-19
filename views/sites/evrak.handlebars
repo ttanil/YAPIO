@@ -666,6 +666,7 @@ body {
     const graphsButton = document.getElementById("graphs-button");
     const soldButton = document.getElementById("sold-button");
     const buttonHome = document.getElementById("buttonHome");
+    const loginButton = document.getElementById("loginButton");
     const imageInput = document.getElementById('modalImageInput');
     const previewArea = document.getElementById('modalPreviewArea');
     const btn = document.getElementById('modalToPdfBtn');
@@ -1974,7 +1975,7 @@ function showEvrakModal(fileUrl, fileName) {
     let content = '';
     const ext = fileName.split('.').pop().toLowerCase();
     //const isMobile = isMobileDevice();
-    isMobile = false;
+    const isMobile = false;
 
     if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].includes(ext)) {
         content = `<img src="${fileUrl}" class="img-fluid" alt="${fileName}">`;
@@ -2034,6 +2035,9 @@ window.showEvrakModal = showEvrakModal;
     });
     buttonHome.addEventListener("click", () => {  
         window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
+    });
+    loginButton.addEventListener("click", () => {
+        window.location.href = "/";
     });
 
     function showLoader() {
