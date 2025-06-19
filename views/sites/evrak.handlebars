@@ -1693,9 +1693,7 @@ function showDisCephe(){
 }
 
 
-// 2. Ödeme/Evrak Formu
 function showOdemeEvrakForm(isRadyal=false, isEvrakIsleri=false, geriHandler=null){
-  // Başlık ve anahtar belirleme
   let alanAciklamasi = '';
   if(isEvrakIsleri) {
     alanAciklamasi = `<div class="alert alert-info py-2 mb-2"> <b>${aktifEvrakKurum} - ${aktifEvrakDetay}</b> işlemi için ödeme ve evrak ekleyin.</div>`;
@@ -1717,15 +1715,24 @@ function showOdemeEvrakForm(isRadyal=false, isEvrakIsleri=false, geriHandler=nul
           </div>
           <div class="card-body">
             <form id="odemeFormDinamik">
-              <div class="row g-2">
-                <div class="col-md-5">
+              <div class="row g-2 align-items-end">
+                <div class="col-md-3">
                   <input type="text" class="form-control" id="odemeAciklama" placeholder="Açıklama" maxlength="100" required>
                 </div>
-                <div class="col-md-3">
-                  <input type="number" class="form-control" id="odemeTutar" placeholder="Tutar (TL)" min="1" required>
+                <div class="col-md-2">
+                  <select class="form-select" id="odemeBirim" required>
+                    <option value="kg">kg</option>
+                    <option value="adet">adet</option>
+                  </select>
                 </div>
-                <div class="col-md-4">
-                  <input type="date" class="form-control" id="odemeTarih" required>
+                <div class="col-md-2">
+                  <input type="number" class="form-control" id="odemeMiktar" placeholder="Miktar" min="1" step="any" required>
+                </div>
+                <div class="col-md-2">
+                  <input type="number" class="form-control" id="odemeBirimFiyat" placeholder="Birim Fiyat (TL)" min="0" step="any" required>
+                </div>
+                <div class="col-md-3 text-end">
+                  <div id="odemeToplamTutar" class="fw-bold text-success" style="font-size:1.1em;">Toplam: 0 TL</div>
                 </div>
               </div>
               <div class="d-flex justify-content-end mt-2">
@@ -1738,8 +1745,10 @@ function showOdemeEvrakForm(isRadyal=false, isEvrakIsleri=false, geriHandler=nul
                   <tr>
                     <th>#</th>
                     <th>Açıklama</th>
-                    <th>Tutar (TL)</th>
-                    <th>Tarih</th>
+                    <th>Birim</th>
+                    <th>Miktar</th>
+                    <th>Birim Fiyat</th>
+                    <th>Toplam Tutar</th>
                     <th>İşlem</th>
                   </tr>
                 </thead>
@@ -1785,7 +1794,21 @@ function showOdemeEvrakForm(isRadyal=false, isEvrakIsleri=false, geriHandler=nul
   document.getElementById('evrakFormDinamik').onsubmit = evrakFormSubmit;
   tabloGuncelleDinamik(isEvrakIsleri);
   evrakGuncelleDinamik(isEvrakIsleri);
-}  
+
+  // --- YENİ: Otomatik Toplam Hesaplama ---
+  function updateToplamTutar() {
+    const miktar = parseFloat(document.getElementById('odemeMiktar').value) || 0;
+    const birimFiyat = parseFloat(document.getElementById('odemeBirimFiyat').value) || 0;
+    document.getElementById('odemeToplamTutar').innerText =
+      `Toplam: ${(miktar * birimFiyat).toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2})} TL`;
+  }
+  ['odemeMiktar','odemeBirimFiyat'].forEach(id=>
+    document.getElementById(id).addEventListener('input', updateToplamTutar)
+  );
+  updateToplamTutar();
+
+  // --- Birim tıklandığında açılır menü zaten select ile sağlanıyor. Ekstra JS gerekmez.---
+}
 // -- Dinamik ödemeler
 // Odeme formunu gönder
 function odemeFormSubmit(e){
