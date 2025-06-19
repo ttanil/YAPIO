@@ -348,34 +348,37 @@ body {
   flex-wrap:wrap;
 }
 .uretim-tab-btn {
-  position:relative;
-  appearance:none;
-  outline:none;
-  border:none;
-  font-family:'Oswald',Arial,sans-serif;
-  font-size:1.17rem;
-  font-weight:700;
-  padding:.86em 2.2em .86em 2.6em;
-  border-radius:18px;
-  background:
-    linear-gradient(90deg,#e0e7fa88 0%, #ede9decc 100%);
-  color: #2857ad;
-  box-shadow:0 4px 16px 0 #d8e5ef77;
-  backdrop-filter:blur(7px) saturate(130%);
-  transition:all .19s cubic-bezier(.47,1.7,.39,.88);
-  letter-spacing:.07em;
-  border:2.6px solid transparent;
-  margin-bottom:0;
-  cursor:pointer;
+  position: relative;
+  appearance: none;
+  outline: none;
+  border: none;
+  font-family: 'Oswald', Arial, sans-serif;
+  font-size: 1.17rem;
+  font-weight: 700;
+  padding: .86em 2.2em .86em 2.6em;
+  border-radius: 18px;
+  /* Daha açık mavi ton -- blue-50'den blue-200'e gradyan */
+  background: linear-gradient(92deg, #f0f9ff 0%, #dbeafe 60%, #bae6fd 100%);
+  color: #446398;
+  box-shadow: 0 4px 16px 0 #bcdffd44;
+  backdrop-filter: blur(7px) saturate(130%);
+  transition: all .18s cubic-bezier(.47,1.7,.39,.88);
+  letter-spacing: .07em;
+  border: 2.2px solid #dbeafe; /* Oldukça hafif mavi sınır */
+  margin-bottom: 0;
+  cursor: pointer;
   min-width: 140px;
-  display:flex;
-  gap:.5em;
-  align-items:center;
+  display: flex;
+  gap: .5em;
+  align-items: center;
 }
-.uretim-tab-btn:hover, .uretim-tab-btn:focus {
+
+.uretim-tab-btn:hover,
+.uretim-tab-btn:focus {
   color: #fff;
-  background:linear-gradient(98deg,#bad0fc66 0%, #fefae28f 88%);
-  box-shadow:0 10px 30px 0 #c5d9ff55, 0 2px 8px #e2e6ec11;
+  background: linear-gradient(98deg, #60a5fa 0%, #38bdf8 94%);
+  box-shadow: 0 8px 28px 0 #60a5fa33, 0 2px 8px #2563eb19;
+  border-color: #38bdf8;
 }
 
 .uretim-tab-btn:focus,
@@ -977,13 +980,6 @@ URETIM_ADIMLARI.forEach((adim, idx) => {
   btn.innerHTML = `<i class="fa-solid ${adim.icon} me-1"></i>${adim.ad}`;
   stepsRowEl.appendChild(btn);
 
-  // Eğer son adım değilse ok ekle
-  if (idx < URETIM_ADIMLARI.length - 1) {
-    const ok = document.createElement('span');
-    ok.className = "uretim-step-ok";
-    ok.innerHTML = `<svg class="uretim-ok-svg" viewBox="0 0 34 24"><polyline points="2,12 28,12"/><polyline points="22,6 28,12 22,18"/></svg>`;
-    stepsRowEl.appendChild(ok);
-  }
 });
 
 // --- Modal: Adıma tıklayınca açılır ---
@@ -1386,13 +1382,6 @@ if(inceStepsRowEl){
     btn.innerHTML = `<i class="fa-solid ${adim.icon} me-1"></i>${adim.ad}`;
     inceStepsRowEl.appendChild(btn);
 
-    // Ok ekle
-    if (idx < INCE_URETIM_ADIMLARI.length - 1) {
-      const ok = document.createElement('span');
-      ok.className = "uretim-step-ok";
-      ok.innerHTML = `<svg class="uretim-ok-svg" viewBox="0 0 34 24"><polyline points="2,12 28,12"/><polyline points="22,6 28,12 22,18"/></svg>`;
-      inceStepsRowEl.appendChild(ok);
-    }
   });
 
   // Event listener ekle
