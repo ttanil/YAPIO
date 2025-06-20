@@ -373,7 +373,7 @@ const sapKaydiSchema = new mongoose.Schema({
 const arsaBedeliSchema = new mongoose.Schema(defaultFields, { _id: false });
 const yerdenCikartmakSchema = new mongoose.Schema(defaultFields, { _id: false });
 
-// --- Ana userInputSchema ---
+// --- Ana userInputSchema --- 
 const userInputSchema = new mongoose.Schema({
   projectName: { type: String, required: true },
   building: [buildingSchema],
