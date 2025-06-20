@@ -1131,7 +1131,7 @@ function showSantiyeKurma(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Şantiye Kurma - "+ SANTIYE_KURMA.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showSantiyeKurma, aktifAltKalem, SANTIYE_KURMA);
+      showOdemeEvrakForm(true, false, showSantiyeKurma, aktifAltKalem, SANTIYE_KURMA,"santiyeKurma");
     }  
   });  
 }
@@ -1155,7 +1155,7 @@ function showTemelKazma(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Temel Kazma - "+ TEMEL_KAZMA.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showTemelKazma, aktifAltKalem, TEMEL_KAZMA);
+      showOdemeEvrakForm(true, false, showTemelKazma, aktifAltKalem, TEMEL_KAZMA,"temelKazma");
     }  
   });  
 }
@@ -1179,7 +1179,7 @@ function showGroBeton(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Gro Beton - "+ GRO_BETON.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showGroBeton, aktifAltKalem, GRO_BETON);
+      showOdemeEvrakForm(true, false, showGroBeton, aktifAltKalem, GRO_BETON,"groBeton");
     }  
   });  
 }
@@ -1203,7 +1203,7 @@ function showDolgu(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Dolgu - "+ DOLGU.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showDolgu, aktifAltKalem, DOLGU);
+      showOdemeEvrakForm(true, false, showDolgu, aktifAltKalem, DOLGU,"dolgu");
     }  
   });  
 }
@@ -1227,7 +1227,7 @@ function showRadyalKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Radyal Temel - "+ RADYAL_ALTKALEM.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showRadyalKalemler, aktifAltKalem, RADYAL_ALTKALEM);
+      showOdemeEvrakForm(true, false, showRadyalKalemler, aktifAltKalem, RADYAL_ALTKALEM,"radyal");
     }  
   });  
 }
@@ -1251,7 +1251,7 @@ function showPerdeKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Perde Beton - "+ RADYAL_ALTKALEM.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showPerdeKalemler, aktifAltKalem, RADYAL_ALTKALEM);
+      showOdemeEvrakForm(true, false, showPerdeKalemler, aktifAltKalem, RADYAL_ALTKALEM,"perde");
     }  
   });  
 }
@@ -1275,7 +1275,7 @@ function showTemelIzalasyonuKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Temel İzalasyonu - "+ TEMEL_IZALASYONU.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showTemelIzalasyonuKalemler, aktifAltKalem, TEMEL_IZALASYONU);
+      showOdemeEvrakForm(true, false, showTemelIzalasyonuKalemler, aktifAltKalem, TEMEL_IZALASYONU,"temelIzalasyon");
     }  
   });  
 }
@@ -1299,7 +1299,7 @@ function showSuBasmanKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Subasman - "+ SU_BASMAN.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showSuBasmanKalemler, aktifAltKalem, SU_BASMAN);
+      showOdemeEvrakForm(true, false, showSuBasmanKalemler, aktifAltKalem, SU_BASMAN,"subasman");
     }  
   });  
 }
@@ -1323,7 +1323,7 @@ function showZeminBetonuKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Zemin Betonu - "+ ZEMIN_BETONU.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showZeminBetonuKalemler, aktifAltKalem, ZEMIN_BETONU);
+      showOdemeEvrakForm(true, false, showZeminBetonuKalemler, aktifAltKalem, ZEMIN_BETONU,"zeminBetonu");
     }  
   });  
 }
@@ -1347,7 +1347,7 @@ function showKatBetonlariKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Kat Betonları - "+ KAT_BETONLARI.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showKatBetonlariKalemler, aktifAltKalem, KAT_BETONLARI);
+      showOdemeEvrakForm(true, false, showKatBetonlariKalemler, aktifAltKalem, KAT_BETONLARI,"katBetonlari");
     }  
   });  
 }
@@ -1371,7 +1371,7 @@ function showCatiKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Çatı - "+ CATI.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showCatiKalemler, aktifAltKalem, CATI);
+      showOdemeEvrakForm(true, false, showCatiKalemler, aktifAltKalem, CATI,"cati");
     }  
   });  
 }
@@ -1395,7 +1395,7 @@ function showKapamaBetonuKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Kapama Betonu - "+ KAPAMA_BETONU.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showKapamaBetonuKalemler, aktifAltKalem, KAPAMA_BETONU);
+      showOdemeEvrakForm(true, false, showKapamaBetonuKalemler, aktifAltKalem, KAPAMA_BETONU,"kapamaBetonu");
     }  
   });  
 }
@@ -1419,7 +1419,7 @@ function showSapKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "ŞAP - "+ SAP.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showSapKalemler, aktifAltKalem, SAP);
+      showOdemeEvrakForm(true, false, showSapKalemler, aktifAltKalem, SAP,"sap");
     }  
   });  
 }
@@ -1443,7 +1443,7 @@ function showDuvarOrmeKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Duvar Örme - "+ DUVAR_ORME.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showDuvarOrmeKalemler, aktifAltKalem, DUVAR_ORME);
+      showOdemeEvrakForm(true, false, showDuvarOrmeKalemler, aktifAltKalem, DUVAR_ORME,"duvarOrme");
     }  
   });  
 }
@@ -1654,7 +1654,7 @@ if(inceStepsRowEl){
       } else if(aktifAdimId === 'mutfak'){
         showMutfak();
       } else if(aktifAdimId === 'islakMekanlar'){
-        showIslakMekanlar('islakMekanlar');
+        showIslakMekanlar();
       } else if(aktifAdimId === 'iklimlendirme'){
         showIklimlendirme();
       } else if(aktifAdimId === 'disCephe'){
@@ -1696,7 +1696,7 @@ function showZeminUygulamalari(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Zemin Uygulamaları - "+ ZEMIN_UYGULAMALARI.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showZeminUygulamalari, aktifAltKalem, ZEMIN_UYGULAMALARI);
+      showOdemeEvrakForm(true, false, showZeminUygulamalari, aktifAltKalem, ZEMIN_UYGULAMALARI,"zeminUygulamalari");
     }  
   });  
 }
@@ -1720,7 +1720,7 @@ function showElektrikTesisat(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Elektrik Tesisat - "+ ELEKTRIK_TESISAT.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showElektrikTesisat, aktifAltKalem, ELEKTRIK_TESISAT);
+      showOdemeEvrakForm(true, false, showElektrikTesisat, aktifAltKalem, ELEKTRIK_TESISAT,"elektrikTesisat");
     }  
   });  
 }
@@ -1744,7 +1744,7 @@ function showSihhiTesisat(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Sıhhi Tesisat - "+ SIHHI_TESISAT.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showSihhiTesisat, aktifAltKalem, SIHHI_TESISAT);
+      showOdemeEvrakForm(true, false, showSihhiTesisat, aktifAltKalem, SIHHI_TESISAT,"sihhiTesisat");
     }  
   });  
 }
@@ -1768,7 +1768,7 @@ function showIcCephe(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "İç Cephe - "+ IC_CEPHE.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showIcCephe, aktifAltKalem, IC_CEPHE);
+      showOdemeEvrakForm(true, false, showIcCephe, aktifAltKalem, IC_CEPHE,"icCephe");
     }  
   });  
 }
@@ -1792,7 +1792,7 @@ function showTavan(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Tavan - "+ TAVAN.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showTavan, aktifAltKalem, TAVAN);
+      showOdemeEvrakForm(true, false, showTavan, aktifAltKalem, TAVAN,"tavan");
     }  
   });  
 }
@@ -1816,7 +1816,7 @@ function showPimapen(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Pimapen - "+ PIMAPEN.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showPimapen, aktifAltKalem, PIMAPEN);
+      showOdemeEvrakForm(true, false, showPimapen, aktifAltKalem, PIMAPEN,"pimapen");
     }  
   });  
 }
@@ -1840,7 +1840,7 @@ function showKapilar(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Kapılar - "+ KAPILAR.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showKapilar, aktifAltKalem, KAPILAR);
+      showOdemeEvrakForm(true, false, showKapilar, aktifAltKalem, KAPILAR,"kapilar");
     }  
   });  
 }
@@ -1864,7 +1864,7 @@ function showPeyzaj(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Peyzaj - "+ PEYZAJ.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showPeyzaj, aktifAltKalem, PEYZAJ);
+      showOdemeEvrakForm(true, false, showPeyzaj, aktifAltKalem, PEYZAJ,"peyzaj");
     }  
   });  
 }
@@ -1888,11 +1888,11 @@ function showMutfak(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Mutfak - "+ MUTFAK.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showMutfak, aktifAltKalem, MUTFAK);
+      showOdemeEvrakForm(true, false, showMutfak, aktifAltKalem, MUTFAK,"mutfak");
     }  
   });  
 }
-function showIslakMekanlar(kalemIdInput){  
+function showIslakMekanlar(){  
   document.getElementById('modalContentGenel').innerHTML =  
     `<div class="mb-3">  
       <div class="fw-bold fs-5 mb-2 text-center">Islak Mekanlar - Alt Kalem Seçiniz:</div>  
@@ -1912,7 +1912,7 @@ function showIslakMekanlar(kalemIdInput){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Islak Mekanlar - "+ ISLAK_MEKANLAR.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showIslakMekanlar, aktifAltKalem, ISLAK_MEKANLAR, kalemIdInput);
+      showOdemeEvrakForm(true, false, showIslakMekanlar, aktifAltKalem, ISLAK_MEKANLAR, "islakMekanlar");
     }  
   });  
 }
@@ -1936,7 +1936,7 @@ function showIklimlendirme(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "İklimlendirme - "+ IKLIMLENDIRME.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showIklimlendirme, aktifAltKalem, IKLIMLENDIRME);
+      showOdemeEvrakForm(true, false, showIklimlendirme, aktifAltKalem, IKLIMLENDIRME,"iklimlendirme");
     }  
   });  
 }
@@ -1960,7 +1960,7 @@ function showDisCephe(){
       aktifAltKalem = this.getAttribute('data-kalem');
       document.getElementById('modalBaslikText').textContent =
         "Dış Cephe - " + DIS_CEPHE.find(x=>x.id===aktifAltKalem).ad;
-      showOdemeEvrakForm(true, false, showDisCephe, aktifAltKalem, DIS_CEPHE);
+      showOdemeEvrakForm(true, false, showDisCephe, aktifAltKalem, DIS_CEPHE,"disCephe");
     }
   });  
 }
@@ -1984,7 +1984,7 @@ function showKorkuluklar(){
       aktifAltKalem = this.getAttribute('data-kalem');
       document.getElementById('modalBaslikText').textContent =
         "Korkuluklar - " + KORKULUKLAR.find(x=>x.id===aktifAltKalem).ad;
-      showOdemeEvrakForm(true, false, showKorkuluklar, aktifAltKalem, KORKULUKLAR);
+      showOdemeEvrakForm(true, false, showKorkuluklar, aktifAltKalem, KORKULUKLAR,"korkuluklar");
     }
   });  
 }
@@ -2008,7 +2008,7 @@ function showDogalgaz(){
       aktifAltKalem = this.getAttribute('data-kalem');
       document.getElementById('modalBaslikText').textContent =
         "Doğalgaz - " + DOGALGAZ.find(x=>x.id===aktifAltKalem).ad;
-      showOdemeEvrakForm(true, false, showDogalgaz, aktifAltKalem, DOGALGAZ);
+      showOdemeEvrakForm(true, false, showDogalgaz, aktifAltKalem, DOGALGAZ,"dogalgaz");
     }
   });  
 }
@@ -2032,7 +2032,7 @@ function showAsansorKurulumu(){
       aktifAltKalem = this.getAttribute('data-kalem');
       document.getElementById('modalBaslikText').textContent =
         "Asansör Kurulumu - " + ASANSOR.find(x=>x.id===aktifAltKalem).ad;
-      showOdemeEvrakForm(true, false, showAsansorKurulumu, aktifAltKalem, ASANSOR);
+      showOdemeEvrakForm(true, false, showAsansorKurulumu, aktifAltKalem, ASANSOR, "asansorKurulumu");
     }
   });  
 }
@@ -2056,7 +2056,7 @@ function showMantolama(){
       aktifAltKalem = this.getAttribute('data-kalem');
       document.getElementById('modalBaslikText').textContent =
         "Mantolama - " + MANTOLAMA.find(x=>x.id===aktifAltKalem).ad;
-      showOdemeEvrakForm(true, false, showMantolama, aktifAltKalem, MANTOLAMA);
+      showOdemeEvrakForm(true, false, showMantolama, aktifAltKalem, MANTOLAMA, "mantolama");
     }
   });  
 }
@@ -2168,9 +2168,11 @@ function showOdemeEvrakForm(isRadyal = false, isEvrakIsleri = false, geriHandler
     document.getElementById('geriRadyalBtn').onclick = geriHandler;
   }
   document.getElementById('odemeFormDinamik').onsubmit = odemeFormSubmit;
+  document.getElementById('evrakFormDinamik').dataset.alanadi = kalemIdInput || "";
+  document.getElementById('evrakFormDinamik').dataset.kalemid = altKalemId || "";
   document.getElementById('evrakFormDinamik').onsubmit = evrakFormSubmit;
   tabloGuncelleDinamik(altKalemId, kalemIdInput);
-  evrakGuncelleDinamik(altKalemId, kalemIdInput);
+  evrakGuncelleDinamik(kalemIdInput,altKalemId);
 
   ['odemeMiktar','odemeBirimFiyat'].forEach(id=>
     document.getElementById(id).addEventListener('input', updateToplamTutar)
@@ -2268,7 +2270,7 @@ function tabloGuncelleDinamik(aktifKalemId, kalemIdInput) {
             <td>${o.aciklama || ''}</td>
             <td>${o.birim || ''}</td>
             <td>${o.miktar}</td>
-            <td>${Number(o.toplamTutar).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span style="color:#198754;font-weight:bold;">₺</span></td>
+            <td>${Number(o.toplamTutar).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span style="color:#0d6efd;font-weight:bold;">₺</span></td>
             <td>${o.tarih}</td>
             <td>
               <button class="btn btn-sm btn-danger" title="Sil" onclick="silOdemeSunucu('${o._id}', '${aktifKalemId}', '${kalemIdInput}')">
@@ -2314,15 +2316,15 @@ window.tabloGuncelleDinamik = tabloGuncelleDinamik;
 
 async function evrakFormSubmit(e) {
   e.preventDefault();
+  const form = e.target;
+  const alanAdi = form.dataset.alanadi;
+  const kalemSatirId = form.dataset.kalemid;
   const dosyaInput = document.getElementById('evrakDosya');
   const aciklamaInput = document.getElementById('evrakAciklama');
   const dosya = dosyaInput.files[0];
   if (!dosya) return;
 
   const aciklama = aciklamaInput.value.trim();
-
-  const alanAdi = kalemId;
-  const kalemSatirId = aktifKalemId;
 
   // Dosyayı önce PDF’e çevir
   let pdfFile;
@@ -2343,7 +2345,7 @@ async function evrakFormSubmit(e) {
   formData.append('process', "saveEvrak");
   formData.append('projectName', projectName);
   formData.append('userId', userId);
-  formData.append('alanAdi', alanAdi);
+  formData.append('alanAdi', alanAdi);          // Doğru değer!
   if (kalemSatirId) formData.append('kalemId', kalemSatirId);
 
   await fetch('/evrak', {
@@ -2427,7 +2429,7 @@ function evrakGuncelleDinamik(alanAdi, kalemId) {
                             <i class="fa fa-download"></i>
                         </a>
                     </span>
-                    <button class="btn btn-outline-danger btn-sm" title="Sil" onclick="silEvrakSunucu('${ev._id}','${alanAdi}','${kalemId || ""}')">
+                    <button class="btn btn-outline-danger btn-sm" title="Sil" onclick="silEvrakSunucu('${ev.path}','${alanAdi}','${kalemId || ""}')">
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 `;
