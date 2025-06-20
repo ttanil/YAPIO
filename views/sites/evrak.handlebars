@@ -759,6 +759,8 @@ body {
     let projectName = null;
     let building = null;
     let floorsDataFromDb = null;
+    let aktifKalemId = null;
+    let kalemId = null;
     
 
     // DOM yüklendiğinde işlem başlat  
@@ -1652,7 +1654,7 @@ if(inceStepsRowEl){
       } else if(aktifAdimId === 'mutfak'){
         showMutfak();
       } else if(aktifAdimId === 'islakMekanlar'){
-        showIslakMekanlar();
+        showIslakMekanlar('islakMekanlar');
       } else if(aktifAdimId === 'iklimlendirme'){
         showIklimlendirme();
       } else if(aktifAdimId === 'disCephe'){
@@ -1890,7 +1892,7 @@ function showMutfak(){
     }  
   });  
 }
-function showIslakMekanlar(){  
+function showIslakMekanlar(kalemIdInput){  
   document.getElementById('modalContentGenel').innerHTML =  
     `<div class="mb-3">  
       <div class="fw-bold fs-5 mb-2 text-center">Islak Mekanlar - Alt Kalem Seçiniz:</div>  
@@ -1910,7 +1912,7 @@ function showIslakMekanlar(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Islak Mekanlar - "+ ISLAK_MEKANLAR.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showIslakMekanlar, aktifAltKalem, ISLAK_MEKANLAR);
+      showOdemeEvrakForm(true, false, showIslakMekanlar, aktifAltKalem, ISLAK_MEKANLAR, kalemIdInput);
     }  
   });  
 }
@@ -2060,13 +2062,15 @@ function showMantolama(){
 }
 
 
-function showOdemeEvrakForm(isRadyal = false, isEvrakIsleri = false, geriHandler = null, altKalemId = null, kayitDizisi = null) {
+function showOdemeEvrakForm(isRadyal = false, isEvrakIsleri = false, geriHandler = null, altKalemId = null, kayitDizisi = null, kalemIdInput) {
   let alanAciklamasi = '';
+  aktifKalemId = altKalemId;
+  kalemId = kalemIdInput;
   if(isEvrakIsleri) {
     alanAciklamasi = `<div class="alert alert-info py-2 mb-2"> <b>${aktifEvrakKurum} - ${aktifEvrakDetay}</b> işlemi için ödeme ve evrak ekleyin.</div>`;
   }
   // Hangisini gönderdiyse oradan bak!
-  kayitDizisi = kayitDizisi || DIS_CEPHE; // eski kod devam etsin diye varsayılanı DIS_CEPHE bırakıyoruz
+  kayitDizisi = kayitDizisi || DIS_CEPHE;
   const secilenKalem = kayitDizisi.find(x => x.id === altKalemId);
   const birimListesi = (secilenKalem && secilenKalem.birimler) ? secilenKalem.birimler : ['adet'];
 
@@ -2101,6 +2105,9 @@ function showOdemeEvrakForm(isRadyal = false, isEvrakIsleri = false, geriHandler
                 <div class="col-md-2">
                   <input type="number" class="form-control" id="odemeBirimFiyat" placeholder="Birim Fiyat (TL)" min="0" step="any" required>
                 </div>
+                <div class="col-md-2">
+                  <input type="date" class="form-control" id="odemeTarih" required>
+                </div>
                 <div class="col-md-3 text-end">
                   <div id="odemeToplamTutar" class="fw-bold text-success" style="font-size:1.1em;">Toplam: 0 TL</div>
                 </div>
@@ -2117,8 +2124,8 @@ function showOdemeEvrakForm(isRadyal = false, isEvrakIsleri = false, geriHandler
                     <th>Açıklama</th>
                     <th>Birim</th>
                     <th>Miktar</th>
-                    <th>Birim Fiyat</th>
-                    <th>Toplam Tutar</th>
+                    <th>Toplam Fiyat</th>
+                    <th>Tarih</th>
                     <th>İşlem</th>
                   </tr>
                 </thead>
@@ -2162,30 +2169,44 @@ function showOdemeEvrakForm(isRadyal = false, isEvrakIsleri = false, geriHandler
   }
   document.getElementById('odemeFormDinamik').onsubmit = odemeFormSubmit;
   document.getElementById('evrakFormDinamik').onsubmit = evrakFormSubmit;
-  tabloGuncelleDinamik(isEvrakIsleri);
-  evrakGuncelleDinamik(isEvrakIsleri);
+  tabloGuncelleDinamik(altKalemId, kalemIdInput);
+  evrakGuncelleDinamik(altKalemId, kalemIdInput);
 
-  // Otomatik Toplam Hesaplama
-  function updateToplamTutar() {
-    const miktar = parseFloat(document.getElementById('odemeMiktar').value) || 0;
-    const birimFiyat = parseFloat(document.getElementById('odemeBirimFiyat').value) || 0;
-    document.getElementById('odemeToplamTutar').innerText =
-      `Toplam: ${(miktar * birimFiyat).toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2})} TL`;
-  }
   ['odemeMiktar','odemeBirimFiyat'].forEach(id=>
     document.getElementById(id).addEventListener('input', updateToplamTutar)
   );
   updateToplamTutar();
+}
+// Otomatik Toplam Hesaplama
+function updateToplamTutar() {
+  const miktar = parseFloat(document.getElementById('odemeMiktar').value) || 0;
+  const birimFiyat = parseFloat(document.getElementById('odemeBirimFiyat').value) || 0;
+  document.getElementById('odemeToplamTutar').innerText =
+    `Toplam: ${(miktar * birimFiyat).toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2})} TL`;
 }
 // -- Dinamik ödemeler
 // Odeme formunu gönder
 function odemeFormSubmit(e){
   e.preventDefault();
   const aciklama = document.getElementById('odemeAciklama').value.trim();
-  const tutar = Number(document.getElementById('odemeTutar').value);
+  const birim = document.getElementById('odemeBirim').value;
+  const miktar = parseFloat(document.getElementById('odemeMiktar').value);
+  const birimFiyat = parseFloat(document.getElementById('odemeBirimFiyat').value);
   const tarih = document.getElementById('odemeTarih').value;
-  let key = aktifAdimId ? (aktifAltKalem ? aktifAdimId+"_"+aktifAltKalem : aktifAdimId) : aktifEvrakKey;
-  if(aciklama && tutar > 0 && tarih && key) {
+
+  const toplamTutar = (!isNaN(miktar) && !isNaN(birimFiyat)) ? miktar * birimFiyat : 0;
+
+  const kalemKayit = {
+    alanAdi: kalemId,
+    kalemId: aktifKalemId,  // frontend'den gönderdiğin kalemin id'si (ör: "zeminYalitimi")
+    miktar,
+    birim,
+    tarih,
+    toplamTutar,
+    aciklama
+  };
+
+  if(aciklama && toplamTutar > 0 && tarih && aktifKalemId) {
     showLoader();
     fetch('/evrak', {
         method: 'POST',
@@ -2194,39 +2215,45 @@ function odemeFormSubmit(e){
           process:"save",
           userId, 
           projectName,
-          aciklama, 
-          tutar,
-          tarih 
+          kalemKayit 
         })
       })
     .then(r => r.json())
-    .then(() => tabloGuncelleDinamik(!!aktifEvrakKey))
+    .then(() => tabloGuncelleDinamik(aktifKalemId, kalemId))
     .finally(() => {
       hideLoader();
   });
     e.target.reset();
+    updateToplamTutar();
   }
 }
-function tabloGuncelleDinamik(isEvrakIsleri) {
+function tabloGuncelleDinamik(aktifKalemId, kalemIdInput) {
   const tbody = document.querySelector('#odemeTablosu tbody');
-
   showLoader();
 
+  // Aktif kalem id'si olmadan çağrılmamalı
+  if (!aktifKalemId) {
+    tbody.innerHTML = '';
+    document.getElementById('odemeBosMesaj').style.display = '';
+    document.getElementById('odemeTablosu').style.display = 'none';
+    hideLoader();
+    return;
+  }
+
   fetch('/evrak', {
-    method: 'POST',  
-    headers: {  
-        'Content-Type': 'application/json'  
-    },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
     body: JSON.stringify({
-      process :"read",
+      process: "read",
       userId,
-      projectName
+      projectName,
+      alanAdi: kalemIdInput,
+      kalemId: aktifKalemId // yeni: sadece seçilen kalem için okuma!
     })
   })
     .then(r => r.json())
     .then(veri => {
-      console.log("veri ",veri);
       tbody.innerHTML = '';
       if (!Array.isArray(veri) || veri.length === 0) {
         document.getElementById('odemeBosMesaj').style.display = '';
@@ -2239,10 +2266,12 @@ function tabloGuncelleDinamik(isEvrakIsleri) {
           tr.innerHTML = `
             <td>${idx + 1}</td>
             <td>${o.aciklama || ''}</td>
-            <td>${o.tutar}</td>
+            <td>${o.birim || ''}</td>
+            <td>${o.miktar}</td>
+            <td>${Number(o.toplamTutar).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span style="color:#198754;font-weight:bold;">₺</span></td>
             <td>${o.tarih}</td>
             <td>
-              <button class="btn btn-sm btn-danger" title="Sil" onclick="silOdemeSunucu('${o._id}')">
+              <button class="btn btn-sm btn-danger" title="Sil" onclick="silOdemeSunucu('${o._id}', '${aktifKalemId}', '${kalemIdInput}')">
                 <i class="fa-solid fa-trash"></i>
               </button>
             </td>
@@ -2253,13 +2282,11 @@ function tabloGuncelleDinamik(isEvrakIsleri) {
     })
     .finally(() => {
       hideLoader();
-  });
+    });
 }
-async function silOdemeSunucu(odemeId) {
-  const userConfirm = await showWarningMessage("Kayıt silinsin mi?","evet", false);
-  if(!userConfirm) return;
-  const userInputIndex = typeof aktifUserInputIndex !== 'undefined' ? aktifUserInputIndex : 0;
-  const imarDurumuIndex = typeof aktifImarDurumuIndex !== 'undefined' ? aktifImarDurumuIndex : 0;
+async function silOdemeSunucu(odemeId, altKalemId, kalemIdInput) {
+  const userConfirm = await showWarningMessage("Kayıt silinsin mi?", "evet", false);
+  if (!userConfirm) return;
 
   showLoader();
 
@@ -2267,31 +2294,35 @@ async function silOdemeSunucu(odemeId) {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({
-      process:"delete",
+      process: "delete",
       userId,
       projectName,
-      odemeId
+      alanAdi: kalemIdInput,
+      odemeId,
+      altKalemId // alt kalem id’sini backend’e gönderiyoruz!
     })
   })
-  .then(r => r.json())
-  .then(() => tabloGuncelleDinamik())
-  .finally(() => {
-      hideLoader(); // Artık ne olursa olsun loader kapanır (başarı ya da hata)
-  });
+    .then(r => r.json())
+    .then(() => tabloGuncelleDinamik(altKalemId,kalemIdInput)) // güncel tabloyu doğru kalem ile al
+    .finally(() => {
+      hideLoader();
+    });
 }
 window.silOdemeSunucu = silOdemeSunucu;
 window.tabloGuncelleDinamik = tabloGuncelleDinamik;
 
 
-async function evrakFormSubmit(e){
+async function evrakFormSubmit(e) {
   e.preventDefault();
   const dosyaInput = document.getElementById('evrakDosya');
   const aciklamaInput = document.getElementById('evrakAciklama');
   const dosya = dosyaInput.files[0];
   if (!dosya) return;
-  const aciklama = document.getElementById('evrakAciklama').value.trim();
-  let key = aktifAdimId ? (aktifAltKalem ? aktifAdimId+"_"+aktifAltKalem : aktifAdimId) : aktifEvrakKey;
-  if (!key) return;
+
+  const aciklama = aciklamaInput.value.trim();
+
+  const alanAdi = kalemId;
+  const kalemSatirId = aktifKalemId;
 
   // Dosyayı önce PDF’e çevir
   let pdfFile;
@@ -2309,28 +2340,24 @@ async function evrakFormSubmit(e){
   const formData = new FormData();
   formData.append('file', pdfFile);
   formData.append('aciklama', aciklama);
-  formData.append('key', key);
   formData.append('process', "saveEvrak");
   formData.append('projectName', projectName);
   formData.append('userId', userId);
+  formData.append('alanAdi', alanAdi);
+  if (kalemSatirId) formData.append('kalemId', kalemSatirId);
 
-  fetch('/evrak', {
+  await fetch('/evrak', {
     method: 'POST',
     body: formData
-  })
-  .then(r => r.json())
-  .then(() => {
-      evrakGuncelleDinamik(!!aktifEvrakKey); 
-
-      // --- Kutu içeriklerini temizle ---
-      dosyaInput.value = "";
-      aciklamaInput.value = "";
-    })
-    .finally(() => {
-      hideLoader();
   });
 
-  // Eğer form elemanı ise, resetle (özellikle onsubmit ile çağrılıyorsa)
+  evrakGuncelleDinamik(alanAdi, kalemSatirId);
+
+  dosyaInput.value = "";
+  aciklamaInput.value = "";
+  hideLoader();
+
+  // Form reset
   if (e.target && typeof e.target.reset === 'function') {
     e.target.reset();
   }
@@ -2360,15 +2387,17 @@ function fileToPdfBlob(file) {
   });
 }
 
-function evrakGuncelleDinamik() {
+function evrakGuncelleDinamik(alanAdi, kalemId) {
     const ul = document.getElementById('evrakListesi');
     fetch('/evrak', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-            process:"readEvrak",
+            process: "readEvrak",
             userId,
-            projectName // ve gerekirse imarDurumuIndex
+            projectName,
+            alanAdi,       // "islakMekanlar", "imarDurumu" vs
+            kalemId        // ilgili iş dizisi satırının _id veya kalemId'si, gerekirse
         })
     })
     .then(r => r.json())
@@ -2398,7 +2427,7 @@ function evrakGuncelleDinamik() {
                             <i class="fa fa-download"></i>
                         </a>
                     </span>
-                    <button class="btn btn-outline-danger btn-sm" title="Sil" onclick="silEvrakSunucu('${ev._id}')">
+                    <button class="btn btn-outline-danger btn-sm" title="Sil" onclick="silEvrakSunucu('${ev._id}','${alanAdi}','${kalemId || ""}')">
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 `;
@@ -2407,25 +2436,27 @@ function evrakGuncelleDinamik() {
         }
     });
 }
-async function silEvrakSunucu(evrakId){
-    const userConfirm = await showWarningMessage("Kayıt silinsin mi?","evet", false);
-    if(!userConfirm) return;
+async function silEvrakSunucu(evrakId, alanAdi, kalemId) {
+    const userConfirm = await showWarningMessage("Kayıt silinsin mi?", "evet", false);
+    if (!userConfirm) return;
     showLoader();
     fetch('/evrak', {
         method: 'POST',
-        headers: {'Content-Type':'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            process:"deleteEvrak",
+            process: "deleteEvrak",
             userId,
             projectName,
-            evrakId
+            evrakId,
+            alanAdi,   // hangi ana dizide dokümanı sileceğimiz MUST!
+            kalemId    // eğer ilgili kalem satırı ise onun _id ya da kalemId'si
         })
     })
     .then(r => r.json())
-    .then(() => evrakGuncelleDinamik())
+    .then(() => evrakGuncelleDinamik(alanAdi, kalemId))  // Güncelleme yine doğru parametrelerle
     .finally(() => {
-      hideLoader();
-  });
+        hideLoader();
+    });
 }
 function showEvrakModal(fileUrl, fileName) {
     let content = '';
