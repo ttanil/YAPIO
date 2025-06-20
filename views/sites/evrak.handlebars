@@ -924,7 +924,7 @@ const SANTIYE_KURMA = [
   { id:"jenerator",       ad:"Jeneratör",                  icon:"fa-charging-station",     birimler:["adet"] },
   { id:"su_deposu",       ad:"Su Deposu",                  icon:"fa-water",                birimler:["adet", "litre", "m³"] },
   { id:"aydinlatma",      ad:"Şantiye Aydınlatması",       icon:"fa-lightbulb",            birimler:["adet"] },
-  { id:"levhalar",        ad:"Tabelalar / Levhalar",       icon:"fa-exclamation-triangle", birimler:["adet"] },
+  //{ id:"levhalar",        ad:"Tabelalar / Levhalar",       icon:"fa-exclamation-triangle", birimler:["adet"] },
   { id:"camasirhane",     ad:"Çamaşırhane",                icon:"fa-tshirt",               birimler:["adet"] },
   { id:"guvenlik_kamera", ad:"Güvenlik Kamerası",          icon:"fa-video",                birimler:["adet", "set"] },
   { id:"yangin",          ad:"Yangın Ekipmanı",            icon:"fa-fire-extinguisher",    birimler:["adet"] },
@@ -1584,20 +1584,23 @@ const KORKULUKLAR = [
   { id: "diger", ad: "Diğer", icon: "fa-ellipsis", birimler: ["adet", "kg", "torba","litre","metre","m²", "m³","kova","ton"] }
 ];
 const DOGALGAZ = [
-  { id: "proje_onay", ad: "Proje ve Onay İşleri", icon: "fa-file-signature", birimler: ["adet"] },
+  { id: "dogalgazKurulumu", ad: "Doğalgaz Kurulumu", icon: "fa-fire", birimler: ["adet"] },
+  ///{ id: "proje_onay", ad: "Proje ve Onay İşleri", icon: "fa-file-signature", birimler: ["adet"] },
   //{ id: "boru_temini", ad: "Boru Temini ve Döşenmesi", icon: "fa-grip-lines", birimler: ["metre", "adet"] },
   //{ id: "kazı", ad: "Hat Kazısı", icon: "fa-person-digging", birimler: ["metre", "m³"] },
-  { id: "kaynak_montaj", ad: "Kaynak ve Montaj", icon: "fa-link", birimler: ["adet"] },
+  ///{ id: "kaynak_montaj", ad: "Kaynak ve Montaj", icon: "fa-link", birimler: ["adet"] },
   //{ id: "test", ad: "Gaz Kaçak Testi ve Kontrol", icon: "fa-vial", birimler: ["adet"] },
   //{ id: "yalitım", ad: "Boru Yalıtımı ve Kaplama", icon: "fa-fill-drip", birimler: ["metre"] },
-  { id: "regulator_sayac", ad: "Regülatör ve Sayaç Montajı", icon: "fa-tachometer-alt", birimler: ["adet"] },
-  { id: "kombibas", ad: "Kombi/Kazancı Montajı", icon: "fa-fire", birimler: ["adet"] },
+  ///{ id: "regulator_sayac", ad: "Regülatör ve Sayaç Montajı", icon: "fa-tachometer-alt", birimler: ["adet"] },
+  ///{ id: "kombibas", ad: "Kombi/Kazancı Montajı", icon: "fa-fire", birimler: ["adet"] },
   //{ id: "vana_montaji", ad: "Vana ve Armatür Montajı", icon: "fa-toggle-on", birimler: ["adet"] },
-  { id: "alarm", ad: "Gaz Alarm Sistemi Kurulumu", icon: "fa-bell", birimler: ["adet"] },
+  ///{ id: "alarm", ad: "Gaz Alarm Sistemi Kurulumu", icon: "fa-bell", birimler: ["adet"] },
   //{ id: "etiket_belge", ad: "Etiketleme ve Belgeler", icon: "fa-id-badge", birimler: ["adet"] },
   { id: "diger", ad: "Diğer", icon: "fa-ellipsis", birimler: ["adet", "kg", "torba","litre","metre","m²", "m³","kova","ton"] }
 ];
 const ASANSOR = [
+  { id: "asansorKurulumu", ad: "Asansör Kurulumu", icon: "fa-grip-lines-vertical", birimler: ["adet"] },
+  /*
   { id: "kuyu_hazirlik", ad: "Kuyu Hazırlığı ve Temizlik", icon: "fa-broom", birimler: ["adet"] },
   { id: "ray_montaj", ad: "Ray Montajı", icon: "fa-grip-lines-vertical", birimler: ["metre", "adet"] },
   { id: "makine_daeresi", ad: "Makine Dairesi ve Ana Makine Kurulumu", icon: "fa-cogs", birimler: ["adet"] },
@@ -1612,6 +1615,7 @@ const ASANSOR = [
   { id: "ruhsat", ad: "Ruhsatlandırma ve Kabul", icon: "fa-file-contract", birimler: ["adet"] },
   { id: "egitim_dokuman", ad: "Eğitim ve Dokümantasyon", icon: "fa-book", birimler: ["adet"] },
   { id: "bakim_garanti", ad: "Bakım ve Garanti", icon: "fa-wrench", birimler: ["adet", "yıl"] },
+  */
   { id: "diger", ad: "Diğer", icon: "fa-ellipsis", birimler: ["adet"] }
 ];
 
@@ -1720,7 +1724,7 @@ function showElektrikTesisat(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Elektrik Tesisat - "+ ELEKTRIK_TESISAT.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showElektrikTesisat, aktifAltKalem, ELEKTRIK_TESISAT,"elektrikTesisat");
+      showOdemeEvrakFormIslem(true, false, showElektrikTesisat, aktifAltKalem, ELEKTRIK_TESISAT,"elektrikTesisat");
     }  
   });  
 }
@@ -2008,7 +2012,7 @@ function showDogalgaz(){
       aktifAltKalem = this.getAttribute('data-kalem');
       document.getElementById('modalBaslikText').textContent =
         "Doğalgaz - " + DOGALGAZ.find(x=>x.id===aktifAltKalem).ad;
-      showOdemeEvrakForm(true, false, showDogalgaz, aktifAltKalem, DOGALGAZ,"dogalgaz");
+      showOdemeEvrakFormIslem(true, false, showDogalgaz, aktifAltKalem, DOGALGAZ,"dogalgaz");
     }
   });  
 }
@@ -2032,7 +2036,7 @@ function showAsansorKurulumu(){
       aktifAltKalem = this.getAttribute('data-kalem');
       document.getElementById('modalBaslikText').textContent =
         "Asansör Kurulumu - " + ASANSOR.find(x=>x.id===aktifAltKalem).ad;
-      showOdemeEvrakForm(true, false, showAsansorKurulumu, aktifAltKalem, ASANSOR, "asansorKurulumu");
+      showOdemeEvrakFormIslem(true, false, showAsansorKurulumu, aktifAltKalem, ASANSOR, "asansorKurulumu");
     }
   });  
 }
@@ -2179,6 +2183,113 @@ function showOdemeEvrakForm(isRadyal = false, isEvrakIsleri = false, geriHandler
   );
   updateToplamTutar();
 }
+
+function showOdemeEvrakFormIslem(isRadyal = false, isEvrakIsleri = false, geriHandler = null, altKalemId = null, kayitDizisi = null, kalemIdInput) {
+  let alanAciklamasi = '';
+  aktifKalemId = altKalemId;
+  kalemId = kalemIdInput;
+  if(isEvrakIsleri) {
+    alanAciklamasi = `<div class="alert alert-info py-2 mb-2"> <b>${aktifEvrakKurum} - ${aktifEvrakDetay}</b> işlemi için ödeme ve evrak ekleyin.</div>`;
+  }
+  // Hangisini gönderdiyse oradan bak!
+  kayitDizisi = kayitDizisi || DIS_CEPHE;
+  const secilenKalem = kayitDizisi.find(x => x.id === altKalemId);
+  const birimListesi = (secilenKalem && secilenKalem.birimler) ? secilenKalem.birimler : ['adet'];
+
+  document.getElementById('modalContentGenel').innerHTML = `
+    ${isRadyal ? `
+    <div class="mb-2">
+      <button type="button" class="btn btn-link btn-sm ps-0 mb-2" id="geriRadyalBtn">
+        <i class="fa fa-chevron-left"></i> Alt Kalemler
+      </button>
+    </div>` : ''}
+    ${alanAciklamasi}
+    <div class="rowg">
+      <div class="colg">
+        <div class="card shadow-sm mb-3 w-100">
+          <div class="card-header bg-light">
+            <b class="text-primary"><i class="fa-solid fa-coins"></i> Ödeme Kayıtları</b>
+          </div>
+          <div class="card-body">
+            <form id="odemeFormDinamik">
+              <div class="row g-2 align-items-end">
+                <div class="col-md-4">
+                  <input type="text" class="form-control" id="odemeAciklama" placeholder="Açıklama" maxlength="100" required>
+                </div>
+                <div class="col-md-3">
+                  <input type="number" class="form-control" id="odemeBirimFiyat" placeholder="Tutar (TL)" min="0" step="any" required>
+                </div>
+                <div class="col-md-3">
+                  <input type="date" class="form-control" id="odemeTarih" required>
+                </div>
+                <div class="col-md-2 text-end">
+                  <div id="odemeToplamTutar" class="fw-bold text-success" style="font-size:1.1em;"></div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-end mt-2">
+                <button type="submit" class="btn btn-success btn-sm"><i class="fa-solid fa-plus"></i> Kaydet</button>
+              </div>
+            </form>
+            <div class="table-responsive mt-3">
+              <table class="table table-striped table-hover align-middle small shadow-sm rounded" id="odemeTablosu">
+                <thead class="table-primary">
+                  <tr>
+                    <th>#</th>
+                    <th>Açıklama</th>
+                    <th>Tutar (TL)</th>
+                    <th>Tarih</th>
+                    <th>İşlem</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <div id="odemeBosMesaj" class="text-center text-secondary mt-3" style="display:none;">Henüz ödeme kaydı girilmemiş.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5 col-12 d-flex flex-column align-items-center mx-auto">
+        <div class="card shadow-sm mb-3 w-100">
+          <div class="card-header bg-light">
+            <b class="text-primary"><i class="fa-solid fa-paperclip"></i> Evrak Yükle</b>
+          </div>
+          <div class="card-body pt-3 pb-2">
+            <form id="evrakFormDinamik">
+              <div class="input-group mb-2">
+                <input type="file" class="form-control" id="evrakDosya" name="file" required>
+              </div>
+              <div class="mb-2">
+                <input type="text" class="form-control" id="evrakAciklama" maxlength="100" placeholder="Açıklama (opsiyonel)">
+              </div>
+              <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-upload"></i> Yükle</button>
+              </div>
+            </form>
+            <hr>
+            <div>
+              <h6 class="mb-1 text-secondary">Yüklenen Evraklar:</h6>
+              <ul class="list-group file-list" id="evrakListesi" style="font-size:0.97rem;"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  // Geri butonu olayı
+  if(isRadyal && typeof geriHandler === 'function') {
+    document.getElementById('geriRadyalBtn').onclick = geriHandler;
+  }
+  document.getElementById('odemeFormDinamik').onsubmit = odemeFormSubmit;
+  document.getElementById('evrakFormDinamik').dataset.alanadi = kalemIdInput || "";
+  document.getElementById('evrakFormDinamik').dataset.kalemid = altKalemId || "";
+  document.getElementById('evrakFormDinamik').onsubmit = evrakFormSubmit;
+  tabloGuncelleDinamikIslem(altKalemId, kalemIdInput);
+  evrakGuncelleDinamik(kalemIdInput,altKalemId);
+
+  updateToplamTutarIslem();
+  document.getElementById('odemeBirimFiyat').addEventListener("input", updateToplamTutarIslem);
+}
+
 // Otomatik Toplam Hesaplama
 function updateToplamTutar() {
   const miktar = parseFloat(document.getElementById('odemeMiktar').value) || 0;
@@ -2186,13 +2297,29 @@ function updateToplamTutar() {
   document.getElementById('odemeToplamTutar').innerText =
     `Toplam: ${(miktar * birimFiyat).toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2})} TL`;
 }
+function updateToplamTutarIslem() {
+  const birimFiyat = parseFloat(document.getElementById('odemeBirimFiyat').value) || 0;
+  document.getElementById('odemeToplamTutar').innerText =
+    birimFiyat > 0
+      ? `Toplam: ${birimFiyat.toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2})} TL`
+      : "";
+}
 // -- Dinamik ödemeler
 // Odeme formunu gönder
 function odemeFormSubmit(e){
   e.preventDefault();
   const aciklama = document.getElementById('odemeAciklama').value.trim();
-  const birim = document.getElementById('odemeBirim').value;
-  const miktar = parseFloat(document.getElementById('odemeMiktar').value);
+  let birim = "-";
+  let miktar = 1;
+  let toplam_func = false;
+
+  // Eğer formda bu inputlar varsa, onlardan değer al
+  if(document.getElementById('odemeBirim') && document.getElementById('odemeMiktar')){
+    birim = document.getElementById('odemeBirim').value;
+    miktar = parseFloat(document.getElementById('odemeMiktar').value);
+    toplam_func = true;
+  }
+  
   const birimFiyat = parseFloat(document.getElementById('odemeBirimFiyat').value);
   const tarih = document.getElementById('odemeTarih').value;
 
@@ -2221,12 +2348,23 @@ function odemeFormSubmit(e){
         })
       })
     .then(r => r.json())
-    .then(() => tabloGuncelleDinamik(aktifKalemId, kalemId))
+    .then(() => {
+      if(toplam_func){
+        tabloGuncelleDinamik(aktifKalemId, kalemId);
+      } else {
+        tabloGuncelleDinamikIslem(aktifKalemId, kalemId);
+      }
+    })
     .finally(() => {
       hideLoader();
   });
     e.target.reset();
-    updateToplamTutar();
+    if(toplam_func){
+      updateToplamTutar();
+    } else{
+      updateToplamTutarIslem();
+    }
+    
   }
 }
 function tabloGuncelleDinamik(aktifKalemId, kalemIdInput) {
@@ -2286,6 +2424,62 @@ function tabloGuncelleDinamik(aktifKalemId, kalemIdInput) {
       hideLoader();
     });
 }
+
+function tabloGuncelleDinamikIslem(aktifKalemId, kalemIdInput) {
+  const tbody = document.querySelector('#odemeTablosu tbody');
+  showLoader();
+
+  // Aktif kalem id'si olmadan çağrılmamalı
+  if (!aktifKalemId) {
+    tbody.innerHTML = '';
+    document.getElementById('odemeBosMesaj').style.display = '';
+    document.getElementById('odemeTablosu').style.display = 'none';
+    hideLoader();
+    return;
+  }
+
+  fetch('/evrak', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({
+      process: "read",
+      userId,
+      projectName,
+      alanAdi: kalemIdInput,
+      kalemId: aktifKalemId // yeni: sadece seçilen kalem için okuma!
+    })
+  })
+    .then(r => r.json())
+    .then(veri => {
+      tbody.innerHTML = '';
+      if (!Array.isArray(veri) || veri.length === 0) {
+        document.getElementById('odemeBosMesaj').style.display = '';
+        document.getElementById('odemeTablosu').style.display = 'none';
+      } else {
+        document.getElementById('odemeBosMesaj').style.display = 'none';
+        document.getElementById('odemeTablosu').style.display = '';
+        veri.forEach((o, idx) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${idx + 1}</td>
+            <td>${o.aciklama || ''}</td>
+            <td>${Number(o.toplamTutar).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span style="color:#0d6efd;font-weight:bold;">₺</span></td>
+            <td>${o.tarih}</td>
+            <td>
+              <button class="btn btn-sm btn-danger" title="Sil" onclick="silOdemeSunucu('${o._id}', '${aktifKalemId}', '${kalemIdInput}')">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    })
+    .finally(() => {
+      hideLoader();
+    });
+}
 async function silOdemeSunucu(odemeId, altKalemId, kalemIdInput) {
   const userConfirm = await showWarningMessage("Kayıt silinsin mi?", "evet", false);
   if (!userConfirm) return;
@@ -2312,6 +2506,7 @@ async function silOdemeSunucu(odemeId, altKalemId, kalemIdInput) {
 }
 window.silOdemeSunucu = silOdemeSunucu;
 window.tabloGuncelleDinamik = tabloGuncelleDinamik;
+window.tabloGuncelleDinamikIslem = tabloGuncelleDinamikIslem;
 
 
 async function evrakFormSubmit(e) {
@@ -2429,7 +2624,7 @@ function evrakGuncelleDinamik(alanAdi, kalemId) {
                             <i class="fa fa-download"></i>
                         </a>
                     </span>
-                    <button class="btn btn-outline-danger btn-sm" title="Sil" onclick="silEvrakSunucu('${ev.path}','${alanAdi}','${kalemId || ""}')">
+                    <button class="btn btn-outline-danger btn-sm" title="Sil" onclick="silEvrakSunucu('${ev._id}','${alanAdi}','${kalemId || ""}')">
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 `;

@@ -104,6 +104,8 @@ const OdemeDetaySchema = new mongoose.Schema({
 }, { _id: true }); // _id'yi otomatik ekler
 
 const DokumanSchema = new mongoose.Schema({
+    alanAdi:    { type: String, required: true },
+    kalemId:    { type: String, required: true },
     path:       { type: String, required: true },   // PDF yolu (sunucuda ya da bulutta)
     uploadedAt: { type: Date, default: Date.now },
     fileName:   { type: String },
@@ -117,7 +119,6 @@ const imarDurumuSchema = new mongoose.Schema({
 }, { _id: false }); // imarDurumu için id yok, alt diziler için var!
 
 
-
 // Islak Mekan Kalemi şeması
 const islakMekanKaydiSchema = new mongoose.Schema({
   kalemId:     { type: String, required: true },
@@ -125,16 +126,252 @@ const islakMekanKaydiSchema = new mongoose.Schema({
   birim:       { type: String, required: true },
   tarih:       { type: String, required: true },
   toplamTutar: { type: Number, required: true },
-  aciklama:    { type: String },
-  dokumanlar:  [DokumanSchema] // opsiyonel, evrak eklersen kullanılır
+  aciklama:    { type: String }
+}, { _id: true });
+// Mutfak Kalemi şeması
+const mutfakKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+// Pimapen Kalemi şeması
+const pimapenKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+// Zemin uygulamaları şeması
+const zeminUygulamalariKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+// İç Cephe şeması
+const icCepheKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+// Kapılar şeması
+const kapilarKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+// Korkuluklar şeması
+const korkuluklarKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+// disCephe şeması
+const disCepheKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const mantolamaKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const tavanKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const elektrikTesisatKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const sihhiTesisatKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const dogalgazKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const asansorKurulumuKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const iklimlendirmeKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const peyzajKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
 }, { _id: true });
 
 
-
+const santiyeKurmaKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const temelKazmaKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const groBetonKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const radyalTemelKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const perdeBetonuKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const temelIzolasyonKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const dolguKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const subasmanKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const zeminBetonuKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const katBetonlariKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const kapamaBetonuKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const catiUygulamaKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const duvarOrmeKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const sapKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  miktar:      { type: Number, required: true },
+  birim:       { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
 
 const arsaBedeliSchema = new mongoose.Schema(defaultFields, { _id: false });
 const yerdenCikartmakSchema = new mongoose.Schema(defaultFields, { _id: false });
-
 
 // --- Ana userInputSchema ---
 const userInputSchema = new mongoose.Schema({
@@ -148,9 +385,39 @@ const userInputSchema = new mongoose.Schema({
   selectedDoor: [selectedDoorSchema],
   selectedWall: [selectedWallSchema],
 
+  dokuman : [DokumanSchema],
   imarDurumu:[imarDurumuSchema],
 
   islakMekanlar: [islakMekanKaydiSchema],
+  mutfak: [mutfakKaydiSchema],
+  pimapen: [pimapenKaydiSchema],
+  zeminUygulamalari:[zeminUygulamalariKaydiSchema],
+  icCephe:[icCepheKaydiSchema],
+  kapilar:[kapilarKaydiSchema],
+  korkuluklar:[korkuluklarKaydiSchema],
+  disCephe:[disCepheKaydiSchema],
+  mantolama:[mantolamaKaydiSchema],
+  tavan:[tavanKaydiSchema],
+  elektrikTesisat:[elektrikTesisatKaydiSchema],
+  sihhiTesisat:[sihhiTesisatKaydiSchema],
+  dogalgaz:[dogalgazKaydiSchema],
+  asansorKurulumu:[asansorKurulumuKaydiSchema],
+  iklimlendirme:[iklimlendirmeKaydiSchema],
+  peyzaj:[peyzajKaydiSchema],
+  santiyeKurma:[santiyeKurmaKaydiSchema],
+  temelKazma:[temelKazmaKaydiSchema],
+  groBeton:[groBetonKaydiSchema],
+  radyalTemel:[radyalTemelKaydiSchema],
+  perdeBetonu:[perdeBetonuKaydiSchema],
+  temelIzolasyon:[temelIzolasyonKaydiSchema],
+  dolgu:[dolguKaydiSchema],
+  subasman:[subasmanKaydiSchema],
+  zeminBetonu:[zeminBetonuKaydiSchema],
+  katBetonlari:[katBetonlariKaydiSchema],
+  kapamaBetonu:[kapamaBetonuKaydiSchema],
+  catiUygulama:[catiUygulamaKaydiSchema],
+  duvarOrme:[duvarOrmeKaydiSchema],
+  sap:[sapKaydiSchema],
 
 
   arsaBedeli: [arsaBedeliSchema],

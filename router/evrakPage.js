@@ -81,45 +81,53 @@ router.get('/', authenticateUser, async (req, res) => {
 router.post('/', upload.single('file'), async (req, res) => {
     const process = req.body.process;
 
-    //console.log("Gelen BODY:", req.body);
-    //console.log("Gelen FILE:", req.file);
-
     if(process === "save"){
         try {
-            const { userId, projectName, kalemKayit } = req.body;
-            const alanAdi = kalemKayit.alanAdi; // DÜZGÜN OLARAK AL
+        const { userId, projectName, kalemKayit } = req.body;
+        const alanAdi = kalemKayit.alanAdi;
+        if (!alanAdi)
+            return res.status(400).json({ success: false, message: "Alan adı belirtilmemiş." });
 
-            const filter = {
-            _id: userId,
-            "userInputs.projectName": projectName
-            };
+        // 1. Kullanıcıyı ve ilgili projeyi bul
+        const user = await Users.findById(userId);
+        if (!user)
+            return res.status(404).json({ success: false, message: "Kullanıcı bulunamadı." });
 
-            const alanYolu = `userInputs.$[input].${alanAdi}`;
-            const update = {
-            $push: {
-                [alanYolu]: kalemKayit
-            }
-            };
-            const options = {
-            arrayFilters: [
-                { "input.projectName": projectName }
-            ]
-            };
+        const proje = user.userInputs.find(p => p.projectName === projectName);
+        if (!proje)
+            return res.status(404).json({ success: false, message: "Proje bulunamadı." });
 
-            const result = await Users.updateOne(filter, update, options);
-
-            if (result.matchedCount === 0) {
-            return res.status(404).json({ success: false, message: "Kullanıcı veya proje bulunamadı." });
-            } else if (result.modifiedCount === 0) {
-            return res.status(400).json({ success: false, message: "Kayıt eklenemedi." });
-            } else {
-            return res.json({ success: true, message: "Kayıt başarıyla eklendi." });
-            }
-
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({ success: false, message: "Bir hata oluştu.", error: err.message });
+        // 2. İlgili alan dinamik dizi mi? Şemada varsa çalışır
+        if (!Array.isArray(proje[alanAdi])) {
+            // Eğer bu alan şemada yoksa, mongoose kaydetmez!
+            proje[alanAdi] = [];
         }
+
+        // 3. Kayıt ekle (kalemId hariç diğer tüm alanlar da push edilir)
+        // Alan adı ve içeriği tamamen dinamik!
+        // Eğer duplicate kaydı önlemek istersen burada kontrol et (örn. kalemId eşsiz ise)
+        proje[alanAdi].push(kalemKayit);
+
+        // 4. Değişikliği kaydet
+        user.markModified('userInputs');
+        await user.save();
+
+        // 5. Kayıttan sonra geri kontrol/log (isteğe bağlı)
+        const refreshed = await Users.findById(userId);
+        const sonDurum = refreshed.userInputs.find(
+            x => x.projectName === projectName
+        )[alanAdi];
+
+        return res.json({ success: true, message: "Kayıt başarıyla eklendi." });
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            success: false,
+            message: "Bir hata oluştu.",
+            error: err.message
+        });
+    }
 
         //res.json({ success: true, odeme });
 
@@ -127,28 +135,52 @@ router.post('/', upload.single('file'), async (req, res) => {
         const { userId, projectName, kalemId, alanAdi } = req.body;
 
         try {
-            const user = await Users.findOne({
-                _id: userId,
-                "userInputs.projectName": projectName
-            });
+        const user = await Users.findOne({
+            _id: userId,
+            "userInputs.projectName": projectName
+        });
 
-            if (!user) return res.status(404).json([]);
+        if (!user) return res.status(404).json([]);
 
-            // İlgili proje bulunmalı
-            const proje = user.userInputs.find(ui => ui.projectName === projectName);
-            if (!proje || !Array.isArray(proje[alanAdi])) return res.json([]);
+        // İlgili proje bulunmalı
+        const proje = user.userInputs.find(ui => ui.projectName === projectName);
+        if (!proje) return res.json([]);
 
-            // Sadece gerekli kalemId için filtreleme:
-            const dizi = proje[alanAdi];
-            if (!Array.isArray(dizi)) return res.json([]);
-            const filtrelenmis = dizi.filter(k => k.kalemId === kalemId);
+        let alanOlusturuldu = false;
 
-            return res.json(filtrelenmis); // <-- burada sonuç dönmeli
-
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json([]);
+        // Eğer ilgili alan yoksa, boş dizi olarak ekle ve kaydet
+        if (typeof proje[alanAdi] === "undefined") {
+            proje[alanAdi] = [];
+            alanOlusturuldu = true;
         }
+
+        const dizi = proje[alanAdi];
+
+        if (!Array.isArray(dizi)) return res.json([]);
+
+        const filtrelenmis = kalemId
+            ? dizi.filter(k => k.kalemId === kalemId)
+            : dizi;
+
+        // Eğer yeni alan oluşturulduysa DB'ye kaydet (safe for future additions)
+        if (alanOlusturuldu) {
+            user.markModified('userInputs');
+            await user.save();
+        }
+
+        return res.json(
+            filtrelenmis.map(obj => {
+                // eğer Mongoose dökümanı ise .toObject() ile düzleştir:
+                const plain = obj.toObject ? obj.toObject() : obj;
+                // _id ekle (hem string olsun hem yayıl)
+                return { ...plain, _id: plain._id ? plain._id.toString() : undefined };
+            })
+        );
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json([]);
+    }
 
         //res.json(userInput.imarDurumu[imarDurumuIndex].odemeDetaylari || []);
 
@@ -179,13 +211,14 @@ router.post('/', upload.single('file'), async (req, res) => {
 
 
     } else if(process === "saveEvrak"){
-        try {
+         try {
             const { userId, projectName, aciklama, alanAdi, kalemId } = req.body;
             const file = req.file;
 
-            if (!file) return res.status(400).json({ error: 'Dosya yok.' });
+            if (!file)
+                return res.status(400).json({ error: 'Dosya yok.' });
 
-            // Dosya yükle ve url oluştur
+            // 1) Dosya bilgisini hazırla
             const ext = path.extname(file.originalname);
             const r2Filename = `evraklar/${userId}_${Date.now()}${ext}`;
             const s3 = getS3Client();
@@ -196,71 +229,29 @@ router.post('/', upload.single('file'), async (req, res) => {
                 ContentType: file.mimetype
             }));
             const fileUrl = `${PUBLIC_BASE_URL}/${r2Filename}`;
-
-            // Kullanıcı ve proje bul
-            const user = await Users.findById(userId);
-            if (!user) return res.status(404).json({ error: 'Kullanıcı bulunamadı' });
-
-            const userInput = user.userInputs.find(p => p.projectName === projectName);
-            if (!userInput) return res.status(404).json({ error: 'Proje bulunamadı' });
-
-            // Dosya kaydı nesnesi
             const dokumanKaydi = {
+                alanAdi,
+                kalemId,
                 path: fileUrl,
                 fileName: file.originalname,
                 uploadedAt: new Date(),
                 aciklama: aciklama || "",
             };
 
-            let eklendi = false;
+            // 2) Kullanıcıyı ve projesini bul
+            const user = await Users.findById(userId);
+            if (!user)
+                return res.status(404).json({ error: 'Kullanıcı bulunamadı.' });
 
-            // ALT KALEM (ör: iş kalemleri, santiyeKurma, vs.)
-            if (alanAdi && kalemId) {
-                if (!Array.isArray(userInput[alanAdi])) userInput[alanAdi] = [];
+            const userInput = user.userInputs.find(p => p.projectName === projectName);
+            if (!userInput)
+                return res.status(404).json({ error: 'Proje bulunamadı.' });
 
-                let kalem = userInput[alanAdi].find(x =>
-                    (x.kalemId && String(x.kalemId).trim() === String(kalemId).trim()) ||
-                    (x._id && String(x._id) === String(kalemId))
-                );
-
-                // Yoksa ekle
-                if (!kalem) {
-                    kalem = {
-                        kalemId,
-                        alanAdi,
-                        dokumanlar: [],
-                        // (dilersen başka default field ekleyebilirsin)
-                    };
-                    userInput[alanAdi].push(kalem);
-                    console.log("Yeni kalem eklendi: ", kalem);
-                }
-
-                if (!Array.isArray(kalem.dokumanlar)) kalem.dokumanlar = [];
-                kalem.dokumanlar.push(dokumanKaydi);
-                eklendi = true;
-                console.log("Eklenen dosya kaleme gitti:", kalem.kalemId || kalem._id);
-
-            // ANA PROPERTY (tekil, ör: userInput[alanAdi].dokumanlar, ya da ilk elemanda)
-            } else if (alanAdi) {
-                if (userInput[alanAdi] && Array.isArray(userInput[alanAdi].dokumanlar)) {
-                    userInput[alanAdi].dokumanlar.push(dokumanKaydi);
-                    eklendi = true;
-                    console.log("Eklenen dosya ana property'deki dokumanlar'a gitti.");
-                } else if (Array.isArray(userInput[alanAdi]) && userInput[alanAdi][0] && Array.isArray(userInput[alanAdi][0].dokumanlar)) {
-                    userInput[alanAdi][0].dokumanlar.push(dokumanKaydi);
-                    eklendi = true;
-                    console.log("Eklenen dosya ana property'nin ilk elemanına gitti.");
-                } else {
-                    userInput[alanAdi] = { dokumanlar: [dokumanKaydi] };
-                    eklendi = true;
-                    console.log("Eklenen dosya yeni oluşturulan ana property'ye gitti.");
-                }
+            // 3) Yalnızca userInput.dokuman dizisine ekle
+            if (!Array.isArray(userInput.dokuman)) {
+                userInput.dokuman = [];
             }
-
-            if (!eklendi) {
-                console.log("Hiçbir yere eklenemedi! userInput[alanAdi]:", userInput[alanAdi]);
-                return res.status(400).json({ error: "Nereye ekleneceği anlaşılamadı (Alan veya kalemId eksik mi?)" });
-            }
+            userInput.dokuman.push(dokumanKaydi);
 
             user.markModified('userInputs');
             await user.save();
@@ -275,9 +266,9 @@ router.post('/', upload.single('file'), async (req, res) => {
     } else if(process === "readEvrak") {
         try {
             const { userId, projectName, alanAdi, kalemId } = req.body;
-        
+
             if (!userId || !projectName || !alanAdi)
-            return res.status(400).json([]);
+                return res.status(400).json([]);
 
             const user = await Users.findById(userId);
             if (!user) return res.status(404).json([]);
@@ -285,107 +276,61 @@ router.post('/', upload.single('file'), async (req, res) => {
             const userInput = user.userInputs.find(p => p.projectName === projectName);
             if (!userInput) return res.status(404).json([]);
 
-            let evraklar = [];
+            if (!Array.isArray(userInput.dokuman))
+                return res.json([]); // Hiç doküman yoksa boş array
 
-            // Eğer kalemId gönderilmişse, ilgili iş kaleminin evraklarını bul
-            if (kalemId) {
-            const alanDizisi = userInput[alanAdi];
-            if (!Array.isArray(alanDizisi)) return res.json([]);
-            // Kalemi id veya kalemId ile bulmaya çalışıyoruz
-            const kalem = alanDizisi.find(x =>
-                (x._id && x._id.toString() === kalemId) ||
-                (x.kalemId && x.kalemId === kalemId)
+            // Filtrele: alanAdi ve kalemId (kalemId verilmezse sadece alanAdi eşleşenler)
+            let filtered = userInput.dokuman.filter(d =>
+                String(d.alanAdi).trim().toLowerCase() === String(alanAdi).trim().toLowerCase() &&
+                (
+                    !kalemId ||
+                    (d.kalemId && String(d.kalemId).trim().toLowerCase() === String(kalemId).trim().toLowerCase())
+                )
             );
-            if (kalem && Array.isArray(kalem.dokumanlar)) {
-                evraklar = kalem.dokumanlar;
-            }
-            }
-            // Sadece alanAdi ile çağrıldıysa — örneğin imarDurumu gibi bir alan
-            else {
-            // Eğer bu alan bir array ve içinde dokumanlar varsa (ör: imarDurumu bir dizi)
-            if (Array.isArray(userInput[alanAdi]) && userInput[alanAdi][0] && Array.isArray(userInput[alanAdi][0].dokumanlar)) {
-                evraklar = userInput[alanAdi][0].dokumanlar;
-            }
-            // Eğer alan doğrudan dokumanlar içeriyorsa (çok nadiren)
-            else if (userInput[alanAdi] && Array.isArray(userInput[alanAdi].dokumanlar)) {
-                evraklar = userInput[alanAdi].dokumanlar;
-            }
-            }
 
-            return res.json(evraklar || []);
+            return res.json(filtered);
+
         } catch (err) {
             console.error("readEvrak HATA:", err);
-            res.status(500).json([]);
+            return res.status(500).json([]);
         }
 
     } else if(process === "deleteEvrak") {
         try {
-            const { userId, projectName, evrakId, alanAdi, kalemId } = req.body; // evrakId dosya path'i
+            const { userId, projectName, evrakId, alanAdi, kalemId } = req.body;
 
             if (!userId || !projectName || !evrakId || !alanAdi)
-                return res.status(400).json({ error: "Eksik parametre." });
+                return res.status(400).json({ error: 'Eksik parametre.' });
 
             const user = await Users.findById(userId);
-            if (!user) return res.status(404).json({ error: "Kullanıcı yok." });
+            if (!user) return res.status(404).json({ error: 'Kullanıcı bulunamadı.' });
 
             const userInput = user.userInputs.find(p => p.projectName === projectName);
-            if (!userInput) return res.status(404).json({ error: "Proje yok." });
+            if (!userInput) return res.status(404).json({ error: 'Proje bulunamadı.' });
 
-            let silindi = false;
+            if (!Array.isArray(userInput.dokuman)) return res.json({ ok: true }); // doküman yoksa sorun yok
 
-            if (kalemId) {
-                const alanDizisi = userInput[alanAdi];
-                if (Array.isArray(alanDizisi)) {
-                    const kalem = alanDizisi.find(x =>
-                        (x._id && x._id.toString() === kalemId) ||
-                        (x.kalemId && x.kalemId === kalemId)
-                    );
-                    if (kalem && Array.isArray(kalem.dokumanlar)) {
-                        const ilkUzunluk = kalem.dokumanlar.length;
-                        kalem.dokumanlar = kalem.dokumanlar.filter(ev => ev.path !== evrakId);
-                        if (kalem.dokumanlar.length < ilkUzunluk) silindi = true;
-                    }
-                }
-            } else {
-                if (Array.isArray(userInput[alanAdi])) {
-                    const diziElemani = userInput[alanAdi][0];
-                    if (diziElemani && Array.isArray(diziElemani.dokumanlar)) {
-                        const ilkUzunluk = diziElemani.dokumanlar.length;
-                        diziElemani.dokumanlar = diziElemani.dokumanlar.filter(ev => ev.path !== evrakId);
-                        if (diziElemani.dokumanlar.length < ilkUzunluk) silindi = true;
-                    }
-                } else if (userInput[alanAdi] && Array.isArray(userInput[alanAdi].dokumanlar)) {
-                    const ilkUzunluk = userInput[alanAdi].dokumanlar.length;
-                    userInput[alanAdi].dokumanlar = userInput[alanAdi].dokumanlar.filter(ev => ev.path !== evrakId);
-                    if (userInput[alanAdi].dokumanlar.length < ilkUzunluk) silindi = true;
-                }
-            }
+            // Silinecek indeksi bul
+            const index = userInput.dokuman.findIndex(ev => 
+                String(ev._id) === String(evrakId) &&
+                String(ev.alanAdi) === String(alanAdi) &&
+                (!kalemId || String(ev.kalemId) === String(kalemId))
+            );
 
-            if (!silindi)
-                return res.status(404).json({ error: "Evrak bulunamadı veya silinemedi." });
+            if (index === -1)
+                return res.status(404).json({ error: 'Belge bulunamadı.' });
+
+            // Diziden çıkar
+            userInput.dokuman.splice(index, 1);
 
             user.markModified('userInputs');
             await user.save();
 
-            // Bu blok: Cloud Storage dosya silme!
-            try {
-                const r2Key = evrakId.replace(`${PUBLIC_BASE_URL}/`, '');
-                const s3 = getS3Client();
-                await s3.send(new DeleteObjectCommand({
-                    Bucket: BUCKET_NAME,
-                    Key: r2Key
-                }));
-                //console.log("Cloud Storage'dan silindi:", r2Key);
-            } catch (err) {
-                console.warn("Cloud Storage silme hatası:", err.message || err);
-                // DB'den silindiği için buradaki hata, client'a return'e engel olmaz
-            }
-
-            return res.json({ success: true });
+            return res.json({ ok: true });
 
         } catch (err) {
             console.error("deleteEvrak HATA:", err);
-            return res.status(500).json({ error: err.message || "Silme sırasında hata oluştu." });
+            return res.status(500).json({ error: err.message || 'Silme sırasında hata oluştu.' });
         }
     }
 });
