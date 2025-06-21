@@ -296,41 +296,64 @@ router.post('/', upload.single('file'), async (req, res) => {
 
     } else if(process === "deleteEvrak") {
         try {
-            const { userId, projectName, evrakId, alanAdi, kalemId } = req.body;
+        const { userId, projectName, evrakId, alanAdi, kalemId } = req.body;
 
-            if (!userId || !projectName || !evrakId || !alanAdi)
-                return res.status(400).json({ error: 'Eksik parametre.' });
+        if (!userId || !projectName || !evrakId || !alanAdi)
+            return res.status(400).json({ error: 'Eksik parametre.' });
 
-            const user = await Users.findById(userId);
-            if (!user) return res.status(404).json({ error: 'Kullanıcı bulunamadı.' });
+        const user = await Users.findById(userId);
+        if (!user) return res.status(404).json({ error: 'Kullanıcı bulunamadı.' });
 
-            const userInput = user.userInputs.find(p => p.projectName === projectName);
-            if (!userInput) return res.status(404).json({ error: 'Proje bulunamadı.' });
+        const userInput = user.userInputs.find(p => p.projectName === projectName);
+        if (!userInput) return res.status(404).json({ error: 'Proje bulunamadı.' });
 
-            if (!Array.isArray(userInput.dokuman)) return res.json({ ok: true }); // doküman yoksa sorun yok
+        if (!Array.isArray(userInput.dokuman)) return res.json({ ok: true });
 
-            // Silinecek indeksi bul
-            const index = userInput.dokuman.findIndex(ev => 
-                String(ev._id) === String(evrakId) &&
-                String(ev.alanAdi) === String(alanAdi) &&
-                (!kalemId || String(ev.kalemId) === String(kalemId))
-            );
+        // Silinecek index’i ve dosya bilgisini bul
+        const index = userInput.dokuman.findIndex(ev => 
+            String(ev._id) === String(evrakId) &&
+            String(ev.alanAdi) === String(alanAdi) &&
+            (!kalemId || String(ev.kalemId) === String(kalemId))
+        );
 
-            if (index === -1)
-                return res.status(404).json({ error: 'Belge bulunamadı.' });
+        if (index === -1)
+            return res.status(404).json({ error: 'Belge bulunamadı.' });
 
-            // Diziden çıkar
-            userInput.dokuman.splice(index, 1);
+        // Dosya yolunu not al, silmeden önce
+        const silinecekEvrak = userInput.dokuman[index];
+        const filePath = silinecekEvrak?.path;
+        
+        // Diziden çıkar
+        userInput.dokuman.splice(index, 1);
+        user.markModified('userInputs');
+        await user.save();
 
-            user.markModified('userInputs');
-            await user.save();
-
-            return res.json({ ok: true });
-
-        } catch (err) {
-            console.error("deleteEvrak HATA:", err);
-            return res.status(500).json({ error: err.message || 'Silme sırasında hata oluştu.' });
+        // Dosya silme işlemi - Cloudflare’dan sil
+        // Sadece path'ten dosya adını/parçasını çekiyoruz
+        if (filePath) {
+            try {
+                // filePath: "https://public-url/evraklar/xxx.pdf"
+                // KENDİ bucket key'ini alıyoruz (ör: "evraklar/xxx.pdf")
+                const key = filePath.split(`${PUBLIC_BASE_URL}/`)[1];
+                if (key) {
+                    const s3 = getS3Client();
+                    await s3.send(new DeleteObjectCommand({
+                        Bucket: BUCKET_NAME,
+                        Key: key
+                    }));
+                }
+            } catch(deleteErr) {
+                console.error("Cloudflare dosya silme hatası:", deleteErr.message);
+                // ama DB'den silme işlemi tamamlandı, kullanıcıyı engelleme
+            }
         }
+
+        return res.json({ ok: true });
+        
+    } catch (err) {
+        console.error("deleteEvrak HATA:", err);
+        return res.status(500).json({ error: err.message || 'Silme sırasında hata oluştu.' });
+    }
     }
 });
 

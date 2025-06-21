@@ -878,7 +878,7 @@ document.querySelectorAll('.alt-kutu-icerik li').forEach(function(item) {
     document.getElementById('modalBaslikIkon').textContent = ikonBul(aktifEvrakKurum);
     document.getElementById('modalBaslikText').textContent = aktifEvrakKurum + ' - ' + aktifEvrakDetay;
 
-    showOdemeEvrakForm(false, true); // (isRadyal=false, isEvrakIsleri=true)
+    showOdemeEvrakFormIslem(false, true,null,aktifEvrakDetay,null,aktifEvrakKurum); // (isRadyal=false, isEvrakIsleri=true) //altKalemId = null, kayitDizisi = null, kalemIdInput
     bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
   });
 });
@@ -2192,8 +2192,11 @@ function showOdemeEvrakFormIslem(isRadyal = false, isEvrakIsleri = false, geriHa
     alanAciklamasi = `<div class="alert alert-info py-2 mb-2"> <b>${aktifEvrakKurum} - ${aktifEvrakDetay}</b> işlemi için ödeme ve evrak ekleyin.</div>`;
   }
   // Hangisini gönderdiyse oradan bak!
-  kayitDizisi = kayitDizisi || DIS_CEPHE;
-  const secilenKalem = kayitDizisi.find(x => x.id === altKalemId);
+  kayitDizisi = kayitDizisi || "";
+  let secilenKalem = null;
+  if(Array.isArray(kayitDizisi)){
+    secilenKalem = kayitDizisi.find(x => x.id === altKalemId);
+  }
   const birimListesi = (secilenKalem && secilenKalem.birimler) ? secilenKalem.birimler : ['adet'];
 
   document.getElementById('modalContentGenel').innerHTML = `
