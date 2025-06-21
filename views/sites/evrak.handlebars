@@ -144,6 +144,7 @@ body {
   padding: 0.88em 2.3em;
   display: flex;
   align-items: center;
+  justify-content: center;
   cursor: pointer;
   box-shadow: 0 2px 8px 0 #e5ecf7;
   transition: color 0.14s, background 0.16s, border-color 0.16s;
@@ -202,6 +203,10 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
+}
+.alt-baslik-ikon{
+  margin-left: 20px;
+  margin-right: 10px;
 }
 .alt-baslik-kutu {
   background: linear-gradient(90deg, #f7ecd2 0%, #e3e7fa 100%);
@@ -450,13 +455,16 @@ body {
   .flow-step-arrow { transform: rotate(90deg); height: 24px; }
   .flow-step-arrow svg { width: 22px; height: 20px; }
   .flow-step-btn { 
-    width: 60%; 
+    width: 30%; 
     justify-content: center;
     font-size: 1em;                 /* Metin biraz küçültüldü */
-    padding: 0.57em 1.2em;          /* Yastıklar azaltıldı */
+    padding: 0.4em 0.9em;          /* Yastıklar azaltıldı */
     border-radius: 1.4em;           /* Köşeler biraz daraldı */
     box-sizing: border-box;         /* Padding genişliğe dahil edilir */
     margin: 7px 0;
+    }
+    .er-kutular {
+      width: 75%;
     }
   .surec-title { font-size: 1.5em; margin-bottom: 10px; }
   #tab-uretim .bolum-baslik { font-size:1.29rem; padding:.9em .33em .7em .33em; }
@@ -589,117 +597,128 @@ body {
 
     <div class="container pt-3 pb-4">  
       <div class="surec-title">Yapı Üretim Süreci</div>  
-      <div class="flow-steps-container">
-        <button class="flow-step-btn active mb-2" data-tab="evrak">
-          Evrak İşleri
-        </button>
-        
-        <button class="flow-step-btn mb-2" data-tab="ruhsat">
-          Yapı Ruhsatı
-        </button>
-      
-          <button class="flow-step-btn mb-2" data-tab="uretim">
-            Üretim
-          </button>
+        <div class="flow-steps-container">
+          <button class="flow-step-btn active mb-2" data-tab="arsa">Arsa</button>
+          <button class="flow-step-btn mb-2" data-tab="evrak">Evrak İşleri</button>
+          <button class="flow-step-btn mb-2" data-tab="ruhsat">Yapı Ruhsatı</button>
+          <button class="flow-step-btn mb-2" data-tab="uretim">Üretim</button>
         </div>
       </div>
 
-    <!-- Evrak İşleri Bölümü -->  
-    <div class="surec-section mb-4 active" id="tab-evrak">  
-    
-  <div class="er-kutular">  
-    <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
-      <span class="alt-baslik-ikon">🏛️</span>  
-      Belediye  
-      <span class="alt-kutu-arrow">&#9654;</span>  
-    </div>  
-    <div class="alt-kutu-icerik">  
-      <ul>  
-        <li data-kurum="Belediye" data-detay="Aplikasyon" id="aplikasyon">Aplikasyon</li>  
-        <li data-kurum="Belediye" data-detay="İmar Durumu" id="imarDurumuKaydi">İmar Durumu</li>  
-        <li data-kurum="Belediye" data-detay="Kanal Kotu" id="kanalKotu">Kanal Kotu</li>  
-        <li data-kurum="Belediye" data-detay="Ruhsat harcı" id="ruhsatHarci">Ruhsat Harcı</li>  
-        <li data-kurum="Belediye" data-detay="Zemin etüdü harcı" id="zeminEtuduHarci">Zemin Etüdü Harcı</li>  
-      </ul>  
-    </div>  
-    <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
-      <span class="alt-baslik-ikon">🖋️</span>  
-      Noter  
-      <span class="alt-kutu-arrow">&#9654;</span>  
-    </div>  
-    <div class="alt-kutu-icerik">  
-      <ul>  
-        <li data-kurum="Noter" data-detay="Müteahhitlik Sözleşmesi" id="muteahhitlikSozlesmesi">Müteahhitlik Sözleşmesi</li>  
-        <li data-kurum="Noter" data-detay="Vekalet Sözleşmesi" id="vekaletSozlesmesi">Vekalet Sözleşmesi</li>  
-      </ul>  
-    </div>  
-    <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
-      <span class="alt-baslik-ikon">🏗️</span>  
-      Yapı Denetim
-      <span class="alt-kutu-arrow">&#9654;</span>  
-    </div>  
-    <div class="alt-kutu-icerik">  
-      <ul>  
-        <li data-kurum="Yapı Denetim" data-detay="Yapı denetim harcı" id="yapiDenetimHarci">Yapı Denetim Harcı</li>  
-        <li data-kurum="Yapı Denetim" data-detay="Fenni Jeoloji" id="fenniJeoloji">Fenni Jeoloji</li>  
-        <li data-kurum="Yapı Denetim" data-detay="Fenni Haritacı" id="fenniHaritaci">Fenni Haritacı</li>  
-      </ul>  
-    </div>  
-    <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
-      <span class="alt-baslik-ikon">🌎</span>  
-      Zemin Etüdü
-      <span class="alt-kutu-arrow">&#9654;</span>  
-    </div>  
-    <div class="alt-kutu-icerik">  
-      <ul>  
-        <li data-kurum="Zemin Etüdü" data-detay="Zemin Etüdü Raporu" id="zeminEtuduRaporu">Zemin Etüdü Raporu</li>  
-        <li data-kurum="Zemin Etüdü" data-detay="Zemin İyileştirme" id="zeminIyilestirme">Zemin İyileştirme</li>  
-      </ul>  
-    </div>  
-    <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
-      <span class="alt-baslik-ikon">📁</span>  
-      Projeler
-      <span class="alt-kutu-arrow">&#9654;</span>  
-    </div>  
-    <div class="alt-kutu-icerik">  
-      <ul>  
-        <li data-kurum="Projeler" data-detay="Mimari Proje" id="mimariProje">Mimari</li>  
-        <li data-kurum="Projeler" data-detay="Statik Proje" id="statikProje">Statik</li>  
-        <!--<li data-kurum="Projeler" data-detay="Elektrik">Elektrik</li>  -->
-        <li data-kurum="Projeler" data-detay="Tesisat Projesi" id="tesisatProje">Tesisat</li>  
-        <li data-kurum="Projeler" data-detay="HES Projesi" id="hesProje">HES</li>  
-        <li data-kurum="Projeler" data-detay="Akustik Proje" id="akustikProje">Akustik</li>  
-        <!--<li data-kurum="Projeler" data-detay="Asansör">Asansör</li>  -->
-      </ul>  
-    </div>  
-  </div>  
-</div>
-
-    <!-- Yapı Ruhsatı Bölümü -->  
-    <div class="surec-section" id="tab-ruhsat">  
-       
-      <button class="evrak-ekle-btn">Evrak Ekle</button>  
-    </div>  
-
-    <!-- Üretim Bölümü -->
-    <div class="surec-section mb-4" id="tab-uretim">
-      
-      <div class="uretim-tabs-row">
-        <button id="btnKaba" class="uretim-tab-btn active"><span class="uretim-ikon">🧱</span> Kaba Üretim</button>
-        <button id="btnInce" class="uretim-tab-btn"><span class="uretim-ikon">🎨</span> İnce Üretim</button>
+      <div class="surec-section mb-4 active" id="tab-arsa">
+        <div class="er-kutular"> 
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
+              <span class="alt-baslik-ikon" id="arsaBedeliArsa">💰</span>  
+              Arsa Bedeli
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
+              <span class="alt-baslik-ikon" id="yerSahibiİleAnlasmaArsa">🤝</span>  
+              Yer Sahibi İle Anlaşma
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
+              <span class="alt-baslik-ikon" id="yerdenCikartmakArsa">⬆️</span>  
+              Yerden Çıkartmak
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
+              <span class="alt-baslik-ikon" id="kiraBedeliArsa">💵</span>  
+              Kira Bedeli
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
+              <span class="alt-baslik-ikon" id="arsaDigerArsa">➕</span>  
+              Arsa Diğer
+          </div>
+        </div>
       </div>
 
-      <!-- Kaba Üretim Adımları -->
-    <div class="uretim-kategori" id="kabaUretim" style="display:block;">
-      <div class="uretim-steps-row w-100 mx-auto" style="max-width:980px;"></div>
-    </div>
-    <!-- İnce Üretim Adımları (boş şablon) -->
-    <div class="uretim-kategori" id="inceUretim" style="display:none;">
-      <div class="uretim-steps-row w-100 mx-auto" style="max-width:980px;justify-content:center;">
-          <span style="font-family:'Varela Round', Arial,sans-serif;color:#7b8399;font-size:1.13rem;opacity:0.8;">İnce üretim adımları burada listelenecek…</span>
+      <div class="surec-section mb-4" id="tab-evrak">  
+        <div class="er-kutular">  
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
+            <span class="alt-baslik-ikon">🏛️</span>  
+            Belediye  
+            <span class="alt-kutu-arrow">&#9654;</span>  
+          </div>  
+          <div class="alt-kutu-icerik">  
+            <ul>  
+              <li data-kurum="Belediye" data-detay="Aplikasyon" id="aplikasyon">Aplikasyon</li>  
+              <li data-kurum="Belediye" data-detay="İmar Durumu" id="imarDurumuKaydi">İmar Durumu</li>  
+              <li data-kurum="Belediye" data-detay="Kanal Kotu" id="kanalKotu">Kanal Kotu</li>  
+              <li data-kurum="Belediye" data-detay="Ruhsat harcı" id="ruhsatHarci">Ruhsat Harcı</li>  
+              <li data-kurum="Belediye" data-detay="Zemin etüdü harcı" id="zeminEtuduHarci">Zemin Etüdü Harcı</li>  
+            </ul>  
+          </div>  
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
+            <span class="alt-baslik-ikon">🖋️</span>  
+            Noter  
+            <span class="alt-kutu-arrow">&#9654;</span>  
+          </div>  
+          <div class="alt-kutu-icerik">  
+            <ul>  
+              <li data-kurum="Noter" data-detay="Müteahhitlik Sözleşmesi" id="muteahhitlikSozlesmesi">Müteahhitlik Sözleşmesi</li>  
+              <li data-kurum="Noter" data-detay="Vekalet Sözleşmesi" id="vekaletSozlesmesi">Vekalet Sözleşmesi</li>  
+            </ul>  
+          </div>  
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
+            <span class="alt-baslik-ikon">🏗️</span>  
+            Yapı Denetim
+            <span class="alt-kutu-arrow">&#9654;</span>  
+          </div>  
+          <div class="alt-kutu-icerik">  
+            <ul>  
+              <li data-kurum="Yapı Denetim" data-detay="Yapı denetim harcı" id="yapiDenetimHarci">Yapı Denetim Harcı</li>  
+              <li data-kurum="Yapı Denetim" data-detay="Fenni Jeoloji" id="fenniJeoloji">Fenni Jeoloji</li>  
+              <li data-kurum="Yapı Denetim" data-detay="Fenni Haritacı" id="fenniHaritaci">Fenni Haritacı</li>  
+            </ul>  
+          </div>  
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
+            <span class="alt-baslik-ikon">🌎</span>  
+            Zemin Etüdü
+            <span class="alt-kutu-arrow">&#9654;</span>  
+          </div>  
+          <div class="alt-kutu-icerik">  
+            <ul>  
+              <li data-kurum="Zemin Etüdü" data-detay="Zemin Etüdü Raporu" id="zeminEtuduRaporu">Zemin Etüdü Raporu</li>  
+              <li data-kurum="Zemin Etüdü" data-detay="Zemin İyileştirme" id="zeminIyilestirme">Zemin İyileştirme</li>  
+            </ul>  
+          </div>  
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
+            <span class="alt-baslik-ikon">📁</span>  
+            Projeler
+            <span class="alt-kutu-arrow">&#9654;</span>  
+          </div>  
+          <div class="alt-kutu-icerik">  
+            <ul>  
+              <li data-kurum="Projeler" data-detay="Mimari Proje" id="mimariProje">Mimari</li>  
+              <li data-kurum="Projeler" data-detay="Statik Proje" id="statikProje">Statik</li>  
+              <!--<li data-kurum="Projeler" data-detay="Elektrik">Elektrik</li>  -->
+              <li data-kurum="Projeler" data-detay="Tesisat Projesi" id="tesisatProje">Tesisat</li>  
+              <li data-kurum="Projeler" data-detay="HES Projesi" id="hesProje">HES</li>  
+              <li data-kurum="Projeler" data-detay="Akustik Proje" id="akustikProje">Akustik</li>  
+              <!--<li data-kurum="Projeler" data-detay="Asansör">Asansör</li>  -->
+            </ul>  
+          </div>  
+        </div>  
+      </div>
+
+      <div class="surec-section" id="tab-ruhsat">  
+        <button class="evrak-ekle-btn">Evrak Ekle</button>  
+      </div>
+
+      <div class="surec-section mb-4" id="tab-uretim">
+        <div class="uretim-tabs-row">
+          <button id="btnKaba" class="uretim-tab-btn active"><span class="uretim-ikon">🧱</span> Kaba Üretim</button>
+          <button id="btnInce" class="uretim-tab-btn"><span class="uretim-ikon">🎨</span> İnce Üretim</button>
+        </div>
+        <!-- Kaba Üretim Adımları -->
+        <div class="uretim-kategori" id="kabaUretim" style="display:block;">
+          <div class="uretim-steps-row w-100 mx-auto" style="max-width:980px;"></div>
+        </div>
+        <!-- İnce Üretim Adımları (boş şablon) -->
+        <div class="uretim-kategori" id="inceUretim" style="display:none;">
+          <div class="uretim-steps-row w-100 mx-auto" style="max-width:980px;justify-content:center;">
+            <span style="font-family:'Varela Round', Arial,sans-serif;color:#7b8399;font-size:1.13rem;opacity:0.8;">İnce üretim adımları burada listelenecek…</span>
+        </div>
       </div>
     </div>
-  </div>
 
 
     <!-- Dinamik Modal -->
@@ -832,35 +851,38 @@ body {
     // ============ Accordion ==================
 document.querySelectorAll('.alt-baslik-kutu').forEach(function(header) {
   header.addEventListener('click', function(){
-    // Kapatılacak içerik, başlığın hemen sonraki kardeşidir:
-    const content = header.nextElementSibling;
+    let content = header.nextElementSibling;
+    // alt-kutu-icerik yoksa accordion işlemi yapma!
+    if (!content || !content.classList.contains('alt-kutu-icerik')) return;
 
     const isOpen = header.getAttribute('aria-expanded') === 'true';
 
     // Tüm başlık ve içerikleri kapat
     document.querySelectorAll('.alt-baslik-kutu').forEach(h => {
       h.setAttribute('aria-expanded', 'false');
-      h.querySelector('.alt-kutu-arrow').innerHTML = "&#9654;"; // Sağ ok
+      // .alt-kutu-arrow varsa yönünü değiştir, yoksa hata verme
+      let arrow = h.querySelector('.alt-kutu-arrow');
+      if (arrow) arrow.innerHTML = "&#9654;";
     });
     document.querySelectorAll('.alt-kutu-icerik').forEach(c => c.style.display = 'none');
 
-    // Eğer tıklanan zaten açıksa KAPALI bırak, değilse AÇ
-    if(!isOpen){
+    // Aç/kapa işlemi
+    if(content && !isOpen){
       header.setAttribute('aria-expanded','true');
       content.style.display = 'block';
-      header.querySelector('.alt-kutu-arrow').innerHTML = "&#9660;"; // Aşağı ok (isteğe bağlı)
+      let arrow = header.querySelector('.alt-kutu-arrow');
+      if (arrow) arrow.innerHTML = "&#9660;";
     }
   });
 
-  // Klavye ile de çalışsın:
   header.addEventListener('keydown', function(e){
-    if(e.key === "Enter" || e.key === " ") { 
+    if(e.key === "Enter" || e.key === " ") {
       e.preventDefault(); header.click();
     }
   });
 });
 
-// Sayfa ilk yüklendiğinde tüm içerikler kapalı olsun:
+// Başta kapalı başlat
 document.querySelectorAll('.alt-kutu-icerik').forEach(c => c.style.display = 'none');
 
 
@@ -881,6 +903,55 @@ document.querySelectorAll('.alt-kutu-icerik li').forEach(function(item) {
 
     showOdemeEvrakFormIslem(false, true,null,aktifEvrakKurum,null,aktifEvrakId); // (isRadyal=false, isEvrakIsleri=true)
     bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
+  });
+});
+// Sadece alt-kutu-icerik gelmeyen alt-baslik-kutu'lar = Arsa başlıkları olarak tanımlanır!
+document.querySelectorAll('#tab-arsa .alt-baslik-kutu').forEach(function(header){
+  header.addEventListener('click', function(){
+    // İkonun id'sine eriş
+    const ikonSpan = header.querySelector('.alt-baslik-ikon');
+    if (!ikonSpan || !ikonSpan.id) return; // Güvenlik önlemi
+
+    const ikonId = ikonSpan.id;
+    const ikon = ikonSpan.textContent.trim();
+    const baslik = header.textContent.trim();
+    aktifEvrakKurum="Arsa";
+
+    // İd'ye göre işlem yap
+    switch(ikonId) {
+      case "arsaBedeliArsa":
+        // showArsaBedeliModal() gibi bir fonksiyon çağırabilirsin
+        aktifEvrakDetay = "Arsa Bedeli";
+        showOdemeEvrakFormIslem(false, true,null,aktifEvrakKurum,null,ikonId);
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
+        break;
+      case "yerSahibiİleAnlasmaArsa":
+        alert("Yer Sahibi İle Anlaşma tıklandı!");
+        break;
+      case "yerdenCikartmakArsa":
+        aktifEvrakDetay = "Yerden Çıkartmak";
+        showOdemeEvrakFormIslem(false, true,null,aktifEvrakKurum,null,ikonId);
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
+        break;
+      case "kiraBedeliArsa":
+        aktifEvrakDetay = "Kira Bedeli";
+        showOdemeEvrakFormIslem(false, true,null,aktifEvrakKurum,null,ikonId);
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
+        break;
+      case "arsaDigerArsa":
+        aktifEvrakDetay = "Arsa Diğer";
+        showOdemeEvrakFormIslem(false, true,null,aktifEvrakKurum,null,ikonId);
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
+        break;
+      default:
+        alert('Bilinmeyen başlık!');
+    }
+  });
+
+  header.addEventListener('keydown', function(e){
+    if(e.key === "Enter" || e.key === " ") {
+      e.preventDefault(); header.click();
+    }
   });
 });
 function ikonBul(kurum) {
@@ -2330,7 +2401,13 @@ function odemeFormSubmit(e){
 
   console.log("aktifKalemId:",aktifKalemId);
 
-  if(aktifKalemId === "Belediye" || aktifKalemId === "Noter" || aktifKalemId === "Yapı Denetim" || aktifKalemId === "Zemin Etüdü" || aktifKalemId === "Projeler"){
+  if(aktifKalemId === "Belediye" || 
+    aktifKalemId === "Noter" || 
+    aktifKalemId === "Yapı Denetim" || 
+    aktifKalemId === "Zemin Etüdü" || 
+    aktifKalemId === "Projeler" ||
+    aktifKalemId === "Arsa"
+    ){
     kalemKayit = {
       alanAdi: kalemId,
       kalemId: aktifKalemId,

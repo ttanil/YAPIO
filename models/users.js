@@ -474,6 +474,32 @@ const akustikProjeKaydiSchema = new mongoose.Schema({
   aciklama:    { type: String }
 }, { _id: true });
 
+
+const arsaBedeliKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const yerdenCikartmakArsaKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const kiraBedeliArsaKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const arsaDigerArsaKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+
 const arsaBedeliSchema = new mongoose.Schema(defaultFields, { _id: false });
 const yerdenCikartmakSchema = new mongoose.Schema(defaultFields, { _id: false });
 
@@ -539,6 +565,11 @@ const userInputSchema = new mongoose.Schema({
   tesisatProje:[tesisatProjeKaydiSchema],
   hesProje:[hesProjeKaydiSchema],
   akustikProje:[akustikProjeKaydiSchema],
+
+  arsaBedeliArsa:[arsaBedeliKaydiSchema],
+  yerdenCikartmakArsa:[yerdenCikartmakArsaKaydiSchema],
+  kiraBedeliArsa:[kiraBedeliArsaKaydiSchema],
+  arsaDigerArsa:[arsaDigerArsaKaydiSchema],
 
   arsaBedeli: [arsaBedeliSchema],
 
