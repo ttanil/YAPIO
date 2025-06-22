@@ -277,8 +277,8 @@ router.post('/', upload.single('file'), async (req, res) => {
     } else if(process === "readEvrak") {
         try {
             const { userId, projectName, alanAdi, kalemId } = req.body;
-            console.log("alanAdi:",alanAdi);
-            console.log("kalemId:",kalemId);
+            //console.log("alanAdi:",alanAdi);
+            //console.log("kalemId:",kalemId);
 
             if (!userId || !projectName || !alanAdi)
                 return res.status(400).json([]);
