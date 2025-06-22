@@ -210,24 +210,25 @@ router.post('/', upload.single('file'), async (req, res) => {
         return res.json({ success: true });
 
     } else if(process === "saveEvrak"){
-         try {
+         let r2Filename, s3, fileUrl;
+        try {
             const { userId, projectName, aciklama, alanAdi, kalemId } = req.body;
             const file = req.file;
 
             if (!file)
-                return res.status(400).json({ error: 'Dosya yok.' });
+            return res.status(400).json({ error: 'Dosya yok.' });
 
             // 1) Dosya bilgisini hazırla
             const ext = path.extname(file.originalname);
-            const r2Filename = `evraklar/${userId}_${Date.now()}${ext}`;
-            const s3 = getS3Client();
+            r2Filename = `evraklar/${userId}_${Date.now()}${ext}`;
+            s3 = getS3Client();
             await s3.send(new PutObjectCommand({
                 Bucket: BUCKET_NAME,
                 Key: r2Filename,
                 Body: file.buffer,
                 ContentType: file.mimetype
             }));
-            const fileUrl = `${PUBLIC_BASE_URL}/${r2Filename}`;
+            fileUrl = `${PUBLIC_BASE_URL}/${r2Filename}`;
             const dokumanKaydi = {
                 alanAdi,
                 kalemId,
@@ -237,34 +238,47 @@ router.post('/', upload.single('file'), async (req, res) => {
                 aciklama: aciklama || "",
             };
 
-            // 2) Kullanıcıyı ve projesini bul
+            // 2) Kullanıcı ve projeyi bul
             const user = await Users.findById(userId);
             if (!user)
-                return res.status(404).json({ error: 'Kullanıcı bulunamadı.' });
+            throw new Error('Kullanıcı bulunamadı.');
 
             const userInput = user.userInputs.find(p => p.projectName === projectName);
             if (!userInput)
-                return res.status(404).json({ error: 'Proje bulunamadı.' });
+            throw new Error('Proje bulunamadı.');
 
-            // 3) Yalnızca userInput.dokuman dizisine ekle
+            // 3) Doküman dizisine ekle
             if (!Array.isArray(userInput.dokuman)) {
-                userInput.dokuman = [];
+            userInput.dokuman = [];
             }
             userInput.dokuman.push(dokumanKaydi);
-
             user.markModified('userInputs');
             await user.save();
 
             return res.json({ success: true, fileUrl });
 
         } catch (err) {
-            console.error("saveEvrak HATA:", err);
+            // Eğer dosya yüklendiyse ve hata burada olduysa dosyayı Cloudflare'dan sil!
+            if (r2Filename && s3) {
+            try {
+                await s3.send(new DeleteObjectCommand({
+                    Bucket: BUCKET_NAME,
+                    Key: r2Filename,
+                }));
+                //console.log('Başarısız kayıt: Cloudflare R2 dosyası silindi:', r2Filename);
+            } catch (delErr) {
+                //console.error('Dosya Cloudflare R2’dan silinemedi:', delErr);
+            }
+            }
+            //console.error("saveEvrak HATA:", err);
             return res.status(500).json({ error: err.message || 'Kayıt sırasında hata oluştu' });
         }
 
     } else if(process === "readEvrak") {
         try {
             const { userId, projectName, alanAdi, kalemId } = req.body;
+            console.log("alanAdi:",alanAdi);
+            console.log("kalemId:",kalemId);
 
             if (!userId || !projectName || !alanAdi)
                 return res.status(400).json([]);
@@ -296,64 +310,226 @@ router.post('/', upload.single('file'), async (req, res) => {
 
     } else if(process === "deleteEvrak") {
         try {
-        const { userId, projectName, evrakId, alanAdi, kalemId } = req.body;
+            const { userId, projectName, evrakId, alanAdi, kalemId } = req.body;
 
-        if (!userId || !projectName || !evrakId || !alanAdi)
+            if (!userId || !projectName || !evrakId || !alanAdi)
+                return res.status(400).json({ error: 'Eksik parametre.' });
+
+            const user = await Users.findById(userId);
+            if (!user) return res.status(404).json({ error: 'Kullanıcı bulunamadı.' });
+
+            const userInput = user.userInputs.find(p => p.projectName === projectName);
+            if (!userInput) return res.status(404).json({ error: 'Proje bulunamadı.' });
+
+            if (!Array.isArray(userInput.dokuman)) return res.json({ ok: true });
+
+            // Silinecek index’i ve dosya bilgisini bul
+            const index = userInput.dokuman.findIndex(ev => 
+                String(ev._id) === String(evrakId) &&
+                String(ev.alanAdi) === String(alanAdi) &&
+                (!kalemId || String(ev.kalemId) === String(kalemId))
+            );
+
+            if (index === -1)
+                return res.status(404).json({ error: 'Belge bulunamadı.' });
+
+            // Dosya yolunu not al, silmeden önce
+            const silinecekEvrak = userInput.dokuman[index];
+            const filePath = silinecekEvrak?.path;
+            
+            // Diziden çıkar
+            userInput.dokuman.splice(index, 1);
+            user.markModified('userInputs');
+            await user.save();
+
+            // Dosya silme işlemi - Cloudflare’dan sil
+            // Sadece path'ten dosya adını/parçasını çekiyoruz
+            if (filePath) {
+                try {
+                    // filePath: "https://public-url/evraklar/xxx.pdf"
+                    // KENDİ bucket key'ini alıyoruz (ör: "evraklar/xxx.pdf")
+                    const key = filePath.split(`${PUBLIC_BASE_URL}/`)[1];
+                    if (key) {
+                        const s3 = getS3Client();
+                        await s3.send(new DeleteObjectCommand({
+                            Bucket: BUCKET_NAME,
+                            Key: key
+                        }));
+                    }
+                } catch(deleteErr) {
+                    console.error("Cloudflare dosya silme hatası:", deleteErr.message);
+                    // ama DB'den silme işlemi tamamlandı, kullanıcıyı engelleme
+                }
+            }
+
+            return res.json({ ok: true });
+            
+        } catch (err) {
+            console.error("deleteEvrak HATA:", err);
+            return res.status(500).json({ error: err.message || 'Silme sırasında hata oluştu.' });
+        }
+    } else if(process === "saveAnaPara"){
+        try {
+            const { userId, projectName, tip, tutar } = req.body;
+
+            if (!userId || !projectName || !tip || !tutar)
             return res.status(400).json({ error: 'Eksik parametre.' });
 
-        const user = await Users.findById(userId);
-        if (!user) return res.status(404).json({ error: 'Kullanıcı bulunamadı.' });
+            const user = await Users.findById(userId);
+            if (!user) return res.status(404).json({ error: 'Kullanıcı bulunamadı.' });
 
-        const userInput = user.userInputs.find(p => p.projectName === projectName);
-        if (!userInput) return res.status(404).json({ error: 'Proje bulunamadı.' });
+            const userInput = user.userInputs.find(p => p.projectName === projectName);
+            if (!userInput) return res.status(404).json({ error: 'Proje bulunamadı.' });
 
-        if (!Array.isArray(userInput.dokuman)) return res.json({ ok: true });
+            // ANA KISIM: Yeni anaPara kaydını push et
+            userInput.anaPara.push({
+                tip,
+                tutar // bu Number olmalı, gerekirse Number(tutar) yap
+            });
 
-        // Silinecek index’i ve dosya bilgisini bul
-        const index = userInput.dokuman.findIndex(ev => 
-            String(ev._id) === String(evrakId) &&
-            String(ev.alanAdi) === String(alanAdi) &&
-            (!kalemId || String(ev.kalemId) === String(kalemId))
-        );
+            // Tüm kullanıcıyı kaydet
+            await user.save();
 
-        if (index === -1)
-            return res.status(404).json({ error: 'Belge bulunamadı.' });
-
-        // Dosya yolunu not al, silmeden önce
-        const silinecekEvrak = userInput.dokuman[index];
-        const filePath = silinecekEvrak?.path;
-        
-        // Diziden çıkar
-        userInput.dokuman.splice(index, 1);
-        user.markModified('userInputs');
-        await user.save();
-
-        // Dosya silme işlemi - Cloudflare’dan sil
-        // Sadece path'ten dosya adını/parçasını çekiyoruz
-        if (filePath) {
-            try {
-                // filePath: "https://public-url/evraklar/xxx.pdf"
-                // KENDİ bucket key'ini alıyoruz (ör: "evraklar/xxx.pdf")
-                const key = filePath.split(`${PUBLIC_BASE_URL}/`)[1];
-                if (key) {
-                    const s3 = getS3Client();
-                    await s3.send(new DeleteObjectCommand({
-                        Bucket: BUCKET_NAME,
-                        Key: key
-                    }));
-                }
-            } catch(deleteErr) {
-                console.error("Cloudflare dosya silme hatası:", deleteErr.message);
-                // ama DB'den silme işlemi tamamlandı, kullanıcıyı engelleme
-            }
+            return res.json({ success: true });
+        } catch (err) {
+            return res.status(500).json({ error: err.message || 'DB Ana para ekleme sırasında hata oluştu.' });
         }
 
-        return res.json({ ok: true });
-        
-    } catch (err) {
-        console.error("deleteEvrak HATA:", err);
-        return res.status(500).json({ error: err.message || 'Silme sırasında hata oluştu.' });
-    }
+    } else if (process === "readAnaPara") {
+        try {
+            const { userId, projectName } = req.body;
+            if (!userId || !projectName) {
+                return res.status(400).json({ error: "Kullanıcı veya proje eksik." });
+            }
+
+            const user = await Users.findById(userId);
+            if (!user) return res.status(404).json({ error: "Kullanıcı bulunamadı." });
+
+            const userInput = user.userInputs.find(p => p.projectName === projectName);
+            if (!userInput) return res.status(404).json({ error: "Proje bulunamadı." });
+
+            // Sadece tip ve tutar alanlarını eşle
+            const anaParaList = (userInput.anaPara || []).map(entry => ({
+                tip: entry.tip,
+                tutar: entry.tutar
+            }));
+
+            return res.json({ success: true, anaPara: anaParaList });
+        } catch (err) {
+            return res.status(500).json({ error: err.message || "Ana para okuma sırasında hata oluştu." });
+        }
+    } else if(process === "deleteAnaPara"){
+        try {
+            const { userId, projectName } = req.body;
+            if (!userId || !projectName) {
+            return res.status(400).json({ error: 'Eksik parametre!' });
+            }
+
+            const user = await Users.findById(userId);
+            if (!user) return res.status(404).json({ error: 'Kullanıcı bulunamadı!' });
+
+            const userInput = user.userInputs.find(p => p.projectName === projectName);
+            if (!userInput) return res.status(404).json({ error: 'Proje bulunamadı!' });
+
+            // Ana kaydı ve tüm altParaları sil
+            userInput.anaPara = [];         // anaPara bir dizi ise, tamamen boşalt
+            userInput.altPara = [];         // altPara dizisini tamamen sıfırla
+
+            await user.save();
+
+            return res.json({ success: true });
+        } catch (err) {
+            return res.status(500).json({ error: err.message || 'Ana kayıtları silerken hata oluştu.' });
+        }
+    } else if(process === "saveAltPara"){
+        try {
+            const { userId, projectName, tip, tutar, tarih, aciklama } = req.body;
+            if (!userId || !projectName || !tip || !tutar || !tarih || !aciklama)
+            return res.status(400).json({ error: 'Eksik parametre.' });
+
+            const user = await Users.findById(userId);
+            if (!user) return res.status(404).json({ error: 'Kullanıcı bulunamadı.' });
+
+            const userInput = user.userInputs.find(p => p.projectName === projectName);
+            if (!userInput) return res.status(404).json({ error: 'Proje bulunamadı.' });
+
+            // Alt para ekle
+            userInput.altPara.push({ tip, tutar, tarih, aciklama });
+
+            // Son eklenen obje
+            const yeniAltPara = userInput.altPara[userInput.altPara.length - 1];
+
+            await user.save();
+
+            // DİKKAT: _id artık Mongo tarafından atanmış!
+            return res.json({
+            success: true,
+            altPara: {
+                tip: yeniAltPara.tip,
+                tutar: yeniAltPara.tutar,
+                tarih: yeniAltPara.tarih,
+                aciklama: yeniAltPara.aciklama,
+                _id: yeniAltPara._id    // <-- KRİTİK!
+            }
+            });
+        } catch (err) {
+            return res.status(500).json({ error: err.message || 'DB Alt para ekleme sırasında hata oluştu.' });
+        }
+    } else if(process === "readAltPara"){
+        try {
+            const { userId, projectName } = req.body;
+            if (!userId || !projectName) {
+                return res.status(400).json({ error: "Kullanıcı veya proje eksik." });
+            }
+
+            const user = await Users.findById(userId);
+            if (!user) return res.status(404).json({ error: "Kullanıcı bulunamadı." });
+
+            const userInput = user.userInputs.find(p => p.projectName === projectName);
+            if (!userInput) return res.status(404).json({ error: "Proje bulunamadı." });
+
+            // Sadece tip ve tutar alanlarını eşle
+            const altParaList = (userInput.altPara || []).map(entry => ({
+                tip: entry.tip,
+                tutar: entry.tutar,
+                tarih:entry.tarih,
+                aciklama:entry.aciklama,
+                _id: entry._id
+            }));
+
+            return res.json({ success: true, altPara: altParaList });
+        } catch (err) {
+            return res.status(500).json({ error: err.message || "Ana para okuma sırasında hata oluştu." });
+        }
+    } else if (process === "deleteAltPara") {
+        try {
+            const { userId, projectName, altParaId } = req.body;
+            if (!userId || !projectName || !altParaId) {
+            return res.status(400).json({ error: "Eksik bilgi." });
+            }
+
+            const user = await Users.findById(userId);
+            if (!user) return res.status(404).json({ error: "Kullanıcı bulunamadı." });
+
+            const userInput = user.userInputs.find(p => p.projectName === projectName);
+            if (!userInput) return res.status(404).json({ error: "Proje bulunamadı." });
+
+            // ID eşleşmesiyle altPara silme
+            const eskiUzunluk = (userInput.altPara || []).length;
+            userInput.altPara = (userInput.altPara || []).filter(
+            altpara => !(altpara._id && altpara._id.toString() === altParaId)
+            );
+            const yeniUzunluk = (userInput.altPara || []).length;
+
+            if (eskiUzunluk === yeniUzunluk) {
+            return res.status(404).json({ error: "Kayıt bulunamadı veya zaten silinmiş." });
+            }
+
+            await user.save();
+            return res.json({ success: true });
+        } catch (err) {
+            return res.status(500).json({ error: err.message || "Silme sırasında hata oluştu." });
+        }
     }
 });
 

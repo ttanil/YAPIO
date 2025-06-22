@@ -433,10 +433,6 @@
   </nav> 
 
   <div class="custom-short-menu" id="regulation-button-area">
-      <a class="menu-btn" id="quatation-button" href="#">
-          <img src="img/pay1_1.png" alt="">
-          <span>Giderler</span>
-      </a>
       <a class="menu-btn" id="sold-button" href="#">
           <img src="/img/property.png" alt="">
           <span>Satış</span>
@@ -490,7 +486,7 @@
     
     const projectNameString = document.getElementById("projectName");
     const buttonHome = document.getElementById("buttonHome");
-    const quatationButton = document.getElementById("quatation-button"); 
+    //const quatationButton = document.getElementById("quatation-button"); 
     const soldButton = document.getElementById("sold-button"); 
     const genelToplamText = document.getElementById("genelToplamText");
     const mKareMaliyetText = document.getElementById("mKareMaliyetText");
@@ -1513,9 +1509,11 @@
         window.location.href = "/";
     });
 
+    /*
     quatationButton.addEventListener("click", () => {
         window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
     });
+    */
     soldButton.addEventListener("click", () => {
         window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
     });

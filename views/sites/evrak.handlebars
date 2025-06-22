@@ -497,6 +497,29 @@ body {
   #modalContentGenel .card {
     width: 90vw;
   }
+
+  .card, .alert, .form-control { font-size: 1rem; }
+  #modalContentGenel { padding: 1rem 0.5rem; }
+  button, input, select { font-size: 1.04rem; }
+  .buton-sil-altpara {
+    font-size: 0.75rem !important;
+    padding: 0.3rem 0.7rem !important;
+    border-radius: 0.55em !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    min-width: 30px !important;
+    min-height: 20px !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+  }
+  .buton-sil-altpara i {
+    font-size: 0.8em !important;
+    margin-right: 3px !important;
+    vertical-align: middle !important;
+    line-height: normal !important;
+  }
 }
 
 /* --- Ekstra - Scrollbarlarını yumuşatmak isteyenler için (isteğe bağlı) --- */
@@ -576,10 +599,6 @@ body {
     </nav> 
 
     <div class="custom-short-menu" id="regulation-button-area">
-        <a class="menu-btn" id="quatation-button" href="#">
-            <img src="img/pay1_1.png" alt="">
-            <span>Giderler</span>
-        </a>
         <a class="menu-btn" id="graphs-button" href="#">
             <img src="img/growth_1.png" alt="">
             <span>Analizler</span>
@@ -760,7 +779,7 @@ body {
     import { showWarningMessage } from '/js/showMessage.js';
 
     const projectNameString = document.getElementById("projectName");
-    const quatationButton = document.getElementById("quatation-button"); 
+    //const quatationButton = document.getElementById("quatation-button"); 
     const graphsButton = document.getElementById("graphs-button");
     const soldButton = document.getElementById("sold-button");
     const buttonHome = document.getElementById("buttonHome");
@@ -920,13 +939,14 @@ document.querySelectorAll('#tab-arsa .alt-baslik-kutu').forEach(function(header)
     // İd'ye göre işlem yap
     switch(ikonId) {
       case "arsaBedeliArsa":
-        // showArsaBedeliModal() gibi bir fonksiyon çağırabilirsin
         aktifEvrakDetay = "Arsa Bedeli";
         showOdemeEvrakFormIslem(false, true,null,aktifEvrakKurum,null,ikonId);
         bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
         break;
       case "yerSahibiİleAnlasmaArsa":
-        alert("Yer Sahibi İle Anlaşma tıklandı!");
+        aktifEvrakDetay = "Yer Sahibi İle Anlaşma";
+        showYerSahibiAnlasmaModal(false, true,null,aktifEvrakKurum,null,ikonId);
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
         break;
       case "yerdenCikartmakArsa":
         aktifEvrakDetay = "Yerden Çıkartmak";
@@ -2415,7 +2435,6 @@ function odemeFormSubmit(e){
       toplamTutar,
       aciklama
     };
-    console.log("kalemKayit:",kalemKayit);
     if(aciklama && toplamTutar > 0 && tarih && aktifKalemId) {
       showLoader();
       fetch('/evrak', {
@@ -2718,6 +2737,7 @@ function fileToPdfBlob(file) {
 }
 
 function evrakGuncelleDinamik(alanAdi, kalemId) {
+    console.log(alanAdi, kalemId);
     const ul = document.getElementById('evrakListesi');
     fetch('/evrak', {
         method: 'POST',
@@ -2732,6 +2752,7 @@ function evrakGuncelleDinamik(alanAdi, kalemId) {
     })
     .then(r => r.json())
     .then(veri => {
+      console.log("veri:",veri);
         ul.innerHTML = '';
         if (!veri || veri.length === 0) {
             ul.innerHTML = `<li class="list-group-item text-secondary">Evrak yok veya yüklenmemiş.</li>`;
@@ -2835,15 +2856,478 @@ function isMobileDevice() {
   // Modern tarayıcılar için oldukça güvenli kontrol
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
+
+async function showYerSahibiAnlasmaModal(
+  isRadyal = false, isEvrakIsleri = false, geriHandler = null, altKalemId = null, kayitDizisi = null, kalemIdInput
+) {
+  let alanAciklamasi = '';
+  aktifKalemId = altKalemId;
+  kalemId = kalemIdInput;
+  if (isEvrakIsleri) {
+    alanAciklamasi = `<div class="alert alert-info py-2 mb-2"> <b>${aktifEvrakKurum} - ${aktifEvrakDetay}</b> işlemi için ödeme ve evrak ekleyin.</div>`;
+  }
+  kayitDizisi = kayitDizisi || "";
+  let secilenKalem = null;
+  if (Array.isArray(kayitDizisi)) {
+    secilenKalem = kayitDizisi.find(x => x.id === altKalemId);
+  }
+  const birimListesi =
+    secilenKalem && secilenKalem.birimler ? secilenKalem.birimler : ["adet"];
+
+  document.getElementById('modalContentGenel').innerHTML = `
+    <h5>Yer Sahibi ile Anlaşma</h5>
+    <div style="color: #6c757d; font-size: 0.98em; margin-bottom:18px;">
+      Arsa için yer sahibi ile kat karşılığı ve/veya para alma/verme üzerine anlaşılmışsa ilgili yerlere giriniz.
+    </div>
+    <div id="paraOzetAlani" class="alert alert-secondary py-2 mb-3" style="display:none;">
+      <b>Girilen Bilgiler:</b>
+      <ul class="list-unstyled mb-0" id="listeOzet"></ul>
+      <div class="d-flex justify-content-between align-items-center gap-2 mt-2 flex-wrap">
+        <div>
+          <span id="toplamTutarAlani" class="fw-bold text-primary" style="display:none;">Toplam: 0 TL</span>
+          <span id="kalanTutarAlani" class="fw-bold text-success" style="display:none; margin-left:12px;">Kalan: 0 TL</span>
+        </div>
+        <button type="button" id="tumKayitlariSilBtn" class="btn btn-outline-danger btn-sm" style="display:none;">Tüm Kayıtları Sil</button>
+      </div>
+    </div>
+    <div id="paraAlanContainer"></div>
+    
+    <hr class="my-3" style="border-color: #cbd5e1; border-width: 4.5px 0 0 0; opacity:.88;" />
+    
+    <button class="btn btn-primary mb-2" id="daireSecBtn">Daire Seç</button>
+    <div class="card mt-3">
+      <div class="card-body" id="anlasmaSonucInfo" style="font-size:1em;">
+        31.05.2025 tarihinde,<br>
+        <b>Zemin Kat</b><br>
+        2 m², 1+1 + 1+1<br>
+        Yer Sahibine Verildi
+      </div>
+    </div>
+
+    <hr class="my-3" style="border-color: #cbd5e1; border-width: 4.5px 0 0 0; opacity:.88;" />
+    <div class="card shadow-sm mb-0 w-100 mt-4 mb-3">
+      <div class="card-header bg-light">
+        <b class="text-primary"><i class="fa-solid fa-paperclip"></i> Evrak Yükle</b>
+      </div>
+      <div class="card-body pt-3 pb-2">
+        <form id="evrakFormDinamik" data-alanadi="yerSahibiAnlasma" data-kalemid="">
+          <div class="input-group mb-2">
+            <input type="file" class="form-control" id="evrakDosya" name="file" required>
+          </div>
+          <div class="mb-2">
+            <input type="text" class="form-control" id="evrakAciklama" maxlength="100" placeholder="Açıklama (opsiyonel)">
+          </div>
+          <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-upload"></i> Yükle</button>
+          </div>
+        </form>
+        <hr>
+        <div>
+          <h6 class="mb-1 text-secondary">Yüklenen Evraklar:</h6>
+          <ul class="list-group file-list" id="evrakListesi" style="font-size:0.97rem;"></ul>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('daireSecBtn').onclick = function() {
+    window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
+  };
+
+  let paraListesi = [];
+  let anaTip = null;
+
+  const anaParaCevap = await readAnaPara();
+
+  if (
+    anaParaCevap && anaParaCevap.success &&
+    Array.isArray(anaParaCevap.anaPara) &&
+    anaParaCevap.anaPara.length > 0
+  ) {
+    // Eğer ana para kaydı varsa
+    const anaKayit = {
+      type: anaParaCevap.anaPara[0].tip,
+      tutar: Number(anaParaCevap.anaPara[0].tutar),
+      ana: true
+    };
+    paraListesi.push(anaKayit);
+    anaTip = anaKayit.type;
+
+    // ALT PARALARI DB'DEN GETİR VE GÖSTER
+    const altParaCevap = await readAltPara();
+    if (
+      altParaCevap && altParaCevap.success &&
+      Array.isArray(altParaCevap.altPara) &&
+      altParaCevap.altPara.length > 0
+    ) {
+      altParaCevap.altPara.forEach(rec => {
+        paraListesi.push({
+          type: rec.tip,
+          tutar: Number(rec.tutar),
+          aciklama: rec.aciklama,
+          tarih: rec.tarih,
+          ana: false,
+          _id: rec._id  // id eksik olmasın!
+        });
+      });
+    }
+
+    updateParaOzet();
+    // önce paraAlanContainer'ı detay paneli için hazırla
+    document.getElementById("paraAlanContainer").innerHTML = `<div id="detayKayitPanel"></div>`;
+    detayKayitPaneli();
+    return;
+  }
+
+  // Ana para kaydı yoksa önce giriş panelini ve detay paneli alanını göster
+  anaKayitPaneli();
+
+  // ----------------- ALT FONKSİYONLAR -----------------
+
+  function updateParaOzet() {
+    const ozet = document.getElementById("paraOzetAlani");
+    const liste = document.getElementById("listeOzet");
+    const tumSilBtn = document.getElementById("tumKayitlariSilBtn");
+    const toplamTutarAlani = document.getElementById("toplamTutarAlani");
+    const kalanTutarAlani = document.getElementById("kalanTutarAlani");
+
+    if (!paraListesi.length) {
+      ozet.style.display = "none";
+      if (tumSilBtn) tumSilBtn.style.display = "none";
+      if (toplamTutarAlani) toplamTutarAlani.style.display = "none";
+      if (kalanTutarAlani) kalanTutarAlani.style.display = "none";
+      return;
+    }
+    ozet.style.display = "";
+    liste.innerHTML = "";
+
+    const toplam = paraListesi
+      .filter(p => p.ana === false)
+      .reduce((sum, p) => sum + (Number(p.tutar) || 0), 0);
+
+    const anaKayit = paraListesi.find(p => p.ana === true);
+    const anaTipLocal = anaKayit ? anaKayit.type : null;
+    const anaTutarLocal = anaKayit ? Number(anaKayit.tutar) : null;
+
+    paraListesi.forEach((p, idx) => {
+      const aciklamaStr = p.aciklama ? `, Açıklama: ${p.aciklama}` : '';
+      const tarihStr = p.tarih ? `, Tarih: ${p.tarih}` : '';
+      let satir = '';
+
+      if (p.ana) {
+        satir = `<b>${p.type === "alinacak" ? "Alınacak" : "Verilecek"} Para (ana): ${Number(p.tutar).toLocaleString()} TL</b>`;
+        const li = document.createElement("li");
+        li.innerHTML = satir;
+        liste.appendChild(li);
+      } else if (p._id) {
+        // Responsive list item: mobilde alt alta, masaüstünde yan yana
+        const detayEtiket = p.type === "alinacak" ? "Alınan" : "Verilen";
+        satir = `${detayEtiket} Para: ${Number(p.tutar).toLocaleString()} TL${aciklamaStr}${tarihStr}`;
+        const li = document.createElement("li");
+        li.className = "row g-2 align-items-center mb-2";
+
+        li.innerHTML = `
+          <div class="col-12 col-md-8">
+            <span>${satir}</span>
+          </div>
+          <div class="col-12 col-md-4 text-md-end mt-2 mt-md-0">
+            <button type="button" class="btn btn-danger btn-sm buton-sil-altpara px-3"
+              title="Sil" data-satir-index="${idx}" data-altpara-id="${p._id}">
+              <i class="fa fa-trash"></i> Sil
+            </button>
+          </div>
+        `;
+        liste.appendChild(li);
+      }
+    });
+
+    // Sil butonlarına event atamaları
+    liste.querySelectorAll('button[data-satir-index]').forEach(b => {
+      b.onclick = async function () {
+        const index = parseInt(this.getAttribute('data-satir-index'));
+        const altParaId = this.getAttribute('data-altpara-id');
+        const userConfirm = await showWarningMessage("Kayıt silinsin mi?", "evet", false);
+        if (!userConfirm) return;
+        if (!isNaN(index)) {
+          // Sadece DB'den gelmiş bir alt para ise silmeye çalış!
+          if (altParaId) {
+            if (userConfirm) {
+              showLoader();
+              const response = await fetch('/evrak', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                  process: "deleteAltPara",
+                  userId,
+                  projectName,
+                  altParaId
+                })
+              });
+              const resData = await response.json();
+              if (resData.success) {
+                // Frontend'den de kaldır
+                paraListesi.splice(index, 1);
+                updateParaOzet();
+                hideLoader();
+              } else {
+                showWarningMessage("Silme işlemi başarısız!", "tamam", false);
+              }
+            }
+          } else {
+            // Henüz DB'ye gitmemiş, frontend'de eklenen silinirse:
+            paraListesi.splice(index, 1);
+            updateParaOzet();
+          }
+        }
+      };
+    });
+
+    if (tumSilBtn) {
+      tumSilBtn.style.display = paraListesi.length > 0 ? "" : "none";
+      tumSilBtn.onclick = async function () {
+        const userConfirm = await showWarningMessage("Kayıt silinsin mi?", "evet", false);
+        if (!userConfirm) return;
+        if (userConfirm) {
+          await deleteAnaPara();
+          paraListesi = [];
+          anaTip = null;
+          updateParaOzet();
+          anaKayitPaneli();
+        }
+      };
+    }
+    if (toplamTutarAlani) {
+      toplamTutarAlani.textContent = `Toplam: ${toplam.toLocaleString()} TL`;
+      toplamTutarAlani.style.display = "";
+    }
+    if (kalanTutarAlani) {
+      if (anaTutarLocal !== null && anaTipLocal) {
+        const kalan = anaTutarLocal - toplam;
+        kalanTutarAlani.textContent = `Kalan: ${kalan.toLocaleString()} TL`;
+        kalanTutarAlani.style.display = "";
+      } else {
+        kalanTutarAlani.style.display = "none";
+      }
+    }
+  }
+
+  function anaKayitPaneli() {
+    document.getElementById("paraAlanContainer").innerHTML = `
+      <div id="anaParaSatiri" class="row align-items-end mb-3 gy-2">
+        <div class="col-12 col-md-5">
+          <select id="anaParaTipi" class="form-select">
+            <option value="alinacak">Alınacak Para</option>
+            <option value="verilecek">Verilecek Para</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-5">
+          <input type="number" id="anaParaTutari" class="form-control" min="0" placeholder="Ana Tutar">
+        </div>
+        <div class="col-12 col-md-2">
+          <button type="button" id="anaParaEkleBtn" class="btn btn-success w-100" disabled>Ekle</button>
+        </div>
+      </div>
+      <div id="detayKayitPanel"></div>
+    `;
+
+    const ekleBtn = document.getElementById("anaParaEkleBtn");
+    const tutarInput = document.getElementById("anaParaTutari");
+
+    // Tutar değiştiğinde butonu aktifleştir/deaktive et
+    tutarInput.addEventListener('input', function () {
+      const value = this.value.trim();
+      ekleBtn.disabled = !(value && !isNaN(value) && Number(value) > 0);
+    });
+
+    ekleBtn.onclick = async function () {
+      const tip = document.getElementById("anaParaTipi").value;
+      const tutar = tutarInput.value.trim();
+      if (!tutar || isNaN(tutar) || Number(tutar) <= 0) return;
+      const data = {
+        tip,
+        tutar: Number(tutar)
+      };
+
+      await saveAnaPara(data);
+
+      paraListesi.push({ type: tip, tutar: Number(tutar), ana: true });
+      anaTip = tip;
+      updateParaOzet();
+
+      // sadece bilgi mesajı değişiyor, detay panel DOM'da KALDIĞI için panel kaybolmaz!
+      document.getElementById("anaParaSatiri").innerHTML = `
+        <div class="alert alert-info mb-2">Ana kayıt eklendi: ${tip === "alinacak" ? "Alınacak" : "Verilecek"} Para, ${Number(tutar).toLocaleString()} TL</div>
+      `;
+      detayKayitPaneli();
+    };
+  }
+
+  function detayKayitPaneli() {
+    const detayDiv = document.getElementById("detayKayitPanel");
+    if (!detayDiv) return;
+    detayDiv.innerHTML = `
+      <div class="row align-items-end mb-3 gy-2" id="ekSatir">
+        <div class="col-12 col-md-4">
+          <input type="text" id="paraAciklama" class="form-control" maxlength="100" placeholder="Açıklama (opsiyonel)">
+        </div>
+        <div class="col-12 col-md-3">
+          <input type="number" id="paraDetayTutar" class="form-control" min="0" placeholder="Tutar">
+        </div>
+        <div class="col-12 col-md-3">
+          <input type="date" id="paraTarih" class="form-control" value="${new Date().toISOString().split('T')[0]}">
+        </div>
+        <div class="col-12 col-md-2">
+          <button type="button" id="ekBilgiKaydetBtn" class="btn btn-primary w-100">Kaydet</button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("ekBilgiKaydetBtn").onclick = async function () {
+      const aciklama = document.getElementById("paraAciklama").value.trim();
+      const tutar = document.getElementById("paraDetayTutar").value.trim();
+      const tarih = document.getElementById("paraTarih").value;
+      if (!tutar || isNaN(tutar) || Number(tutar) <= 0) {
+        showWarningMessage("Tutar giriniz.", "tamam", false);
+        return;
+      }
+      if (!aciklama) {
+        showWarningMessage("Açıklama giriniz.", "tamam", false);
+        return;
+      }
+      const data = {
+        tip: anaTip,
+        tutar: Number(tutar),
+        aciklama: aciklama,
+        tarih: tarih
+      };
+
+      const saveRes = await saveAltPara(data);
+      if (saveRes && saveRes.success && saveRes.altPara && saveRes.altPara._id) {
+        paraListesi.push({
+          type: saveRes.altPara.tip,
+          tutar: Number(saveRes.altPara.tutar),
+          aciklama: saveRes.altPara.aciklama,
+          tarih: saveRes.altPara.tarih,
+          ana: false,
+          _id: saveRes.altPara._id
+        });
+        updateParaOzet();
+        document.getElementById("paraAciklama").value = "";
+        document.getElementById("paraDetayTutar").value = "";
+        document.getElementById("paraTarih").value = new Date().toISOString().split('T')[0];
+      } else {
+        showWarningMessage("Kayıt eklenemedi, tekrar deneyin!", "tamam", false);
+      }
+    };
+  }
+}
+
+async function saveAnaPara(data){
+  showLoader();
+      fetch('/evrak', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            process: "saveAnaPara",
+            userId,
+            projectName,
+            tip: data.tip,
+            tutar: data.tutar
+          })
+        })
+      .then(r => r.json())
+      .finally(() => {
+        hideLoader();
+    });
+}
+async function readAnaPara(){
+  showLoader();
+    try {
+      const response = await fetch('/evrak', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          process: "readAnaPara",
+          userId,
+          projectName
+        })
+      });
+      const data = await response.json();
+      return data; // backend'den gelen obje: {success: true, anaPara: [...]}
+    } finally {
+      hideLoader();
+    }
+}
+async function deleteAnaPara(){
+  showLoader();
+  try {
+    const response = await fetch('/evrak', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        process: "deleteAnaPara",
+        userId,
+        projectName
+      })
+    });
+    const resData = await response.json();
+    return resData;
+  } finally {
+    hideLoader();
+  }
+}
+async function saveAltPara(data) {
+  showLoader();
+  try {
+    const response = await fetch('/evrak', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        process: "saveAltPara",
+        userId,
+        projectName,
+        tip: data.tip,
+        tutar: data.tutar,
+        tarih: data.tarih,
+        aciklama: data.aciklama
+      })
+    });
+    const resData = await response.json();
+    return resData; // <-- EN KRİTİK KISIM!
+  } finally {
+    hideLoader();
+  }
+}
+async function readAltPara(){
+  showLoader();
+    try {
+      const response = await fetch('/evrak', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          process: "readAltPara",
+          userId,
+          projectName
+        })
+      });
+      const data = await response.json();
+      return data; // backend'den gelen obje: {success: true, anaPara: [...]}
+    } finally {
+      hideLoader();
+    }
+}
+
 window.silEvrakSunucu = silEvrakSunucu;
 window.evrakGuncelleDinamik = evrakGuncelleDinamik;
 window.showEvrakModal = showEvrakModal;
 
 
 
+    /*
     quatationButton.addEventListener("click", () => {
         window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
     });
+    */
     graphsButton.addEventListener("click", () => {
         window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
     });

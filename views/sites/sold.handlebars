@@ -471,10 +471,12 @@
   </nav> 
 
   <div class="custom-short-menu" id="regulation-button-area">
+    <!--
       <a class="menu-btn" id="quatation-button" href="#">
           <img src="img/pay1_1.png" alt="">
           <span>Giderler</span>
       </a>
+      -->
       <a class="menu-btn" id="graphs-button" href="#">
           <img src="img/growth_1.png" alt="">
           <span>Analizler</span>
@@ -634,7 +636,7 @@
     const paymentButton = document.querySelector(".payment-button");
     const paymentModalBody = document.getElementById('paymentModalBody');
     const loginButton = document.getElementById("loginButton");
-    const quatationButton = document.getElementById("quatation-button");
+    //const quatationButton = document.getElementById("quatation-button");
     const documentButton = document.getElementById("document-button");
 
     let userId = null;
@@ -754,9 +756,11 @@
     loginButton.addEventListener("click", () => {
         window.location.href = "/";
     });
+    /*
     quatationButton.addEventListener("click", () => {
         window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
     });
+    */
     graphsButton.addEventListener("click", () => {
       window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
     });

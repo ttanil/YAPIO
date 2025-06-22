@@ -500,6 +500,19 @@ const arsaDigerArsaKaydiSchema = new mongoose.Schema({
   aciklama:    { type: String }
 }, { _id: true });
 
+const anaParaKaydiSchema = new mongoose.Schema({
+  tip:         { type: String, required: true },
+  tutar:       { type: Number, required: true },
+  tarih:       { type: Date,   default: Date.now }
+}, { _id: true });
+const altParaKaydiSchema = new mongoose.Schema({
+  tip:         { type: String, required: true },
+  tutar:       { type: Number, required: true },
+  tarih:       { type: String, required: true },
+  aciklama:    { type: String, required: true }
+}, { _id: true });
+
+
 const arsaBedeliSchema = new mongoose.Schema(defaultFields, { _id: false });
 const yerdenCikartmakSchema = new mongoose.Schema(defaultFields, { _id: false });
 
@@ -570,6 +583,9 @@ const userInputSchema = new mongoose.Schema({
   yerdenCikartmakArsa:[yerdenCikartmakArsaKaydiSchema],
   kiraBedeliArsa:[kiraBedeliArsaKaydiSchema],
   arsaDigerArsa:[arsaDigerArsaKaydiSchema],
+
+  anaPara:[anaParaKaydiSchema],
+  altPara:[altParaKaydiSchema],
 
   arsaBedeli: [arsaBedeliSchema],
 

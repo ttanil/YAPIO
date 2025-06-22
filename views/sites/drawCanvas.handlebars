@@ -549,10 +549,12 @@
             <img src="img/edit.png" alt="">
             <span>Düzenle</span>
         </a>
+        <!--
         <a class="menu-btn" id="quatation-button" href="#">
             <img src="img/pay1_1.png" alt="">
             <span>Giderler</span>
         </a>
+        -->
         <a class="menu-btn" id="graphs-button" href="#">
             <img src="img/growth_1.png" alt="">
             <span>Analizler</span>
@@ -642,7 +644,7 @@
         //const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
         const regulationButton = document.getElementById("regulation-button");
         const regulationButtonArea = document.getElementById("regulation-button-area");
-        const quatationButton = document.getElementById("quatation-button"); 
+        //const quatationButton = document.getElementById("quatation-button"); 
         const graphsButton = document.getElementById("graphs-button"); 
         const buildingContainer = document.getElementById("building-container");
         const projectNameString = document.getElementById("projectName");  
@@ -1048,9 +1050,11 @@
         regulationButton.addEventListener("click", () => {
             window.location.href = `/bina?projectName=${encodeURIComponent(projectName)}`;
         });
+        /*
         quatationButton.addEventListener("click", () => {
             window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
         });
+        */
         graphsButton.addEventListener("click", () => {
            window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
         });

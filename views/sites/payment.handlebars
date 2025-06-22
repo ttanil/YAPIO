@@ -299,13 +299,15 @@
                 <button class="btn nav-link dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">  
                 Menü  
                 </button>  
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">  
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                  <!--
                   <li>
                       <a class="dropdown-item d-flex align-items-center" id="quatation-button" href="#">
                           <img src="img/pay1_1.png" alt="" style="width:19px; height:19px; margin-right:8px;">
                           Giderler
                       </a>
                     </li>
+                  -->
                     <li>
                       <a class="dropdown-item d-flex align-items-center" id="graphs-button" href="#">
                           <img src="/img/growth_1.png" alt="" style="width:19px; height:19px; margin-right:8px;">
@@ -534,8 +536,8 @@
     import { showWarningMessage } from '/js/showMessage.js';
     const navbarCollapse = document.getElementById('navbarNav');  
     const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
-    const quatationButton = document.getElementById("quatation-button"); 
-    const quatationButtonMobile = document.getElementById("quatation-button-mobile");
+    //const quatationButton = document.getElementById("quatation-button"); 
+    //const quatationButtonMobile = document.getElementById("quatation-button-mobile");
     const graphsButton = document.getElementById("graphs-button"); 
     const graphsButtonMobile = document.getElementById("graphs-button-mobile");
     const buildingContainer = document.getElementById("building-container");
@@ -608,12 +610,14 @@
 
   });
 
+    /*
     quatationButton.addEventListener("click", () => {
         window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
     });
     quatationButtonMobile.addEventListener("click", () => {
         window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
     });
+    */
 
     graphsButton.addEventListener("click", () => {
         window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
