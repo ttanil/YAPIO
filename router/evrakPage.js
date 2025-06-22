@@ -277,8 +277,6 @@ router.post('/', upload.single('file'), async (req, res) => {
     } else if(process === "readEvrak") {
         try {
             const { userId, projectName, alanAdi, kalemId } = req.body;
-            //console.log("alanAdi:",alanAdi);
-            //console.log("kalemId:",kalemId);
 
             if (!userId || !projectName || !alanAdi)
                 return res.status(400).json([]);
@@ -529,6 +527,44 @@ router.post('/', upload.single('file'), async (req, res) => {
             return res.json({ success: true });
         } catch (err) {
             return res.status(500).json({ error: err.message || "Silme sırasında hata oluştu." });
+        }
+    } else if(process === "readYerSahibi"){
+        try {
+            const { userId, projectName } = req.body;
+            if (!userId || !projectName) {
+                return res.status(400).json({ error: "Kullanıcı veya proje eksik." });
+            }
+
+            const user = await Users.findById(userId);
+            if (!user) return res.status(404).json({ error: "Kullanıcı bulunamadı." });
+
+            const userInput = user.userInputs.find(p => p.projectName === projectName);
+            if (!userInput) return res.status(404).json({ error: "Proje bulunamadı." });
+
+            // --- Tüm building verisini ilgili projeden al:
+            const buildingData = Array.isArray(userInput.building) ? userInput.building : [];
+
+            // Her anlaşma kaydının yanına, building datasından eşleşeni ekle:
+            const yerSahibiIleAnlasmaList = (userInput.yerSahibiIleAnlasma || []).map(entry => {
+                // Aynı rowNumber ile eşleşen building verisini (birden fazla ise ilkini al, istersen dizi dönebilirsin)
+                const matchedBuilding = buildingData.find(b => String(b.rowNumber) === String(entry.rowNumber));
+                // Eğer birden fazla eşleşen olabilir diyorsan (çoklu daire/alan için), şunu kullanabilirsin:
+                // const matchedBuildings = buildingData.filter(b => String(b.rowNumber) === String(entry.rowNumber));
+
+                return {
+                    tarih: entry.tarih,
+                    rowNumber: entry.rowNumber,
+                    unit: entry.unit,
+                    tutar: entry.tutar,
+                    not: entry.not,
+                    buildingDetail: matchedBuilding || null
+                    // Eğer çoklu istersen: buildingDetails: matchedBuildings
+                };
+            });
+
+            return res.json({ success: true, yerSahibiIleAnlasma: yerSahibiIleAnlasmaList });
+        } catch (err) {
+            return res.status(500).json({ error: err.message || "Ana para okuma sırasında hata oluştu." });
         }
     }
 });

@@ -2874,60 +2874,79 @@ async function showYerSahibiAnlasmaModal(
   const birimListesi =
     secilenKalem && secilenKalem.birimler ? secilenKalem.birimler : ["adet"];
 
-  document.getElementById('modalContentGenel').innerHTML = `
-    <h5>Yer Sahibi ile Anlaşma</h5>
-    <div style="color: #6c757d; font-size: 0.98em; margin-bottom:18px;">
-      Arsa için yer sahibi ile kat karşılığı ve/veya para alma/verme üzerine anlaşılmışsa ilgili yerlere giriniz.
-    </div>
-    <div id="paraOzetAlani" class="alert alert-secondary py-2 mb-3" style="display:none;">
-      <b>Girilen Bilgiler:</b>
-      <ul class="list-unstyled mb-0" id="listeOzet"></ul>
-      <div class="d-flex justify-content-between align-items-center gap-2 mt-2 flex-wrap">
-        <div>
-          <span id="toplamTutarAlani" class="fw-bold text-primary" style="display:none;">Toplam: 0 TL</span>
-          <span id="kalanTutarAlani" class="fw-bold text-success" style="display:none; margin-left:12px;">Kalan: 0 TL</span>
-        </div>
-        <button type="button" id="tumKayitlariSilBtn" class="btn btn-outline-danger btn-sm" style="display:none;">Tüm Kayıtları Sil</button>
-      </div>
-    </div>
-    <div id="paraAlanContainer"></div>
-    
-    <hr class="my-3" style="border-color: #cbd5e1; border-width: 4.5px 0 0 0; opacity:.88;" />
-    
-    <button class="btn btn-primary mb-2" id="daireSecBtn">Daire Seç</button>
-    <div class="card mt-3">
-      <div class="card-body" id="anlasmaSonucInfo" style="font-size:1em;">
-        31.05.2025 tarihinde,<br>
-        <b>Zemin Kat</b><br>
-        2 m², 1+1 + 1+1<br>
-        Yer Sahibine Verildi
-      </div>
-    </div>
+  // YER SAHİBİ ANLAŞMALARI BACKEND'DEN ÇEK  
+  const yerSahibiCevap = await readYerSahibi();  
+  let anlasmaHTML = "";  
+  if (yerSahibiCevap && yerSahibiCevap.success && Array.isArray(yerSahibiCevap.yerSahibiIleAnlasma)) {  
+    if (yerSahibiCevap.yerSahibiIleAnlasma.length > 0) {  
+      anlasmaHTML = yerSahibiCevap.yerSahibiIleAnlasma  
+        .map(entry => `
+          <div class="card mb-2">
+            <div class="card-body px-3 py-2" style="font-size:1em;">
+              <div><b>${entry.tarih || ''}</b></div>
+              <div>${entry.buildingDetail.kat || ''}</div>
+              ${entry.buildingDetail.tipi ? `<div>${entry.buildingDetail.tipi}</div>` : ''}
+              ${entry.not ? `<div class="mt-1 text-secondary"><b>${entry.not}</b></div>` : ''}
+            </div>
+          </div>
+        `).join('');  
+    } else {  
+      anlasmaHTML = `<div class="text-muted small">Kayıt yok.</div>`;  
+    }  
+  } else {  
+    anlasmaHTML = `<div class="text-muted small">Veri alınamadı.</div>`;  
+  }  
 
-    <hr class="my-3" style="border-color: #cbd5e1; border-width: 4.5px 0 0 0; opacity:.88;" />
-    <div class="card shadow-sm mb-0 w-100 mt-4 mb-3">
-      <div class="card-header bg-light">
-        <b class="text-primary"><i class="fa-solid fa-paperclip"></i> Evrak Yükle</b>
-      </div>
-      <div class="card-body pt-3 pb-2">
-        <form id="evrakFormDinamik" data-alanadi="yerSahibiAnlasma" data-kalemid="">
-          <div class="input-group mb-2">
-            <input type="file" class="form-control" id="evrakDosya" name="file" required>
-          </div>
-          <div class="mb-2">
-            <input type="text" class="form-control" id="evrakAciklama" maxlength="100" placeholder="Açıklama (opsiyonel)">
-          </div>
-          <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-upload"></i> Yükle</button>
-          </div>
-        </form>
-        <hr>
-        <div>
-          <h6 class="mb-1 text-secondary">Yüklenen Evraklar:</h6>
-          <ul class="list-group file-list" id="evrakListesi" style="font-size:0.97rem;"></ul>
-        </div>
-      </div>
-    </div>
+  document.getElementById('modalContentGenel').innerHTML = `  
+    <h5>Yer Sahibi ile Anlaşma</h5>  
+    <div style="color: #6c757d; font-size: 0.98em; margin-bottom:18px;">  
+      Arsa için yer sahibi ile kat karşılığı ve/veya para alma/verme üzerine anlaşılmışsa ilgili yerlere giriniz.  
+    </div>  
+    <div id="paraOzetAlani" class="alert alert-secondary py-2 mb-3" style="display:none;">  
+      <b>Girilen Bilgiler:</b>  
+      <ul class="list-unstyled mb-0" id="listeOzet"></ul>  
+      <div class="d-flex justify-content-between align-items-center gap-2 mt-2 flex-wrap">  
+        <div>  
+          <span id="toplamTutarAlani" class="fw-bold text-primary" style="display:none;">Toplam: 0 TL</span>  
+          <span id="kalanTutarAlani" class="fw-bold text-success" style="display:none; margin-left:12px;">Kalan: 0 TL</span>  
+        </div>  
+        <button type="button" id="tumKayitlariSilBtn" class="btn btn-outline-danger btn-sm" style="display:none;">Tüm Kayıtları Sil</button>  
+      </div>  
+    </div>  
+    <div id="paraAlanContainer"></div>  
+    
+    <hr class="my-3" style="border-color: #cbd5e1; border-width: 4.5px 0 0 0; opacity:.88;" />  
+    
+    <button class="btn btn-primary mb-2" id="daireSecBtn">Daire Seç</button>  
+
+    <div id="anlasmaSonucInfoContainer">  
+      ${anlasmaHTML}  
+    </div>  
+
+    <hr class="my-3" style="border-color: #cbd5e1; border-width: 4.5px 0 0 0; opacity:.88;" />  
+    <div class="card shadow-sm mb-0 w-100 mt-4 mb-3">  
+      <div class="card-header bg-light">  
+        <b class="text-primary"><i class="fa-solid fa-paperclip"></i> Evrak Yükle</b>  
+      </div>  
+      <div class="card-body pt-3 pb-2">  
+        <form id="evrakFormDinamik" data-alanadi="yerSahibiAnlasma" data-kalemid="">  
+          <div class="input-group mb-2">  
+            <input type="file" class="form-control" id="evrakDosya" name="file" required>  
+          </div>  
+          <div class="mb-2">  
+            <input type="text" class="form-control" id="evrakAciklama" maxlength="100" placeholder="Açıklama (opsiyonel)">  
+          </div>  
+          <div class="d-flex justify-content-end">  
+            <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-upload"></i> Yükle</button>  
+          </div>  
+        </form>  
+        <hr>  
+        <div>  
+          <h6 class="mb-1 text-secondary">Yüklenen Evraklar:</h6>  
+          <ul class="list-group file-list" id="evrakListesi" style="font-size:0.97rem;"></ul>  
+        </div>  
+      </div>  
+    </div>  
   `;
 
   document.getElementById('daireSecBtn').onclick = function() {
@@ -3253,7 +3272,7 @@ async function readAnaPara(){
         })
       });
       const data = await response.json();
-      return data; // backend'den gelen obje: {success: true, anaPara: [...]}
+      return data;
     } finally {
       hideLoader();
     }
@@ -3293,7 +3312,7 @@ async function saveAltPara(data) {
       })
     });
     const resData = await response.json();
-    return resData; // <-- EN KRİTİK KISIM!
+    return resData;
   } finally {
     hideLoader();
   }
@@ -3312,6 +3331,26 @@ async function readAltPara(){
       });
       const data = await response.json();
       return data; // backend'den gelen obje: {success: true, anaPara: [...]}
+    } finally {
+      hideLoader();
+    }
+}
+
+async function readYerSahibi(){
+  showLoader();
+    try {
+      const response = await fetch('/evrak', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          process: "readYerSahibi",
+          userId,
+          projectName
+        })
+      });
+      const data = await response.json();
+      console.log("data:",data);
+      return data;
     } finally {
       hideLoader();
     }
