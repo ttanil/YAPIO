@@ -477,13 +477,13 @@
           <span>Giderler</span>
       </a>
       -->
-      <a class="menu-btn" id="graphs-button" href="#">
-          <img src="img/growth_1.png" alt="">
-          <span>Analizler</span>
-      </a>
       <a class="menu-btn" id="document-button" href="#">
           <img src="/img/document.png" alt="">
           <span>Evraklar</span>
+      </a>
+      <a class="menu-btn" id="graphs-button" href="#">
+          <img src="img/growth_1.png" alt="">
+          <span>Analizler</span>
       </a>
   </div>
 
@@ -856,7 +856,8 @@
                 odaMetreKare.textContent = detayDaire.m2 + " m²";
                 
                 if(model !== "1 (dükkan, depo vs)"){
-                    odaTipi.innerHTML = `${model}&nbsp;${detayDaire.tip}`;
+                    //odaTipi.innerHTML = `${model}&nbsp;${detayDaire.tip}`;
+                    odaTipi.innerHTML = `${detayDaire.tip}`;
                     odaTipiText.style.display = "flex";
                 } else{
                     odaTipi.innerHTML = `${detayDaire.tip}`;

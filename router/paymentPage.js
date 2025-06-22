@@ -103,10 +103,10 @@ router.get('/', authenticateUser, async (req, res) => {
 
 // 1) Ödeme başlatıcı  
 router.post('/', authenticateUser, async (req, res) => {  
-    const { fullName, email, projectNumber, userType, projectLimit, cardNumber = '', instalment } = req.body || {};  
+    const { projectNumber, userType, projectLimit, cardNumber = '', instalment } = req.body || {};  
     const userId = res.locals.user._id || res.locals.user.id;  
 
-    if (!userId || !fullName || !email || !projectNumber || !userType || !projectLimit)  
+    if (!userId || !projectNumber || !userType || !projectLimit)  
         return res.status(400).json({ success: false, message: "Eksik bilgi." });  
 
     if ((projectLimit === 2 && userType === "premium2" && parseInt(projectNumber) > 2)   
@@ -157,7 +157,7 @@ router.post('/', authenticateUser, async (req, res) => {
                     instalment: Instalment,  
                     status: "pending",  
                     paymentStartedAt: new Date(),  
-                    meta: { fullName, email, userType, projectNumber }  
+                    meta: { userType, projectNumber }  
                 }  
             }  
         });  

@@ -276,78 +276,6 @@
     <button class="btn custom-btn" id="loginButton">PROJELER</button>  
   </nav>
 
-  <!-- Navbar -->  
-  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm mt-4 container-navbar">  
-    <div class="container-fluid">  
-      <!-- Proje Adı -->  
-      <h4 class="navbar-brand" id="projectName"></h4>  
-      <!-- Ana Sayfa Butonu -->  
-      <button class="btn d-flex navbar-home-button" id="buttonHome">  
-        <img src="/img/home1_1.png" alt="Katlar Görseli" class="img-fluid rounded">  
-      </button>  
-      <!-- Hamburger Menü -->  
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"  
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">  
-        <span class="navbar-toggler-icon"></span>  
-      </button>  
-  
-      <!-- Menu: Mobilde sağdan, büyük ekranda klasik dropdown -->  
-      <div class="collapse navbar-collapse" id="navbarNav">  
-        <!-- Masaüstü: Dropdown Menüsü -->  
-        <ul class="navbar-nav ms-auto d-none d-lg-flex">  
-            <li class="nav-item dropdown">  
-                <button class="btn nav-link dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">  
-                Menü  
-                </button>  
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                  <!--
-                  <li>
-                      <a class="dropdown-item d-flex align-items-center" id="quatation-button" href="#">
-                          <img src="img/pay1_1.png" alt="" style="width:19px; height:19px; margin-right:8px;">
-                          Giderler
-                      </a>
-                    </li>
-                  -->
-                    <li>
-                      <a class="dropdown-item d-flex align-items-center" id="graphs-button" href="#">
-                          <img src="/img/growth_1.png" alt="" style="width:19px; height:19px; margin-right:8px;">
-                          Analizler
-                      </a>
-                  </li> 
-                  <li>
-                      <a class="dropdown-item d-flex align-items-center" id="sold-button" href="#">
-                          <img src="/img/property.png" alt="" style="width:19px; height:19px; margin-right:8px;">
-                          Satış
-                      </a>
-                  </li> 
-                </ul> 
-              </li>
-        </ul>  
-        <!-- Mobilde: Menü Seçenekleri En Sağa Yaslı -->  
-        <ul class="navbar-nav ms-auto d-lg-none justify-content-end text-end mobile-navbar-menu">
-          <li>
-              <a class="dropdown-item-mobile d-flex align-items-center" id="quatation-button-mobile" href="#">
-                  <img src="img/pay1_1.png" alt="" style="width:19px; height:19px; ">
-                  Giderler
-              </a>
-          </li>
-          <li>
-            <a class="dropdown-item-mobile d-flex align-items-center" id="graphs-button-mobile" href="#">
-                <img src="/img/growth_1.png" alt="" style="width:19px; height:19px; ">
-                Analizler
-            </a>
-        </li>
-        <li>
-            <a class="dropdown-item-mobile d-flex align-items-center" id="sold-button-mobile" href="#">
-                <img src="/img/property.png" alt="" style="width:19px; height:19px; ">
-                Satış
-            </a>
-        </li> 
-        </ul>  
-      </div>  
-    </div>
-  </nav>
-
 
   
   <div class="payment-container pb-5 mb-5">
@@ -386,14 +314,6 @@
                     <label class="form-label" for="feeInput">Fiyat</label>
                     <input type="text" id="feeInput" class="form-control" value="3800 ₺" readonly>
                 </div>
-            </div>
-            <div class="mb-3">
-                <label for="userFullName" class="form-label">Ad Soyad</label>
-                <input type="text" class="form-control" id="userFullName" placeholder="Adınızı giriniz" required>
-            </div>
-            <div class="mb-3">
-                <label for="userEmail" class="form-label">E-posta</label>
-                <input type="email" class="form-control" id="userEmail" placeholder="E-posta adresiniz" required>
             </div>
             <!--
             <div class="mb-3">
@@ -534,17 +454,9 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script type="module">
     import { showWarningMessage } from '/js/showMessage.js';
-    const navbarCollapse = document.getElementById('navbarNav');  
-    const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
-    //const quatationButton = document.getElementById("quatation-button"); 
-    //const quatationButtonMobile = document.getElementById("quatation-button-mobile");
-    const graphsButton = document.getElementById("graphs-button"); 
-    const graphsButtonMobile = document.getElementById("graphs-button-mobile");
-    const buildingContainer = document.getElementById("building-container");
-    const soldButton = document.getElementById("sold-button"); 
-    const soldButtonMobile = document.getElementById("sold-button-mobile");
-    const buttonHome = document.getElementById("buttonHome");
+
     const loginButton = document.getElementById("loginButton");
+    const buildingContainer = document.getElementById("building-container");
     const fullName = document.getElementById('userFullName');
     const email = document.getElementById('userEmail');
     //const bankaRadio = document.getElementById('bankaRadio');
@@ -564,24 +476,6 @@
     // DOM yüklendiğinde işlem başlat  
     document.addEventListener("DOMContentLoaded", () => {  
       event.preventDefault();
-      // 1- Menü dışındaki herhangi bir yere tıklanınca  
-      document.addEventListener('click', function (event) {  
-          if (navbarCollapse.classList.contains('show')) {  
-              // Eğer tıklanan yer menü veya hamburger değilse menüyü kapat  
-              if (!navbarCollapse.contains(event.target) &&  
-                  event.target !== document.querySelector('.navbar-toggler')  
-                  ) { bsCollapse.hide(); }  
-          }  
-      });  
-
-      // 2- Menü içerisindeki bir bağlantıya tıklanırsa kapansın
-      navbarCollapse.querySelectorAll('.nav-link').forEach(function (link) {  
-          link.addEventListener('click', function () {  
-          if (navbarCollapse.classList.contains('show')) {  
-              bsCollapse.hide();  
-          }  
-          });  
-      });
 
       showWarningMessage("Daha fazla proje oluşturmak için üyeliğinizi yenileyin", "tamam", false);
 
@@ -597,6 +491,8 @@
       projectName = window.user.project.projectName;
       userType = window.user.userType;
 
+      userId = window.user.userId;
+      
       if(userId){
           loginButton.style.display = "block";
       } else{
@@ -610,33 +506,11 @@
 
   });
 
-    /*
-    quatationButton.addEventListener("click", () => {
-        window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
-    });
-    quatationButtonMobile.addEventListener("click", () => {
-        window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
-    });
-    */
+  loginButton.addEventListener("click", () => {
+      //window.location.href = `/?userId=${encodeURIComponent(userId)}`;
+      window.location.href = "/";
+  });
 
-    graphsButton.addEventListener("click", () => {
-        window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
-    });
-    graphsButtonMobile.addEventListener("click", () => {
-        window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
-    });
-    soldButton.addEventListener("click", () => {
-        window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
-    });
-    soldButtonMobile.addEventListener("click", () => {
-        window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
-    });
-    buttonHome.addEventListener("click", () => {  
-        window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
-    });
-    loginButton.addEventListener("click", () => {
-        window.location.href = "/";
-    });
 
     // ilk açılışta doğru fiyatı göster
     function setInitialFee() {
@@ -652,11 +526,9 @@
     });
 
     document.getElementById('paymentForm').addEventListener('input', function() {
-        const adDolu = fullName.value.trim().length > 0;
-        const mailDolu = email.value.trim().length > 0;
         const kvkkOk = kvkkCheck.checked;
         const mesafeOk = mesafeCheck.checked;
-        payBtn.disabled = !(adDolu && mailDolu && kvkkOk && mesafeOk);
+        payBtn.disabled = !(kvkkOk && mesafeOk);
     });
 
     document.getElementById('paymentForm').addEventListener('submit', async function(e) {
@@ -664,8 +536,6 @@
         const projectLimit = limit4.checked ? 4 : 2;
         // Backend’e fetch ile gönder, gelen ödeme linkine yönlendir:
         const data = {
-            fullName: fullName.value,
-            email: email.value,
             userId,
             projectNumber,
             userType,
