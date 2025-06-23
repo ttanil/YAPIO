@@ -449,7 +449,7 @@
   </div>  
 
   <!-- KPI Kartı Burada -->
-  <div class="d-flex justify-content-center gap-4 mt-4">  
+  <div class="d-flex justify-content-center gap-4 mt-4 mb-4">  
     <div class="kpi-kart">  
       <div class="kpi-baslik">Toplam Gider</div>  
       <div class="kpi-sayi" id="genelToplamText">0</div>  
@@ -499,87 +499,252 @@
     let userProjectInfos = null;
 
     let arsaBedeliTutar = 0;
+    let yerSahibiAlinanParaTutar = 0;
+    let yerSahibiVerilenParaTutar = 0;
+    let yerSahibiDaireMetreKare = 0;
     let santiyeKurulumuTutar = 0;
     let arsaGiderleriToplam = 0;
+    let yerdenCikartmakTutar = 0;
     let kiraBedeliTutar = 0;
     let arsaDigerTutar = 0;
-    let mimariProjeTutar = 0;
-    let statikProjeTutar = 0;
-    let haritaciTutar = 0;
-    let tesisatProjeTutar = 0;
-    let elektrikProjeTutar = 0;
-    let asansorProjeTutar = 0;
-    let dogalgazProjeTutar = 0;
-    let akustikProjeTutar = 0;
-    let santiyeSefiTutar = 0;
-    let fenniMesulJeoTutar = 0;
-    let fenniMesulHaritaciTutar = 0;
-    let katIrtifaTutar = 0;
-    let enerjiKimligiTutar = 0;
-    let projeDigerTutar = 0;
-    let projelerGiderleriToplam = 0;
-    let belediyeTutar = 0;
-    let noterOdemeleriTutar = 0;
-    let yapidenetimTutar = 0;
-    let kadastroTutar = 0;
-    let zeminEtuduTutar = 0;
-    let santiyeElektrikTutar = 0;
-    let kentselDonusumTutar = 0;
-    let SSKTutar = 0;
-    let tapuTutar = 0;
-    let emlakcıTutar = 0;
-    let reklamTutar = 0;
-    let avukatTutar = 0;
-    let vergilerTutar = 0;
-    let kurumlarDigerTutar = 0;
-    let kurumlarGiderleriToplam = 0;
-    let isMakinalariTutar = 0;
-    let betonTutar = 0;
-    let demirTutar = 0;
-    let suYalitimiTemelTutar = 0;
-    let duvarOrmeTutar = 0;
-    let catiTutar = 0;
-    let uretimKabaDigerTutar = 0;
-    let kabaUretimGiderleriToplam = 0;
-    let suTesisatiTutar = 0;
-    let elektrikTesisatiTutar = 0;
-    let mermerTutar = 0;
-    let pencerelerTutar = 0;
-    let sivaTutar = 0;
-    let mantolamaTutar = 0;
-    let kapilarTutar = 0;
-    let islakZeminYalitimlariTutar = 0;
-    let seramiklerTutar = 0;
-    let parkelerTutar = 0;
-    let vitrifiyelerTutar = 0;
-    let bataryalarTutar = 0;
-    let stropiyerAlcıpanTutar = 0;
-    let mutfakTutar = 0;
-    let ankastreTutar = 0;
-    let iklimlendirmeTutar = 0;
-    let korkulukVePerforjeTutar = 0;
-    let soveTutar = 0;
+    let belediyeGiderleriToplam = 0;
+    let aplikasyonTutar = 0;
+    let imarDurumuTutar = 0;
+    let kanalKotuTutar = 0;
+    let ruhsatHarciTutar = 0;
+    let zeminEtuduHarciTutar = 0;
+    let noterGiderleriToplam = 0;
+    let muteahhitlikSozlesmesiTutar = 0;
+    let vekaletSozlesmesiTutar = 0;
+    let yapiDenetimToplam = 0;
+    let yapiDenetimHarciTutar = 0;
+    let fenniJeolojiTutar = 0;
+    let fenniHaritaciTutar = 0;
+    let zeminEtuduToplam = 0;
+    let zeminEtuduRaporuTutar = 0;
+    let zeminIyilestirmeTutar = 0;
+    let projelerToplam = 0;
+    let mimariTutar = 0;
+    let statikTutar = 0;
+    let tesisatTutar = 0;
+    let hesTutar = 0;
+    let akustikTutar = 0;
+    let evrakToplam = 0;
+    let ruhsatToplam = 0;
+    let kabaToplam = 0;
+    let santiyeKurmaToplam = 0;
+    let citlemeTutar = 0;
+    let nizamiyeTutar = 0;
+    let konteyner_ofisTutar = 0;
+    let konteyner_yemekTutar = 0;
+    let konteyner_wcTutar = 0;
+    let elektrikTutar = 0;
+    let suTutar = 0;
+    let zemin_betonuTutar = 0;
+    let depoTutar = 0;
+    let jeneratorTutar = 0;
+    let su_deposuTutar = 0;
     let aydinlatmaTutar = 0;
-    let kompozitKaplamaTutar = 0;
-    let peyzajTutar = 0;
-    let uretimInceDigerTutar = 0;
-    let inceUretimGiderleriToplam = 0;
-    let kalipIsciligiTutar = 0;
-    let demirIsciligiTutar = 0;
-    let duvarOrmeIsciligiTutar = 0;
-    let sivaIsciligiTutar = 0;
-    let sapIsciligiTutar = 0;
-    let catiIsciligiTutar = 0;
-    let mantolamaIsciligiTutar = 0;
-    let yalitimIsciligiTutar = 0;
-    let suTesisatiIsciligiTutar = 0;
+    let camasirhaneTutar = 0;
+    let guvenlik_kameraTutar = 0;
+    let yanginTutar = 0;
+    let ilk_yardimTutar = 0;
+    let tasinimTutar = 0;
+    let iskeleTutar = 0;
+    let digerSantiyeTutar = 0;
+    let temelKazmaToplam = 0;
+    let kazi_yapimiTutar = 0;
+    let makine_kiralamaTutar =0 ;
+    let yuklemeTutar = 0;
+    let tasimaTutar = 0;
+    let tesviyeTutar =0 ;
+    let iksaTutar = 0;
+    let drenajTutar = 0;
+    let su_indirimiTutar = 0;
+    let hafriyat_depolamaTutar = 0;
+    let elle_kaziTutar = 0;
+    let kaba_kaziTutar = 0;
+    let ince_kaziTutar = 0;
+    let patlatmaTutar = 0;
+    let kontrollukTutar = 0;
+    let zemin_testTutar =0;
+    let gecici_yolTutar = 0;
+    let guvenlikTutar =0;
+    let digertemelKazmaTutar = 0;
+    let groBetonToplam = 0;
+    let alan_hazirligiTutar = 0;
+    let kalipTutar = 0;
+    let beton_teminiTutar = 0;
+    let gro_beton_sermeTutar = 0;
+    let tesviyeGroTutar = 0;
+    let sikistirmaTutar = 0;
+    let bakimTutar = 0;
+    let numuneTutar = 0;
+    let temizlikTutar = 0;
+    let digerGroTutar = 0;
+    let radyalTemelToplam = 0;
+    let demirTutar = 0;
+    let betonTutar = 0;
+    let telTutar = 0;
+    let civiTutar = 0;
+    let digerRadyalTemelTutar = 0;
+    let perdeBetonuToplam = 0;
+    let demirPerdeBetonuTutar = 0;
+    let betonPerdeBetonuTutar = 0;
+    let telperdeBetonuTutar = 0;
+    let civiPerdeBetonuTutar = 0;
+    let digerPerdeBetonuTutar = 0;
+    let temelIzalasyonuToplam = 0;
+    let su_tutucu_bantTutar = 0;
+    let mebranTutar = 0;
+    let likit_mebranTutar = 0;
+    let drenaj_levhasiTutar = 0;
+    let dolguToplam = 0;
+    let malzeme_teminiTutar = 0;
+    let alan_hazirligiDolguTutar = 0;
+    let sermeTutar = 0;
+    let sikistirmaDolguTutar = 0;
+    let nemlendirmeTutar = 0;
+    let seviye_kontrolTutar = 0;
+    let numuneDolguTutar = 0;
+    let gecici_yolDolguTutar = 0;
+    let atik_tasimaTutar = 0;
+    let drenajDolguTutar = 0;
+    let digerDolguTutar = 0;
+    let suBasmanToplam = 0;
+    let celik_hasirTutar = 0;
+    let betonSubasmanTutar = 0;
+    let digerSubasmanTutar = 0;
+    let zeminBetonuToplam = 0;
+    let demirZeminBetonuTutar = 0;
+    let betonZeminBetonuTutar = 0;
+    let telZeminBetonuTutar = 0;
+    let civiZeminBetonuTutar = 0;
+    let digerZeminBetonuTutar = 0;
+    let katBetonlariToplam = 0;
+    let demirkatBetonlariTutar = 0;
+    let betonkatBetonlariTutar = 0;
+    let telkatBetonlariTutar = 0;
+    let civikatBetonlariTutar = 0;
+    let digerkatBetonlariTutar = 0;
+    let kapamaBetonuToplam = 0;
+    let demirkapamaBetonuTutar = 0;
+    let betonkapamaBetonuTutar = 0;
+    let telkapamaBetonuTutar = 0;
+    let civikapamaBetonuTutar = 0;
+    let digerkapamaBetonuTutar = 0;
+    let catiUygulamaToplam = 0;
+    let keresteTutar = 0;
+    let osbTutar = 0;
+    let cati_izalasyonuTutar = 0;
+    let kiremitTutar = 0;
+    let digercatiUygulamaTutar = 0;
+    let duvarOrmeToplam = 0;
+    let cimentoTutar = 0;
+    let duvar_bloguTutar = 0;
+    let kirecTutar = 0;
+    let kum_cakilTutar = 0;
+    let digerduvarOrmeTutar = 0;
+    let sapToplam = 0;
+    let kumTutar = 0;
+    let cimentoSapTutar = 0;
+    let digerSapTutar = 0;
+    let inceToplam = 0;
+    let zeminUygulamalariToplam = 0;
+    let seramikTutar = 0;
+    let parkeTutar = 0;
+    let mermerTutar = 0;
+    let zeminBoyasiTutar = 0;
+    let epoksiTutar = 0;
+    let digerZeminUygulamalariTutar = 0;
+    let icCepheToplam = 0;
+    let korKasaTutar = 0;
+    let kosebentTutar = 0;
+    let betonAstariTutar = 0;
+    let alciTutar = 0;
+    let cimentoIcCepheTutar = 0;
+    let kumIcCepheTutar = 0;
+    let hazirSivaIcTutar = 0;
+    let icCepheBoyasiTutar = 0;
+    let boyaAstariTutar = 0;
+    let digerIcCepheTutar = 0;
+    let islakMekanlarToplam = 0;
+    let zeminYalitimiTutar = 0;
+    let seramikFayansTutar = 0;
+    let klozetlerTutar = 0;
+    let lavabolarTutar = 0;
+    let banyoDolabiTutar = 0;
+    let dusTeknesiTutar = 0;
+    let banyoBataryasiTutar = 0;
+    let lavaboBataryasiTutar = 0;
+    let digerIslakMekanlarTutar = 0;
+    let mutfakToplam = 0;
+    let tezgahTutar = 0;
+    let mutfakEvyeTutar = 0;
+    let mutfakDolabiTutar = 0;
+    let mutfakBataryasiTutar = 0;
+    let ankastreTutar = 0;
+    let digerMutfakTutar = 0;
+    let pimapenToplam = 0;
+    let pencerelerTutar = 0;
+    let zeminDogramaTutar = 0;
+    let digerPimapenTutar = 0;
+    let kapilarToplam = 0;
+    let odaKapilariTutar = 0;
+    let celikKapilarTutar = 0;
+    let digerKapilarTutar = 0;
+    let korkuluklarToplam = 0;
+    let balkonTutar = 0;
+    let merdivenTutar = 0;
+    let digerKorkuluklarTutar = 0;
+    let disCepheToplam = 0;
+    let hazirSivaDisTutar = 0;
+    let cimentoDisCepheTutar = 0;
+    let kumDisCepheTutar = 0;
+    let disCepheBoyasiTutar = 0;
+    let soveTutar = 0;
+    let boyaAstariDisCepheTutar = 0;
+    let digerDisCepheTutar = 0;
+    let mantolamaToplam = 0;
+    let duvel_montajTutar = 0;
+    let yalitim_levhaTutar = 0;
+    let karbonluEpsTutar = 0;
+    let xpsTutar = 0;
+    let tasYunuTutar = 0;
+    let file_sivaTutar = 0;
+    let kaplama_sivaTutar = 0;
+    let dekoratif_kaplamaTutar = 0;
+    let digerMantolamaTutar = 0;
+    let tavanToplam = 0;
+    let stropiyerTutar = 0;
+    let alcipanTutar = 0;
+    let karolemTutar = 0;
+    let digerTavanTutar = 0;
+    let elektrikTesisatToplam = 0;
     let elektrikIsciligiTutar = 0;
-    let dogalgazIsciligiTutar = 0;
-    let asansorIsciligiTutar = 0;
-    let dekorAlcipanIsciligiTutar = 0;
-    let perforjeIsciligiTutar = 0;
-    let iscilikDigerTutar = 0;
-    let iscilikGiderleriToplam = 0;
+    let digerElektrikTutar = 0;
+    let sihhiTesisatToplam = 0;
+    let pisSuTutar = 0;
+    let temizSuTutar = 0;
+    let isitmaTutar = 0;
+    let digerSihhiTesisatTutar = 0;
+    let dogalgazToplam = 0;
+    let dogalgazKurulumuTutar = 0;
+    let digerDogalgazTutar = 0;
+    let asansorKurulumuToplam = 0;
+    let asansorKurulumuTutar = 0;
+    let digerAsansorTutar = 0;
+    let iklimlendirmeToplam = 0;
+    let kombiTutar = 0;
+    let kombiDolabiTutar = 0;
+    let klimaTutar = 0;
+    let digerIklimlendirmeTutar = 0;
+    let peyzajToplam = 0;
+    let bahceDuvariTutar = 0;
+    let bitkilendirmeTutar = 0;
+    let perforjeTutar = 0;
+    let digerPeyzajTutar = 0;
+
     let genelToplam = 0;
     let mKareMaliyet = 0;
     let mKareToplam = 0;
@@ -595,6 +760,7 @@
         {{/if}};
 
         userProjectInfos = window.user.project || [];
+        console.log("userProjectInfos:",userProjectInfos);
 
         userId = window.user.userId;
         projectName = window.user.project.projectName;
@@ -610,567 +776,795 @@
         }
 
         
-        const arsaBedeli = userProjectInfos.arsaBedeli;
-        if(arsaBedeli.length > 0){
+        const arsaBedeli = userProjectInfos.arsaBedeliArsa;
+        if(Array.isArray(arsaBedeli) && arsaBedeli.length > 0){
           arsaBedeli.forEach(element => {
-            arsaBedeliTutar += parseInt(element.tutar);
+            arsaBedeliTutar += parseInt(element.toplamTutar);
           });
         }
-        
-        const santiyeKurulumu = userProjectInfos.santiyeKurulumu;
-        if(santiyeKurulumu.length > 0){
-          santiyeKurulumu.forEach(element => {
-            santiyeKurulumuTutar += parseInt(element.tutar);
+        const yerSahibiIlePara = userProjectInfos.anaPara;
+        if(Array.isArray(yerSahibiIlePara) && yerSahibiIlePara.length > 0){
+          yerSahibiIlePara.forEach(element => {
+            if(element.tip === "alinacak"){
+              yerSahibiAlinanParaTutar += parseInt(element.tutar);
+            } else if(element.tip === "verilecek"){
+              yerSahibiVerilenParaTutar += parseInt(element.tutar);
+            }
           });
         }
-        let yerdenCıkartmakTutar = 0;
-        const yerdenCıkartmak = userProjectInfos.yerdenCikartmak;
-        if(yerdenCıkartmak.length > 0){
-          yerdenCıkartmak.forEach(element => {
-            yerdenCıkartmakTutar += parseInt(element.tutar);
+        const yerSahibiDaire = userProjectInfos.yerSahibiIleAnlasma;
+        if(Array.isArray(yerSahibiDaire) && yerSahibiDaire.length > 0){
+          yerSahibiDaire.forEach(element => {
+            for (let i=0; i<userProjectInfos.building.length; i++){
+              if(element.rowNumber === userProjectInfos.building[i].rowNumber){
+                yerSahibiDaireMetreKare += parseInt(userProjectInfos.building[i].genelBrutAlan);
+                break;
+              }
+            }
           });
         }
-    
-        const kiraBedeli = userProjectInfos.kiraBedeli;
-        if(kiraBedeli.length > 0){
+        const yerdenCikartmak = userProjectInfos.yerdenCikartmakArsa;
+        if(Array.isArray(yerdenCikartmak) && yerdenCikartmak.length > 0){
+          yerdenCikartmak.forEach(element => {
+            yerdenCikartmakTutar += parseInt(element.toplamTutar);
+          });
+        }
+        const kiraBedeli = userProjectInfos.kiraBedeliArsa;
+        if(Array.isArray(kiraBedeli) && kiraBedeli.length > 0){
           kiraBedeli.forEach(element => {
-            kiraBedeliTutar += parseInt(element.tutar);
+            kiraBedeliTutar += parseInt(element.toplamTutar);
           });
         }
-        
-        const arsaDiger = userProjectInfos.arsaDiger;
-        if(arsaDiger.length > 0){
+        const arsaDiger = userProjectInfos.arsaDigerArsa;
+        if(Array.isArray(arsaDiger) && arsaDiger.length > 0){
           arsaDiger.forEach(element => {
-            arsaDigerTutar += parseInt(element.tutar);
+            arsaDigerTutar += parseInt(element.toplamTutar);
           });
         }
-        arsaGiderleriToplam = arsaBedeliTutar + santiyeKurulumuTutar + yerdenCıkartmakTutar + kiraBedeliTutar + arsaDigerTutar;
+        arsaGiderleriToplam = arsaBedeliTutar + santiyeKurulumuTutar + yerdenCikartmakTutar + kiraBedeliTutar + arsaDigerTutar;
 
-        const mimariProje = userProjectInfos.mimariProje;
-        if(mimariProje.length > 0){
-          mimariProje.forEach(element => {
-            mimariProjeTutar += parseInt(element.tutar);
-          });
-        }
-    
-        const statikProje = userProjectInfos.statikProje;
-        if(statikProje.length > 0){
-          statikProje.forEach(element => {
-            statikProjeTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const haritaci = userProjectInfos.haritaci;
-        if(haritaci.length > 0){
-          haritaci.forEach(element => {
-            haritaciTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const tesisatProje = userProjectInfos.tesisatProje;
-        if(tesisatProje.length > 0){
-          tesisatProje.forEach(element => {
-            tesisatProjeTutar += parseInt(element.tutar);
-          });
-        }
-    
-        const elektrikProje = userProjectInfos.elektrikProje;
-        if(elektrikProje.length > 0){
-          elektrikProje.forEach(element => {
-            elektrikProjeTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const asansorProje = userProjectInfos.asansorProje;
-        if(asansorProje.length > 0){
-          asansorProje.forEach(element => {
-            asansorProjeTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const dogalgazProje = userProjectInfos.dogalgazProje;
-        if(dogalgazProje.length > 0){
-          dogalgazProje.forEach(element => {
-            dogalgazProjeTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const akustikProje = userProjectInfos.akustikProje;
-        if(akustikProje.length > 0){
-          akustikProje.forEach(element => {
-            akustikProjeTutar += parseInt(element.tutar);
-          });
-        }
-    
-        const santiyeSefi = userProjectInfos.santiyeSefi;
-        if(santiyeSefi.length > 0){
-          santiyeSefi.forEach(element => {
-            santiyeSefiTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const fenniMesulJeo = userProjectInfos.fenniMesulJeoloji;
-        if(fenniMesulJeo.length > 0){
-          fenniMesulJeo.forEach(element => {
-            fenniMesulJeoTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const fenniMesulHaritaci = userProjectInfos.fenniMesulHaritaci;
-        if(fenniMesulHaritaci.length > 0){
-          fenniMesulHaritaci.forEach(element => {
-            fenniMesulHaritaciTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const katIrtifa = userProjectInfos.katIrtifaKurma;
-        if(katIrtifa.length > 0){
-          katIrtifa.forEach(element => {
-            katIrtifaTutar += parseInt(element.tutar);
-          });
-        }
-    
-        const enerjiKimligi = userProjectInfos.enerjiKimligi;
-        if(enerjiKimligi.length > 0){
-          enerjiKimligi.forEach(element => {
-            enerjiKimligiTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const projeDiger = userProjectInfos.projeDiger;
-        if(projeDiger.length > 0){
-          projeDiger.forEach(element => {
-            projeDigerTutar += parseInt(element.tutar);
-          });
-        }
-        
-        projelerGiderleriToplam = mimariProjeTutar + statikProjeTutar + haritaciTutar +tesisatProjeTutar + elektrikProjeTutar
-            + asansorProjeTutar + dogalgazProjeTutar + akustikProjeTutar + santiyeSefiTutar + fenniMesulJeoTutar + fenniMesulHaritaciTutar
-            + katIrtifaTutar + enerjiKimligiTutar + projeDigerTutar;
 
-        const belediye = userProjectInfos.belediye;
-        if(belediye.length > 0){
-          belediye.forEach(element => {
-            belediyeTutar += parseInt(element.tutar);
+        const aplikasyonBedeli = userProjectInfos.aplikasyon;
+        if(Array.isArray(aplikasyonBedeli) && aplikasyonBedeli.length > 0){
+          aplikasyonBedeli.forEach(element => {
+            aplikasyonTutar += parseInt(element.toplamTutar);
           });
         }
-    
-        const noterOdemeleri = userProjectInfos.noterOdemeleri;
-        if(noterOdemeleri.length > 0){
-          noterOdemeleri.forEach(element => {
-            noterOdemeleriTutar += parseInt(element.tutar);
+        const imarDurumuBedeli = userProjectInfos.imarDurumuKaydi;
+        if(Array.isArray(imarDurumuBedeli) && imarDurumuBedeli.length > 0){
+          imarDurumuBedeli.forEach(element => {
+            imarDurumuTutar += parseInt(element.toplamTutar);
           });
         }
+        const kanalKotuBedeli = userProjectInfos.kanalKotu;
+        if(Array.isArray(kanalKotuBedeli) && kanalKotuBedeli.length > 0){
+          kanalKotuBedeli.forEach(element => {
+            kanalKotuTutar += parseInt(element.toplamTutar);
+          });
+        }
+        const zeminEtuduHarciBedeli = userProjectInfos.zeminEtuduHarci;
+        if(Array.isArray(zeminEtuduHarciBedeli) && zeminEtuduHarciBedeli.length > 0){
+          zeminEtuduHarciBedeli.forEach(element => {
+            zeminEtuduHarciTutar += parseInt(element.toplamTutar);
+          });
+        }
+        belediyeGiderleriToplam = aplikasyonTutar+imarDurumuTutar+kanalKotuTutar+ruhsatHarciTutar+zeminEtuduHarciTutar;
         
-        const yapidenetim = userProjectInfos.yapiDenetim;
-        if(yapidenetim.length > 0){
-          yapidenetim.forEach(element => {
-            yapidenetimTutar += parseInt(element.tutar);
+        const muteahhitlikSozlesmesiBedeli = userProjectInfos.muteahhitlikSozlesmesi;
+        if(Array.isArray(muteahhitlikSozlesmesiBedeli) && muteahhitlikSozlesmesiBedeli.length > 0){
+          muteahhitlikSozlesmesiBedeli.forEach(element => {
+            muteahhitlikSozlesmesiTutar += parseInt(element.toplamTutar);
           });
         }
-        
-        const kadastro = userProjectInfos.kadastro;
-        if(kadastro.length > 0){
-          kadastro.forEach(element => {
-            kadastroTutar += parseInt(element.tutar);
+        const vekaletSozlesmesiBedeli = userProjectInfos.vekaletSozlesmesi;
+        if(Array.isArray(vekaletSozlesmesiBedeli) && vekaletSozlesmesiBedeli.length > 0){
+          vekaletSozlesmesiBedeli.forEach(element => {
+            vekaletSozlesmesiTutar += parseInt(element.toplamTutar);
           });
         }
-        
-        const zeminEtudu = userProjectInfos.zeminEtudu;
-        if(zeminEtudu.length > 0){
-          zeminEtudu.forEach(element => {
-            zeminEtuduTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const santiyeElektrik = userProjectInfos.santiyeElektrik;
-        if(santiyeElektrik.length > 0){
-          santiyeElektrik.forEach(element => {
-            santiyeElektrikTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const kentselDonusum = userProjectInfos.kentselDonusum;
-        if(kentselDonusum.length > 0){
-          kentselDonusum.forEach(element => {
-            kentselDonusumTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const SSK = userProjectInfos.ssk;
-        if(SSK.length > 0){
-          SSK.forEach(element => {
-            SSKTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const tapu = userProjectInfos.tapu;
-        if(tapu.length > 0){
-          tapu.forEach(element => {
-            tapuTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const emlakcı = userProjectInfos.emlakci;
-        if(emlakcı.length > 0){
-          emlakcı.forEach(element => {
-            emlakcıTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const reklam = userProjectInfos.reklamVeTanitim;
-        if(reklam.length > 0){
-          reklam.forEach(element => {
-            reklamTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const avukat = userProjectInfos.avukat;
-        if(avukat.length > 0){
-          avukat.forEach(element => {
-            avukatTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const vergiler = userProjectInfos.vergiler;
-        if(vergiler.length > 0){
-          vergiler.forEach(element => {
-            vergilerTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const kurumlarDiger = userProjectInfos.kurumlarDiger;
-        if(kurumlarDiger.length > 0){
-          kurumlarDiger.forEach(element => {
-            kurumlarDigerTutar += parseInt(element.tutar);
-          });
-        }
-        
-        kurumlarGiderleriToplam = belediyeTutar + noterOdemeleriTutar + yapidenetimTutar + kadastroTutar + zeminEtuduTutar 
-            + santiyeElektrikTutar + kentselDonusumTutar + SSKTutar + tapuTutar + emlakcıTutar + reklamTutar + avukatTutar + vergilerTutar
-            + kurumlarDigerTutar;
+        noterGiderleriToplam = muteahhitlikSozlesmesiTutar+vekaletSozlesmesiTutar;
 
-        const isMakinalari = userProjectInfos.isMakinalari;
-        if(isMakinalari.length > 0){
-          isMakinalari.forEach(element => {
-            isMakinalariTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const beton = userProjectInfos.beton;
-        if(beton.length > 0){
-          beton.forEach(element => {
-            betonTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const demir = userProjectInfos.demir;
-        if(demir.length > 0){
-          demir.forEach(element => {
-            demirTutar += parseInt(element.tutar);
-          });
-        }
-    
-        const suYalitimiTemel = userProjectInfos.suYalitimiTemel;
-        if(suYalitimiTemel.length > 0){
-          suYalitimiTemel.forEach(element => {
-            suYalitimiTemelTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const duvarOrme = userProjectInfos.duvarOrme;
-        if(duvarOrme.length > 0){
-          duvarOrme.forEach(element => {
-            duvarOrmeTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const cati = userProjectInfos.cati;
-        if(cati.length > 0){
-          cati.forEach(element => {
-            catiTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const uretimKabaDiger = userProjectInfos.uretimKabaDiger;
-        if(uretimKabaDiger.length > 0){
-          uretimKabaDiger.forEach(element => {
-            uretimKabaDigerTutar += parseInt(element.tutar);
-          });
-        }
-        
-        kabaUretimGiderleriToplam = isMakinalariTutar + betonTutar + demirTutar + suYalitimiTemelTutar + duvarOrmeTutar + catiTutar
-            + uretimKabaDigerTutar;
-      
-        const suTesisati = userProjectInfos.suTesisati;
-        if(suTesisati.length > 0){
-          suTesisati.forEach(element => {
-            suTesisatiTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const elektrikTesisati = userProjectInfos.elektrikTesisati;
-        if(elektrikTesisati.length > 0){
-          elektrikTesisati.forEach(element => {
-            elektrikTesisatiTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const mermer = userProjectInfos.mermer;
-        if(mermer.length > 0){
-          mermer.forEach(element => {
-            mermerTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const pencereler = userProjectInfos.pencereler;
-        if(pencereler.length > 0){
-          pencereler.forEach(element => {
-            pencerelerTutar += parseInt(element.tutar);
-          });
-        }
-    
-        const siva = userProjectInfos.siva;
-        if(siva.length > 0){
-          siva.forEach(element => {
-            sivaTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const mantolama = userProjectInfos.mantolama;
-        if(mantolama.length > 0){
-          mantolama.forEach(element => {
-            mantolamaTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const kapilar = userProjectInfos.kapilar;
-        if(kapilar.length > 0){
-          kapilar.forEach(element => {
-            kapilarTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const islakZeminYalitimlari = userProjectInfos.islakZeminYalitmlari;
-        if(islakZeminYalitimlari.length > 0){
-          islakZeminYalitimlari.forEach(element => {
-            islakZeminYalitimlariTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const seramikler = userProjectInfos.seramikler;
-        if(seramikler.length > 0){
-          seramikler.forEach(element => {
-            seramiklerTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const parkeler = userProjectInfos.parkeler;
-        if(parkeler.length > 0){
-          parkeler.forEach(element => {
-            parkelerTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const vitrifiyeler = userProjectInfos.vitrifiyeler;
-        if(vitrifiyeler.length > 0){
-          vitrifiyeler.forEach(element => {
-            vitrifiyelerTutar += parseInt(element.tutar);
-          });
-        }
-    
-        const bataryalar = userProjectInfos.bataryalar;
-        if(bataryalar.length > 0){
-          bataryalar.forEach(element => {
-            bataryalarTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const stropiyerAlcıpan = userProjectInfos.stropiyerAlcipan;
-        if(stropiyerAlcıpan.length > 0){
-          stropiyerAlcıpan.forEach(element => {
-            stropiyerAlcıpanTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const mutfak = userProjectInfos.mutfak;
-        if(mutfak.length > 0){
-          mutfak.forEach(element => {
-            mutfakTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const ankastre = userProjectInfos.ankastre;
-        if(ankastre.length > 0){
-          ankastre.forEach(element => {
-            ankastreTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const iklimlendirme = userProjectInfos.iklimlendirme;
-        if(iklimlendirme.length > 0){
-          iklimlendirme.forEach(element => {
-            iklimlendirmeTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const korkulukVePerforje = userProjectInfos.korkulukVePerforje;
-        if(korkulukVePerforje.length > 0){
-          korkulukVePerforje.forEach(element => {
-            korkulukVePerforjeTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const sove = userProjectInfos.sove;
-        if(sove.length > 0){
-          sove.forEach(element => {
-            soveTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const aydinlatma = userProjectInfos.aydinlatma;
-        if(aydinlatma.length > 0){
-          aydinlatma.forEach(element => {
-            aydinlatmaTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const kompozitKaplama = userProjectInfos.kompozitKaplama;
-        if(kompozitKaplama.length > 0){
-          kompozitKaplama.forEach(element => {
-            kompozitKaplamaTutar += parseInt(element.tutar);
-          });
-        }
-    
-        const peyzaj = userProjectInfos.peyzaj;
-        if(peyzaj.length > 0){
-          peyzaj.forEach(element => {
-            peyzajTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const uretimInceDiger = userProjectInfos.uretimInceDiger;
-        if(uretimInceDiger.length > 0){
-          uretimInceDiger.forEach(element => {
-            uretimInceDigerTutar += parseInt(element.tutar);
-          });
-        }
-        
-        inceUretimGiderleriToplam = suTesisatiTutar + elektrikTesisatiTutar + mermerTutar + pencerelerTutar + sivaTutar + mantolamaTutar
-            + kapilarTutar + islakZeminYalitimlariTutar + seramiklerTutar + parkelerTutar + vitrifiyelerTutar + bataryalarTutar + stropiyerAlcıpanTutar 
-            + mutfakTutar + ankastreTutar + iklimlendirmeTutar + korkulukVePerforjeTutar + soveTutar + aydinlatmaTutar + kompozitKaplamaTutar 
-            + peyzajTutar + uretimInceDigerTutar;
 
-        const kalipIsciligi = userProjectInfos.kalipIsciligi;
-        if(kalipIsciligi.length > 0){
-          kalipIsciligi.forEach(element => {
-            kalipIsciligiTutar += parseInt(element.tutar);
+        const yapiDenetimHarciBedeli = userProjectInfos.yapiDenetimHarci;
+        if(Array.isArray(yapiDenetimHarciBedeli) && yapiDenetimHarciBedeli.length > 0){
+          yapiDenetimHarciBedeli.forEach(element => {
+            yapiDenetimHarciTutar += parseInt(element.toplamTutar);
           });
         }
-        
-        const demirIsciligi = userProjectInfos.demirIsciligi;
-        if(demirIsciligi.length > 0){
-          demirIsciligi.forEach(element => {
-            demirIsciligiTutar += parseInt(element.tutar);
+        const fenniJeolojiBedeli = userProjectInfos.fenniJeoloji;
+        if(Array.isArray(fenniJeolojiBedeli) && fenniJeolojiBedeli.length > 0){
+          fenniJeolojiBedeli.forEach(element => {
+            fenniJeolojiTutar += parseInt(element.toplamTutar);
           });
         }
-        
-        const duvarOrmeIsciligi = userProjectInfos.duvarOrmeIsciligi;
-        if(duvarOrmeIsciligi.length > 0){
-          duvarOrmeIsciligi.forEach(element => {
-            duvarOrmeIsciligiTutar += parseInt(element.tutar);
+        const fenniHaritaciBedeli = userProjectInfos.fenniHaritaci;
+        if(Array.isArray(fenniHaritaciBedeli) && fenniHaritaciBedeli.length > 0){
+          fenniHaritaciBedeli.forEach(element => {
+            fenniHaritaciTutar += parseInt(element.toplamTutar);
           });
         }
-        
-        const sivaIsciligi = userProjectInfos.sivaIsciligi;
-        if(sivaIsciligi.length > 0){
-          sivaIsciligi.forEach(element => {
-            sivaIsciligiTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const sapIsciligi = userProjectInfos.sapIsciligi;
-        if(sapIsciligi.length > 0){
-          sapIsciligi.forEach(element => {
-            sapIsciligiTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const catiIsciligi = userProjectInfos.catiIsciligi;
-        if(catiIsciligi.length > 0){
-          catiIsciligi.forEach(element => {
-            catiIsciligiTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const mantolamaIsciligi = userProjectInfos.mantolamaIsciligi;
-        if(mantolamaIsciligi.length > 0){
-          mantolamaIsciligi.forEach(element => {
-            mantolamaIsciligiTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const yalitimIsciligi = userProjectInfos.yalitimIsciligi;
-        if(yalitimIsciligi.length > 0){
-          yalitimIsciligi.forEach(element => {
-            yalitimIsciligiTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const suTesisatiIsciligi = userProjectInfos.suTesisatiIsciligi;
-        if(suTesisatiIsciligi.length > 0){
-          suTesisatiIsciligi.forEach(element => {
-            suTesisatiIsciligiTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const elektrikIsciligi = userProjectInfos.elektrikIsciligi;
-        if(elektrikIsciligi.length > 0){
-          elektrikIsciligi.forEach(element => {
-            elektrikIsciligiTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const dogalgazIsciligi = userProjectInfos.dogalgazIsciligi;
-        if(dogalgazIsciligi.length > 0){
-          dogalgazIsciligi.forEach(element => {
-            dogalgazIsciligiTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const asansorIsciligi = userProjectInfos.asansorIsciligi;
-        if(asansorIsciligi.length > 0){
-          asansorIsciligi.forEach(element => {
-            asansorIsciligiTutar += parseInt(element.tutar);
-          });
-        }
-    
-        const dekorAlcipanIsciligi = userProjectInfos.dekorAlcipanIsciligi;
-        if(dekorAlcipanIsciligi.length > 0){
-          dekorAlcipanIsciligi.forEach(element => {
-            dekorAlcipanIsciligiTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const perforjeIsciligi = userProjectInfos.perforjeIsciligi;
-        if(perforjeIsciligi !=null){
-          perforjeIsciligi.forEach(element => {
-            perforjeIsciligiTutar += parseInt(element.tutar);
-          });
-        }
-        
-        const iscilikDiger = userProjectInfos.iscilikDiger;
-        if(iscilikDiger.length > 0){
-          iscilikDiger.forEach(element => {
-            iscilikDigerTutar += parseInt(element.tutar);
-          });
-        }
-        
-        iscilikGiderleriToplam = kalipIsciligiTutar + demirIsciligiTutar + duvarOrmeIsciligiTutar + sivaIsciligiTutar + sapIsciligiTutar
-            + catiIsciligiTutar + mantolamaIsciligiTutar + yalitimIsciligiTutar + suTesisatiIsciligiTutar + elektrikIsciligiTutar
-            + dogalgazIsciligiTutar + asansorIsciligiTutar + dekorAlcipanIsciligiTutar + perforjeIsciligiTutar + iscilikDigerTutar;
+        yapiDenetimToplam = yapiDenetimHarciTutar+fenniJeolojiTutar+fenniHaritaciTutar;
 
-        genelToplam = arsaGiderleriToplam + projelerGiderleriToplam + kurumlarGiderleriToplam + iscilikGiderleriToplam + kabaUretimGiderleriToplam + inceUretimGiderleriToplam;
+        const zeminEtuduRaporuBedeli = userProjectInfos.zeminEtuduRaporu;
+        if(Array.isArray(zeminEtuduRaporuBedeli) && zeminEtuduRaporuBedeli.length > 0){
+          zeminEtuduRaporuBedeli.forEach(element => {
+            zeminEtuduRaporuTutar += parseInt(element.toplamTutar);
+          });
+        }
+        const zeminIyilestirmeBedeli = userProjectInfos.zeminIyilestirme;
+        if(Array.isArray(zeminIyilestirmeBedeli) && zeminIyilestirmeBedeli.length > 0){
+          zeminIyilestirmeBedeli.forEach(element => {
+            zeminIyilestirmeTutar += parseInt(element.toplamTutar);
+          });
+        }
+        zeminEtuduToplam = zeminEtuduRaporuTutar+zeminIyilestirmeTutar;
+
+        const mimariBedeli = userProjectInfos.mimariProje;
+        if(Array.isArray(mimariBedeli) && mimariBedeli.length > 0){
+          mimariBedeli.forEach(element => {
+            mimariTutar += parseInt(element.toplamTutar);
+          });
+        }
+        const statikBedeli = userProjectInfos.statikProje;
+        if(Array.isArray(statikBedeli) && statikBedeli.length > 0){
+          statikBedeli.forEach(element => {
+            statikTutar += parseInt(element.toplamTutar);
+          });
+        }
+        const tesisatBedeli = userProjectInfos.tesisatProje;
+        if(Array.isArray(tesisatBedeli) && tesisatBedeli.length > 0){
+          tesisatBedeli.forEach(element => {
+            tesisatTutar += parseInt(element.toplamTutar);
+          });
+        }
+        const hesBedeli = userProjectInfos.hesProje;
+        if(Array.isArray(hesBedeli) && hesBedeli.length > 0){
+          hesBedeli.forEach(element => {
+            hesTutar += parseInt(element.toplamTutar);
+          });
+        }
+        const akustikBedeli = userProjectInfos.akustikProje;
+        if(Array.isArray(akustikBedeli) && akustikBedeli.length > 0){
+          akustikBedeli.forEach(element => {
+            hesTutar += parseInt(element.toplamTutar);
+          });
+        }
+        projelerToplam = mimariTutar+statikTutar+tesisatTutar+hesTutar+akustikTutar;
+
+        evrakToplam = belediyeGiderleriToplam + noterGiderleriToplam + yapiDenetimToplam + zeminEtuduToplam + projelerToplam;
+
+
+        const santiyeKurmaBedeli = userProjectInfos.santiyeKurma;
+        if(Array.isArray(santiyeKurmaBedeli) && santiyeKurmaBedeli.length > 0){
+          santiyeKurmaBedeli.forEach(element => {
+            if(element.kalemId === "citleme"){
+              citlemeTutar += element.toplamTutar;
+            } else if(element.kalemId === "nizamiye"){
+              nizamiyeTutar += element.toplamTutar;
+            } else if(element.kalemId === "konteyner_ofis"){
+              konteyner_ofisTutar += element.toplamTutar;
+            } else if(element.kalemId === "konteyner_yemek"){
+              konteyner_yemekTutar += element.toplamTutar;
+            } else if(element.kalemId === "konteyner_wc"){
+              konteyner_wcTutar += element.toplamTutar;
+            } else if(element.kalemId === "elektrik"){
+              elektrikTutar += element.toplamTutar;
+            } else if(element.kalemId === "su"){
+              suTutar += element.toplamTutar;
+            } else if(element.kalemId === "zemin_betonu"){
+              zemin_betonuTutar += element.toplamTutar;
+            } else if(element.kalemId === "depo"){
+              depoTutar += element.toplamTutar;
+            } else if(element.kalemId === "jenerator"){
+              jeneratorTutar += element.toplamTutar;
+            } else if(element.kalemId === "su_deposu"){
+              su_deposuTutar += element.toplamTutar;
+            } else if(element.kalemId === "aydinlatma"){
+              aydinlatmaTutar += element.toplamTutar;
+            } else if(element.kalemId === "camasirhane"){
+              camasirhaneTutar += element.toplamTutar;
+            } else if(element.kalemId === "guvenlik_kamera"){
+              guvenlik_kameraTutar += element.toplamTutar;
+            } else if(element.kalemId === "yangin"){
+              yanginTutar += element.toplamTutar;
+            } else if(element.kalemId === "ilk_yardim"){
+              ilk_yardimTutar += element.toplamTutar;
+            } else if(element.kalemId === "tasinim"){
+              tasinimTutar += element.toplamTutar;
+            } else if(element.kalemId === "iskele"){
+              iskeleTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerSantiyeTutar += element.toplamTutar;
+            }
+          });
+        }
+        santiyeKurmaToplam = citlemeTutar+nizamiyeTutar+konteyner_ofisTutar+konteyner_yemekTutar+konteyner_wcTutar+elektrikTutar
+                            +suTutar+zemin_betonuTutar+depoTutar+jeneratorTutar+su_deposuTutar+aydinlatmaTutar+camasirhaneTutar
+                            +guvenlik_kameraTutar+yanginTutar+ilk_yardimTutar+tasinimTutar+iskeleTutar+digerSantiyeTutar;
+
+        const temelKazmaBedeli = userProjectInfos.temelKazma;
+        if(Array.isArray(temelKazmaBedeli) && temelKazmaBedeli.length > 0){
+          temelKazmaBedeli.forEach(element => {
+            if(element.kalemId === "kazi_yapimi"){
+              kazi_yapimiTutar += element.toplamTutar;
+            } else if(element.kalemId === "makine_kiralama"){
+              makine_kiralamaTutar += element.toplamTutar;
+            } else if(element.kalemId === "yukleme"){
+              yuklemeTutar += element.toplamTutar;
+            } else if(element.kalemId === "tasima"){
+              tasimaTutar += element.toplamTutar;
+            } else if(element.kalemId === "tesviye"){
+              tesviyeTutar += element.toplamTutar;
+            } else if(element.kalemId === "iksa"){
+              iksaTutar += element.toplamTutar;
+            } else if(element.kalemId === "drenaj"){
+              drenajTutar += element.toplamTutar;
+            } else if(element.kalemId === "su_indirimi"){
+              su_indirimiTutar += element.toplamTutar;
+            } else if(element.kalemId === "hafriyat_depolama"){
+              hafriyat_depolamaTutar += element.toplamTutar;
+            } else if(element.kalemId === "elle_kazi"){
+              elle_kaziTutar += element.toplamTutar;
+            } else if(element.kalemId === "kaba_kazi"){
+              kaba_kaziTutar += element.toplamTutar;
+            } else if(element.kalemId === "ince_kazi"){
+              ince_kaziTutar += element.toplamTutar;
+            } else if(element.kalemId === "patlatma"){
+              patlatmaTutar += element.toplamTutar;
+            } else if(element.kalemId === "kontrolluk"){
+              kontrollukTutar += element.toplamTutar;
+            } else if(element.kalemId === "zemin_test"){
+              zemin_testTutar += element.toplamTutar;
+            } else if(element.kalemId === "gecici_yol"){
+              gecici_yolTutar += element.toplamTutar;
+            } else if(element.kalemId === "guvenlik"){
+              guvenlikTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digertemelKazmaTutar += element.toplamTutar;
+            }
+          });
+        }
+        temelKazmaToplam = kazi_yapimiTutar + makine_kiralamaTutar + yuklemeTutar + tasimaTutar + tesviyeTutar + iksaTutar +
+                          drenajTutar + su_indirimiTutar + hafriyat_depolamaTutar + elle_kaziTutar + kaba_kaziTutar + ince_kaziTutar +
+                          patlatmaTutar + kontrollukTutar + zemin_testTutar + gecici_yolTutar + guvenlikTutar + digertemelKazmaTutar;
+
+        const groBetonBedeli = userProjectInfos.groBeton;
+        if(Array.isArray(groBetonBedeli) && groBetonBedeli.length > 0){
+          groBetonBedeli.forEach(element => {
+            if(element.kalemId === "alan_hazirligi"){
+              alan_hazirligiTutar += element.toplamTutar;
+            } else if(element.kalemId === "kalip"){
+              kalipTutar += element.toplamTutar;
+            } else if(element.kalemId === "beton_temini"){
+              beton_teminiTutar += element.toplamTutar;
+            } else if(element.kalemId === "gro_beton_serme"){
+              gro_beton_sermeTutar += element.toplamTutar;
+            } else if(element.kalemId === "tesviye"){
+              tesviyeGroTutar += element.toplamTutar;
+            } else if(element.kalemId === "sikistirma"){
+              sikistirmaTutar += element.toplamTutar;
+            } else if(element.kalemId === "bakim"){
+              bakimTutar += element.toplamTutar;
+            } else if(element.kalemId === "numune"){
+              numuneTutar += element.toplamTutar;
+            } else if(element.kalemId === "temizlik"){
+              temizlikTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerGroTutar += element.toplamTutar;
+            }
+          });
+        }
+        groBetonToplam = alan_hazirligiTutar + kalipTutar + beton_teminiTutar + gro_beton_sermeTutar + tesviyeGroTutar + sikistirmaTutar
+                        + bakimTutar + numuneTutar + temizlikTutar + digerGroTutar;
+
+        const radyalTemelBedeli = userProjectInfos.radyalTemel;
+        if(Array.isArray(radyalTemelBedeli) && radyalTemelBedeli.length > 0){
+          radyalTemelBedeli.forEach(element => {
+            if(element.kalemId === "demir"){
+              demirTutar += element.toplamTutar;
+            } else if(element.kalemId === "beton"){
+              betonTutar += element.toplamTutar;
+            } else if(element.kalemId === "tel"){
+              telTutar += element.toplamTutar;
+            } else if(element.kalemId === "civi"){
+              civiTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerRadyalTemelTutar += element.toplamTutar;
+            }
+          });
+        }
+        radyalTemelToplam = demirTutar + betonTutar + telTutar + civiTutar + digerRadyalTemelTutar;
+
+        const perdeBetonuBedeli = userProjectInfos.perdeBetonu;
+        if(Array.isArray(perdeBetonuBedeli) && perdeBetonuBedeli.length > 0){
+          perdeBetonuBedeli.forEach(element => {
+            if(element.kalemId === "demir"){
+              demirPerdeBetonuTutar += element.toplamTutar;
+            } else if(element.kalemId === "beton"){
+              betonPerdeBetonuTutar += element.toplamTutar;
+            } else if(element.kalemId === "tel"){
+              telperdeBetonuTutar += element.toplamTutar;
+            } else if(element.kalemId === "civi"){
+              civiPerdeBetonuTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerPerdeBetonuTutar += element.toplamTutar;
+            }
+          });
+        }
+        perdeBetonuToplam = demirPerdeBetonuTutar + betonPerdeBetonuTutar + telperdeBetonuTutar + civiPerdeBetonuTutar + digerPerdeBetonuTutar;
+
+        const temelIzalasyonuBedeli = userProjectInfos.temelIzolasyon;
+        if(Array.isArray(temelIzalasyonuBedeli) && temelIzalasyonuBedeli.length > 0){
+          temelIzalasyonuBedeli.forEach(element => {
+            if(element.kalemId === "su_tutucu_bant"){
+              su_tutucu_bantTutar += element.toplamTutar;
+            } else if(element.kalemId === "mebran"){
+              mebranTutar += element.toplamTutar;
+            } else if(element.kalemId === "likit_mebran"){
+              likit_mebranTutar += element.toplamTutar;
+            } else if(element.kalemId === "drenaj_levhasi"){
+              drenaj_levhasiTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerPerdeBetonuTutar += element.toplamTutar;
+            }
+          });
+        }
+        temelIzalasyonuToplam = su_tutucu_bantTutar + mebranTutar + likit_mebranTutar + drenaj_levhasiTutar;
+
+        const dolguBedeli = userProjectInfos.dolgu;
+        if(Array.isArray(dolguBedeli) && dolguBedeli.length > 0){
+          dolguBedeli.forEach(element => {
+            if(element.kalemId === "malzeme_temini"){
+              malzeme_teminiTutar += element.toplamTutar;
+            } else if(element.kalemId === "alan_hazirligi"){
+              alan_hazirligiDolguTutar += element.toplamTutar;
+            } else if(element.kalemId === "serme"){
+              sermeTutar += element.toplamTutar;
+            } else if(element.kalemId === "sikistirma"){
+              sikistirmaDolguTutar += element.toplamTutar;
+            } else if(element.kalemId === "nemlendirme"){
+              nemlendirmeTutar += element.toplamTutar;
+            } else if(element.kalemId === "seviye_kontrol"){
+              seviye_kontrolTutar += element.toplamTutar;
+            } else if(element.kalemId === "numune"){
+              numuneDolguTutar += element.toplamTutar;
+            } else if(element.kalemId === "gecici_yol"){
+              gecici_yolDolguTutar += element.toplamTutar;
+            } else if(element.kalemId === "atik_tasima"){
+              atik_tasimaTutar += element.toplamTutar;
+            } else if(element.kalemId === "drenaj"){
+              drenajDolguTutar += element.toplamTutar;
+            }  else if(element.kalemId === "diger"){
+              digerDolguTutar += element.toplamTutar;
+            }
+          });
+        }
+        dolguToplam = malzeme_teminiTutar + alan_hazirligiDolguTutar + sermeTutar + sikistirmaDolguTutar + nemlendirmeTutar + seviye_kontrolTutar
+                    + numuneDolguTutar + gecici_yolDolguTutar + atik_tasimaTutar + drenajDolguTutar + digerDolguTutar;
+
+        const subasmanBedeli = userProjectInfos.subasman;
+        if(Array.isArray(subasmanBedeli) && subasmanBedeli.length > 0){
+          subasmanBedeli.forEach(element => {
+            if(element.kalemId === "celik_hasir"){
+              celik_hasirTutar += element.toplamTutar;
+            } else if(element.kalemId === "beton"){
+              betonSubasmanTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerSubasmanTutar += element.toplamTutar;
+            }
+          });
+        }
+        suBasmanToplam = celik_hasirTutar + betonSubasmanTutar + digerSubasmanTutar;
+
+        const zeminBetonuBedeli = userProjectInfos.zeminBetonu;
+        if(Array.isArray(zeminBetonuBedeli) && zeminBetonuBedeli.length > 0){
+          zeminBetonuBedeli.forEach(element => {
+            if(element.kalemId === "demir"){
+              demirZeminBetonuTutar += element.toplamTutar;
+            } else if(element.kalemId === "beton"){
+              betonZeminBetonuTutar += element.toplamTutar;
+            } else if(element.kalemId === "tel"){
+              telZeminBetonuTutar += element.toplamTutar;
+            } else if(element.kalemId === "civi"){
+              civiZeminBetonuTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerZeminBetonuTutar += element.toplamTutar;
+            }
+          });
+        }
+        zeminBetonuToplam = demirZeminBetonuTutar + betonZeminBetonuTutar + telZeminBetonuTutar + civiZeminBetonuTutar + digerZeminBetonuTutar;
+        
+        const katBetonlariBedeli = userProjectInfos.katBetonlari;
+        if(Array.isArray(katBetonlariBedeli) && katBetonlariBedeli.length > 0){
+          katBetonlariBedeli.forEach(element => {
+            if(element.kalemId === "demir"){
+              demirkatBetonlariTutar += element.toplamTutar;
+            } else if(element.kalemId === "beton"){
+              betonkatBetonlariTutar += element.toplamTutar;
+            } else if(element.kalemId === "tel"){
+              telkatBetonlariTutar += element.toplamTutar;
+            } else if(element.kalemId === "civi"){
+              civikatBetonlariTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerkatBetonlariTutar += element.toplamTutar;
+            }
+          });
+        }
+        katBetonlariToplam = demirkatBetonlariTutar + betonkatBetonlariTutar + telkatBetonlariTutar + civikatBetonlariTutar + digerkatBetonlariTutar;
+
+        const kapamaBetonuBedeli = userProjectInfos.kapamaBetonu;
+        if(Array.isArray(kapamaBetonuBedeli) && kapamaBetonuBedeli.length > 0){
+          kapamaBetonuBedeli.forEach(element => {
+            if(element.kalemId === "demir"){
+              demirkapamaBetonuTutar += element.toplamTutar;
+            } else if(element.kalemId === "beton"){
+              betonkapamaBetonuTutar += element.toplamTutar;
+            } else if(element.kalemId === "tel"){
+              telkapamaBetonuTutar += element.toplamTutar;
+            } else if(element.kalemId === "civi"){
+              civikapamaBetonuTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerkapamaBetonuTutar += element.toplamTutar;
+            }
+          });
+        }
+        kapamaBetonuToplam = demirkapamaBetonuTutar + betonkapamaBetonuTutar + telkapamaBetonuTutar + civikapamaBetonuTutar + digerkapamaBetonuTutar;
+
+        const catiUygulamaBedeli = userProjectInfos.catiUygulama;
+        if(Array.isArray(catiUygulamaBedeli) && catiUygulamaBedeli.length > 0){
+          catiUygulamaBedeli.forEach(element => {
+            if(element.kalemId === "kereste"){
+              keresteTutar += element.toplamTutar;
+            } else if(element.kalemId === "osb"){
+              osbTutar += element.toplamTutar;
+            } else if(element.kalemId === "cati_izalasyonu"){
+              cati_izalasyonuTutar += element.toplamTutar;
+            } else if(element.kalemId === "kiremit"){
+              kiremitTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digercatiUygulamaTutar += element.toplamTutar;
+            }
+          });
+        }
+        catiUygulamaToplam = keresteTutar + osbTutar + cati_izalasyonuTutar + kiremitTutar + digercatiUygulamaTutar;
+
+        const duvarOrmeBedeli = userProjectInfos.duvarOrme;
+        if(Array.isArray(duvarOrmeBedeli) && duvarOrmeBedeli.length > 0){
+          duvarOrmeBedeli.forEach(element => {
+            if(element.kalemId === "cimento"){
+              cimentoTutar += element.toplamTutar;
+            } else if(element.kalemId === "duvar_blogu"){
+              duvar_bloguTutar += element.toplamTutar;
+            } else if(element.kalemId === "kirec"){
+              kirecTutar += element.toplamTutar;
+            } else if(element.kalemId === "kum_cakil"){
+              kum_cakilTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerduvarOrmeTutar += element.toplamTutar;
+            }
+          });
+        }
+        duvarOrmeToplam = cimentoTutar + duvar_bloguTutar + kirecTutar + kum_cakilTutar + digerduvarOrmeTutar;
+
+        const sapBedeli = userProjectInfos.sap;
+        if(Array.isArray(sapBedeli) && sapBedeli.length > 0){
+          sapBedeli.forEach(element => {
+            if(element.kalemId === "kum"){
+              kumTutar += element.toplamTutar;
+            } else if(element.kalemId === "cimento"){
+              cimentoSapTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerSapTutar += element.toplamTutar;
+            }
+          });
+        }
+        sapToplam = kumTutar + cimentoSapTutar + digerSapTutar;
+
+        kabaToplam = santiyeKurmaToplam+temelKazmaToplam+groBetonToplam+radyalTemelToplam+perdeBetonuToplam+temelIzalasyonuToplam
+                    +dolguToplam+suBasmanToplam+zeminBetonuToplam+katBetonlariToplam+kapamaBetonuToplam+catiUygulamaToplam
+                    +duvarOrmeToplam+sapToplam;
+
+
+        const zeminUygulamalariBedeli = userProjectInfos.zeminUygulamalari;
+        if(Array.isArray(zeminUygulamalariBedeli) && zeminUygulamalariBedeli.length > 0){
+          zeminUygulamalariBedeli.forEach(element => {
+            if(element.kalemId === "seramik"){
+              seramikTutar += element.toplamTutar;
+            } else if(element.kalemId === "parke"){
+              parkeTutar += element.toplamTutar;
+            } else if(element.kalemId === "mermer"){
+              mermerTutar += element.toplamTutar;
+            } else if(element.kalemId === "zeminBoyasi"){
+              zeminBoyasiTutar += element.toplamTutar;
+            } else if(element.kalemId === "epoksi"){
+              epoksiTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerZeminUygulamalariTutar += element.toplamTutar;
+            }
+          });
+        }
+        zeminUygulamalariToplam = seramikTutar + parkeTutar + mermerTutar + zeminBoyasiTutar + epoksiTutar + digerZeminUygulamalariTutar;
+
+        const icCepheBedeli = userProjectInfos.icCephe;
+        if(Array.isArray(icCepheBedeli) && icCepheBedeli.length > 0){
+          icCepheBedeli.forEach(element => {
+            if(element.kalemId === "korKasa"){
+              korKasaTutar += element.toplamTutar;
+            } else if(element.kalemId === "kosebent"){
+              kosebentTutar += element.toplamTutar;
+            } else if(element.kalemId === "betonAstari"){
+              betonAstariTutar += element.toplamTutar;
+            } else if(element.kalemId === "alci"){
+              alciTutar += element.toplamTutar;
+            } else if(element.kalemId === "cimento"){
+              cimentoIcCepheTutar += element.toplamTutar;
+            } else if(element.kalemId === "kum"){
+              kumIcCepheTutar += element.toplamTutar;
+            } else if(element.kalemId === "hazirSivaIc"){
+              hazirSivaIcTutar += element.toplamTutar;
+            } else if(element.kalemId === "icCepheBoyasi"){
+              icCepheBoyasiTutar += element.toplamTutar;
+            } else if(element.kalemId === "boyaAstari"){
+              boyaAstariTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerIcCepheTutar += element.toplamTutar;
+            }
+          });
+        }
+        icCepheToplam = korKasaTutar + kosebentTutar + betonAstariTutar + alciTutar + cimentoIcCepheTutar + kumIcCepheTutar
+                      + hazirSivaIcTutar + icCepheBoyasiTutar + boyaAstariTutar + digerIcCepheTutar;
+
+        const islakMekanlarBedeli = userProjectInfos.islakMekanlar;
+        if(Array.isArray(islakMekanlarBedeli) && islakMekanlarBedeli.length > 0){
+          islakMekanlarBedeli.forEach(element => {
+            if(element.kalemId === "zeminYalitimi"){
+              zeminYalitimiTutar += element.toplamTutar;
+            } else if(element.kalemId === "seramikFayans"){
+              seramikFayansTutar += element.toplamTutar;
+            } else if(element.kalemId === "klozetler"){
+              klozetlerTutar += element.toplamTutar;
+            } else if(element.kalemId === "lavabolar"){
+              lavabolarTutar += element.toplamTutar;
+            } else if(element.kalemId === "banyoDolabi"){
+              banyoDolabiTutar += element.toplamTutar;
+            } else if(element.kalemId === "dusTeknesi"){
+              dusTeknesiTutar += element.toplamTutar;
+            } else if(element.kalemId === "banyoBataryasi"){
+              banyoBataryasiTutar += element.toplamTutar;
+            } else if(element.kalemId === "lavaboBataryasi"){
+              lavaboBataryasiTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerIslakMekanlarTutar += element.toplamTutar;
+            }
+          });
+        }
+        islakMekanlarToplam = zeminYalitimiTutar + seramikFayansTutar + klozetlerTutar + lavabolarTutar + banyoDolabiTutar
+                            + dusTeknesiTutar + banyoBataryasiTutar + lavaboBataryasiTutar + digerIslakMekanlarTutar;
+        
+        const mutfakBedeli = userProjectInfos.mutfak;
+        if(Array.isArray(mutfakBedeli) && mutfakBedeli.length > 0){
+          mutfakBedeli.forEach(element => {
+            if(element.kalemId === "tezgah"){
+              tezgahTutar += element.toplamTutar;
+            } else if(element.kalemId === "mutfakEvye"){
+              mutfakEvyeTutar += element.toplamTutar;
+            } else if(element.kalemId === "mutfakDolabi"){
+              mutfakDolabiTutar += element.toplamTutar;
+            } else if(element.kalemId === "mutfakBataryasi"){
+              mutfakBataryasiTutar += element.toplamTutar;
+            } else if(element.kalemId === "ankastre"){
+              ankastreTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerMutfakTutar += element.toplamTutar;
+            }
+          });
+        }
+        mutfakToplam = tezgahTutar + mutfakEvyeTutar + mutfakDolabiTutar + mutfakBataryasiTutar + ankastreTutar + digerMutfakTutar;
+
+        const pimapenBedeli = userProjectInfos.pimapen;
+        if(Array.isArray(pimapenBedeli) && pimapenBedeli.length > 0){
+          pimapenBedeli.forEach(element => {
+            if(element.kalemId === "pencereler"){
+              pencerelerTutar += element.toplamTutar;
+            } else if(element.kalemId === "zeminDograma"){
+              zeminDogramaTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerPimapenTutar += element.toplamTutar;
+            }
+          });
+        }
+        pimapenToplam = pencerelerTutar + zeminDogramaTutar + digerPimapenTutar;
+
+        const kapilarBedeli = userProjectInfos.kapilar;
+        if(Array.isArray(kapilarBedeli) && kapilarBedeli.length > 0){
+          kapilarBedeli.forEach(element => {
+            if(element.kalemId === "odaKapilari"){
+              odaKapilariTutar += element.toplamTutar;
+            } else if(element.kalemId === "celikKapilar"){
+              celikKapilarTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerKapilarTutar += element.toplamTutar;
+            }
+          });
+        }
+        kapilarToplam = odaKapilariTutar + celikKapilarTutar + digerKapilarTutar;
+
+        const korkuluklarBedeli = userProjectInfos.korkuluklar;
+        if(Array.isArray(korkuluklarBedeli) && korkuluklarBedeli.length > 0){
+          korkuluklarBedeli.forEach(element => {
+            if(element.kalemId === "balkon"){
+              balkonTutar += element.toplamTutar;
+            } else if(element.kalemId === "merdiven"){
+              merdivenTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerKorkuluklarTutar += element.toplamTutar;
+            }
+          });
+        }
+        korkuluklarToplam = balkonTutar + merdivenTutar + digerKorkuluklarTutar;
+
+        const disCepheBedeli = userProjectInfos.disCephe;
+        if(Array.isArray(disCepheBedeli) && disCepheBedeli.length > 0){
+          disCepheBedeli.forEach(element => {
+            if(element.kalemId === "hazirSivaDis"){
+              hazirSivaDisTutar += element.toplamTutar;
+            } else if(element.kalemId === "cimento"){
+              cimentoDisCepheTutar += element.toplamTutar;
+            } else if(element.kalemId === "kum"){
+              kumDisCepheTutar += element.toplamTutar;
+            } else if(element.kalemId === "disCepheBoyasi"){
+              disCepheBoyasiTutar += element.toplamTutar;
+            } else if(element.kalemId === "sove"){
+              soveTutar += element.toplamTutar;
+            } else if(element.kalemId === "boyaAstari"){
+              boyaAstariDisCepheTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerDisCepheTutar += element.toplamTutar;
+            }
+          });
+        }
+        disCepheToplam = hazirSivaDisTutar + cimentoDisCepheTutar + kumDisCepheTutar + disCepheBoyasiTutar + soveTutar
+                      + boyaAstariDisCepheTutar + digerDisCepheTutar;
+
+        const mantolamaBedeli = userProjectInfos.mantolama;
+        if(Array.isArray(mantolamaBedeli) && mantolamaBedeli.length > 0){
+          mantolamaBedeli.forEach(element => {
+            if(element.kalemId === "duvel_montaj"){
+              duvel_montajTutar += element.toplamTutar;
+            } else if(element.kalemId === "yalitim_levha"){
+              yalitim_levhaTutar += element.toplamTutar;
+            } else if(element.kalemId === "karbonluEps"){
+              karbonluEpsTutar += element.toplamTutar;
+            } else if(element.kalemId === "xps"){
+              xpsTutar += element.toplamTutar;
+            } else if(element.kalemId === "tasYunu"){
+              tasYunuTutar += element.toplamTutar;
+            } else if(element.kalemId === "file_siva"){
+              file_sivaTutar += element.toplamTutar;
+            } else if(element.kalemId === "kaplama_siva"){
+              kaplama_sivaTutar += element.toplamTutar;
+            } else if(element.kalemId === "dekoratif_kaplama"){
+              dekoratif_kaplamaTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerMantolamaTutar += element.toplamTutar;
+            }
+          });
+        }
+        mantolamaToplam = duvel_montajTutar + yalitim_levhaTutar + karbonluEpsTutar + xpsTutar + tasYunuTutar + file_sivaTutar
+                        + kaplama_sivaTutar + dekoratif_kaplamaTutar + digerMantolamaTutar;
+
+        const tavanBedeli = userProjectInfos.tavan;
+        if(Array.isArray(tavanBedeli) && tavanBedeli.length > 0){
+          tavanBedeli.forEach(element => {
+            if(element.kalemId === "stropiyer"){
+              stropiyerTutar += element.toplamTutar;
+            } else if(element.kalemId === "alcipan"){
+              alcipanTutar += element.toplamTutar;
+            } else if(element.kalemId === "karolem"){
+              karolemTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerTavanTutar += element.toplamTutar;
+            }
+          });
+        }
+        tavanToplam = stropiyerTutar + alcipanTutar + karolemTutar + digerTavanTutar;
+
+        const elektrikTesisatBedeli = userProjectInfos.elektrikTesisat;
+        if(Array.isArray(elektrikTesisatBedeli) && elektrikTesisatBedeli.length > 0){
+          elektrikTesisatBedeli.forEach(element => {
+            if(element.kalemId === "elektrikIsciligi"){
+              elektrikIsciligiTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerElektrikTutar += element.toplamTutar;
+            }
+          });
+        }
+        elektrikTesisatToplam = elektrikIsciligiTutar + digerElektrikTutar;
+
+        const sihhiTesisatBedeli = userProjectInfos.sihhiTesisat;
+        if(Array.isArray(sihhiTesisatBedeli) && sihhiTesisatBedeli.length > 0){
+          sihhiTesisatBedeli.forEach(element => {
+            if(element.kalemId === "pisSu"){
+              pisSuTutar += element.toplamTutar;
+            } else if(element.kalemId === "temizSu"){
+              temizSuTutar += element.toplamTutar;
+            } else if(element.kalemId === "isitma"){
+              isitmaTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerSihhiTesisatTutar += element.toplamTutar;
+            }
+          });
+        }
+        sihhiTesisatToplam = pisSuTutar + temizSuTutar + isitmaTutar + digerSihhiTesisatTutar;
+
+        const dogalgazBedeli = userProjectInfos.dogalgaz;
+        if(Array.isArray(dogalgazBedeli) && dogalgazBedeli.length > 0){
+          dogalgazBedeli.forEach(element => {
+            if(element.kalemId === "dogalgazKurulumu"){
+              dogalgazKurulumuTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerDogalgazTutar += element.toplamTutar;
+            }
+          });
+        }
+        dogalgazToplam = dogalgazKurulumuTutar + digerDogalgazTutar;
+
+        const asansorKurulumuBedeli = userProjectInfos.asansorKurulumu;
+        if(Array.isArray(asansorKurulumuBedeli) && asansorKurulumuBedeli.length > 0){
+          asansorKurulumuBedeli.forEach(element => {
+            if(element.kalemId === "asansorKurulumu"){
+              asansorKurulumuTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerAsansorTutar += element.toplamTutar;
+            }
+          });
+        }
+        asansorKurulumuToplam = asansorKurulumuTutar + digerAsansorTutar;
+
+        const iklimlendirmeBedeli = userProjectInfos.iklimlendirme;
+        if(Array.isArray(iklimlendirmeBedeli) && iklimlendirmeBedeli.length > 0){
+          iklimlendirmeBedeli.forEach(element => {
+            if(element.kalemId === "kombi"){
+              kombiTutar += element.toplamTutar;
+            } else if(element.kalemId === "kombiDolabi"){
+              kombiDolabiTutar += element.toplamTutar;
+            } else if(element.kalemId === "klima"){
+              klimaTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerIklimlendirmeTutar += element.toplamTutar;
+            }
+          });
+        }
+        iklimlendirmeToplam = kombiTutar + kombiDolabiTutar + klimaTutar + digerIklimlendirmeTutar;
+
+        const peyzajBedeli = userProjectInfos.peyzaj;
+        if(Array.isArray(peyzajBedeli) && peyzajBedeli.length > 0){
+          peyzajBedeli.forEach(element => {
+            if(element.kalemId === "bahceDuvari"){
+              bahceDuvariTutar += element.toplamTutar;
+            } else if(element.kalemId === "bitkilendirme"){
+              bitkilendirmeTutar += element.toplamTutar;
+            } else if(element.kalemId === "perforje"){
+              perforjeTutar += element.toplamTutar;
+            } else if(element.kalemId === "diger"){
+              digerPeyzajTutar += element.toplamTutar;
+            }
+          });
+        }
+        peyzajToplam = bahceDuvariTutar + bitkilendirmeTutar + perforjeTutar + digerPeyzajTutar;
+
+
+
+
+        inceToplam = zeminUygulamalariToplam + icCepheToplam + islakMekanlarToplam + mutfakToplam + pimapenToplam + kapilarToplam
+                    + korkuluklarToplam + disCepheToplam + mantolamaToplam + tavanToplam + elektrikTesisatToplam + sihhiTesisatToplam
+                    + dogalgazToplam + asansorKurulumuToplam + iklimlendirmeToplam + peyzajToplam;
+
+
+
+
+        genelToplam = arsaGiderleriToplam + evrakToplam + ruhsatToplam + kabaToplam + inceToplam 
+                    - yerSahibiAlinanParaTutar + yerSahibiVerilenParaTutar;
 
         building = userProjectInfos.building;
         if(building.length > 0){
@@ -1178,29 +1572,14 @@
             mKareToplam += parseInt(element.genelBrutAlan);
           });
         }
-
-        const yerSahibi = userProjectInfos.yerSahibiIleAnlasma;
-        if(yerSahibi.length > 0 ){
-          yerSahibi.forEach(element => {
-            const rowNumber = element.rowNumber;
-            if(rowNumber.length > 0){
-              const match = building.find(element => element.rowNumber === rowNumber);
-              mKareToplam -= parseInt(match.genelBrutAlan);
-            }
-          });
-
-          const tutarAlinacak = yerSahibi[0].tutar;
-          if(tutarAlinacak.length > 0){
-            genelToplam -= tutarAlinacak;
-          }
-          const tutarVerilecek = yerSahibi[0].tutar;
-          if(tutarVerilecek.length > 0){
-            genelToplam -= tutarVerilecek;
-          }
-        }
+        mKareToplam -= yerSahibiDaireMetreKare;
 
         genelToplamText.textContent = formatTL(genelToplam);
-        mKareMaliyetText.textContent = formatTL(genelToplam/mKareToplam);
+        if (mKareToplam > 0) {
+          mKareMaliyetText.textContent = formatTL(genelToplam / mKareToplam);
+        } else {
+          mKareMaliyetText.textContent = "—"; // veya "0 TL", "Bilinmiyor", dilediğin bir şey
+        }
 
         const maliyet = formatTL(genelToplam/mKareToplam);
         const value = parseFloat(maliyet);
@@ -1216,16 +1595,16 @@
         const myChart = new Chart(ctx, {  
           type: 'bar',  
           data: {  
-            labels: ['Arsa', 'Projeler', 'Kurumlar', 'İşçilik', 'Kaba', 'İnce'],  
+            labels: ['Arsa', 'Evrak', 'Ruhsat', 'Kaba', 'İnce'],  
             datasets: [{  
               label: 'Harcamalar',  
-              data: [arsaGiderleriToplam, projelerGiderleriToplam, kurumlarGiderleriToplam, iscilikGiderleriToplam, kabaUretimGiderleriToplam, inceUretimGiderleriToplam],  
+              data: [arsaGiderleriToplam, evrakToplam, ruhsatToplam, kabaToplam, inceToplam],  
               backgroundColor: [  
                 'rgba(59, 130, 246, 0.8)',  
                 'rgba(16, 185, 129, 0.8)',  
                 'rgba(250, 220, 20, 0.8)',  
                 'rgba(239, 68, 68, 0.8)',  
-                'rgba(168, 85, 247, 0.8)',  
+                //'rgba(168, 85, 247, 0.8)',  
                 'rgba(251, 146, 60, 0.8)'  
               ]  
             }]  
@@ -1262,12 +1641,12 @@
                 const label = myChart.data.labels[index];  
                 const value = myChart.data.datasets[0].data[index];  
 
-                let labelsArray = ['Arsa', 'Projeler', 'Kurumlar', 'İşçilik', 'Kaba', 'İnce'];
+                let labelsArray = ['Arsa', 'Evrak', 'Ruhsat', 'Kaba', 'İnce'];
                 let dataArray = [];
                 let backgroundArray = [];
                 if(label === "Arsa"){
-                  labelsArray = ["Arsa Bedeli","Yerden Çıkartmak","Kira Bedeli","Şantiye Kurulumu","Arsa Diğer"];
-                  dataArray = [arsaBedeliTutar, yerdenCıkartmakTutar, kiraBedeliTutar, santiyeKurulumuTutar, arsaDigerTutar];
+                  labelsArray = ["Arsa Bedeli", "Yerden Çıkartmak", "Kira Bedeli","Arsa Diğer"];
+                  dataArray = [arsaBedeliTutar, yerdenCikartmakTutar, kiraBedeliTutar, arsaDigerTutar];
                   backgroundArray = ['rgba(30, 64, 175, 0.8)','rgba(147, 197, 253, 0.8)'];
                 } else if(label === "Projeler"){
                   labelsArray = [

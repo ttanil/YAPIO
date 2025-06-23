@@ -1319,7 +1319,7 @@ function showRadyalKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Radyal Temel - "+ RADYAL_ALTKALEM.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showRadyalKalemler, aktifAltKalem, RADYAL_ALTKALEM,"radyal");
+      showOdemeEvrakForm(true, false, showRadyalKalemler, aktifAltKalem, RADYAL_ALTKALEM,"radyalTemel");
     }  
   });  
 }
@@ -1340,10 +1340,10 @@ function showPerdeKalemler(){
 
   document.querySelectorAll('.perde-altkalem-btn').forEach(b=>{  
     b.onclick = function(){  
-      aktifAltKalem = this.getAttribute('data-kalem');  
+      aktifAltKalem = this.getAttribute('data-kalem');
       document.getElementById('modalBaslikText').textContent =  
         "Perde Beton - "+ RADYAL_ALTKALEM.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showPerdeKalemler, aktifAltKalem, RADYAL_ALTKALEM,"perde");
+      showOdemeEvrakForm(true, false, showPerdeKalemler, aktifAltKalem, RADYAL_ALTKALEM,"perdeBetonu");
     }  
   });  
 }
@@ -1367,7 +1367,7 @@ function showTemelIzalasyonuKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Temel İzalasyonu - "+ TEMEL_IZALASYONU.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showTemelIzalasyonuKalemler, aktifAltKalem, TEMEL_IZALASYONU,"temelIzalasyon");
+      showOdemeEvrakForm(true, false, showTemelIzalasyonuKalemler, aktifAltKalem, TEMEL_IZALASYONU,"temelIzolasyon");
     }  
   });  
 }
@@ -1463,7 +1463,7 @@ function showCatiKalemler(){
       aktifAltKalem = this.getAttribute('data-kalem');  
       document.getElementById('modalBaslikText').textContent =  
         "Çatı - "+ CATI.find(x=>x.id===aktifAltKalem).ad;  
-      showOdemeEvrakForm(true, false, showCatiKalemler, aktifAltKalem, CATI,"cati");
+      showOdemeEvrakForm(true, false, showCatiKalemler, aktifAltKalem, CATI,"catiUygulama");
     }  
   });  
 }
@@ -2419,7 +2419,7 @@ function odemeFormSubmit(e){
   const toplamTutar = (!isNaN(miktar) && !isNaN(birimFiyat)) ? miktar * birimFiyat : 0;
   let kalemKayit = null;
 
-  console.log("aktifKalemId:",aktifKalemId);
+  //console.log("aktifKalemId:",aktifKalemId);
 
   if(aktifKalemId === "Belediye" || 
     aktifKalemId === "Noter" || 
@@ -2467,6 +2467,7 @@ function odemeFormSubmit(e){
       toplamTutar,
       aciklama
     };
+    //console.log("kalemKayit:",kalemKayit);
     if(aciklama && toplamTutar > 0 && tarih && aktifKalemId) {
       showLoader();
       fetch('/evrak', {
@@ -2737,7 +2738,7 @@ function fileToPdfBlob(file) {
 }
 
 function evrakGuncelleDinamik(alanAdi, kalemId) {
-    console.log(alanAdi, kalemId);
+    //console.log(alanAdi, kalemId);
     const ul = document.getElementById('evrakListesi');
     fetch('/evrak', {
         method: 'POST',
@@ -2752,7 +2753,7 @@ function evrakGuncelleDinamik(alanAdi, kalemId) {
     })
     .then(r => r.json())
     .then(veri => {
-      console.log("veri:",veri);
+      //console.log("veri:",veri);
         ul.innerHTML = '';
         if (!veri || veri.length === 0) {
             ul.innerHTML = `<li class="list-group-item text-secondary">Evrak yok veya yüklenmemiş.</li>`;
@@ -3349,7 +3350,7 @@ async function readYerSahibi(){
         })
       });
       const data = await response.json();
-      console.log("data:",data);
+      //console.log("data:",data);
       return data;
     } finally {
       hideLoader();
