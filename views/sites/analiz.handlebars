@@ -753,6 +753,22 @@
     let avukatToplam = 0;
     let emlakciToplam = 0;
     let reklamToplam = 0;
+    let isciliklerToplam = 0;
+    let kalipIsciligiToplam = 0;
+    let demirIsciligiToplam = 0;
+    let duvarOrmeIsciligiToplam = 0;
+    let sivaIsciligiToplam = 0;
+    let sapIsciligiToplam = 0;
+    let catiIsciligiToplam = 0;
+    let mantolamaIsciligiToplam = 0;
+    let yalitimIsciligiToplam = 0;
+    let suTesisatiIsciligiToplam = 0;
+    let elektrikIsciligiToplam = 0;
+    let dogalgazIsciligiToplam = 0;
+    let asansorIsciligiToplam = 0;
+    let dekorAlcipanIsciligiToplam = 0;
+    let perforjeIsciligiToplam = 0;
+    let digerIsciligiToplam = 0;
 
     let genelToplam = 0;
     let mKareMaliyet = 0;
@@ -993,6 +1009,116 @@
                     + projelerToplam + kadastroToplam + tapuToplam + vergiToplam + sskToplam + avukatToplam 
                     + emlakciToplam + reklamToplam;
 
+        
+        const kalipIsciligiBedeli = userProjectInfos.kalipIsciligi;
+        if(Array.isArray(kalipIsciligiBedeli) && kalipIsciligiBedeli.length > 0){
+          kalipIsciligiBedeli.forEach(element => {
+            kalipIsciligiToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const demirIsciligiBedeli = userProjectInfos.demirIsciligi;
+        if(Array.isArray(demirIsciligiBedeli) && demirIsciligiBedeli.length > 0){
+          demirIsciligiBedeli.forEach(element => {
+            demirIsciligiToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const duvarOrmeIsciligiBedeli = userProjectInfos.duvarOrmeIsciligi;
+        if(Array.isArray(duvarOrmeIsciligiBedeli) && duvarOrmeIsciligiBedeli.length > 0){
+          duvarOrmeIsciligiBedeli.forEach(element => {
+            duvarOrmeIsciligiToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const sivaIsciligiBedeli = userProjectInfos.sivaIsciligi;
+        if(Array.isArray(sivaIsciligiBedeli) && sivaIsciligiBedeli.length > 0){
+          sivaIsciligiBedeli.forEach(element => {
+            sivaIsciligiToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const sapIsciligiBedeli = userProjectInfos.sapIsciligi;
+        if(Array.isArray(sapIsciligiBedeli) && sapIsciligiBedeli.length > 0){
+          sapIsciligiBedeli.forEach(element => {
+            sapIsciligiToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const catiIsciligiBedeli = userProjectInfos.catiIsciligi;
+        if(Array.isArray(catiIsciligiBedeli) && catiIsciligiBedeli.length > 0){
+          catiIsciligiBedeli.forEach(element => {
+            catiIsciligiToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const mantolamaIsciligiBedeli = userProjectInfos.mantolamaIsciligi;
+        if(Array.isArray(mantolamaIsciligiBedeli) && mantolamaIsciligiBedeli.length > 0){
+          mantolamaIsciligiBedeli.forEach(element => {
+            mantolamaIsciligiToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const yalitimIsciligiBedeli = userProjectInfos.yalitimIsciligi;
+        if(Array.isArray(yalitimIsciligiBedeli) && yalitimIsciligiBedeli.length > 0){
+          yalitimIsciligiBedeli.forEach(element => {
+            yalitimIsciligiToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const suTesisatiIsciligiBedeli = userProjectInfos.suTesisatiIsciligi;
+        if(Array.isArray(suTesisatiIsciligiBedeli) && suTesisatiIsciligiBedeli.length > 0){
+          suTesisatiIsciligiBedeli.forEach(element => {
+            suTesisatiIsciligiToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const elektrikIsciligiBedeli = userProjectInfos.elektrikIsciligi;
+        if(Array.isArray(elektrikIsciligiBedeli) && elektrikIsciligiBedeli.length > 0){
+          elektrikIsciligiBedeli.forEach(element => {
+            elektrikIsciligiToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const dogalgazIsciligiBedeli = userProjectInfos.dogalgazIsciligi;
+        if(Array.isArray(dogalgazIsciligiBedeli) && dogalgazIsciligiBedeli.length > 0){
+          dogalgazIsciligiBedeli.forEach(element => {
+            dogalgazIsciligiToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const asansorIsciligiBedeli = userProjectInfos.asansorIsciligi;
+        if(Array.isArray(asansorIsciligiBedeli) && asansorIsciligiBedeli.length > 0){
+          asansorIsciligiBedeli.forEach(element => {
+            asansorIsciligiToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const dekorAlcipanIsciligiBedeli = userProjectInfos.dekorAlcipanIsciligi;
+        if(Array.isArray(dekorAlcipanIsciligiBedeli) && dekorAlcipanIsciligiBedeli.length > 0){
+          dekorAlcipanIsciligiBedeli.forEach(element => {
+            dekorAlcipanIsciligiToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const perforjeIsciligiBedeli = userProjectInfos.perforjeIsciligi;
+        if(Array.isArray(perforjeIsciligiBedeli) && perforjeIsciligiBedeli.length > 0){
+          perforjeIsciligiBedeli.forEach(element => {
+            perforjeIsciligiToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const digerIsciligiBedeli = userProjectInfos.digerIsciligi;
+        if(Array.isArray(digerIsciligiBedeli) && digerIsciligiBedeli.length > 0){
+          digerIsciligiBedeli.forEach(element => {
+            digerIsciligiToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        isciliklerToplam = kalipIsciligiToplam + demirIsciligiToplam + duvarOrmeIsciligiToplam + sivaIsciligiToplam +sapIsciligiToplam
+                        + catiIsciligiToplam + mantolamaIsciligiToplam + yalitimIsciligiToplam + suTesisatiIsciligiToplam 
+                        + elektrikIsciligiToplam + dogalgazIsciligiToplam + asansorIsciligiToplam + dekorAlcipanIsciligiToplam
+                        + perforjeIsciligiToplam + digerIsciligiToplam;
 
         const santiyeKurmaBedeli = userProjectInfos.santiyeKurma;
         if(Array.isArray(santiyeKurmaBedeli) && santiyeKurmaBedeli.length > 0){
@@ -1623,7 +1749,7 @@
 
 
 
-        genelToplam = arsaGiderleriToplam + evrakToplam + ruhsatToplam + kabaToplam + inceToplam 
+        genelToplam = arsaGiderleriToplam + evrakToplam + ruhsatToplam + kabaToplam + inceToplam + isciliklerToplam
                     - yerSahibiAlinanParaTutar + yerSahibiVerilenParaTutar;
 
         building = userProjectInfos.building;
@@ -1651,8 +1777,8 @@
 
         const detailMappings = {
           root: {
-            labels: ['Arsa', 'Evrak', 'Ruhsat', 'Kaba', 'İnce'],
-            data: [arsaGiderleriToplam, evrakToplam, ruhsatToplam, kabaToplam, inceToplam],
+            labels: ['Arsa', 'Evrak', 'Ruhsat', 'Kaba', 'İnce', 'İşçilikler'],
+            data: [arsaGiderleriToplam, evrakToplam, ruhsatToplam, kabaToplam, inceToplam, isciliklerToplam],
             background: [
               'rgba(59, 130, 246, 0.8)',
               'rgba(16, 185, 129, 0.8)',
@@ -1664,7 +1790,8 @@
               'Arsa': 'arsa',
               'Evrak': 'evrak',
               'Kaba': 'kaba',
-              'İnce': 'ince'
+              'İnce': 'ince',
+              'İşçilikler' : 'iscilikler'
               // Diğer ana başlıklar için alt key tanımları yapılabilir
             }
           },
@@ -2225,6 +2352,34 @@
               //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
               //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
               'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+        },
+        iscilikler: {
+          labels: ["Kalıp İşçiliği", "Demir İşçiliği", "Duvar Örme İşçiliği", "Sıva İşçiliği", "Şap İşçiliği", "Çatı İşçiliği",
+                    "Mantolama İşçiliği", "Yalıtım İşçiliği", "Su Tesisatı İşçiliği", "Elektrik İşçiliği", "Doğalgaz İşçiliği",
+                    "asansör İşçiliği", "Dekor Alçıpan İşçiliği", "Perforje İşçiliği", "İşçilik Diğer"],
+            data: [
+              kalipIsciligiToplam,
+              demirIsciligiToplam,
+              duvarOrmeIsciligiToplam,
+              sivaIsciligiToplam,
+              sapIsciligiToplam,
+              catiIsciligiToplam,
+              mantolamaIsciligiToplam,
+              yalitimIsciligiToplam,
+              suTesisatiIsciligiToplam,
+              elektrikIsciligiToplam,
+              dogalgazIsciligiToplam,
+              asansorIsciligiToplam,
+              dekorAlcipanIsciligiToplam,
+              perforjeIsciligiToplam,
+              digerIsciligiToplam
+            ],
+            background: [
+              'rgba(30, 64, 175, 0.8)', 
+              'rgba(147, 197, 253, 0.8)',
+              'rgba(59,130,246,0.3)',
+              'rgba(30, 64, 175, 0.5)'
             ]
         }
       };

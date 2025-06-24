@@ -621,6 +621,7 @@ body {
           <button class="flow-step-btn mb-2" data-tab="evrak">Evrak İşleri</button>
           <button class="flow-step-btn mb-2" data-tab="ruhsat">Yapı Ruhsatı</button>
           <button class="flow-step-btn mb-2" data-tab="uretim">Üretim</button>
+          <button class="flow-step-btn mb-2" data-tab="iscilikler">İşçilikler</button>
         </div>
       </div>
 
@@ -645,6 +646,72 @@ body {
           <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
               <span class="alt-baslik-ikon" id="arsaDigerArsa">➕</span>  
               Arsa Diğer
+          </div>
+        </div>
+      </div>
+
+      <!-- İşçilikler Sekmesi İçin -->
+      <div class="surec-section mb-4" id="tab-iscilikler">
+        <div class="er-kutular">
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">
+            <span data-kurum="İşçilik" class="alt-baslik-ikon" id="kalipIsciligi">🪜</span>
+            Kalıp İşçiliği
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">
+            <span data-kurum="İşçilik" class="alt-baslik-ikon" id="demirIsciligi">🔩</span>
+            Demir İşçiliği
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">
+            <span data-kurum="İşçilik" class="alt-baslik-ikon" id="duvarOrmeIsciligi">🧱</span>
+            Duvar Örme İşçiliği
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">
+            <span data-kurum="İşçilik" class="alt-baslik-ikon" id="sivaIsciligi">🗿</span>
+            Sıva İşçiliği
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">
+            <span data-kurum="İşçilik" class="alt-baslik-ikon" id="sapIsciligi">🪣</span>
+            Şap İşçiliği
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">
+            <span data-kurum="İşçilik" class="alt-baslik-ikon" id="catiIsciligi">🏠</span>
+            Çatı İşçiliği
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">
+            <span data-kurum="İşçilik" class="alt-baslik-ikon" id="mantolamaIsciligi">🔥</span>
+            Mantolama İşçiliği
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">
+            <span data-kurum="İşçilik" class="alt-baslik-ikon" id="yalitimIsciligi">🧤</span>
+            Yalıtım İşçiliği
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">
+            <span data-kurum="İşçilik" class="alt-baslik-ikon" id="suTesisatiIsciligi">🚿</span>
+            Su Tesisatı İşçiliği
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">
+            <span data-kurum="İşçilik" class="alt-baslik-ikon" id="elektrikIsciligi">💡</span>
+            Elektrik İşçiliği
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">
+            <span data-kurum="İşçilik" class="alt-baslik-ikon" id="dogalgazIsciligi">🔥</span>
+            Doğalgaz İşçiliği
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">
+            <span data-kurum="İşçilik" class="alt-baslik-ikon" id="asansorIsciligi">🛗</span>
+            Asansör İşçiliği
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">
+            <span data-kurum="İşçilik" class="alt-baslik-ikon" id="dekorAlcipanIsciligi">🖌️</span>
+            Dekor Alçıpan İşçiliği
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">
+            <span data-kurum="İşçilik" class="alt-baslik-ikon" id="perforjeIsciligi">🛠️</span>
+            Perforje İşçiliği
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">
+            <span data-kurum="İşçilik" class="alt-baslik-ikon" id="digerIsciligi">➕</span>
+            İşçilik Diğer
           </div>
         </div>
       </div>
@@ -765,6 +832,7 @@ body {
             <span style="font-family:'Varela Round', Arial,sans-serif;color:#7b8399;font-size:1.13rem;opacity:0.8;">İnce üretim adımları burada listelenecek…</span>
         </div>
       </div>
+
     </div>
 
 
@@ -1061,6 +1129,40 @@ function ikonBul(kurum) {
     default: return '';
   }
 }
+
+
+// İşçilik alt başlıkları için accordion
+document.querySelectorAll('#tab-iscilikler .alt-baslik-kutu').forEach(function(header) {
+  header.addEventListener('click', function() {
+    const kurum = this.querySelector('.alt-baslik-ikon').getAttribute('data-kurum'); // data-kurum bilgisini al
+
+    // Tıklanan başlık için bilgileri ayarlama işlemi
+    aktifEvrakKurum = kurum;
+    aktifEvrakDetay = this.innerText.trim();
+    const aktifEvrakId = this.querySelector('.alt-baslik-ikon').getAttribute('id') || '';
+
+    console.log("aktifEvrakKurum:", aktifEvrakKurum);
+    console.log("aktifEvrakDetay:", aktifEvrakDetay);
+
+    // Modal başlığını ayarla
+    document.getElementById('modalBaslikIkon').textContent = ikonBul(aktifEvrakKurum);
+    document.getElementById('modalBaslikText').textContent = `${aktifEvrakKurum} - ${aktifEvrakDetay}`;
+
+    // Modalı göster
+    showOdemeEvrakFormIslem(false, true, null, aktifEvrakKurum, null, aktifEvrakId); // (isRadyal=false, isEvrakIsleri=true)
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
+    
+  });
+  
+  header.addEventListener('keydown', function(e) {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault(); header.click();
+    }
+  });
+});
+
+// Başta kapalı başlat
+document.querySelectorAll('#tab-iscilikler .alt-kutu-icerik').forEach(c => c.style.display = 'none');
 
     // Kaba Üretim Adımları - TAM LİSTE
 const URETIM_ADIMLARI = [
