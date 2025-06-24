@@ -395,6 +395,48 @@ const ruhsatHarciKaydiSchema = new mongoose.Schema({
   toplamTutar: { type: Number, required: true },
   aciklama:    { type: String }
 }, { _id: true });
+const kadastroKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const tapuKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const vergiKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const sskKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const avukatKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const emlakciKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+const reklamKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
 const zeminEtuduHarciKaydiSchema = new mongoose.Schema({
   kalemId:     { type: String, required: true },
   tarih:       { type: String, required: true },
@@ -565,6 +607,13 @@ const userInputSchema = new mongoose.Schema({
   imarDurumuKaydi:[imarDurumuKaydiSchema],
   kanalKotu:[kanalKotuKaydiSchema],
   ruhsatHarci:[ruhsatHarciKaydiSchema],
+  kadastroTutar:[kadastroKaydiSchema],
+  tapuTutar:[tapuKaydiSchema],
+  vergiTutar:[vergiKaydiSchema],
+  sskTutar:[sskKaydiSchema],
+  avukat:[avukatKaydiSchema],
+  emlakci: [emlakciKaydiSchema],
+  reklam:[reklamKaydiSchema],
   zeminEtuduHarci:[zeminEtuduHarciKaydiSchema],
   muteahhitlikSozlesmesi:[muteahhitlikSozlesmesiKaydiSchema],
   vekaletSozlesmesi:[vekaletSozlesmesiKaydiSchema],

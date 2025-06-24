@@ -746,6 +746,13 @@
     let bitkilendirmeTutar = 0;
     let perforjeTutar = 0;
     let digerPeyzajTutar = 0;
+    let kadastroToplam = 0;
+    let tapuToplam = 0;
+    let vergiToplam = 0;
+    let sskToplam = 0;
+    let avukatToplam = 0;
+    let emlakciToplam = 0;
+    let reklamToplam = 0;
 
     let genelToplam = 0;
     let mKareMaliyet = 0;
@@ -933,7 +940,58 @@
         }
         projelerToplam = mimariTutar+statikTutar+tesisatTutar+hesTutar+akustikTutar;
 
-        evrakToplam = belediyeGiderleriToplam + noterGiderleriToplam + yapiDenetimToplam + zeminEtuduToplam + projelerToplam;
+        const kadastroBedeli = userProjectInfos.kadastroTutar;
+        if(Array.isArray(kadastroBedeli) && kadastroBedeli.length > 0){
+          kadastroBedeli.forEach(element => {
+            kadastroToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const tapuBedeli = userProjectInfos.tapuTutar;
+        if(Array.isArray(tapuBedeli) && tapuBedeli.length > 0){
+          tapuBedeli.forEach(element => {
+            tapuToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const vergiBedeli = userProjectInfos.vergiTutar;
+        if(Array.isArray(vergiBedeli) && vergiBedeli.length > 0){
+          vergiBedeli.forEach(element => {
+            vergiToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const sskBedeli = userProjectInfos.sskTutar;
+        if(Array.isArray(sskBedeli) && sskBedeli.length > 0){
+          sskBedeli.forEach(element => {
+            sskToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const avukatBedeli = userProjectInfos.avukat;
+        if(Array.isArray(avukatBedeli) && avukatBedeli.length > 0){
+          avukatBedeli.forEach(element => {
+            avukatToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const emlakciBedeli = userProjectInfos.emlakci;
+        if(Array.isArray(emlakciBedeli) && emlakciBedeli.length > 0){
+          emlakciBedeli.forEach(element => {
+            emlakciToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        const reklamBedeli = userProjectInfos.reklam;
+        if(Array.isArray(reklamBedeli) && reklamBedeli.length > 0){
+          reklamBedeli.forEach(element => {
+            reklamToplam += parseInt(element.toplamTutar);
+          });
+        }
+
+        evrakToplam = belediyeGiderleriToplam + noterGiderleriToplam + yapiDenetimToplam + zeminEtuduToplam 
+                    + projelerToplam + kadastroToplam + tapuToplam + vergiToplam + sskToplam + avukatToplam 
+                    + emlakciToplam + reklamToplam;
 
 
         const santiyeKurmaBedeli = userProjectInfos.santiyeKurma;
@@ -1621,8 +1679,21 @@
             ]
           },
           evrak: {
-            labels: ["Belediye", "Noter", "Yapı Denetim", "Zemin Etüdü", "Projeler"],
-            data: [belediyeGiderleriToplam, noterGiderleriToplam, yapiDenetimToplam, zeminEtuduToplam, projelerToplam],
+            labels: ["Belediye", "Noter", "Yapı Denetim", "Kadastro", "Zemin Etüdü", "Projeler", "Tapu", "Vergi", "SSK", "Avukat", "Emlakçı", "Reklam"],
+            data: [
+              belediyeGiderleriToplam, 
+              noterGiderleriToplam, 
+              yapiDenetimToplam, 
+              kadastroToplam, 
+              zeminEtuduToplam, 
+              projelerToplam,
+              tapuToplam,
+              vergiToplam,
+              sskToplam,
+              avukatToplam,
+              emlakciToplam,
+              reklamToplam
+            ],
             background: [
               'rgba(11, 129, 90, 0.8)',
               'rgba(66, 227, 175, 0.8)',
@@ -1634,8 +1705,15 @@
               'Belediye': 'belediye',
               'Noter': 'noter',
               'Yapı Denetim': 'yapidenetim',
+              'Kadastro' : 'kadastro',
               'Zemin Etüdü': 'zeminetudu',
-              'Projeler': 'projeler'
+              'Projeler': 'projeler',
+              'Tapu': 'tapu',
+              'Vergi': 'vergi',
+              'SSK': 'ssk',
+              'Avukat': 'avukat',
+              'Emlakçı': 'emlakci',
+              'Reklam': 'reklam'
             }
           },
           belediye: {
@@ -2320,6 +2398,7 @@
     */
     soldButton.addEventListener("click", () => {
         window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
+        //window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
     });
     buttonHome.addEventListener("click", () => {  
         window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;

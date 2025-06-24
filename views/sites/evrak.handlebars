@@ -687,7 +687,11 @@ body {
               <li data-kurum="Yapı Denetim" data-detay="Fenni Jeoloji" id="fenniJeoloji">Fenni Jeoloji</li>  
               <li data-kurum="Yapı Denetim" data-detay="Fenni Haritacı" id="fenniHaritaci">Fenni Haritacı</li>  
             </ul>  
-          </div>  
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false" id="kadastroTutar">  
+            <span class="alt-baslik-ikon">📏</span>  
+            Kadastro 
+          </div> 
           <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
             <span class="alt-baslik-ikon">🌎</span>  
             Zemin Etüdü
@@ -714,7 +718,31 @@ body {
               <li data-kurum="Projeler" data-detay="Akustik Proje" id="akustikProje">Akustik</li>  
               <!--<li data-kurum="Projeler" data-detay="Asansör">Asansör</li>  -->
             </ul>  
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false" id="tapu">  
+            <span class="alt-baslik-ikon">📜</span>  
+            Tapu 
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false" id="vergiler">  
+            <span class="alt-baslik-ikon">🧾</span>  
+            Vergiler 
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false" id="ssk">  
+            <span class="alt-baslik-ikon">🩺</span>  
+            SSK 
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
+            <span class="alt-baslik-ikon">🗃️</span>  
+            Diğer
+            <span class="alt-kutu-arrow">&#9654;</span>  
           </div>  
+          <div class="alt-kutu-icerik">  
+            <ul>  
+              <li data-kurum="Diğer" data-detay="Avukat" id="avukat">Avukat</li>  
+              <li data-kurum="Diğer" data-detay="Emlakci" id="emlakci">Emlakçı</li>
+              <li data-kurum="Diğer" data-detay="Reklam ve Tanıtım" id="reklam">Reklam ve Tanıtım</li>
+            </ul>  
+          </div>
         </div>  
       </div>
 
@@ -792,6 +820,10 @@ body {
     const btnInce = document.getElementById('btnInce');
     const kabaUretim = document.getElementById('kabaUretim');
     const inceUretim = document.getElementById('inceUretim');
+    const kadastroTutar = document.getElementById('kadastroTutar');
+    const tapu = document.getElementById('tapu');
+    const vergiler = document.getElementById('vergiler');
+    const ssk = document.getElementById('ssk');
 
     let userId = null;
     let projectName = null;
@@ -893,7 +925,6 @@ document.querySelectorAll('.alt-baslik-kutu').forEach(function(header) {
       if (arrow) arrow.innerHTML = "&#9660;";
     }
   });
-
   header.addEventListener('keydown', function(e){
     if(e.key === "Enter" || e.key === " ") {
       e.preventDefault(); header.click();
@@ -924,6 +955,40 @@ document.querySelectorAll('.alt-kutu-icerik li').forEach(function(item) {
     bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
   });
 });
+
+kadastroTutar.addEventListener('click', function() {
+  aktifEvrakKurum = "Kadastro";
+  aktifEvrakDetay = "";
+  document.getElementById('modalBaslikIkon').textContent = "📏";
+  document.getElementById('modalBaslikText').textContent = "Kadastro " + ' - ' + "Kadastro Ödemesi";
+  showOdemeEvrakFormIslem(false, true,null,"Kadastro",null,"kadastroTutar"); // (isRadyal=false, isEvrakIsleri=true)
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
+});
+tapu.addEventListener('click', function() {
+  aktifEvrakKurum = "Tapu";
+  aktifEvrakDetay = "";
+  document.getElementById('modalBaslikIkon').textContent = "📜";
+  document.getElementById('modalBaslikText').textContent = "Tapu " + ' - ' + "Tapu Ödemeleri";
+  showOdemeEvrakFormIslem(false, true,null,"Tapu",null,"tapuTutar"); // (isRadyal=false, isEvrakIsleri=true)
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
+});
+vergiler.addEventListener('click', function() {
+  aktifEvrakKurum = "Vergiler";
+  aktifEvrakDetay = "";
+  document.getElementById('modalBaslikIkon').textContent = "🧾";
+  document.getElementById('modalBaslikText').textContent = "Vergiler " + ' - ' + "Vergi Ödemeleri";
+  showOdemeEvrakFormIslem(false, true,null,"Vergi",null,"vergiTutar"); // (isRadyal=false, isEvrakIsleri=true)
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
+});
+ssk.addEventListener('click', function() {
+  aktifEvrakKurum = "SSK";
+  aktifEvrakDetay = "";
+  document.getElementById('modalBaslikIkon').textContent = "🩺";
+  document.getElementById('modalBaslikText').textContent = "SSK " + ' - ' + "SSK Ödemeleri";
+  showOdemeEvrakFormIslem(false, true,null,"SSK",null,"sskTutar"); // (isRadyal=false, isEvrakIsleri=true)
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
+});
+
 // Sadece alt-kutu-icerik gelmeyen alt-baslik-kutu'lar = Arsa başlıkları olarak tanımlanır!
 document.querySelectorAll('#tab-arsa .alt-baslik-kutu').forEach(function(header){
   header.addEventListener('click', function(){
@@ -940,26 +1005,36 @@ document.querySelectorAll('#tab-arsa .alt-baslik-kutu').forEach(function(header)
     switch(ikonId) {
       case "arsaBedeliArsa":
         aktifEvrakDetay = "Arsa Bedeli";
+        document.getElementById('modalBaslikIkon').textContent = '💰';
+        document.getElementById('modalBaslikText').textContent = "Arsa " + ' - ' + "Arsa Bedeli";
         showOdemeEvrakFormIslem(false, true,null,aktifEvrakKurum,null,ikonId);
         bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
         break;
       case "yerSahibiİleAnlasmaArsa":
         aktifEvrakDetay = "Yer Sahibi İle Anlaşma";
+        document.getElementById('modalBaslikIkon').textContent = '🤝';
+        document.getElementById('modalBaslikText').textContent = "Yer Sahibi İle Anlaşma ";
         showYerSahibiAnlasmaModal(false, true,null,aktifEvrakKurum,null,ikonId);
         bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
         break;
       case "yerdenCikartmakArsa":
         aktifEvrakDetay = "Yerden Çıkartmak";
+        document.getElementById('modalBaslikIkon').textContent = '⬆️';
+        document.getElementById('modalBaslikText').textContent = "Yerden Çıkartmak" + ' - ' + "Yerden Çıkartma Bedeli";
         showOdemeEvrakFormIslem(false, true,null,aktifEvrakKurum,null,ikonId);
         bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
         break;
       case "kiraBedeliArsa":
         aktifEvrakDetay = "Kira Bedeli";
+        document.getElementById('modalBaslikIkon').textContent = '💵';
+        document.getElementById('modalBaslikText').textContent = "Kira Bedeli";
         showOdemeEvrakFormIslem(false, true,null,aktifEvrakKurum,null,ikonId);
         bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
         break;
       case "arsaDigerArsa":
         aktifEvrakDetay = "Arsa Diğer";
+        document.getElementById('modalBaslikIkon').textContent = '➕';
+        document.getElementById('modalBaslikText').textContent = "Arsa Diğer" + ' - ' + "Arsa Diğer Ödemeler";
         showOdemeEvrakFormIslem(false, true,null,aktifEvrakKurum,null,ikonId);
         bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
         break;
@@ -979,8 +1054,10 @@ function ikonBul(kurum) {
     case 'Belediye': return '🏛️';
     case 'Noter': return '🖋️';
     case 'Yapı Denetim': return '🏗️';
+    case 'Kadastro' : return '📏';
     case 'Zemin Etüdü': return '🌎';
     case 'Projeler': return '📁';
+    case 'Diğer': return '🗃️';
     default: return '';
   }
 }
@@ -2280,6 +2357,8 @@ function showOdemeEvrakFormIslem(isRadyal = false, isEvrakIsleri = false, geriHa
   let alanAciklamasi = '';
   aktifKalemId = altKalemId;
   kalemId = kalemIdInput;
+  console.log("aktifKalemId ",aktifKalemId);
+  console.log("kalemId ",kalemId);
   if(isEvrakIsleri) {
     alanAciklamasi = `<div class="alert alert-info py-2 mb-2"> <b>${aktifEvrakKurum} - ${aktifEvrakDetay}</b> işlemi için ödeme ve evrak ekleyin.</div>`;
   }
@@ -2419,14 +2498,14 @@ function odemeFormSubmit(e){
   const toplamTutar = (!isNaN(miktar) && !isNaN(birimFiyat)) ? miktar * birimFiyat : 0;
   let kalemKayit = null;
 
-  //console.log("aktifKalemId:",aktifKalemId);
-
   if(aktifKalemId === "Belediye" || 
     aktifKalemId === "Noter" || 
     aktifKalemId === "Yapı Denetim" || 
     aktifKalemId === "Zemin Etüdü" || 
     aktifKalemId === "Projeler" ||
-    aktifKalemId === "Arsa"
+    aktifKalemId === "Arsa" ||
+    aktifKalemId === "Kadastro" ||
+    aktifKalemId === "Diğer"
     ){
     kalemKayit = {
       alanAdi: kalemId,
@@ -2435,6 +2514,8 @@ function odemeFormSubmit(e){
       toplamTutar,
       aciklama
     };
+    console.log("kalemKayit:",kalemKayit);
+
     if(aciklama && toplamTutar > 0 && tarih && aktifKalemId) {
       showLoader();
       fetch('/evrak', {
