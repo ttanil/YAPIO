@@ -2254,8 +2254,10 @@
             // 1. Etkileşimli label listesi:
             let clickableListHTML = '<ul class="list-group mt-3">';
             mapping.labels.forEach((lbl, i) => {
+              // Eğer bu label'ın children'ı varsa ve mapping.children'da key olarak var ise...
+              const isChild = mapping.children && mapping.children[lbl] && detailMappings[mapping.children[lbl]];
               clickableListHTML += `<li class="list-group-item list-group-item-action" style="cursor:pointer" data-label="${lbl}" data-index="${i}">
-                <span class="text-primary">${lbl}</span>
+                <span class="${isChild ? 'fw-bold text-primary' : 'text-primary'}">${lbl}</span>
                 <span class="float-end">${mapping.data[i].toLocaleString()} TL</span>
               </li>`;
             });
@@ -2381,6 +2383,31 @@
             }
           }
         });
+
+
+        document.getElementById('myChart').onclick = function (evt) {
+          const chartArea = myChart.chartArea;
+          const xAxis = myChart.scales.x;
+          const mouseX = evt.offsetX;
+          const mouseY = evt.offsetY;
+          
+          // X eksenindeki label'lar için tıklama alanını belirle (grafik altı)
+          if (mouseY > chartArea.bottom && mouseY < chartArea.bottom + 32) {
+            const labels = myChart.data.labels;
+            const step = (chartArea.right - chartArea.left) / labels.length;
+            const relX = mouseX - chartArea.left;
+            const index = Math.floor(relX / step);
+
+            if (index >= 0 && index < labels.length) {
+              const label = labels[index];
+              const value = myChart.data.datasets[0].data[index];
+              const mappingKey = detailMappings.root.children[label];
+              if (mappingKey) {
+                openDetailModal(mappingKey, label, value);
+              }
+            }
+          }
+        };
 
 
 
