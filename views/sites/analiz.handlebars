@@ -462,20 +462,22 @@
     </div>  
   </div>
 
-  <!-- Modal -->  
-  <div class="modal fade" id="myInfoModal" tabindex="-1" aria-labelledby="myInfoModalLabel" aria-hidden="true">  
+  <!-- Modal -->
+  <div class="modal fade" id="myInfoModal" tabindex="-1" aria-labelledby="myInfoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content">  
-        <div class="modal-header">  
-          <h5 class="modal-title" id="myInfoModalLabel">Detay Başlığı</h5>  
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>  
-        </div>  
-        <div class="modal-body" id="modal-body-content">  
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="myInfoModalLabel">Detay Başlığı</h5>
+        </div>
+        <div class="modal-body" id="modal-body-content">
           <canvas id="detailChart"></canvas>
-        </div>  
-      </div>  
-    </div>  
-  </div> 
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ana grafik -->
+  <canvas id="myChart"></canvas>
   
 
 
@@ -1589,300 +1591,723 @@
           await saveData("metreMaliyet", { metreMaliyeti: value });
         }
 
+        const detailMappings = {
+          root: {
+            labels: ['Arsa', 'Evrak', 'Ruhsat', 'Kaba', 'İnce'],
+            data: [arsaGiderleriToplam, evrakToplam, ruhsatToplam, kabaToplam, inceToplam],
+            background: [
+              'rgba(59, 130, 246, 0.8)',
+              'rgba(16, 185, 129, 0.8)',
+              'rgba(250, 220, 20, 0.8)',
+              'rgba(239, 68, 68, 0.8)',
+              'rgba(251, 146, 60, 0.8)'
+            ],
+            children: {
+              'Arsa': 'arsa',
+              'Evrak': 'evrak',
+              'Kaba': 'kaba',
+              'İnce': 'ince'
+              // Diğer ana başlıklar için alt key tanımları yapılabilir
+            }
+          },
+          arsa: {
+            labels: ["Arsa Bedeli", "Yerden Çıkartmak", "Kira Bedeli", "Arsa Diğer"],
+            data: [arsaBedeliTutar, yerdenCikartmakTutar, kiraBedeliTutar, arsaDigerTutar],
+            background: [
+              'rgba(30, 64, 175, 0.8)', 
+              'rgba(147, 197, 253, 0.8)',
+              'rgba(59,130,246,0.3)',
+              'rgba(30, 64, 175, 0.5)'
+            ]
+          },
+          evrak: {
+            labels: ["Belediye", "Noter", "Yapı Denetim", "Zemin Etüdü", "Projeler"],
+            data: [belediyeGiderleriToplam, noterGiderleriToplam, yapiDenetimToplam, zeminEtuduToplam, projelerToplam],
+            background: [
+              'rgba(11, 129, 90, 0.8)',
+              'rgba(66, 227, 175, 0.8)',
+              'rgba(50, 130, 100, 0.8)',
+              'rgba(16, 185, 129, 0.4)',
+              'rgba(80, 160, 130, 0.5)'
+            ],
+            children: {
+              'Belediye': 'belediye',
+              'Noter': 'noter',
+              'Yapı Denetim': 'yapidenetim',
+              'Zemin Etüdü': 'zeminetudu',
+              'Projeler': 'projeler'
+            }
+          },
+          belediye: {
+            labels: ["Aplikasyon", "İmar Durumu", "Kanal Kotu", "Ruhsat Harcı", "Zemin Etüdü Harcı"],
+            data: [aplikasyonTutar, imarDurumuTutar, kanalKotuTutar, ruhsatHarciTutar, zeminEtuduHarciTutar],
+            background: [
+              'rgba(59, 130, 246, 0.7)',
+              'rgba(30, 64, 175, 0.7)',
+              'rgba(120, 180, 240, 0.7)',
+              'rgba(80, 160, 220, 0.7)',
+              'rgba(59, 130, 246, 0.4)'
+            ]
+          },
+          noter: {
+            labels: ["Müteahhitlik Sözleşmesi", "Vekalet Sözleşmesi"],
+            data: [muteahhitlikSozlesmesiTutar, vekaletSozlesmesiTutar],
+            background: [
+              'rgba(255, 193, 7, 0.8)',
+              'rgba(255, 236, 179, 0.8)'
+            ]
+          },
+          yapidenetim: {
+            labels: ["Yapı Denetim Harcı", "Fenni Jeoloji", "Fenni Haritacı"],
+            data: [yapiDenetimHarciTutar, fenniJeolojiTutar, fenniHaritaciTutar],
+            background: [
+              'rgba(249, 115, 22, 0.8)',
+              'rgba(253, 186, 116, 0.8)',
+              'rgba(251, 191, 36, 0.8)'
+            ]
+          },
+          zeminetudu: {
+            labels: ["Zemin Etüdü Raporu", "Zemin İyileştirme"],
+            data: [zeminEtuduRaporuTutar, zeminIyilestirmeTutar],
+            background: [
+              'rgba(34,197,94,0.8)', 
+              'rgba(132,204,22,0.8)'
+            ]
+          },
+          projeler: {
+            labels: ["Mimari", "Statik", "Tesisat", "HES", "Akustik"],
+            data: [mimariTutar, statikTutar, tesisatTutar, hesTutar, akustikTutar],
+            background: [
+              'rgba(30,64,175,0.6)',
+              'rgba(59,130,246,0.6)',
+              'rgba(16,185,129,0.6)',
+              'rgba(250,220,20,0.6)',
+              'rgba(239,68,68,0.6)'
+            ]
+          },
+          // ================= KABA ve ALT KALEMLERİ =================
+          kaba: {
+            labels: [
+              "Şantiye Kurma", "Temel Kazma", "Grobeton", "Radyal Temel", "Perde Betonu", "Temel İzolasyonu",
+              "Dolgu", "Subasman", "Zemin Betonu", "Kat Betonları", "Kapama Betonu", "Çatı Uygulama", "Duvar Örme + Şap"
+            ],
+            data: [
+              santiyeKurmaToplam, temelKazmaToplam, groBetonToplam, radyalTemelToplam, perdeBetonuToplam, temelIzalasyonuToplam,
+              dolguToplam, suBasmanToplam, zeminBetonuToplam, katBetonlariToplam, kapamaBetonuToplam, catiUygulamaToplam, duvarOrmeToplam + sapToplam
+            ],
+            background: [
+              //"#1e3a8a", // koyu mavi
+              //"#60a5fa", // açık mavi
+              "#2563eb", // normal mavi
+              //"#38bdf8", // çok açık/cyan-mavi
+              //"#3b82f6", // orta mavi
+              "#93c5fd", // pastel açık mavi
+              //"#0ea5e9", // açık turkuaz mavi
+              //"#bae6fd", // çok çok açık mavi
+              //"#1d4ed8", // koyu mavi
+              //"#7dd3fc", // açık mavi
+              //"#0284c7", // mavi
+              //"#0ea5e9", // açık mavi
+            ],
+            children: {
+              "Şantiye Kurma": "santiye_kurma",
+              "Temel Kazma": "temel_kazma",
+              "Grobeton": "grobeto",
+              "Radyal Temel": "radyal_t",
+              "Perde Betonu": "perde_betonu",
+              "Temel İzolasyonu": "temel_izolasyonu",
+              "Dolgu": "dolgu",
+              "Subasman": "subasman",
+              "Zemin Betonu": "zemin_betonu",
+              "Kat Betonları": "kat_betonlari",
+              "Kapama Betonu": "kapama_beton",
+              "Çatı Uygulama": "cati_uygulama",
+              "Duvar Örme + Şap": "duvar_orme_sap"
+            }
+          },
+          santiye_kurma: {
+            labels: [
+              "Çitleme", "Nizamiye", "Konteyner Ofis", "Konteyner Yemek", "Konteyner WC", "Elektrik",
+              "Su", "Zemin Betonu", "Depo", "Jeneratör", "Su Deposu", "Aydınlatma", "Çamaşırhane",
+              "Güvenlik Kamerası", "Yangın", "İlk Yardım", "Taşınım", "İskele", "Diğer"
+            ],
+            data: [
+              citlemeTutar, nizamiyeTutar, konteyner_ofisTutar, konteyner_yemekTutar, konteyner_wcTutar, elektrikTutar,
+              suTutar, zemin_betonuTutar, depoTutar, jeneratorTutar, su_deposuTutar, aydinlatmaTutar, camasirhaneTutar,
+              guvenlik_kameraTutar, yanginTutar, ilk_yardimTutar, tasinimTutar, iskeleTutar, digerSantiyeTutar
+            ],
+            background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+          },
+          temel_kazma: {
+            labels: [
+              "Kazı Yapımı", "Makine Kiralama", "Yükleme", "Taşıma", "Tesviye", "İksa", "Drenaj", "Su İndirimi", 
+              "Hafriyat Depolama", "Elle Kazı", "Kaba Kazı", "İnce Kazı", "Patlatma", "Kontrollük", "Zemin Test", 
+              "Geçici Yol", "Güvenlik", "Diğer"
+            ],
+            data: [
+              kazi_yapimiTutar, makine_kiralamaTutar, yuklemeTutar, tasimaTutar, tesviyeTutar, iksaTutar, 
+              drenajTutar, su_indirimiTutar, hafriyat_depolamaTutar, elle_kaziTutar, kaba_kaziTutar, ince_kaziTutar, 
+              patlatmaTutar, kontrollukTutar, zemin_testTutar, gecici_yolTutar, guvenlikTutar, digertemelKazmaTutar
+            ],
+            background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+          },
+          grobeto: {
+            labels: [
+              "Alan Hazırlığı", "Kalıp", "Beton Temini", "Grobeton Serme", "Tesviye", "Sıkıştırma",
+              "Bakım", "Numune", "Temizlik", "Diğer"
+            ],
+            data: [
+              alan_hazirligiTutar, kalipTutar, beton_teminiTutar, gro_beton_sermeTutar, tesviyeGroTutar, sikistirmaTutar,
+              bakimTutar, numuneTutar, temizlikTutar, digerGroTutar
+            ],
+            background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+          },
+          radyal_t: {
+            labels: ["Demir", "Beton", "Tel", "Çivi", "Diğer"],
+            data: [demirTutar, betonTutar, telTutar, civiTutar, digerRadyalTemelTutar],
+            background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+          },
+          perde_betonu: {
+            labels: ["Demir", "Beton", "Tel", "Çivi", "Diğer"],
+            data: [demirPerdeBetonuTutar, betonPerdeBetonuTutar, telperdeBetonuTutar, civiPerdeBetonuTutar, digerPerdeBetonuTutar],
+            background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+          },
+          temel_izolasyonu: {
+            labels: ["Su Tutucu Bant", "Membran", "Likit Membran", "Drenaj Levhası"],
+            data: [su_tutucu_bantTutar, mebranTutar, likit_mebranTutar, drenaj_levhasiTutar],
+            background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+          },
+          dolgu: {
+            labels: [
+              "Malzeme Temini", "Alan Hazırlığı", "Serme", "Sıkıştırma", "Nemlendirme", "Seviye Kontrol",
+              "Numune", "Geçici Yol", "Atık Taşıma", "Drenaj", "Diğer"
+            ],
+            data: [
+              malzeme_teminiTutar, alan_hazirligiDolguTutar, sermeTutar, sikistirmaDolguTutar, nemlendirmeTutar, seviye_kontrolTutar,
+              numuneDolguTutar, gecici_yolDolguTutar, atik_tasimaTutar, drenajDolguTutar, digerDolguTutar
+            ],
+            background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+          },
+          subasman: {
+            labels: ["Çelik Hasır", "Beton", "Diğer"],
+            data: [celik_hasirTutar, betonSubasmanTutar, digerSubasmanTutar],
+            background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+          },
+          zemin_betonu: {
+            labels: ["Demir", "Beton", "Tel", "Çivi", "Diğer"],
+            data: [demirZeminBetonuTutar, betonZeminBetonuTutar, telZeminBetonuTutar, civiZeminBetonuTutar, digerZeminBetonuTutar],
+            background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+          },
+          kat_betonlari: {
+            labels: ["Demir", "Beton", "Tel", "Çivi", "Diğer"],
+            data: [demirkatBetonlariTutar, betonkatBetonlariTutar, telkatBetonlariTutar, civikatBetonlariTutar, digerkatBetonlariTutar],
+            background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+          },
+          kapama_beton: {
+            labels: ["Demir", "Beton", "Tel", "Çivi", "Diğer"],
+            data: [demirkapamaBetonuTutar, betonkapamaBetonuTutar, telkapamaBetonuTutar, civikapamaBetonuTutar, digerkapamaBetonuTutar],
+            background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+          },
+          cati_uygulama: {
+            labels: ["Kereste", "OSB", "Çatı İzolasyonu", "Kiremit", "Diğer"],
+            data: [keresteTutar, osbTutar, cati_izalasyonuTutar, kiremitTutar, digercatiUygulamaTutar],
+            background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+          },
+          duvar_orme_sap: {
+            labels: ["Duvar Örme", "Şap"],
+            data: [duvarOrmeToplam, sapToplam],
+            background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ],
+            children: {
+              "Duvar Örme": "duvar_orme",
+              "Şap": "sap"
+            }
+          },
+          sap: {
+            labels: ["Kum", "Çimento", "Diğer"],
+            data: [kumTutar, cimentoSapTutar, digerSapTutar],
+            background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+          },
+          duvar_orme: {
+            labels: ["Çimento", "Duvar Bloğu", "Kireç", "Kum & Çakıl", "Diğer"],
+            data: [cimentoTutar, duvar_bloguTutar, kirecTutar, kum_cakilTutar, digerduvarOrmeTutar],
+            background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+          },
+          ince: {
+          labels: [
+            "Zemin Uygulamaları", "İç Cephe", "Islak Mekanlar", "Mutfak", "Pimapen",
+            "Kapılar", "Korkuluklar", "Dış Cephe", "Mantolama", "Tavan",
+            "Elektrik Tesisat", "Sıhhi Tesisat", "Doğalgaz", "Asansör Kurulumu",
+            "İklimlendirme", "Peyzaj"
+          ],
+          data: [
+            zeminUygulamalariToplam, icCepheToplam, islakMekanlarToplam, mutfakToplam, pimapenToplam,
+            kapilarToplam, korkuluklarToplam, disCepheToplam, mantolamaToplam, tavanToplam,
+            elektrikTesisatToplam, sihhiTesisatToplam, dogalgazToplam, asansorKurulumuToplam,
+            iklimlendirmeToplam, peyzajToplam
+          ],
+          background: [
+              //"#1e3a8a", // koyu mavi
+              //"#60a5fa", // açık mavi
+              "#2563eb", // normal mavi
+              //"#38bdf8", // çok açık/cyan-mavi
+              //"#3b82f6", // orta mavi
+              "#93c5fd", // pastel açık mavi
+              //"#0ea5e9", // açık turkuaz mavi
+              //"#bae6fd", // çok çok açık mavi
+              //"#1d4ed8", // koyu mavi
+              //"#7dd3fc", // açık mavi
+              //"#0284c7", // mavi
+              //"#0ea5e9", // açık mavi
+            ],
+          children: {
+            "Zemin Uygulamaları": "zemin_uygulamalari",
+            "İç Cephe": "ic_cephe",
+            "Islak Mekanlar": "islak_mekanlar",
+            "Mutfak": "mutfak",
+            "Pimapen": "pimapen",
+            "Kapılar": "kapilar",
+            "Korkuluklar": "korkuluklar",
+            "Dış Cephe": "dis_cephe",
+            "Mantolama": "mantolama",
+            "Tavan": "tavan",
+            "Elektrik Tesisat": "elektrik_tesisat",
+            "Sıhhi Tesisat": "sihhi_tesisat",
+            "Doğalgaz": "dogalgaz",
+            "Asansör Kurulumu": "asansor_kurulumu",
+            "İklimlendirme": "iklimlendirme",
+            "Peyzaj": "peyzaj"
+          }
+        },
+
+        // --- Alt children mappingleri ---
+
+        zemin_uygulamalari: {
+          labels: ["Seramik", "Parke", "Mermer", "Zemin Boyası", "Epoksi", "Diğer"],
+          data: [seramikTutar, parkeTutar, mermerTutar, zeminBoyasiTutar, epoksiTutar, digerZeminUygulamalariTutar],
+          background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+        },
+        ic_cephe: {
+          labels: ["Kör Kasa", "Köşebent", "Beton Astarı", "Alçı", "Çimento", "Kum", "Hazır Sıva", "İç Cephe Boyası", "Boya Astarı", "Diğer"],
+          data: [korKasaTutar, kosebentTutar, betonAstariTutar, alciTutar, cimentoIcCepheTutar, kumIcCepheTutar,
+                hazirSivaIcTutar, icCepheBoyasiTutar, boyaAstariTutar, digerIcCepheTutar],
+          background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+        },
+        islak_mekanlar: {
+          labels: ["Zemin Yalıtımı", "Seramik/Fayans", "Klozetler", "Lavabolar", "Banyo Dolabı", "Duş Teknesi", "Banyo Bataryası", "Lavabo Bataryası", "Diğer"],
+          data: [zeminYalitimiTutar, seramikFayansTutar, klozetlerTutar, lavabolarTutar, banyoDolabiTutar, dusTeknesiTutar,
+                banyoBataryasiTutar, lavaboBataryasiTutar, digerIslakMekanlarTutar],
+          background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+        },
+        mutfak: {
+          labels: ["Tezgah", "Evye", "Dolap", "Batarya", "Ankastre", "Diğer"],
+          data: [tezgahTutar, mutfakEvyeTutar, mutfakDolabiTutar, mutfakBataryasiTutar, ankastreTutar, digerMutfakTutar],
+          background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+        },
+        pimapen: {
+          labels: ["Pencere", "Zemin Doğrama", "Diğer"],
+          data: [pencerelerTutar, zeminDogramaTutar, digerPimapenTutar],
+          background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+        },
+        kapilar: {
+          labels: ["Oda Kapıları", "Çelik Kapılar", "Diğer"],
+          data: [odaKapilariTutar, celikKapilarTutar, digerKapilarTutar],
+          background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+        },
+        korkuluklar: {
+          labels: ["Balkon", "Merdiven", "Diğer"],
+          data: [balkonTutar, merdivenTutar, digerKorkuluklarTutar],
+          background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+        },
+        dis_cephe: {
+          labels: ["Hazır Sıva", "Çimento", "Kum", "Dış Cephe Boyası", "Söve", "Boya Astarı", "Diğer"],
+          data: [hazirSivaDisTutar, cimentoDisCepheTutar, kumDisCepheTutar, disCepheBoyasiTutar, soveTutar, boyaAstariDisCepheTutar, digerDisCepheTutar],
+          background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]        },
+        mantolama: {
+          labels: ["Düvel/Montaj", "Yalıtım Levha", "Karbonlu EPS", "XPS", "Taş Yünü", "File/Sıva", "Kaplama/Sıva", "Dekoratif Kaplama", "Diğer"],
+          data: [duvel_montajTutar, yalitim_levhaTutar, karbonluEpsTutar, xpsTutar, tasYunuTutar,
+                file_sivaTutar, kaplama_sivaTutar, dekoratif_kaplamaTutar, digerMantolamaTutar],
+          background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+        },
+        tavan: {
+          labels: ["Stropiyer", "Alçıpan", "Karolem", "Diğer"],
+          data: [stropiyerTutar, alcipanTutar, karolemTutar, digerTavanTutar],
+          background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+        },
+        elektrik_tesisat: {
+          labels: ["İşçilik", "Diğer"],
+          data: [elektrikIsciligiTutar, digerElektrikTutar],
+          background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+        },
+        sihhi_tesisat: {
+          labels: ["Pis Su", "Temiz Su", "Isıtma", "Diğer"],
+          data: [pisSuTutar, temizSuTutar, isitmaTutar, digerSihhiTesisatTutar],
+          background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+        },
+        dogalgaz: {
+          labels: ["Kurulum", "Diğer"],
+          data: [dogalgazKurulumuTutar, digerDogalgazTutar],
+          background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+        },
+        asansor_kurulumu: {
+          labels: ["Kurulum", "Diğer"],
+          data: [asansorKurulumuTutar, digerAsansorTutar],
+          background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+        },
+        iklimlendirme: {
+          labels: ["Kombi", "Kombi Dolabı", "Klima", "Diğer"],
+          data: [kombiTutar, kombiDolabiTutar, klimaTutar, digerIklimlendirmeTutar],
+          background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+        },
+        peyzaj: {
+          labels: ["Bahçe Duvarı", "Bitkilendirme", "Perforje", "Diğer"],
+          data: [bahceDuvariTutar, bitkilendirmeTutar, perforjeTutar, digerPeyzajTutar],
+          background: [
+              'rgba(34,197,94,0.85)',    // Koyu yeşil
+              //'rgba(132,204,22,0.75)',   // Açık yeşil
+              //'rgba(74,222,128,0.85)',   // Orta-açık yeşil
+              //'rgba(16,185,129,0.75)',   // Turkuaz-yeşil
+              'rgba(187,247,208,0.9)'    // En açık yeşil
+            ]
+        }
+      };
+
         let detailChart;
 
-        const ctx = document.getElementById('myChart').getContext('2d');  
-        const myChart = new Chart(ctx, {  
-          type: 'bar',  
-          data: {  
-            labels: ['Arsa', 'Evrak', 'Ruhsat', 'Kaba', 'İnce'],  
-            datasets: [{  
-              label: 'Harcamalar',  
-              data: [arsaGiderleriToplam, evrakToplam, ruhsatToplam, kabaToplam, inceToplam],  
-              backgroundColor: [  
-                'rgba(59, 130, 246, 0.8)',  
-                'rgba(16, 185, 129, 0.8)',  
-                'rgba(250, 220, 20, 0.8)',  
-                'rgba(239, 68, 68, 0.8)',  
-                //'rgba(168, 85, 247, 0.8)',  
-                'rgba(251, 146, 60, 0.8)'  
-              ]  
-            }]  
-          },  
-          options: {  
-            plugins: {  
-              legend: { display: false },  
-              title: {  
-                display: true,  
-                //text: 'Yıllık Satışlar',  
-                padding: { bottom: 30 }  // <--- Başlık ile grafik arasına boşluk (px cinsinden)  
-              }  
-            },
-            scales: {  
-              y: {  
-                beginAtZero: true,  
-                ticks: {  
-                  stepSize: 50000,  
-                  callback: function(value) {  
-                    return value/1000 + ' bin TL';  
-                  }  
-                },  
-    /*
-                title: { 
-                  display: true,  
-                  text: 'bin TL' 
-                }  
-                  */
+        // Modal referansını globalde oluştur
+        const modalEl = document.getElementById('myInfoModal');
+        // Modal kapanınca chartı ve içeriği her zaman temizle (SADECE BİR KEZ tanımlanmalı!)
+        modalEl.addEventListener('hidden.bs.modal', function () {
+          if (detailChart) {
+            detailChart.destroy();
+            detailChart = null;
+          }
+          document.getElementById("modal-body-content").innerHTML = '';
+        });
+
+        // Detay modal açıcı fonksiyon
+        function openDetailModal(mappingKey, parentLabel, parentValue) {
+          const mapping = detailMappings[mappingKey];
+          if (!mapping) return;
+
+          document.getElementById("myInfoModalLabel").textContent =
+            parentLabel ? parentLabel + " Alt Kalemleri" : "Harcamalar";
+            const dynamicHeight = Math.max(mapping.labels.length * 5, 320);
+
+            // 1. Etkileşimli label listesi:
+            let clickableListHTML = '<ul class="list-group mt-3">';
+            mapping.labels.forEach((lbl, i) => {
+              clickableListHTML += `<li class="list-group-item list-group-item-action" style="cursor:pointer" data-label="${lbl}" data-index="${i}">
+                <span class="text-primary">${lbl}</span>
+                <span class="float-end">${mapping.data[i].toLocaleString()} TL</span>
+              </li>`;
+            });
+            clickableListHTML += '</ul>';
+
+            document.getElementById("modal-body-content").innerHTML = `
+              ${parentLabel && parentValue !== undefined ? `<b>${parentLabel} tutarı:</b> ${parentValue.toLocaleString()} TL<br>` : ""}
+              <canvas id="detailChart" width="380" height="${dynamicHeight}"></canvas>
+              <div id="subCalemInfo" style="padding-top:12px;"></div>
+              <div id="clickableLabelList">${clickableListHTML}</div>
+            `;
+
+          // Listeye tıklama:
+          setTimeout(() => {
+            document.querySelectorAll('#clickableLabelList li').forEach(li => {
+              li.addEventListener('click', function() {
+                const label = this.getAttribute('data-label');
+                const index = this.getAttribute('data-index');
+                const subValue = mapping.data[index];
+                if (mapping.children && mapping.children[label] && detailMappings[mapping.children[label]]) {
+                  openDetailModal(mapping.children[label], label, subValue);
+                } else {
+                  document.getElementById('subCalemInfo').innerHTML = `<b>${label} kaleminde daha alt detay bulunamadı.</b>`;
+                }
+              });
+            });
+          }, 100);
+
+          function drawDetailChart() {
+            if (detailChart) detailChart.destroy();
+            const ctx = document.getElementById('detailChart').getContext('2d');
+            detailChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: mapping.labels,
+                datasets: [{
+                  label: parentLabel || 'Harcamalar',
+                  data: mapping.data,
+                  backgroundColor: mapping.background
+                }]
+              },
+              options: {
+                indexAxis: 'y',
+                elements: {
+                  bar: {
+                    barThickness: 2
+                  }
+                },
+                plugins: { legend: { display: false }, title: { display: false }},
+                onClick: function (evt, elements) {
+                  if (elements.length > 0 && mapping.children) {
+                    const index = elements[0].index;
+                    const subLabel = mapping.labels[index];
+                    const subValue = mapping.data[index];
+                    const subMappingKey = mapping.children[subLabel];
+                    if (subMappingKey && detailMappings[subMappingKey]) {
+                      openDetailModal(subMappingKey, subLabel, subValue);
+                    } else {
+                      document.getElementById('subCalemInfo').innerHTML = `<b>${subLabel} kaleminde daha alt detay bulunamadı.</b>`;
+                    }
+                  }
+                },
+                scales: {
+                  x: {
+                    beginAtZero: true,
+                    ticks: {
+                      stepSize: 50000,
+                      callback: value => value / 1000 + ' bin TL'
+                    }
+                  }
+                }
+              }
+            });
+          }
+          modalEl.addEventListener('shown.bs.modal', drawDetailChart, { once: true }); 
+          const myModal = new bootstrap.Modal(modalEl);
+          myModal.show();
+        }
+
+        // Ana chart (dikey bar)
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: detailMappings.root.labels,
+            datasets: [{
+              label: 'Harcamalar',
+              data: detailMappings.root.data,
+              backgroundColor: detailMappings.root.background
+            }]
+          },
+          options: {
+            indexAxis: 'x', // Dikey bar
+            plugins: { legend: { display: false } },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 50000,
+                  callback: function (value) {
+                    return value / 1000 + ' bin TL';
+                  }
+                }
               }
             },
-            onClick: (event, elements) => {  
-              if (elements.length > 0) {  
-                const index = elements[0].index;  
-                const label = myChart.data.labels[index];  
-                const value = myChart.data.datasets[0].data[index];  
-
-                let labelsArray = ['Arsa', 'Evrak', 'Ruhsat', 'Kaba', 'İnce'];
-                let dataArray = [];
-                let backgroundArray = [];
-                if(label === "Arsa"){
-                  labelsArray = ["Arsa Bedeli", "Yerden Çıkartmak", "Kira Bedeli","Arsa Diğer"];
-                  dataArray = [arsaBedeliTutar, yerdenCikartmakTutar, kiraBedeliTutar, arsaDigerTutar];
-                  backgroundArray = ['rgba(30, 64, 175, 0.8)','rgba(147, 197, 253, 0.8)'];
-                } else if(label === "Projeler"){
-                  labelsArray = [
-                    "Mimari Proje",
-                    "Statik Proje",
-                    "Haritacı",
-                    "Tesisat Proje",
-                    "Elektrik Proje",
-                    "Asansör Proje",
-                    "Doğalgaz Proje",
-                    "Akustik Proje",
-                    "Şantiye Şefi",
-                    "Fenni Mesul Jeoloji",
-                    "Fenni Mesul Haritacı",
-                    "Kat İrtifa Kurma",
-                    "Enerji Kimliği",
-                    "Proje Diğer"
-                  ];
-                  dataArray = [
-                    mimariProjeTutar,
-                    statikProjeTutar,
-                    haritaciTutar,
-                    tesisatProjeTutar,
-                    elektrikProjeTutar,
-                    asansorProjeTutar,
-                    dogalgazProjeTutar,
-                    akustikProjeTutar,
-                    santiyeSefiTutar,
-                    fenniMesulJeoTutar,
-                    fenniMesulHaritaciTutar,
-                    katIrtifaTutar,
-                    enerjiKimligiTutar,
-                    projeDigerTutar
-                  ];
-                  backgroundArray = ['rgba(11, 129, 90, 0.8)', 'rgba(66, 227, 175, 0.8)'];
-                } else if(label === "Kurumlar"){
-                  labelsArray = [
-                    "Belediye",
-                    "Noter Ödemeleri",
-                    "Yapı Denetim",
-                    "Kadastro",
-                    "Zemin Etüdü",
-                    "Şantiye Elektrik",
-                    "Kentsel Dönüşüm",
-                    "SSK",
-                    "Tapu",
-                    "Emlakçı",
-                    "Reklam ve Tanıtım",
-                    "Avukat",
-                    "Vergiler",
-                    "Kurumlar Diğer"
-                  ];
-                  dataArray = [
-                    belediyeTutar,
-                    noterOdemeleriTutar,
-                    yapidenetimTutar,
-                    kadastroTutar,
-                    zeminEtuduTutar,
-                    santiyeElektrikTutar,
-                    kentselDonusumTutar,
-                    SSKTutar,
-                    tapuTutar,
-                    emlakcıTutar,
-                    reklamTutar,
-                    avukatTutar,
-                    vergilerTutar,
-                    kurumlarDigerTutar
-                  ];
-                  backgroundArray = ['rgba(200, 176, 16, 0.8)', 'rgba(255, 239, 130, 0.8)'];
-                } else if(label === "İşçilik"){
-                  labelsArray = [
-                    "Kalıp İşçiliği",
-                    "Demir İşçiliği",
-                    "Duvar Örme İşçiliği",
-                    "Sıva İşçiliği",
-                    "Şap İşçiliği",
-                    "Çatı İşçiliği",
-                    "Mantolama İşçiliği",
-                    "Yalıtım İşçiliği",
-                    "Su Tesisatı İşçiliği",
-                    "Elektrik İşçiliği",
-                    "Doğalgaz İşçiliği",
-                    "Asansör İşçiliği",
-                    "Dekor Alçıpan İşçiliği",
-                    "Perforje İşçiliği",
-                    "İşçilik Diğer"
-                  ];
-                  dataArray = [
-                    kalipIsciligiTutar,
-                    demirIsciligiTutar,
-                    duvarOrmeIsciligiTutar,
-                    sivaIsciligiTutar,
-                    sapIsciligiTutar,
-                    catiIsciligiTutar,
-                    mantolamaIsciligiTutar,
-                    yalitimIsciligiTutar,
-                    suTesisatiIsciligiTutar,
-                    elektrikIsciligiTutar,
-                    dogalgazIsciligiTutar,
-                    asansorIsciligiTutar,
-                    dekorAlcipanIsciligiTutar,
-                    perforjeIsciligiTutar,
-                    iscilikDigerTutar
-                  ];
-                  backgroundArray = ['rgba(246, 10, 10, 0.8)', 'rgba(255, 121, 121, 0.8)'];
-                } else if(label === "Kaba"){
-                  labelsArray = [
-                    "İş Makinaları",
-                    "Beton",
-                    "Demir",
-                    "Su Yalıtımı Temel",
-                    "Duvar Örme",
-                    "Çatı",
-                    "Üretim Kaba Diğer"
-                  ];
-                  dataArray = [
-                    isMakinalariTutar,
-                    betonTutar,
-                    demirTutar,
-                    suYalitimiTemelTutar,
-                    duvarOrmeTutar,
-                    catiTutar,
-                    uretimKabaDigerTutar
-                  ];
-                  backgroundArray = ['rgba(120, 45, 180, 0.8)', 'rgba(174, 79, 246, 0.8)'];
-                } else if(label === "İnce"){
-                  labelsArray = [
-                    "Su Tesisatı",
-                    "Elektrik Tesisatı",
-                    "Mermer",
-                    "Pencereler",
-                    "Sıva",
-                    "Mantolama",
-                    "Kapılar",
-                    "Islak Zemin Yalıtımları",
-                    "Seramikler",
-                    "Parkeler",
-                    "Vitrifiyeler",
-                    "Bataryalar",
-                    "Stropiyer Alçıpan",
-                    "Mutfak",
-                    "Ankastre",
-                    "İklimlendirme",
-                    "Korkuluk ve Perforje",
-                    "Söve",
-                    "Aydınlatma",
-                    "Kompozit Kaplama",
-                    "Peyzaj",
-                    "Üretim İnce Diğer"
-                  ];
-                  dataArray = [
-                    suTesisatiTutar,
-                    elektrikTesisatiTutar,
-                    mermerTutar,
-                    pencerelerTutar,
-                    sivaTutar,
-                    mantolamaTutar,
-                    kapilarTutar,
-                    islakZeminYalitimlariTutar,
-                    seramiklerTutar,
-                    parkelerTutar,
-                    vitrifiyelerTutar,
-                    bataryalarTutar,
-                    stropiyerAlcıpanTutar,
-                    mutfakTutar,
-                    ankastreTutar,
-                    iklimlendirmeTutar,
-                    korkulukVePerforjeTutar,
-                    soveTutar,
-                    aydinlatmaTutar,
-                    kompozitKaplamaTutar,
-                    peyzajTutar,
-                    uretimInceDigerTutar
-                  ];
-                  backgroundArray = ['rgba(252, 137, 42, 0.8)', 'rgba(254, 182, 122, 0.8)'];
+            onClick: (event, elements) => {
+              modalEl.addEventListener('hidden.bs.modal', function () {
+          if (detailChart) {
+            detailChart.destroy();
+            detailChart = null;
+          }
+          document.getElementById("modal-body-content").innerHTML = '';
+        });
+              if (elements.length > 0) {
+                const index = elements[0].index;
+                const label = myChart.data.labels[index];
+                const value = myChart.data.datasets[0].data[index];
+                const mappingKey = detailMappings.root.children[label];
+                if (mappingKey) {
+                  openDetailModal(mappingKey, label, value);
                 }
-                
+              }
+            }
+          }
+        });
 
-                // Modal içeriğini güncelle  
-                document.getElementById("myInfoModalLabel").textContent = label + " Harcamaları";  
-                const dynamicHeight = Math.max(labelsArray.length * 30, 320); // En az 320px  
-                document.getElementById("modal-body-content").innerHTML = `  
-                  <b>${label} gideri:</b> ${value.toLocaleString()} TL  
-                  <canvas id="detailChart" width="380" height="${dynamicHeight}"></canvas>`;   
 
-                // Modalı aç  
-                const myModal = new bootstrap.Modal(document.getElementById('myInfoModal'));  
-                myModal.show();  
 
-                // Modal tamamen açıldığında grafik oluştur  
-                const modalEl = document.getElementById('myInfoModal');  
-                const drawDetailChart = function () {  
-                  if (detailChart) detailChart.destroy();  
-                  const ctx = document.getElementById('detailChart').getContext('2d');  
-                  detailChart = new Chart(ctx, {  
-                    type: 'bar',  
-                    data: {  
-                      labels: labelsArray,  
-                      datasets: [{  
-                        label: 'Harcamalar',  
-                        data: dataArray,  
-                        backgroundColor: backgroundArray
-                      }]  
-                    },  
-                    options: {  
-                      indexAxis: 'y', // Yatay grafik  
-                      plugins: {  
-                        legend: { display: false },  
-                        title: { display: true, padding: { bottom: 30 } }  
-                      },  
-                      scales: {  
-                        x: {  
-                          beginAtZero: true,  
-                          ticks: {  
-                            stepSize: 50000,  
-                            callback: function (value) {  
-                              return value/1000 + ' bin TL';  
-                            },
-                            minRotation: 45, // veya rotation: 45, Chart.js sürümüne göre  
-                            maxRotation: 45
-                          }  
-                        }  
-                      }
-                    }  
-                  });  
-                  // Listener'ı kaldır ki yalnızca 1 kez çalışsın  
-                  modalEl.removeEventListener('shown.bs.modal', drawDetailChart);  
-                };  
-
-                modalEl.addEventListener('shown.bs.modal', drawDetailChart);  
-              }  
-            }  
-            
-          }  
-        }); 
     });
+    
 
     loginButton.addEventListener("click", () => {
         window.location.href = "/";
