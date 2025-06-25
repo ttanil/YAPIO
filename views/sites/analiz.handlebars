@@ -441,6 +441,10 @@
           <img src="/img/property.png" alt="">
           <span>Satış</span>
       </a>
+      <a class="menu-btn" id="material-button" href="#">
+        <img src="/img/list.png" alt="">
+        <span>Malzeme Yönetimi</span>
+    </a>
   </div>
 
   <div class="mt-4 graph" id="container-graph">  
@@ -489,7 +493,8 @@
     const projectNameString = document.getElementById("projectName");
     const buttonHome = document.getElementById("buttonHome");
     //const quatationButton = document.getElementById("quatation-button"); 
-    const soldButton = document.getElementById("sold-button"); 
+    const soldButton = document.getElementById("sold-button");
+    const material = document.getElementById("material-button");
     const genelToplamText = document.getElementById("genelToplamText");
     const mKareMaliyetText = document.getElementById("mKareMaliyetText");
     const loginButton = document.getElementById("loginButton");
@@ -2581,6 +2586,9 @@
     soldButton.addEventListener("click", () => {
         window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
         //window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
+    });
+    material.addEventListener("click", () => {
+        window.location.href = `/malzeme?projectName=${encodeURIComponent(projectName)}`;
     });
     buttonHome.addEventListener("click", () => {  
         window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;

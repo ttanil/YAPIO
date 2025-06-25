@@ -1,0 +1,413 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Malzeme Yönetimi</title>
+    <link rel="icon" type="image/png" href="img/icon.png" sizes="32x32">
+    <!-- Bootstrap CSS -->  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">  
+    <link rel="stylesheet" href="/css/index.css"> 
+     
+    <style> 
+        body {
+            min-height: 130vh;
+            height: 110%;
+            margin: 0;
+            background: linear-gradient(to bottom, #fff, #dbeafe 75%);
+        }
+        .city-silhouette {
+            position: fixed;   /* absolute değil, fixed! */
+            left: 0; right: 0; bottom: 0;
+            width: 100vw;
+            height: 24vh;
+            min-height: 100px;
+            max-height: 220px;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        .main-content {
+            position: relative;
+            z-index: 2;
+        }
+        .frost {
+            backdrop-filter: blur(8px) brightness(0.96);
+        }
+
+        .container-navbar {  
+            display: flex;  
+            flex: 0 0 100%;  
+            flex-wrap: nowrap;  
+            align-items: center;  
+            justify-content: center;  
+            margin: 0px;
+        }
+
+        .custom-short-menu {
+            display: flex;
+            gap: 22px;
+            justify-content: center;   /* Ortala */
+            align-items: flex-start;
+            width: 100%;
+            margin-top: 18px;
+            margin-bottom: 10px;
+        }
+
+        .menu-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 70px;
+            text-decoration: none;
+            background: none;
+            border: none;
+            outline: none;
+            transition: color 0.18s, background 0.18s;
+        }
+
+        .menu-btn img {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 4px;
+        }
+
+        .menu-btn span {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .menu-btn:hover span,
+        .menu-btn:focus span {
+            color: #1d67c4;
+            font-weight: 500;
+        }
+
+        #buttonHome {
+            margin-right: 18px; /* Sağdan istediğin kadar boşluk (arttırabilirsin) */
+        }
+
+
+
+        .container-fluid {  
+            display: flex;  
+            flex: 0 0 100%;  
+            flex-wrap: nowrap;  
+            align-items: center;  
+        }  
+        #projectName {  
+            flex: 0 0 90%;  
+            white-space: nowrap;  
+            overflow: hidden;  
+            text-overflow: ellipsis;  
+            font-family: Arial, sans-serif;  
+            font-size: 36px;
+        }  
+        .img-fluid {  
+            flex: 0 0 auto;  
+            height: 30px;  
+            width: 30px;  
+            margin-right: 10px;  
+        }
+        .custom-btn {  
+            background-color: #847539;
+            color: white; /* Yazı rengi */  
+            border: none; /* Kenarlığın kaldırılması */  
+            border-radius: 10px; /* Kenarlıkları yuvarlaklaştırma */  
+            padding: 10px 20px; /* İç boşluklar */  
+            font-family: "Varela Round";  
+            font-size: 16px; /* Yazı boyutu */  
+            font-weight: bold; /* Kalın yazı */  
+            letter-spacing: 2px;
+            cursor: pointer; /* Fare imlecini işaretçi yapma */  
+            transition: background-color 0.3s ease; /* Hover geçiş efekti */
+            margin-right: 40px;
+        }
+
+
+         @media (max-width: 576px) {
+            body {
+                min-height: 100vh;
+                height: 100%;
+            }
+            .city-silhouette {
+                position: fixed;
+                left: 0; right: 0; bottom: 0;
+                width: 100vw;
+                height: 14vh;
+                min-height: 70px;
+                max-height: 150px;
+            }
+
+            .container-navbar {  
+                flex-wrap: wrap;  
+                justify-content: flex-end;  
+            }  
+            #projectName {
+                flex: 0 0 70%;  
+                overflow: hidden;  
+                text-overflow: ellipsis;  
+                white-space: nowrap;  
+                text-align: left;
+                font-size: 17px !important;  
+                max-width: 65%;     /* Taşmayı önler */  
+                min-width: 0;       /* flex shrink için gerekli */  
+                margin-right: 0;    /* İstenirse gap için elle ekleyin */
+            }  
+            #buttonHome {
+                flex: 0 0 30px;     /* Eğer 30px'lik bir kutu ise tam sabitlenir */  
+                padding: 0;         /* Ekstra boşlukları engeller */  
+                margin-left: 0;     /* İstenirse 5px gibi küçük bir boşluk eklenebilir */  
+                display: flex;  
+                align-items: center;
+            }
+
+            .custom-short-menu {
+                display: flex;
+                gap: 12px;
+                justify-content: center;
+                align-items: flex-start;
+                width: 90% !important;
+                margin-top: 12px;
+                margin-left: auto;
+                margin-right: auto; /* Ortalamak için */
+            }
+            .menu-btn {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                flex: 1 1 0;    /* EŞİT yayılır, min 0 olur, büyüyebilir */
+                text-decoration: none;
+                background: none;
+                border: none;
+                outline: none;
+                transition: color 0.18s, background 0.18s;
+                min-width: 0;   /* Sıkışmaya izin verir */
+            }
+            .menu-btn img {
+                width: 25px;
+                height: 25px;
+                margin-bottom: 4px;
+            }
+            .menu-btn span {
+                font-size: 0.8rem;
+                white-space: nowrap; /* Çok taşmasını önlemek için */
+                text-align: center;
+            }
+
+
+            .img-fluid {  
+                height: 28px;  
+                width: 28px;  
+                margin-right: 0;    /* Sağdan boşluğu kaldırır */  
+                margin-left: 0;     /* Soldan boşluğu kaldırır */
+            }  
+            .custom-btn {  
+              font-size: 12px; /* Yazı boyutu */
+              padding: 5px 10px;      /* Yan boşlukları biraz artırdım */
+              border-radius: 6px;      /* Köşeler hafif yuvarlatıldı */
+              color: #fff;
+              border: none;
+              margin-right: 12px;
+              display: inline-block; 
+              font-weight: 500;   
+            }
+            .navbar-toggler {  
+                /* background-color: rgb(89, 125, 234);  */
+                background-color: #c2c5c9;
+                flex: 0 0 auto;  
+                margin-left: auto;  
+                justify-content: flex-end;  
+            }
+            .container-fluid {  
+                flex-wrap: wrap;  
+            } 
+            .dropdown-item{
+                display: flex;
+                margin-left: auto;  
+                justify-content: flex-end;
+            }
+            .mobile-navbar-menu {  
+                justify-content: flex-end !important;  
+                text-align: right !important;  
+                margin-top: 10px;
+                margin-bottom: 5px;
+            }  
+            .mobile-navbar-menu .nav-item, .mobile-navbar-menu .dropdown-item-mobile {
+                display: flex;
+                align-items: center;
+                justify-content: space-between !important;  
+                text-align: right !important;
+                font-size: 1.1rem;
+                font-style: bold !important;
+                height: 22px;
+                margin-top: 2px;
+                justify-self: end;
+            }
+            .dropdown-item-mobile {
+                width: 34%;
+                font-family: Arial, sans-serif !important; 
+                color: rgb(94, 93, 93) !important;      /* Varsayılan metin rengini kullan */  
+                text-decoration: none !important; /* Altı çizgiyi kaldır */  
+                font-weight: 400 !important;
+            }
+         }
+
+    </style>  
+</head> 
+
+<body class="relative min-h-screen w-full bg-gradient-to-b from-white to-blue-100 flex flex-col items-center justify-start">
+    <!-- Alt Şehir Silüeti SVG -->
+    <svg class="city-silhouette" viewBox="0 0 400 96" fill="none" preserveAspectRatio="none" width="100%" height="100%">
+    <g>
+        <!-- Sol bloklar -->
+        <rect x="0" y="60" width="14" height="36" rx="2" fill="#6366f1" opacity="0.13"/>
+        <rect x="16" y="40" width="22" height="56" rx="4" fill="#60a5fa" opacity="0.18"/>
+        <!-- Çatılı bina -->
+        <rect x="41" y="72" width="12" height="24" rx="2" fill="#818cf8" opacity="0.16"/>
+        <polygon points="41,72 47,62 53,72" fill="#818cf8" opacity="0.28"/>
+        <rect x="56" y="60" width="16" height="36" rx="3" fill="#38bdf8" opacity="0.14"/>
+        <!-- Pencereli uzun blok -->
+        <rect x="75" y="36" width="12" height="60" rx="2" fill="#60a5fa" opacity="0.15"/>
+        <rect x="81" y="44" width="2" height="8" rx="1" fill="#fff" opacity="0.22"/>
+        <rect x="81" y="60" width="2" height="8" rx="1" fill="#fff" opacity="0.15"/>
+        <!-- Mini blok -->
+        <rect x="90" y="80" width="7" height="16" rx="1.5" fill="#818cf8" opacity="0.19"/>
+        
+        <!-- Orta bloklar -->
+        <rect x="100" y="66" width="18" height="30" rx="2" fill="#6366f1" opacity="0.09"/>
+        <rect x="121" y="46" width="28" height="50" rx="3" fill="#818cf8" opacity="0.09"/>
+        <rect x="152" y="78" width="12" height="18" rx="2" fill="#60a5fa" opacity="0.16"/>
+        <!-- Yan yana iki blok farklı yükseklikte -->
+        <rect x="170" y="69" width="16" height="27" rx="2" fill="#818cf8" opacity="0.12"/>
+        <rect x="188" y="79" width="10" height="17" rx="2" fill="#6366f1" opacity="0.12"/>
+        <!-- Asimetrik büyük blok -->
+        <rect x="201" y="29" width="29" height="67" rx="4" fill="#60a5fa" opacity="0.14"/>
+        <!-- Farklı ton kısa blok -->
+        <rect x="233" y="74" width="12" height="22" rx="2" fill="#38bdf8" opacity="0.13"/>
+        <!-- İnce yüksek blok -->
+        <rect x="248" y="25" width="9" height="71" rx="2" fill="#818cf8" opacity="0.17"/>
+        <!-- Diğer bloklar (düz, alçak/kalın) -->
+        <rect x="260" y="79" width="23" height="17" rx="3" fill="#6366f1" opacity="0.1"/>
+        <rect x="287" y="67" width="16" height="29" rx="2" fill="#60a5fa" opacity="0.11"/>
+        <!-- Minik bloklar ve farklı renk -->
+        <rect x="306" y="82" width="6" height="14" rx="1" fill="#818cf8" opacity="0.17"/>
+        <rect x="316" y="68" width="10" height="28" rx="2" fill="#38bdf8" opacity="0.14"/>
+        <!-- Geniş kısa bina -->
+        <rect x="330" y="80" width="26" height="16" rx="2" fill="#6366f1" opacity="0.09"/>
+        <!-- Sağda küçük çatılı blok -->
+        <rect x="360" y="70" width="13" height="26" rx="2" fill="#60a5fa" opacity="0.12"/>
+        <polygon points="360,70 366.5,61 373,70" fill="#60a5fa" opacity="0.22"/>
+        <!-- Sağda yüksek son blok -->
+        <rect x="378" y="24" width="18" height="72" rx="2.5" fill="#6366f1" opacity="0.11"/>
+        <!-- En sağ mini pencere detayı -->
+        <rect x="384" y="32" width="2.5" height="8" rx="1" fill="#fff" opacity="0.20"/>
+    </g>
+    </svg>
+        <!-- Responsive Header -->  
+    <nav class="header d-flex justify-content-between align-items-center px-3">
+        <span class="d-flex align-items-center gap-2">
+            <img src="img/icon.png" alt="Logo" width="32" height="32">
+            Yapıo
+        </span>
+        <button class="btn custom-btn" id="loginButton" style="display: none;">PROJELER</button>  
+    </nav>
+
+    <!-- Navbar -->  
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm mt-4 container-navbar">  
+        <div class="container-fluid">  
+            <!-- Proje Adı -->  
+            <h4 class="navbar-brand" id="projectName">Proje Adı</h4>  
+            <!-- Ana Sayfa Butonu -->  
+            <button class="btn d-flex navbar-home-button" id="buttonHome">  
+                <img src="img/home1_1.png" alt="Katlar Görseli" class="img-fluid rounded">  
+            </button>
+        </div>  
+    </nav> 
+
+    <div class="custom-short-menu" id="regulation-button-area">
+        <a class="menu-btn" id="document-button" href="#">
+            <img src="/img/building-plan.png" alt="">
+            <span>Yapı Süreci</span>
+        </a>
+        <a class="menu-btn" id="graphs-button" href="#">
+            <img src="img/growth_1.png" alt="">
+            <span>Analizler</span>
+        </a>
+        <a class="menu-btn" id="sold-button" href="#">
+            <img src="/img/property.png" alt="">
+            <span>Satış</span>
+        </a>
+    </div>
+
+    <div class="container-fluid vh-99 d-flex justify-content-center align-items-center">
+        <div class="text-center mt-5">
+            <span>
+                Yapım Aşamasındadır
+            </span>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
+    <script type="module">
+
+        const graphsButton = document.getElementById("graphs-button");
+        const buttonHome = document.getElementById("buttonHome");
+        const loginButton = document.getElementById("loginButton");
+        const soldButton = document.getElementById("sold-button");
+        const documentButton = document.getElementById("document-button");
+        const projectNameString = document.getElementById("projectName");  
+
+
+        let userId = null;
+        let projectName = null;
+        let building = null;
+
+        // DOM yüklendiğinde işlem başlat  
+        document.addEventListener("DOMContentLoaded", () => {  
+            event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle  
+
+             window.user = {{#if user}}
+                { "email": "{{user.email}}", "role": "{{user.role}}", "userId": "{{user.id}}", "project": {{{json project}}} }
+            {{else}}
+                { "role": "{{role}}" }
+            {{/if}};
+
+            console.log(window.user);
+
+            userId = window.user.userId;
+            const projectNameDb = window.user.project.projectName;
+            projectName = projectNameDb;
+            if(projectName){
+                const projectNameText = projectNameDb.toUpperCase();
+                projectNameString.textContent = projectNameText;
+            }
+            if(userId){
+                loginButton.style.display = "block";
+            } else{
+                loginButton.style.display = "none";
+            }
+
+        });
+
+
+        loginButton.addEventListener("click", () => {
+            window.location.href = "/";
+        });
+        buttonHome.addEventListener("click", () => {  
+            window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
+        });
+        graphsButton.addEventListener("click", () => {
+           window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
+        });
+        soldButton.addEventListener("click", () => {
+            window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`;
+        });
+        documentButton.addEventListener("click", () => {
+            window.location.href = `/evrak?projectName=${encodeURIComponent(projectName)}`;
+        });
+
+    </script>  
+</body>  
+</html>

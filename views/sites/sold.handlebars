@@ -485,6 +485,10 @@
           <img src="img/growth_1.png" alt="">
           <span>Analizler</span>
       </a>
+      <a class="menu-btn" id="material-button" href="#">
+        <img src="/img/list.png" alt="">
+        <span>Malzeme Yönetimi</span>
+    </a>
   </div>
 
 <div id="loader" style="display:none;">
@@ -620,7 +624,8 @@
     
     const projectNameString = document.getElementById("projectName");
     const buttonHome = document.getElementById("buttonHome");
-    const graphsButton = document.getElementById("graphs-button"); 
+    const graphsButton = document.getElementById("graphs-button");
+    const material = document.getElementById("material-button");
     const modalTitle = document.getElementById("roomModalTitle");
     const modalSubtitle = document.getElementById("roomModalSubtitle");
     const roomModalImage = document.getElementById("roomModalImage");
@@ -763,6 +768,9 @@
     */
     graphsButton.addEventListener("click", () => {
       window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
+    });
+    material.addEventListener("click", () => {
+        window.location.href = `/malzeme?projectName=${encodeURIComponent(projectName)}`;
     });
     buttonHome.addEventListener("click", () => {  
       window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
