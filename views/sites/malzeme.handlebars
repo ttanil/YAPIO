@@ -852,11 +852,17 @@
 
         // Kaydet butonu tıklandığında
         saveMaterialButton.addEventListener('click', () => {
-            const materialName = document.getElementById('materialName').value.trim();
+            let materialName = document.getElementById('materialName').value.trim();
             const unitsInput = document.getElementById('materialUnits').value.split(','); // Virgül ile birimleri ayır
 
             if (materialName && unitsInput.length > 0) {
-                addService(materialName, unitsInput);
+                materialName = materialName.toUpperCase();
+                const newData = {
+                    materialName,
+                    unitsInput
+                }
+                saveNewMaterial(newData);
+                addService(materialName, "", unitsInput);
                 const modal = bootstrap.Modal.getInstance(document.getElementById('addMaterialModal'));
                 modal.hide(); // Modal'ı kapat
             } else {
@@ -865,12 +871,20 @@
         });
 
         // Hizmeti ekleyen fonksiyon
-        function addService(serviceName, units, savedResults = []) {
+        function addService(serviceName, serviceNameText = "", units, savedResults = []) {
             const serviceDiv = document.createElement('div');
             serviceDiv.className = 'service';
+            let nameText = "";
+            if(serviceNameText === ""){
+                nameText = serviceName; 
+            } else{
+                nameText = serviceNameText;
+            }
+
+            console.log("units:",units);
 
             serviceDiv.innerHTML = `
-                <div class="service-name">${serviceName}</div>
+                <div class="service-name">${nameText}</div>
                 <div class="input-group">
                     <select id="birim-select">
                         <option value="" disabled selected>Birim</option>
@@ -909,7 +923,11 @@
                 const birimFiyat = parseFloat(birimFiyatInput.value);
                 const miktar = miktarInput.value;
                 const toplamTutar = parseFloat(toplamTutarInput.value);
-                const materialValue = getMaterialKeyByValue(material);
+                let materialValue = getMaterialKeyByValue(material) || "";
+
+                if(materialValue === ""){
+                    materialValue = serviceName;
+                }
 
                 if (birim && birimFiyat && miktar) {
                     const newRecord = { materialValue, birim, birimFiyat, miktar, toplamTutar };
@@ -1106,13 +1124,13 @@
                 //console.log("predefinedServices:",predefinedServices);
                 // Başlangıçta kaydedilen hizmetleri ekle
                 predefinedServices.forEach(service => {  
-                    const serviceName = service.name;  
+                    const serviceName = service.name;
+                    const serviceNameText = service.nameText;
                     const serviceData = {  
                         units: service.units,  
                         savedResults: service.savedResults  
                     };
-                    //console.log("savedResults:",service.name, " ",serviceData.savedResults);
-                    addService(serviceName, serviceData.units, serviceData.savedResults);  
+                    addService(serviceName, serviceNameText, serviceData.units, serviceData.savedResults);  
                 });  
             }
         }
@@ -1143,6 +1161,7 @@
                         // Diziye malzeme nesnelerini ekle
                         materialsList.push({
                             name: materialDisplayName, // Düzgün büyük harfle malzeme adı
+                            nameText : material.nameText,
                             units: material.units, // Gelen malzemenin birimlerini al
                             savedResults: savedAreas 
                         });
@@ -1200,6 +1219,31 @@
             }
         }
 
+
+        async function saveNewMaterial(newData){
+            const newMaterialNameDb = turkishToAsciiLower(newData.materialName);
+            newData.newMaterialNameDb = newMaterialNameDb;
+            showLoader();
+            try {
+                const response = await fetch('/malzeme', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        process: "saveNewMaterial",
+                        userId: userId, 
+                        projectName: projectName,
+                        newData
+                    })
+                });
+
+            } catch (error) {
+                console.error("Fetch hatası:", error);
+            } finally {
+                hideLoader();
+            }
+        }
+        
+
         function showLoader() {
             document.getElementById('loader').style.display = 'flex';
         }
@@ -1215,6 +1259,24 @@
             }
             return null;
         }
+
+        function turkishToAsciiLower(str) {
+            return str
+                .replace(/ç/g, 'c')
+                .replace(/ğ/g, 'g')
+                .replace(/ı/g, 'i')
+                .replace(/ö/g, 'o')
+                .replace(/ş/g, 's')
+                .replace(/ü/g, 'u')
+                .replace(/Ç/g, 'c')
+                .replace(/Ğ/g, 'g')
+                .replace(/İ/g, 'i')
+                .replace(/Ö/g, 'o')
+                .replace(/Ş/g, 's')
+                .replace(/Ü/g, 'u')
+                .toLowerCase();
+        }
+
 
     </script>  
 </body>  

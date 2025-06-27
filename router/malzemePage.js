@@ -297,6 +297,46 @@ router.post('/', async (req, res) => {
             return res.status(500).json({ success: false, message: "Bir hata oluştu." });
         }
 
+    } else if(process === "saveNewMaterial"){
+        try {
+            const { userId, projectName, newData } = req.body;
+            //console.log(newData);
+            const user = await Users.findById(userId);  
+            if (!user) {
+                return res.status(404).json({ success: false, message: "Kullanıcı bulunamadı." });
+            }
+
+            const proje = user.userInputs.find(p => p.projectName === projectName);
+            if (!proje) {
+                return res.status(404).json({ success: false, message: "Proje bulunamadı." });
+            }
+
+            // Aynı materyal önceden var mı kontrolü:
+            const alreadyExists = proje.materials.some(
+                m => m.name === newData.newMaterialNameDb
+            );
+
+
+            if (alreadyExists) {
+            return res.status(400).json({ error: "Bu isimle bir materyal zaten var." });
+            }
+
+            // Yoksa ekle:
+            proje.materials.push({
+                name:newData.newMaterialNameDb,
+                nameText: newData.materialName,        // Orjinal (ör: 'Ğöç')
+                units: newData.unitsInput,
+                savedResults: []
+            });
+
+            await user.save();
+
+            return res.json({ success: true, message: "Materyal eklendi.", materials: proje.materials });
+
+        } catch (error) {
+            console.error("Hata: ", error);
+            return res.status(500).json({ success: false, message: "Bir hata oluştu." });
+        }
     }
 
 

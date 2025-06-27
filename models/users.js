@@ -656,6 +656,7 @@ const savedMaterialRecordsKaydiSchema = new mongoose.Schema({
 }, { _id: true });
 const savedMaterialKaydiSchema = new mongoose.Schema({
   name: { type: String, required: true },
+  nameText: {type: String, default: ""},
   units: { type: [String], required: true },
   savedResults: [savedMaterialRecordsKaydiSchema]
 },{ strict: false }, { _id: true });
