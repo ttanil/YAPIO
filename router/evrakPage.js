@@ -242,7 +242,7 @@ router.post('/', upload.single('file'), async (req, res) => {
         //res.json(userInput.imarDurumu[imarDurumuIndex].odemeDetaylari || []);
 
     } else if(process === "delete"){
-        console.log(req.body);
+        //console.log(req.body);
         const { process, userId, projectName, odemeId, alanAdi } = req.body;
         if (process !== "delete") return res.status(400).json({ error: "Process bilinmiyor" });
 

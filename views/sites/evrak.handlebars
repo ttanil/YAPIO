@@ -1146,8 +1146,8 @@ document.querySelectorAll('#tab-iscilikler .alt-baslik-kutu').forEach(function(h
     aktifEvrakDetay = this.innerText.trim();
     const aktifEvrakId = this.querySelector('.alt-baslik-ikon').getAttribute('id') || '';
 
-    console.log("aktifEvrakKurum:", aktifEvrakKurum);
-    console.log("aktifEvrakDetay:", aktifEvrakDetay);
+    //console.log("aktifEvrakKurum:", aktifEvrakKurum);
+    //console.log("aktifEvrakDetay:", aktifEvrakDetay);
 
     // Modal başlığını ayarla
     document.getElementById('modalBaslikIkon').textContent = ikonBul(aktifEvrakKurum);
@@ -2464,8 +2464,8 @@ function showOdemeEvrakFormIslem(isRadyal = false, isEvrakIsleri = false, geriHa
   let alanAciklamasi = '';
   aktifKalemId = altKalemId;
   kalemId = kalemIdInput;
-  console.log("aktifKalemId ",aktifKalemId);
-  console.log("kalemId ",kalemId);
+  //console.log("aktifKalemId ",aktifKalemId);
+  //console.log("kalemId ",kalemId);
   if(isEvrakIsleri) {
     alanAciklamasi = `<div class="alert alert-info py-2 mb-2"> <b>${aktifEvrakKurum} - ${aktifEvrakDetay}</b> işlemi için ödeme ve evrak ekleyin.</div>`;
   }
@@ -2621,7 +2621,6 @@ function odemeFormSubmit(e){
       toplamTutar,
       aciklama
     };
-    console.log("kalemKayit:",kalemKayit);
 
     if(aciklama && toplamTutar > 0 && tarih && aktifKalemId) {
       showLoader();
@@ -2655,7 +2654,6 @@ function odemeFormSubmit(e){
       toplamTutar,
       aciklama
     };
-    console.log("kalemKayit:",kalemKayit);
     if(aciklama && toplamTutar > 0 && tarih && aktifKalemId) {
       showLoader();
       fetch('/evrak', {
