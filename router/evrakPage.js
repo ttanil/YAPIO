@@ -242,6 +242,7 @@ router.post('/', upload.single('file'), async (req, res) => {
         //res.json(userInput.imarDurumu[imarDurumuIndex].odemeDetaylari || []);
 
     } else if(process === "delete"){
+        console.log(req.body);
         const { process, userId, projectName, odemeId, alanAdi } = req.body;
         if (process !== "delete") return res.status(400).json({ error: "Process bilinmiyor" });
 
@@ -256,12 +257,26 @@ router.post('/', upload.single('file'), async (req, res) => {
         const dizi = userInput[alanAdi];
         if (!Array.isArray(dizi)) return res.status(404).json({ error: `Beklenen dizin ${alanAdi} bulunamadı.` });
 
-        // Not: Eğer dizi içindeki alt dizi ise (ör: dizi[0].odemeDetaylari gibi) onu da dinamikleştirmek istersen, yapıyı paylaşırsan yardımcı olurum!
-        // Şimdilik ana dizi olarak siliyoruz:
         const index = dizi.findIndex(o => o && o._id && o._id.toString() === odemeId);
         if (index === -1) return res.status(404).json({ error: "Kayıt/Ödeme bulunamadı" });
 
         dizi.splice(index, 1);
+
+        // 3. Malzemeleri kontrol et ve eşleşen kayıtları sil
+        let isDeletedMaterial = false;
+        
+        for (const material of userInput.materials) { 
+            const initialLength = material.savedResults.length;
+
+            material.savedResults = material.savedResults.filter(result => {
+                return result.evrakId && odemeId && result.evrakId.toString() !== odemeId;
+            });
+
+            if (initialLength !== material.savedResults.length) {
+                isDeletedMaterial = true;
+            }
+        }
+
         await user.save();
 
         return res.json({ success: true });
