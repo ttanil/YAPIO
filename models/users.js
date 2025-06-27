@@ -645,6 +645,22 @@ const altParaKaydiSchema = new mongoose.Schema({
 }, { _id: true });
 
 
+const savedMaterialRecordsKaydiSchema = new mongoose.Schema({
+  birim:       { type: String, required: true },
+  birimFiyat:  { type: Number, required: true },
+  miktar:      { type: String, required: true },
+  from:        { type: String, default: "evrak" },
+  toplamTutar: { type: Number, required: true },
+  tarih:       { type: Date,   default: Date.now },
+  evrakId:     { type: String, default: "" }
+}, { _id: true });
+const savedMaterialKaydiSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  units: { type: [String], required: true },
+  savedResults: [savedMaterialRecordsKaydiSchema]
+},{ strict: false }, { _id: true });
+
+
 const arsaBedeliSchema = new mongoose.Schema(defaultFields, { _id: false });
 const yerdenCikartmakSchema = new mongoose.Schema(defaultFields, { _id: false });
 
@@ -732,6 +748,8 @@ const userInputSchema = new mongoose.Schema({
   dekorAlcipanIsciligi:[dekorAlcipanIsciligiKaydiSchema],
   perforjeIsciligi:[perforjeIsciligiKaydiSchema],
   digerIsciligi:[digerIsciligiKaydiSchema],
+
+  materials:[savedMaterialKaydiSchema],
 
 
   arsaBedeliArsa:[arsaBedeliKaydiSchema],

@@ -609,7 +609,7 @@ body {
         </a>
         <a class="menu-btn" id="material-button" href="#">
             <img src="/img/list.png" alt="">
-            <span>Malzeme Yönetimi</span>
+            <span>Malzeme<br>Yönetimi</span>
         </a>
     </div>
 
@@ -1759,9 +1759,9 @@ const ELEKTRIK_TESISAT = [
 ];
 
 const SIHHI_TESISAT = [
-  { id:"pisSu",     ad:"Pis Su",      icon:"fa-toilet",              birimler:["m", "boru", "adet"] },
-  { id:"temizSu",   ad:"Temiz Su",    icon:"fa-faucet",              birimler:["m", "boru", "adet"] },
-  { id:"isitma",    ad:"Isıtma",      icon:"fa-temperature-high",    birimler:["m", "boru", "adet"] },
+  { id:"pisSu",     ad:"Pis Su",      icon:"fa-toilet",              birimler:["metre", "boru", "adet"] },
+  { id:"temizSu",   ad:"Temiz Su",    icon:"fa-faucet",              birimler:["metre", "boru", "adet"] },
+  { id:"isitma",    ad:"Isıtma",      icon:"fa-temperature-high",    birimler:["metre", "boru", "adet"] },
   { id: "diger", ad: "Diğer", icon: "fa-ellipsis", birimler: ["adet", "kg", "torba","litre","metre","m²", "m³","kova","ton"] }
 ];
 
@@ -1804,9 +1804,9 @@ const PEYZAJ = [
   { id: "diger", ad: "Diğer", icon: "fa-ellipsis", birimler: ["adet", "kg", "torba","litre","metre","m²", "m³","kova","ton"] }
 ];
 const MUTFAK = [
-  { id: "tezgah",           ad: "Tezgah",           icon: "fa-grip-horizontal", birimler: ["m", "m²"] },
+  { id: "tezgah",           ad: "Tezgah",           icon: "fa-grip-horizontal", birimler: ["metre", "m²"] },
   { id: "mutfakEvye",       ad: "Mutfak Evye",      icon: "fa-sink",           birimler: ["adet", "takım"] },
-  { id: "mutfakDolabi",     ad: "Mutfak Dolabı",    icon: "fa-box-archive",    birimler: ["m", "m²", "adet", "takım"] },
+  { id: "mutfakDolabi",     ad: "Mutfak Dolabı",    icon: "fa-box-archive",    birimler: ["metre", "m²", "adet", "takım"] },
   { id: "mutfakBataryasi",  ad: "Mutfak Bataryası", icon: "fa-faucet",         birimler: ["adet", "takım"] },
   { id: "ankastre",         ad: "Ankastre",         icon: "fa-rectangle-list", birimler: ["adet", "set"] },
   { id: "diger", ad: "Diğer", icon: "fa-ellipsis", birimler: ["adet", "kg", "torba","litre","metre","m²", "m³","kova","ton"] }
@@ -1839,8 +1839,8 @@ const DIS_CEPHE = [
 ];
 const MANTOLAMA = [
   //{ id: "yuzey_hazirlik",   ad: "Yüzey Hazırlığı ve Temizlik", icon: "fa-broom",         birimler: ["m²", "adet"] },
-  { id: "duvel_montaj",     ad: "Dübel ve Aksesuar Montajı",   icon: "fa-screwdriver",   birimler: ["adet", "m"] },
-  { id: "yalitim_levha",    ad: "Yalıtım Levhası Montajı",     icon: "fa-layer-group",   birimler: ["m²", "adet"] },
+  { id: "duvel_montaj",     ad: "Dübel ve Aksesuar",   icon: "fa-screwdriver",   birimler: ["adet"] },
+  { id: "yalitim_levha",    ad: "Yalıtım Levhası",     icon: "fa-layer-group",   birimler: ["m²", "adet"] },
   { id: "karbonluEps",      ad: "Karbonlu EPS",                icon: "fa-dice-d6",       birimler: ["m²", "m³", "adet"] },
   { id: "xps",              ad: "XPS",                         icon: "fa-layer-group",   birimler: ["m²", "m³", "adet"] },
   { id: "tasYunu",          ad: "Taş Yünü",                    icon: "fa-feather-alt",   birimler: ["m²", "m³", "adet"] },
@@ -2655,7 +2655,7 @@ function odemeFormSubmit(e){
       toplamTutar,
       aciklama
     };
-    //console.log("kalemKayit:",kalemKayit);
+    console.log("kalemKayit:",kalemKayit);
     if(aciklama && toplamTutar > 0 && tarih && aktifKalemId) {
       showLoader();
       fetch('/evrak', {
@@ -2665,7 +2665,8 @@ function odemeFormSubmit(e){
             process:"save",
             userId, 
             projectName,
-            kalemKayit 
+            kalemKayit,
+            birimFiyat
           })
         })
       .then(r => r.json())

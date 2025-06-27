@@ -83,51 +83,108 @@ router.post('/', upload.single('file'), async (req, res) => {
 
     if(process === "save"){
         try {
-        const { userId, projectName, kalemKayit } = req.body;
-        const alanAdi = kalemKayit.alanAdi;
-        if (!alanAdi)
-            return res.status(400).json({ success: false, message: "Alan adı belirtilmemiş." });
+            const { userId, projectName, kalemKayit } = req.body;
+            const alanAdi = kalemKayit.alanAdi;
+            const { birimFiyat } = req.body;
+            if (!alanAdi)
+                return res.status(400).json({ success: false, message: "Alan adı belirtilmemiş." });
 
-        // 1. Kullanıcıyı ve ilgili projeyi bul
-        const user = await Users.findById(userId);
-        if (!user)
-            return res.status(404).json({ success: false, message: "Kullanıcı bulunamadı." });
+            // 1. Kullanıcıyı ve ilgili projeyi bul
+            const user = await Users.findById(userId);
+            if (!user)
+                return res.status(404).json({ success: false, message: "Kullanıcı bulunamadı." });
 
-        const proje = user.userInputs.find(p => p.projectName === projectName);
-        if (!proje)
-            return res.status(404).json({ success: false, message: "Proje bulunamadı." });
+            const proje = user.userInputs.find(p => p.projectName === projectName);
+            if (!proje)
+                return res.status(404).json({ success: false, message: "Proje bulunamadı." });
 
-        // 2. İlgili alan dinamik dizi mi? Şemada varsa çalışır
-        if (!Array.isArray(proje[alanAdi])) {
-            // Eğer bu alan şemada yoksa, mongoose kaydetmez!
-            proje[alanAdi] = [];
+            // 2. İlgili alan dinamik dizi mi? Şemada varsa çalışır
+            if (!Array.isArray(proje[alanAdi])) {
+                // Eğer bu alan şemada yoksa, mongoose kaydetmez!
+                proje[alanAdi] = [];
+            }
+
+            // 3. Kayıt ekle (kalemId hariç diğer tüm alanlar da push edilir)
+            // Alan adı ve içeriği tamamen dinamik!
+            proje[alanAdi].push(kalemKayit);
+
+            user.markModified('userInputs');
+            await user.save();
+
+            // 5. DB'den eklenen kalemin _id'sini almak için tekrar sorgulama
+            const savedKalemKayit = await Users.findOne(
+                { _id: userId, "userInputs.projectName": projectName }, // Kullanıcı ID ve proje adı ile sorgulama
+                { "userInputs.$": 1 } // Sadece ilgili proje verisini al
+            );
+
+            const latestKalem = savedKalemKayit.userInputs[0][alanAdi].slice(-1)[0]; // Son eklenen kalemi al
+            const latestKalemId = latestKalem._id.toString();
+
+            //console.log("Son eklenen kalemin ID'si:", latestKalemId);
+
+            if(kalemKayit.kalemId !== "nizamiye" || kalemKayit.kalemId !== "tasinim" || kalemKayit.kalemId !== "diger"
+            || kalemKayit.kalemId !== "kazi_yapimi" || kalemKayit.kalemId !== "makine_kiralama" || kalemKayit.kalemId !== "yukleme"
+            || kalemKayit.kalemId !== "tasima" || kalemKayit.kalemId !== "tesviye" || kalemKayit.kalemId !== "su_indirimi"
+            || kalemKayit.kalemId !== "hafriyat_depolama" || kalemKayit.kalemId !== "elle_kazi" || kalemKayit.kalemId !== "kaba_kazi"
+            || kalemKayit.kalemId !== "ince_kazi" || kalemKayit.kalemId !== "kontrolluk" || kalemKayit.kalemId !== "zemin_test"
+            || kalemKayit.kalemId !== "gecici_yol" || kalemKayit.kalemId !== "guvenlik" || kalemKayit.kalemId !== "alan_hazirligi"
+            || kalemKayit.kalemId !== "kalip" || kalemKayit.kalemId !== "gro_beton_serme" || kalemKayit.kalemId !== "sikistirma"
+            || kalemKayit.kalemId !== "bakim" || kalemKayit.kalemId !== "numune" || kalemKayit.kalemId !== "temizlik"
+            || kalemKayit.kalemId !== "malzeme_temini" || kalemKayit.kalemId !== "serme" || kalemKayit.kalemId !== "sikistirma"
+            || kalemKayit.kalemId !== "nemlendirme" || kalemKayit.kalemId !== "seviye_kontrol" || kalemKayit.kalemId !== "atik_tasima"
+            || kalemKayit.kalemId !== "drenaj" || kalemKayit.kalemId !== "pisSu" || kalemKayit.kalemId !== "temizSu"
+            || kalemKayit.kalemId !== "isitma" || kalemKayit.kalemId !== "bahceDuvari" || kalemKayit.kalemId !== "bitkilendirme"
+            ){
+                // 3. Kayıt kontrolü (önce kontrol et)
+                const existingMaterial = proje.materials.find(material => material.name === kalemKayit.kalemId);
+
+                if (existingMaterial) {
+                    // Eğer kayıt varsa, yeni savedResults ekle
+                    existingMaterial.savedResults.push({ 
+                        birim: kalemKayit.birim, 
+                        birimFiyat: birimFiyat, 
+                        miktar: kalemKayit.miktar, 
+                        toplamTutar: kalemKayit.toplamTutar,
+                        from:"evrak",
+                        evrakId:latestKalemId
+                    });
+                } else {
+                    // Eğer kayıt yoksa, yeni bir dataToDb oluştur
+                    const dataToDb = {
+                        name: kalemKayit.kalemId,
+                        units: kalemKayit.birim,
+                        savedResults: [{ 
+                            birim: kalemKayit.birim, 
+                            birimFiyat: birimFiyat, 
+                            miktar: kalemKayit.miktar,
+                            from:"evrak",
+                            toplamTutar: kalemKayit.toplamTutar 
+                        }]
+                    };
+                    proje.materials.push(dataToDb); // Yeni kaydı ekle
+                }
+            }
+
+            // 4. Değişikliği kaydet
+            user.markModified('userInputs');
+            await user.save();
+
+            // 5. Kayıttan sonra geri kontrol/log (isteğe bağlı)
+            const refreshed = await Users.findById(userId);
+            const sonDurum = refreshed.userInputs.find(
+                x => x.projectName === projectName
+            )[alanAdi];
+
+            return res.json({ success: true, message: "Kayıt başarıyla eklendi." });
+
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({
+                success: false,
+                message: "Bir hata oluştu.",
+                error: err.message
+            });
         }
-
-        // 3. Kayıt ekle (kalemId hariç diğer tüm alanlar da push edilir)
-        // Alan adı ve içeriği tamamen dinamik!
-        // Eğer duplicate kaydı önlemek istersen burada kontrol et (örn. kalemId eşsiz ise)
-        proje[alanAdi].push(kalemKayit);
-
-        // 4. Değişikliği kaydet
-        user.markModified('userInputs');
-        await user.save();
-
-        // 5. Kayıttan sonra geri kontrol/log (isteğe bağlı)
-        const refreshed = await Users.findById(userId);
-        const sonDurum = refreshed.userInputs.find(
-            x => x.projectName === projectName
-        )[alanAdi];
-
-        return res.json({ success: true, message: "Kayıt başarıyla eklendi." });
-
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({
-            success: false,
-            message: "Bir hata oluştu.",
-            error: err.message
-        });
-    }
 
         //res.json({ success: true, odeme });
 
