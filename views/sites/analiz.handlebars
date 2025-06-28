@@ -500,6 +500,74 @@
     const loginButton = document.getElementById("loginButton");
     const documentButton = document.getElementById("document-button");
 
+    const materialNames = {
+        "demir": "DEMİR",
+        "beton": "BETON",
+        "tel": "TEL",
+        "civi": "ÇİVİ",
+        "su_tutucu_bant": "SU TUTUCU BANT",
+        "citleme": "ÇİT",
+        "mebran": "MEBRAN",
+        "likit_mebran": "LİKİT MEBRAN",
+        "drenaj_levhasi": "DRENAJ LEVHASI",
+        "celik_hasir": "ÇELİK HASIR",
+        "kereste": "KERESTE",
+        "osb": "OSB",
+        "cati_izalasyonu": "ÇATI İZALASYONU",
+        "kiremit": "KİREMİT",
+        "cimento": "ÇİMENTO",
+        "duvar_blogu": "DUVAR BLOĞU",
+        "kirec": "KİREÇ",
+        "kum_cakil": "KUM-ÇAKIL",
+        "kum": "KUM",
+        "seramik": "SERAMİK",
+        "parke": "PARKE",
+        "mermer": "MERMER",
+        "zeminBoyasi": "ZEMİN BOYASI",
+        "epoksi": "EPOKSİ",
+        "korKasa": "KÖR KASA",
+        "kosebent": "KÖŞEBENT",
+        "betonAstari": "BETON ASTARI",
+        "alci": "ALÇI",
+        "hazirSivaIc": "HAZIR SIVA İÇ",
+        "icCepheBoyasi": "İÇ CEPHE BOYASI",
+        "boyaAstari": "BOYA ASTARI",
+        "zeminYalitimi": "ZEMİN YALITIMI",
+        "seramikFayans": "SERAMİK-FAYANS",
+        "klozetler": "KLOZETLER",
+        "lavabolar": "LAVABOLAR",
+        "banyoDolabi": "BANYO DOLABI",
+        "dusTeknesi": "DUŞ TEKNESİ",
+        "banyoBataryasi": "BANYO BATARYASI",
+        "lavaboBataryasi": "LAVABO BATARYASI",
+        "tezgah": "TEZGAH",
+        "mutfakEvye": "MUTFAK EVYE",
+        "mutfakDolabi": "MUTFAK DOLABI",
+        "mutfakBataryasi": "MUTFAK BATARYASI",
+        "ankastre": "ANKASTRE",
+        "pencereler": "PENCERELER",
+        "zeminDograma": "ZEMİN DOĞRAMA",
+        "odaKapilari": "ODA KAPILARI",
+        "celikKapilar": "ÇELİK KAPILAR",
+        "hazirSivaDis": "HAZIR SIVA DIŞ",
+        "disCepheBoyasi": "DIŞ CEPHE BOYASI",
+        "duvel_montaj": "DUVEL",
+        "yalitim_levha": "YALITIM LEVHASI",
+        "karbonluEps": "KARBONLU EPS",
+        "xps": "XPS",
+        "tasYunu": "TAŞ YÜNÜ",
+        "file_siva": "SIVA FİLESİ",
+        "kaplama_siva": "KAPLAMA SIVASI",
+        "dekoratif_kaplama": "DEKORATİF KAPLAMA (MANTOLAMA)",
+        "stropiyer": "STROPİYER",
+        "alcipan": "ALÇIPAN",
+        "karolem": "KAROLEM",
+        "kombi": "KOMBİ",
+        "kombiDolabi": "KOMBİ DOLABI",
+        "klima": "KLİMA",
+        "perforje": "PERFORJE"
+    }
+
     let userId = null;
     let projectName = null;
     let building = null;
@@ -774,6 +842,7 @@
     let dekorAlcipanIsciligiToplam = 0;
     let perforjeIsciligiToplam = 0;
     let digerIsciligiToplam = 0;
+    let malzemelerToplam = 0;
 
     let genelToplam = 0;
     let mKareMaliyet = 0;
@@ -1753,8 +1822,49 @@
 
 
 
+        let materialsList = [];
+        const malzemeBedeli = userProjectInfos.materials;
+        if(Array.isArray(malzemeBedeli) && malzemeBedeli.length > 0){
+          malzemeBedeli.forEach(element => {
+            const saves = element.savedResults;
+            if(saves.length > 0){
+              saves.forEach(item => {
+                if(item.from === "malzeme"){
+                  const toplamTutar = item.toplamTutar;
+                  let name = "";
+                  if(element.nameText === ""){
+                    name = element.name;
+                  } else{
+                    name = element.nameText;
+                  }
+                  const materialDisplayName = materialNames[name] || name;
+                  const data = {
+                    materialDisplayName,
+                    toplamTutar
+                  }
+                  malzemelerToplam += toplamTutar*1000;
+                  materialsList.push(data);
+                }
+              });
+            }
+          });
+        }
+        let materialNamesList = [];
+        let materialTutarList = [];
+        if(materialsList.length > 0){
+          materialsList.forEach(item => {
+            materialNamesList.push(item.materialDisplayName);
+            materialTutarList.push(item.toplamTutar*1000);
+          });
 
-        genelToplam = arsaGiderleriToplam + evrakToplam + ruhsatToplam + kabaToplam + inceToplam + isciliklerToplam
+        }
+        console.log('materialNamesList', materialNamesList);
+console.log('materialTutarList', materialTutarList);
+
+
+
+
+        genelToplam = arsaGiderleriToplam + evrakToplam + ruhsatToplam + kabaToplam + inceToplam + isciliklerToplam + malzemelerToplam
                     - yerSahibiAlinanParaTutar + yerSahibiVerilenParaTutar;
 
         building = userProjectInfos.building;
@@ -1782,22 +1892,24 @@
 
         const detailMappings = {
           root: {
-            labels: ['Arsa', 'Evrak', 'Ruhsat', 'Kaba', 'İnce', 'İşçilikler'],
-            data: [arsaGiderleriToplam, evrakToplam, ruhsatToplam, kabaToplam, inceToplam, isciliklerToplam],
+            labels: ['Arsa', 'Evrak', 'Ruhsat', 'Kaba', 'İnce', 'İşçilikler', ['Eklenen', 'Malzemeler']],
+            data: [arsaGiderleriToplam, evrakToplam, ruhsatToplam, kabaToplam, inceToplam, isciliklerToplam, malzemelerToplam],
             background: [
-              'rgba(59, 130, 246, 0.8)',
-              'rgba(16, 185, 129, 0.8)',
-              'rgba(250, 220, 20, 0.8)',
-              'rgba(239, 68, 68, 0.8)',
-              'rgba(251, 146, 60, 0.8)'
+              'rgba(59, 130, 246, 0.8)',    // Mavi
+              'rgba(34, 197, 94, 0.8)',    // Yeşil
+              'rgba(177, 98, 28, 0.8)',   // Sarı
+              'rgba(239, 68, 68, 0.8)',   //  Kırmızı
+              'rgba(251, 146, 60, 0.8)',  // Turuncu
+              'rgba(124, 58, 237, 0.8)',   // Tailwind: purple-600
+              'rgba(20, 184, 166, 0.8)'     // Teal
             ],
             children: {
               'Arsa': 'arsa',
               'Evrak': 'evrak',
               'Kaba': 'kaba',
               'İnce': 'ince',
-              'İşçilikler' : 'iscilikler'
-              // Diğer ana başlıklar için alt key tanımları yapılabilir
+              'İşçilikler' : 'iscilikler',
+              'Eklenen,Malzemeler' : 'malzemeler'
             }
           },
           arsa: {
@@ -2386,6 +2498,16 @@
               'rgba(59,130,246,0.3)',
               'rgba(30, 64, 175, 0.5)'
             ]
+        },
+        malzemeler:{
+          labels:materialNamesList,
+          data:materialTutarList,
+          background: [
+              'rgba(30, 64, 175, 0.8)', 
+              'rgba(147, 197, 253, 0.8)',
+              'rgba(59,130,246,0.3)',
+              'rgba(30, 64, 175, 0.5)'
+            ]
         }
       };
 
@@ -2700,6 +2822,8 @@
 
       return decPart ? `${intPart},${decPart.substring(0,2)}` : intPart;  
     }
+
+
   </script>  
 </body>  
 </html>
