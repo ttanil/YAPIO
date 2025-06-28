@@ -859,7 +859,7 @@
         {{/if}};
 
         userProjectInfos = window.user.project || [];
-        console.log("userProjectInfos:",userProjectInfos);
+        //console.log("userProjectInfos:",userProjectInfos);
 
         userId = window.user.userId;
         projectName = window.user.project.projectName;
@@ -1821,6 +1821,13 @@
                     + dogalgazToplam + asansorKurulumuToplam + iklimlendirmeToplam + peyzajToplam;
 
 
+        const ruhsatBedeli = userProjectInfos.yapiRuhsati;
+        if(Array.isArray(ruhsatBedeli) && ruhsatBedeli.length > 0){
+          ruhsatBedeli.forEach(element => {
+            ruhsatToplam += element.toplamTutar;
+          });
+        }
+
 
         let materialsList = [];
         const malzemeBedeli = userProjectInfos.materials;
@@ -1856,12 +1863,7 @@
             materialNamesList.push(item.materialDisplayName);
             materialTutarList.push(item.toplamTutar*1000);
           });
-
         }
-        console.log('materialNamesList', materialNamesList);
-console.log('materialTutarList', materialTutarList);
-
-
 
 
         genelToplam = arsaGiderleriToplam + evrakToplam + ruhsatToplam + kabaToplam + inceToplam + isciliklerToplam + malzemelerToplam

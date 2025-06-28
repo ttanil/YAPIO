@@ -645,6 +645,14 @@ const altParaKaydiSchema = new mongoose.Schema({
 }, { _id: true });
 
 
+const yapiRuhsatiKaydiSchema = new mongoose.Schema({
+  kalemId:     { type: String, required: true },
+  tarih:       { type: String, required: true },
+  toplamTutar: { type: Number, required: true },
+  aciklama:    { type: String }
+}, { _id: true });
+
+
 const savedMaterialRecordsKaydiSchema = new mongoose.Schema({
   birim:       { type: String, required: true },
   birimFiyat:  { type: Number, required: true },
@@ -749,6 +757,8 @@ const userInputSchema = new mongoose.Schema({
   dekorAlcipanIsciligi:[dekorAlcipanIsciligiKaydiSchema],
   perforjeIsciligi:[perforjeIsciligiKaydiSchema],
   digerIsciligi:[digerIsciligiKaydiSchema],
+
+  yapiRuhsati:[yapiRuhsatiKaydiSchema],
 
   materials:[savedMaterialKaydiSchema],
 

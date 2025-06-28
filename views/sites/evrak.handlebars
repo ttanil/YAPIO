@@ -818,7 +818,7 @@ body {
       </div>
 
       <div class="surec-section" id="tab-ruhsat">  
-        <button class="evrak-ekle-btn">Evrak Ekle</button>  
+        <button class="evrak-ekle-btn" id="btnYapiRuhsati">Evrak Ekle</button>  
       </div>
 
       <div class="surec-section mb-4" id="tab-uretim">
@@ -897,6 +897,7 @@ body {
     const tapu = document.getElementById('tapu');
     const vergiler = document.getElementById('vergiler');
     const ssk = document.getElementById('ssk');
+    const btnYapiRuhsati = document.getElementById('btnYapiRuhsati');
 
     let userId = null;
     let projectName = null;
@@ -1134,6 +1135,16 @@ function ikonBul(kurum) {
     default: return '';
   }
 }
+
+// Yapı Ruhsatı
+btnYapiRuhsati.addEventListener('click', function() {
+  aktifEvrakKurum = "Yapı Ruhsatı";
+  aktifEvrakDetay = "";
+  document.getElementById('modalBaslikIkon').textContent = "📄➕";
+  document.getElementById('modalBaslikText').textContent = "Yapı Ruhsatı " + ' - ' + "Ödemeler";
+  showOdemeEvrakFormIslem(false, true,null,"YapiRuhsati",null,"yapiRuhsati"); // (isRadyal=false, isEvrakIsleri=true)
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
+});
 
 
 // İşçilik alt başlıkları için accordion
