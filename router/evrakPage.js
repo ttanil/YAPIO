@@ -120,24 +120,20 @@ router.post('/', upload.single('file'), async (req, res) => {
             const latestKalem = savedKalemKayit.userInputs[0][alanAdi].slice(-1)[0]; // Son eklenen kalemi al
             const latestKalemId = latestKalem._id.toString();
 
-            //console.log("Son eklenen kalemin ID'si:", latestKalemId);
+            const engelliIdler = [
+                "nizamiye", "tasinim", "diger", "kazi_yapimi", "makine_kiralama", "yukleme",
+                "tasima", "tesviye", "su_indirimi", "hafriyat_depolama", "elle_kazi",
+                "kaba_kazi", "ince_kazi", "kontrolluk", "zemin_test", "gecici_yol", "guvenlik",
+                "alan_hazirligi", "kalip", "gro_beton_serme", "sikistirma", "bakim", "numune",
+                "temizlik", "malzeme_temini", "serme", "sikistirma", "nemlendirme", "seviye_kontrol",
+                "atik_tasima", "drenaj", "pisSu", "temizSu", "isitma", "bahceDuvari", "bitkilendirme",
+                "Arsa", "YapiRuhsati", "Noter", "Belediye", "Yapı Denetim", "Kadastro", "Zemin Etüdü",
+                "Projeler", "Tapu", "Vergi", "SSK", "Diğer", "İşçilik"
+            ];
 
-            if(kalemKayit.kalemId !== "nizamiye" || kalemKayit.kalemId !== "tasinim" || kalemKayit.kalemId !== "diger"
-            || kalemKayit.kalemId !== "kazi_yapimi" || kalemKayit.kalemId !== "makine_kiralama" || kalemKayit.kalemId !== "yukleme"
-            || kalemKayit.kalemId !== "tasima" || kalemKayit.kalemId !== "tesviye" || kalemKayit.kalemId !== "su_indirimi"
-            || kalemKayit.kalemId !== "hafriyat_depolama" || kalemKayit.kalemId !== "elle_kazi" || kalemKayit.kalemId !== "kaba_kazi"
-            || kalemKayit.kalemId !== "ince_kazi" || kalemKayit.kalemId !== "kontrolluk" || kalemKayit.kalemId !== "zemin_test"
-            || kalemKayit.kalemId !== "gecici_yol" || kalemKayit.kalemId !== "guvenlik" || kalemKayit.kalemId !== "alan_hazirligi"
-            || kalemKayit.kalemId !== "kalip" || kalemKayit.kalemId !== "gro_beton_serme" || kalemKayit.kalemId !== "sikistirma"
-            || kalemKayit.kalemId !== "bakim" || kalemKayit.kalemId !== "numune" || kalemKayit.kalemId !== "temizlik"
-            || kalemKayit.kalemId !== "malzeme_temini" || kalemKayit.kalemId !== "serme" || kalemKayit.kalemId !== "sikistirma"
-            || kalemKayit.kalemId !== "nemlendirme" || kalemKayit.kalemId !== "seviye_kontrol" || kalemKayit.kalemId !== "atik_tasima"
-            || kalemKayit.kalemId !== "drenaj" || kalemKayit.kalemId !== "pisSu" || kalemKayit.kalemId !== "temizSu"
-            || kalemKayit.kalemId !== "isitma" || kalemKayit.kalemId !== "bahceDuvari" || kalemKayit.kalemId !== "bitkilendirme"
-            ){
+            if(!engelliIdler.includes(kalemKayit.kalemId)) {
                 // 3. Kayıt kontrolü (önce kontrol et)
                 const existingMaterial = proje.materials.find(material => material.name === kalemKayit.kalemId);
-
                 if (existingMaterial) {
                     // Eğer kayıt varsa, yeni savedResults ekle
                     existingMaterial.savedResults.push({ 

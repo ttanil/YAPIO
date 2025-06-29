@@ -126,6 +126,60 @@
         }
 
 
+        .container-materials-list {
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 16px;
+            padding-right: 16px;
+            padding-top: 32px;
+            padding-bottom: 32px;
+            min-height: 100vh;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #222;
+            font-size: 1.6rem;
+            font-weight: bold;
+            }
+        .materials-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+        @media (min-width: 640px) {
+        .materials-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (min-width: 900px) {
+        .materials-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        @media (min-width: 1200px) {
+        .materials-grid { grid-template-columns: repeat(5, 1fr); }
+        }
+        .malzeme-kart {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px 0 rgba(31,42,67,0.08),0 1.5px 5px 0 rgba(31,42,67,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #374151;
+            text-align: center;
+            transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+            cursor: pointer;
+            user-select: none;
+        }
+        .malzeme-kart:hover {
+            background: #e0eefa;
+            color: #1e3a8a;
+            box-shadow: 0 6px 20px 0 rgba(30,58,138,0.10);
+        }
+
+
         .container {
             max-width: 75%;
             margin: 0 auto;
@@ -139,8 +193,8 @@
             padding: 15px;
             margin-bottom: 20px;
             border: 1px solid rgba(139, 139, 139, 0.5);
-            border-left: 5px solid #8b8b8b; /* Sol kenar için yeşil kalın çizgi */
-            
+            border-left: 5px solid #8b8b8b; /* Sol kenar için kalın çizgi */
+            /*display: none; */
         }
 
         .service-name {
@@ -152,8 +206,9 @@
 
         .input-group {
             display: flex;
-            justify-content: space-between;
+            justify-content:flex-start;
             margin-bottom: 10px;
+            gap: 12px;
         }
 
         select,
@@ -163,7 +218,7 @@
             border-radius: 4px;
             color: #858484; /* Giriş alanlarındaki metin rengi gri */
             font-size: 0.9rem;
-            max-width: 70%;
+            max-width: 100%;
         }
 
         input[type="number"] {
@@ -178,6 +233,9 @@
             border-radius: 4px;
             cursor: pointer;
             transition: background 0.3s;
+        }
+        .input-group button {
+            margin-left: auto !important;
         }
 
         button:hover {
@@ -199,19 +257,24 @@
             font-size: 1rem; /* Yazı boyutu */
         }
 
-        .result-label {
-            font-weight: 300;
-            margin-right: 5px; /* Etiket ile değer arasına boşluk bırak */
-            min-width: 50px; /* Sabit genişlik ayarla */
-        }
-
-        .result-value {
-            margin-right: 5px; /* Etiket ile değer arasına boşluk bırak */
-            min-width: 70px;
-        }
-
         .separator {
             margin: 0 5px; /* Her bir değer arasındaki boşluk */
+        }
+
+        #labelMiktar, #valueMiktar{
+            font-weight: 300;
+            margin-right: 5px; /* Etiket ile değer arasına boşluk bırak */
+            min-width: 85px; /* Sabit genişlik ayarla */
+        }
+        #labelBirim, #valueBirim, #labelToplam{
+            font-weight: 300;
+            margin-right: 5px;
+            min-width: 30px;
+        }
+        #labelBirimFiyat, #valueBirimFiyat{
+            font-weight: 300;
+            margin-right: 5px;
+            min-width: 85px;
         }
 
         .delete-button {
@@ -236,7 +299,7 @@
         }
 
         /* Modal stil güncellemeleri */  
-        .modal-content {  
+        .modal-content, {  
             border-radius: 15px; /* Köşeleri yuvarlat */  
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Gölgelendirme ekle */ 
             display: flex;
@@ -301,6 +364,101 @@
         .custom-select {  
             border-radius: 10px; /* Seçim alanı köşeleri */  
         } 
+
+
+        #service-modal {
+            position: fixed;
+            z-index: 11; /* Bootstrap modaldan daha yukarıda olmasını istersen bunu artırabilirsin */
+            left: 0; top: 0; right: 0; bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(30, 45, 80, 0.16);
+            transition: background 0.18s;
+        }
+
+        #service-modal[style*="display: none"] {
+            pointer-events: none;
+            opacity: 0;
+            background: transparent;
+        }
+
+        #service-modal .modal-content {
+            border-radius: 15px;
+            box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.21);
+            background: #fff;
+            padding: 30px 26px 26px 26px;
+            min-width: 320px;
+            max-width: 98vw;
+            min-height: 120px;
+            max-height: 89vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            border: none;
+        }
+
+        #service-modal .close-button {
+            position: absolute;
+            right: 18px;
+            top: 10px;
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #888;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 1;
+            transition: color 0.16s;
+        }
+        #service-modal .close-button:hover {
+            color: #5469d4;
+        }
+
+        #service-modal #servicesContainer {
+            width: 100%;
+            margin-top: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #materials-chart-area{
+            width: 50%; 
+            margin:0 auto 24px auto;
+        }
+        .empty-graph-message {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(120deg, #e0e7ff 0%, #f1f5f9 100%);
+            border-radius: 14px;
+            padding: 32px 20px 24px 20px;
+            margin: 16px auto 10px auto;
+            box-shadow: 0 2px 12px 2px rgba(100, 116, 139, 0.06);
+            max-width: 350px;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+        }
+        .empty-graph-icon {
+            font-size: 48px;
+            margin-bottom: 8px;
+            opacity: 0.6;
+        }
+        .empty-graph-text {
+            color: #334155;
+            font-size: 1.18rem;
+            font-weight: 500;
+            text-align: center;
+            letter-spacing: 0.01em;
+        }
+        #dataManagement{
+            width: 50px;
+            height: 50px;
+        }
+
         
 
 
@@ -431,6 +589,47 @@
                 font-weight: 400 !important;
             }
 
+            .container-materials-list {
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+                padding-left: 8px;
+                padding-right: 8px;
+                padding-top: 18px;
+                padding-bottom: 18px;
+                min-height: 100vh;
+            }
+            h1 {
+                text-align: center;
+                margin-bottom: 1.2rem;
+                color: #222;
+                font-size: 1.1rem;
+                font-weight: bold;
+                }
+            .materials-grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .materials-grid { grid-template-columns: repeat(2, 1fr); }
+            .malzeme-kart {
+                background: #fff;
+                border-radius: 10px;
+                box-shadow: 0 2px 12px 0 rgba(31,42,67,0.08),0 1.5px 5px 0 rgba(31,42,67,0.08);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 6px 3px;
+                font-size: 0.7rem;
+                font-weight: 300;
+                color: #374151;
+                text-align: center;
+                transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+                cursor: pointer;
+                user-select: none;
+            }
+
+
             .container {
                 max-width: 90%;
                 padding: 8px;
@@ -453,6 +652,7 @@
 
             .input-group {
                 margin-bottom: 5px;
+                gap: 0px;
             }
 
             select,
@@ -500,15 +700,23 @@
                 font-size: 0.7rem; /* Yazı boyutu */
             }
 
-            .result-label {
+            #labelMiktar, #valueMiktar{
+                font-weight: 300;
+                margin-right: 5px; /* Etiket ile değer arasına boşluk bırak */
+                min-width: 50px; /* Sabit genişlik ayarla */
+            }
+            #labelMiktar,#labelBirimFiyat, #labelBirim{
                 display: none;
             }
-
-            .result-value {
-                display: flex;
-                justify-content: center;
-                margin-right: 5px; /* Etiket ile değer arasına boşluk bırak */
-                min-width: 17%;
+            #labelBirim, #valueBirim, #labelToplam{
+                font-weight: 300;
+                margin-right: 5px;
+                min-width: 35px;
+            }
+            #labelBirimFiyat, #valueBirimFiyat{
+                font-weight: 300;
+                margin-right: 5px;
+                min-width: 55px;
             }
 
             .separator {
@@ -582,6 +790,20 @@
                 font-size: 0.75rem; /* Buton boyutu */  
                 padding: 5px 9px; /* Buton boyutları */  
             }  
+
+            #service-modal .modal-content {
+                min-width: 95vw;
+                max-width: 99vw;
+                padding: 15px 7px 17px 7px;
+            }
+            #service-modal #servicesContainer {
+                padding: 0;
+            }
+
+            #materials-chart-area{
+                width: 75%; 
+                margin:0 auto 12px auto;
+            }
 
          }
 
@@ -677,11 +899,22 @@
         <span>Yükleniyor...</span>
     </div>
 
-    <div class="container">  
-        <div id="services-container"></div> <!-- Yeni hizmetler buraya eklenecek -->   
+    <!-- Pasta grafik alanı -->
+    <div id="materials-chart-area">
+        <canvas id="materials-pie-chart" style="width:100%;"></canvas>
+    </div>
+
+    <div class="container-materials-list">
+        <h1>Malzeme Listesi</h1>
+        <div class="materials-grid" id="materials-grid"></div>
         <div class="add-material">  
             <button class="btn btn-primary" id="add-service-button" data-bs-toggle="modal" data-bs-target="#addMaterialModal">Yeni Malzeme Ekle</button>   
-        </div>  
+        </div> 
+    </div>
+
+    <div class="container">  
+        <div id="services-container"></div> <!-- Yeni hizmetler buraya eklenecek -->   
+         
     </div>   
 
     <!-- Modal yapısı -->  
@@ -718,10 +951,19 @@
                 </div>  
             </div>  
         </div>  
-    </div>  
+    </div>
+
+    <!-- Modal malzeme detay -->
+    <div id="service-modal" class="modal" style="display:none">
+        <div class="modal-content">
+            <span id="close-modal" class="close-button">&times;</span>
+            <div id="servicesContainer"></div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     <script type="module">
         import { showWarningMessage } from '/js/showMessage.js';
 
@@ -736,81 +978,85 @@
         const saveMaterialButton = document.getElementById('saveMaterialButton'); 
         const addServiceButton = document.getElementById('add-service-button');
 
+        const grid = document.getElementById('materials-grid');
+
 
         let userId = null;
         let projectName = null;
         let building = null;
 
         const materialNames = {
-            "demir": "DEMİR",
-            "beton": "BETON",
-            "tel": "TEL",
-            "civi": "ÇİVİ",
-            "su_tutucu_bant": "SU TUTUCU BANT",
-            "citleme": "ÇİT",
-            "mebran": "MEBRAN",
-            "likit_mebran": "LİKİT MEBRAN",
-            "drenaj_levhasi": "DRENAJ LEVHASI",
-            "celik_hasir": "ÇELİK HASIR",
-            "kereste": "KERESTE",
-            "osb": "OSB",
-            "cati_izalasyonu": "ÇATI İZALASYONU",
-            "kiremit": "KİREMİT",
-            "cimento": "ÇİMENTO",
-            "duvar_blogu": "DUVAR BLOĞU",
-            "kirec": "KİREÇ",
-            "kum_cakil": "KUM-ÇAKIL",
-            "kum": "KUM",
-            "seramik": "SERAMİK",
-            "parke": "PARKE",
-            "mermer": "MERMER",
-            "zeminBoyasi": "ZEMİN BOYASI",
-            "epoksi": "EPOKSİ",
-            "korKasa": "KÖR KASA",
-            "kosebent": "KÖŞEBENT",
-            "betonAstari": "BETON ASTARI",
             "alci": "ALÇI",
+            "alcipan": "ALÇIPAN",
+            "ankastre": "ANKASTRE",
+            "banyoBataryasi": "BANYO BATARYASI",
+            "banyoDolabi": "BANYO DOLABI",
+            "beton": "BETON",
+            "betonAstari": "BETON ASTARI",
+            "boyaAstari": "BOYA ASTARI",
+            "celik_hasir": "ÇELİK HASIR",
+            "celikKapilar": "ÇELİK KAPILAR",
+            "cati_izalasyonu": "ÇATI İZALASYONU",
+            "cimento": "ÇİMENTO",
+            "civi": "ÇİVİ",
+            "citleme": "ÇİT",
+            "dekoratif_kaplama": "DEKORATİF KAPLAMA (MANTOLAMA)",
+            "demir": "DEMİR",
+            "disCepheBoyasi": "DIŞ CEPHE BOYASI",
+            "drenaj_levhasi": "DRENAJ LEVHASI",
+            "dusTeknesi": "DUŞ TEKNESİ",
+            "duvar_blogu": "DUVAR BLOĞU",
+            "duvel_montaj": "DUVEL",
+            "epoksi": "EPOKSİ",
+            "file_siva": "SIVA FİLESİ",
+            "hazirSivaDis": "HAZIR SIVA DIŞ",
             "hazirSivaIc": "HAZIR SIVA İÇ",
             "icCepheBoyasi": "İÇ CEPHE BOYASI",
-            "boyaAstari": "BOYA ASTARI",
-            "zeminYalitimi": "ZEMİN YALITIMI",
-            "seramikFayans": "SERAMİK-FAYANS",
-            "klozetler": "KLOZETLER",
-            "lavabolar": "LAVABOLAR",
-            "banyoDolabi": "BANYO DOLABI",
-            "dusTeknesi": "DUŞ TEKNESİ",
-            "banyoBataryasi": "BANYO BATARYASI",
-            "lavaboBataryasi": "LAVABO BATARYASI",
-            "tezgah": "TEZGAH",
-            "mutfakEvye": "MUTFAK EVYE",
-            "mutfakDolabi": "MUTFAK DOLABI",
-            "mutfakBataryasi": "MUTFAK BATARYASI",
-            "ankastre": "ANKASTRE",
-            "pencereler": "PENCERELER",
-            "zeminDograma": "ZEMİN DOĞRAMA",
-            "odaKapilari": "ODA KAPILARI",
-            "celikKapilar": "ÇELİK KAPILAR",
-            "hazirSivaDis": "HAZIR SIVA DIŞ",
-            "disCepheBoyasi": "DIŞ CEPHE BOYASI",
-            "duvel_montaj": "DUVEL",
-            "yalitim_levha": "YALITIM LEVHASI",
-            "karbonluEps": "KARBONLU EPS",
-            "xps": "XPS",
-            "tasYunu": "TAŞ YÜNÜ",
-            "file_siva": "SIVA FİLESİ",
             "kaplama_siva": "KAPLAMA SIVASI",
-            "dekoratif_kaplama": "DEKORATİF KAPLAMA (MANTOLAMA)",
-            "stropiyer": "STROPİYER",
-            "alcipan": "ALÇIPAN",
+            "karbonluEps": "KARBONLU EPS",
             "karolem": "KAROLEM",
-            "kombi": "KOMBİ",
-            "kombiDolabi": "KOMBİ DOLABI",
+            "kere": "KERESTE",
+            "kirec": "KİREÇ",
+            "kiremit": "KİREMİT",
             "klima": "KLİMA",
-            "perforje": "PERFORJE"
+            "klozetler": "KLOZETLER",
+            "kombİ": "KOMBİ",
+            "kombiDolabi": "KOMBİ DOLABI",
+            "korKasa": "KÖR KASA",
+            "kosebent": "KÖŞEBENT",
+            "kum": "KUM",
+            "kum_cakil": "KUM-ÇAKIL",
+            "lavaboBataryasi": "LAVABO BATARYASI",
+            "lavabolar": "LAVABOLAR",
+            "likit_mebran": "LİKİT MEBRAN",
+            "mebran": "MEBRAN",
+            "mermer": "MERMER",
+            "mutfakBataryasi": "MUTFAK BATARYASI",
+            "mutfakDolabi": "MUTFAK DOLABI",
+            "mutfakEvye": "MUTFAK EVYE",
+            "odaKapilari": "ODA KAPILARI",
+            "osb": "OSB",
+            "parke": "PARKE",
+            "pencereler": "PENCERELER",
+            "perforje": "PERFORJE",
+            "seramik": "SERAMİK",
+            "seramikFayans": "SERAMİK-FAYANS",
+            "stropiyer": "STROPİYER",
+            "su_tutucu_bant": "SU TUTUCU BANT",
+            "tasYunu": "TAŞ YÜNÜ",
+            "tel": "TEL",
+            "tezgah": "TEZGAH",
+            "xps": "XPS",
+            "yalitim_levha": "YALITIM LEVHASI",
+            "zeminBoyasi": "ZEMİN BOYASI",
+            "zeminDograma": "ZEMİN DOĞRAMA",
+            "zeminYalitimi": "ZEMİN YALITIMI"
         }
 
         // Ön tanımlı hizmetler ve birimleri
         let predefinedServices = [];
+        let list = [];
+        let graphList = [];
 
 
         // DOM yüklendiğinde işlem başlat  
@@ -839,7 +1085,38 @@
             await initializeDb();
 
             // Malzemeleri oku ve hizmetleri başlat
-            await loadMaterials(); 
+            list = await loadMaterials(); 
+
+            grid.innerHTML = ""; // Temizle (gerekliyse)
+            for (const material of list) {
+                let name = material.nameText;
+                if(material.nameText === ""){
+                    name = material.name;
+                }
+                const div = document.createElement('div');
+                div.className = 'malzeme-kart';
+                div.textContent = name;
+                div.addEventListener('click', function() {
+                    addService(material.name, material.nameText, material.units,"",material.savedResults);
+                    openServiceModal();
+                });
+                grid.appendChild(div);
+                let toplamDb = 0;
+                if(material.savedResults.length > 0){
+                    material.savedResults.forEach(item => {  
+                        toplamDb += item.toplamTutar;
+                    });
+                }
+                const data = {
+                    name,
+                    toplamDb
+                };
+                graphList.push(data);
+            }
+
+            drawMaterialsPieChart(graphList);
+            
+            //console.log(graphList);
 
         });
 
@@ -862,16 +1139,25 @@
                     unitsInput
                 }
                 saveNewMaterial(newData);
-                addService(materialName, "", unitsInput);
+                const div = document.createElement('div');
+                div.className = 'malzeme-kart';
+                div.textContent = materialName;
+                div.addEventListener('click', function() {
+                    addService(materialName, "", unitsInput,"");
+                    openServiceModal();
+                });
+                grid.appendChild(div);
+                //addService(materialName, "", unitsInput);
                 const modal = bootstrap.Modal.getInstance(document.getElementById('addMaterialModal'));
-                modal.hide(); // Modal'ı kapat
+                modal.hide();
             } else {
                 showWarningMessage("Eksik Giriş Yaptınız! Lütfen kontrol edip tekrar giriniz.", "tamam", false);
             }
         });
 
         // Hizmeti ekleyen fonksiyon
-        function addService(serviceName, serviceNameText = "", units, savedResults = []) {
+        function addService(serviceName, serviceNameText = "", units, displayStatus="", savedResults = []) {
+            const servicesContainer = document.getElementById('servicesContainer');
             const serviceDiv = document.createElement('div');
             serviceDiv.className = 'service';
             let nameText = "";
@@ -884,12 +1170,12 @@
             serviceDiv.innerHTML = `
                 <div class="service-name">${nameText}</div>
                 <div class="input-group">
+                    <input type="text" id="miktar" placeholder="Miktar" />
                     <select id="birim-select">
                         <option value="" disabled selected>Birim</option>
                         ${units.map(unit => `<option value="${unit}">${unit}</option>`).join('')}
                     </select>
                     <input type="text" id="birim-fiyat" placeholder="Birim Fiyat" />
-                    <input type="text" id="miktar" placeholder="Miktar" />
                     <input type="text" id="toplam-tutar" placeholder="Toplam" disabled />
                     <button class="ekle-button">Ekle</button>
                 </div>
@@ -902,6 +1188,33 @@
             const ekleButton = serviceDiv.querySelector('.ekle-button');
             const resultDiv = serviceDiv.querySelector('.result');
 
+            // --- Binlikli input formatter fonksiyonları ---
+            function formatNumberInput(input) {
+                // Sadece sayılar (ondalık gerekmiyorsa)
+                let val = input.value.replace(/\D/g, '');
+                if (val === "") {
+                    input.value = "";
+                    return;
+                }
+                input.value = parseInt(val, 10).toLocaleString('tr-TR');
+            }
+            function formatDecimalInput(input) {
+                // Nokta ve virgül kaldır, ondalık için tekrar ekle
+                let val = input.value.replace(/\./g, '').replace(',', '.');
+                val = val.replace(/[^0-9.]/g, '');
+                if (val === "") {
+                    input.value = "";
+                    return;
+                }
+                const parts = val.split('.');
+                let formatted = parseInt(parts[0] || '0', 10).toLocaleString('tr-TR');
+                if (parts[1] !== undefined) {
+                    formatted += ',' + parts[1].substring(0,2);
+                }
+                input.value = formatted;
+            }
+            // ---------------------------------------------------
+
             // Önceden kayıtlı sonuçları ekle
             savedResults.forEach(result => {
                 addResultToDisplay(resultDiv, result);
@@ -912,15 +1225,17 @@
                 const birimFiyat = parseFloat(birimFiyatInput.value.replace(/\./g, '').replace(',', '.')) || 0;
                 const miktar = parseFloat(miktarInput.value.replace(/\./g, '').replace(',', '.')) || 0;
                 const toplamTutar = birimFiyat * miktar;
-                toplamTutarInput.value = toplamTutar.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TL';
+                toplamTutarInput.value = toplamTutar
+                    ? toplamTutar.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TL'
+                    : '';
             }
 
             ekleButton.addEventListener('click', async () => {
                 const material = serviceDiv.querySelector('.service-name').textContent;
                 const birim = serviceDiv.querySelector('#birim-select').value;
-                const birimFiyat = parseFloat(birimFiyatInput.value);
-                const miktar = miktarInput.value;
-                const toplamTutar = parseFloat(toplamTutarInput.value);
+                const birimFiyat = parseFloat(birimFiyatInput.value.replace(/\./g, '').replace(',', '.'));
+                const miktar = parseFloat(miktarInput.value.replace(/\./g, '').replace(',', '.'));
+                const toplamTutar = birimFiyat * miktar;
                 let materialValue = getMaterialKeyByValue(material) || "";
 
                 if(materialValue === ""){
@@ -943,26 +1258,48 @@
                 }
             });
 
-            miktarInput.addEventListener('input', hesaplaToplamTutar);
-            birimFiyatInput.addEventListener('input', hesaplaToplamTutar);
+            // --- Formatlama ile birlikte event tetikleyicileri ---
+            miktarInput.addEventListener('input', () => {
+                formatNumberInput(miktarInput);
+                hesaplaToplamTutar();
+            });
+            birimFiyatInput.addEventListener('input', () => {
+                formatDecimalInput(birimFiyatInput);
+                hesaplaToplamTutar();
+            });
+            // -----------------------------------------------------
 
             // Her bir sonucu göstermek için yardımcı fonksiyon
             function addResultToDisplay(resultDiv, result) {
                 resultDiv.style.display = 'block';
                 const resultItem = document.createElement('div');
                 resultItem.className = 'result-item';
+
+                // Sayı formatlama fonksiyonu
+                function formatDeger(value, fractionDigits = 2) {
+                    // NaN gelme olasılığına karşı koruma ekliyoruz
+                    const n = Number(value);
+                    return isNaN(n)
+                        ? ''
+                        : n.toLocaleString('tr-TR', { minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits });
+                }
+
+                const miktarFormatted = formatDeger(result.miktar, 0);       // ör: "1.200,50"
+                const birimFiyatFormatted = formatDeger(result.birimFiyat, 2); // ör: "30.000,00"
+                const toplamTutarFormatted = formatDeger(result.toplamTutar, 2);
+
                 resultItem.innerHTML = `
-                    <div class="result-label">Birim:</div>
-                    <div class="result-value">${result.birim}</div>
+                    <div class="result-label" id="labelMiktar">Miktar:</div>
+                    <div class="result-value" id="valueMiktar">${miktarFormatted}</div>
                     <span class="separator">|</span>
-                    <div class="result-label">Birim Fiyat:</div>
-                    <div class="result-value">${result.birimFiyat} TL</div>
+                    <div class="result-label" id="labelBirim">Birim:</div>
+                    <div class="result-value" id="valueBirim">${result.birim}</div>
                     <span class="separator">|</span>
-                    <div class="result-label">Miktar:</div>
-                    <div class="result-value">${result.miktar}</div>
+                    <div class="result-label" id="labelBirimFiyat">Birim Fiyat:</div>
+                    <div class="result-value" id="valueBirimFiyat">${birimFiyatFormatted} TL</div>
                     <span class="separator">|</span>
-                    <div class="result-label">Toplam:</div>
-                    <div class="result-value">${result.toplamTutar} TL</div>
+                    <div class="result-label" id="labelToplam">Toplam:</div>
+                    <div class="result-value" id="valueToplam">${toplamTutarFormatted} TL</div>
                 `;
 
                 // Silme butonunu ekle
@@ -981,15 +1318,101 @@
                 if (!userConfirm) return;
                 await deleteMaterial(result);
                 const index = Array.from(button.parentElement.parentElement.parentElement.children).indexOf(button.parentElement);
-                savedResults.splice(index, 1); // Diziden silme işlemi
-                const resultDiv = button.parentElement.parentElement; // resultDiv'i bul
+                savedResults.splice(index, 1); // Diziden sil
+                const resultDiv = button.parentElement.parentElement;
                 resultDiv.innerHTML = ''; // Sonuç divini temizle 
 
-                // Kalan sonuçları göster
+                // Kalan sonuçları tekrar göster
                 savedResults.forEach(result => addResultToDisplay(resultDiv, result));
             }
             // Son hizmeti görüntüle
             servicesContainer.appendChild(serviceDiv);
+        }
+
+        // Modalı açan fonksiyon
+        function openServiceModal() {
+            document.getElementById('service-modal').style.display = 'flex';
+        }
+        // Modalı kapatan fonksiyon
+        function closeServiceModal() {
+            document.getElementById('service-modal').style.display = 'none';
+            // içerikleri temizlemek açısından:
+            document.getElementById('servicesContainer').innerHTML = '';
+        }
+        document.getElementById('close-modal').onclick = closeServiceModal;
+        window.addEventListener('keydown', function(e) {
+            // ESC ile kapat
+            if (e.key === "Escape") closeServiceModal();
+        });
+        // Modal dışına tıklanırsa kapat
+        document.getElementById('service-modal').onclick = function(e) {
+            if (e.target === this) closeServiceModal();
+        };
+
+        // Chart.js ile grafik çizdirme fonksiyonu
+        function drawMaterialsPieChart(data) {
+            // sıfır olanları filtrele
+            const filtered = data.filter(item => item.toplamDb > 0);
+            if (filtered.length === 0) {
+                document.getElementById('materials-pie-chart').style.display = 'none';
+                document.getElementById('materials-chart-area').innerHTML = `
+                    <div class="empty-graph-message">
+                        <img src="/img/data-management.png" alt="" id="dataManagement">
+                        <span class="empty-graph-text">Grafik için veri bulunmamaktadır.</span>
+                    </div>
+                    `;
+                return;
+            } else {
+                document.getElementById('materials-pie-chart').style.display = 'block';
+            }
+            if(window.materialsPieChart) window.materialsPieChart.destroy();
+
+            const ctx = document.getElementById('materials-pie-chart').getContext('2d');
+            window.materialsPieChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: filtered.map(item => item.name),
+                    datasets: [{
+                        data: filtered.map(item => item.toplamDb),
+                        backgroundColor: [
+                            '#4286f4', '#92caf6', '#f48f42', '#f4dc42', '#42f492', '#bf42f4',
+                            '#f47142', '#42aaf4', '#f44271', '#42f4d9', '#d942f4', '#f4bc42'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            color: '#333',
+                            font: { weight: 'bold', size: 13 },
+                            align: 'center',
+                            anchor: 'center',
+                            rotation: function(context) {
+                                const meta = context.chart.getDatasetMeta(0);
+                                const index = context.dataIndex;
+                                const arc = meta.data[index];
+                                if (!arc) return 0;
+                                const start = arc.startAngle || 0;
+                                const end = arc.endAngle || 0;
+                                // Dilimin orta açısı (radyan cinsinden)
+                                const midAngle = (start + end) / 2;
+                                // Dairenin merkezine dik olacak şekilde döndür (metnin yönü merkeze baksın)
+                                return midAngle * 180 / Math.PI ;
+                            },
+                            formatter: function(value, context) {
+                                return context.chart.data.labels[context.dataIndex];
+                            },
+                            clamp: true,
+                            clip: true,
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                },
+                plugins: [ChartDataLabels]
+            });
         }
 
 
@@ -1012,71 +1435,71 @@
 
         async function initializeDb(){
             const data = {
-                "demir": ["kg", "ton", "adet"],
-                "beton": ["m³"],
-                "tel": ["kg", "metre", "rulo"],
-                "civi": ["kg", "adet", "kutu"],
-                "su_tutucu_bant": ["adet", "rulo", "metre"],
-                "citleme": ["metre", "adet"],
-                "mebran": ["m²", "adet", "rulo"],
-                "likit_mebran": ["litre", "kg", "kova"],
-                "drenaj_levhasi": ["adet", "m²"],
-                "celik_hasir": ["m³", "adet", "metre"],
-                "kereste": ["m³", "adet"],
-                "osb": ["m²", "adet", "plaka"],
-                "cati_izalasyonu": ["m²", "rulo", "paket"],
-                "kiremit": ["adet", "m²", "paket"],
-                "cimento": ["kg", "ton", "torba"],
-                "duvar_blogu": ["adet", "m²", "palet"],
-                "kirec": ["kg", "ton", "torba"],
-                "kum_cakil": ["ton", "m³","kg"],
-                "kum": ["ton", "m³","kg"],
-                "seramik": ["m²", "adet", "kutu"],
-                "parke": ["m²", "adet","paket"],
-                "mermer": ["m²", "adet","plaka"],
-                "zeminBoyasi": ["litre", "kova","kg"],
-                "epoksi": ["kg", "litre", "set"],
-                "korKasa": ["adet","metre"],
-                "kosebent": ["adet", "metre"],
-                "betonAstari": ["kg", "litre"],
                 "alci": ["kg", "torba"],
+                "alcipan": ["m²", "levha", "adet"],
+                "ankastre": ["adet","set"],
+                "banyoBataryasi": ["adet","takım"],
+                "banyoDolabi": ["adet","takım"],
+                "beton": ["m³"],
+                "betonAstari": ["kg", "litre"],
+                "boyaAstari": ["litre", "kg"],
+                "celik_hasir": ["m³", "adet", "metre"],
+                "celikKapilar": ["adet"],
+                "cati_izalasyonu": ["m²", "rulo", "paket"],
+                "cimento": ["kg", "ton", "torba"],
+                "civi": ["kg", "adet", "kutu"],
+                "citleme": ["metre", "adet"],
+                "dekoratif_kaplama": ["m²"],
+                "demir": ["kg", "ton", "adet"],
+                "disCepheBoyasi": ["litre", "kg","kova"],
+                "drenaj_levhasi": ["adet", "m²"],
+                "dusTeknesi": ["adet","takım"],
+                "duvar_blogu": ["adet", "m²", "palet"],
+                "duvel_montaj": ["adet"],
+                "epoksi": ["kg", "litre", "set"],
+                "file_siva": ["m²"],
+                "hazirSivaDis": ["kg", "torba", "adet"],
                 "hazirSivaIc": ["kg", "torba","adet"],
                 "icCepheBoyasi": ["litre", "kg","kova"],
-                "boyaAstari": ["litre", "kg"],
-                "zeminYalitimi": ["m²"],
-                "seramikFayans": ["m²", "adet", "kutu"],
-                "klozetler": ["adet","takım"],
-                "lavabolar": ["adet","takım"],
-                "banyoDolabi": ["adet","takım"],
-                "dusTeknesi": ["adet","takım"],
-                "banyoBataryasi": ["adet","takım"],
-                "lavaboBataryasi": ["adet","takım"],
-                "tezgah": ["metre", "m²"],
-                "mutfakEvye": ["adet","takım"],
-                "mutfakDolabi": ["adet","takım","metre", "m²"],
-                "mutfakBataryasi": ["adet","takım"],
-                "ankastre": ["adet","set"],
-                "pencereler": ["adet", "m²"],
-                "zeminDograma": ["adet","metre"],
-                "odaKapilari": ["adet"],
-                "celikKapilar": ["adet"],
-                "hazirSivaDis": ["kg", "torba", "adet"],
-                "disCepheBoyasi": ["litre", "kg","kova"],
-                "duvel_montaj": ["adet"],
-                "yalitim_levha": ["m²", "adet"],
-                "karbonluEps": ["m²", "m³", "adet"],
-                "xps": ["m²", "m³", "adet"],
-                "tasYunu": ["m²", "m³", "adet"],
-                "file_siva": ["m²"],
                 "kaplama_siva": ["m²"],
-                "dekoratif_kaplama": ["m²"],
-                "stropiyer": ["metre", "adet", "paket"],
-                "alcipan": ["m²", "levha", "adet"],
+                "karbonluEps": ["m²", "m³", "adet"],
                 "karolem": ["adet", "kutu"],
+                "kereste": ["m³", "adet"],
+                "kirec": ["kg", "ton", "torba"],
+                "kiremit": ["adet", "m²", "paket"],
+                "klima": ["adet", "set"],
+                "klozetler": ["adet","takım"],
                 "kombi": ["adet", "set"],
                 "kombiDolabi": ["adet"],
-                "klima": ["adet", "set"],
-                "perforje": ["metre", "adet"]
+                "korKasa": ["adet","metre"],
+                "kosebent": ["adet", "metre"],
+                "kum": ["ton", "m³","kg"],
+                "kum_cakil": ["ton", "m³","kg"],
+                "lavaboBataryasi": ["adet","takım"],
+                "lavabolar": ["adet","takım"],
+                "likit_mebran": ["litre", "kg", "kova"],
+                "mebran": ["m²", "adet", "rulo"],
+                "mermer": ["m²", "adet","plaka"],
+                "mutfakBataryasi": ["adet","takım"],
+                "mutfakDolabi": ["adet","takım","metre", "m²"],
+                "mutfakEvye": ["adet","takım"],
+                "odaKapilari": ["adet"],
+                "osb": ["m²", "adet", "plaka"],
+                "parke": ["m²", "adet","paket"],
+                "pencereler": ["adet", "m²"],
+                "perforje": ["metre", "adet"],
+                "seramik": ["m²", "adet", "kutu"],
+                "seramikFayans": ["m²", "adet", "kutu"],
+                "stropiyer": ["metre", "adet", "paket"],
+                "su_tutucu_bant": ["adet", "rulo", "metre"],
+                "tasYunu": ["m²", "m³", "adet"],
+                "tel": ["kg", "metre", "rulo"],
+                "tezgah": ["metre", "m²"],
+                "xps": ["m²", "m³", "adet"],
+                "yalitim_levha": ["m²", "adet"],
+                "zeminBoyasi": ["litre", "kova","kg"],
+                "zeminDograma": ["adet","metre"],
+                "zeminYalitimi": ["m²"]
             }
             showLoader();
             fetch('/malzeme', {
@@ -1088,7 +1511,7 @@
                     projectName,
                     data
                 })
-                })
+            })
             .then(r => r.json())
             .finally(() => {
                 hideLoader();
@@ -1128,9 +1551,10 @@
                         units: service.units,  
                         savedResults: service.savedResults  
                     };
-                    addService(serviceName, serviceNameText, serviceData.units, serviceData.savedResults);  
+                    //addService(serviceName, serviceNameText, serviceData.units, serviceData.savedResults);  
                 });  
             }
+            return predefinedServices;
         }
 
 

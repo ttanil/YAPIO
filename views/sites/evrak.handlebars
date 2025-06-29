@@ -2454,6 +2454,15 @@ function showOdemeEvrakForm(isRadyal = false, isEvrakIsleri = false, geriHandler
       </div>
     </div>
   `;
+
+  // GÜNÜN TARİHİNİ OTO DOLDUR
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const dd = String(now.getDate()).padStart(2, '0');
+  const formatted = `${yyyy}-${mm}-${dd}`;
+  document.getElementById('odemeTarih').value = formatted;
+
   // Geri butonu olayı
   if(isRadyal && typeof geriHandler === 'function') {
     document.getElementById('geriRadyalBtn').onclick = geriHandler;
@@ -2567,6 +2576,14 @@ function showOdemeEvrakFormIslem(isRadyal = false, isEvrakIsleri = false, geriHa
       </div>
     </div>
   `;
+  // GÜNÜN TARİHİNİ OTO DOLDUR
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const dd = String(now.getDate()).padStart(2, '0');
+  const formatted = `${yyyy}-${mm}-${dd}`;
+  document.getElementById('odemeTarih').value = formatted;
+
   // Geri butonu olayı
   if(isRadyal && typeof geriHandler === 'function') {
     document.getElementById('geriRadyalBtn').onclick = geriHandler;
@@ -2601,7 +2618,7 @@ function updateToplamTutarIslem() {
 function odemeFormSubmit(e){
   e.preventDefault();
   const aciklama = document.getElementById('odemeAciklama').value.trim();
-  const tarih = document.getElementById('odemeTarih').value;
+  const tarih = document.getElementById('odemeTarih').value.split('-').reverse().join('-');
   let birim = "-";
   let miktar = 1;
   let toplam_func = false;
