@@ -1128,7 +1128,7 @@
         });
 
         // Kaydet butonu tıklandığında
-        saveMaterialButton.addEventListener('click', () => {
+        saveMaterialButton.addEventListener('click', async () => {
             let materialName = document.getElementById('materialName').value.trim();
             const unitsInput = document.getElementById('materialUnits').value.split(','); // Virgül ile birimleri ayır
 
@@ -1138,12 +1138,13 @@
                     materialName,
                     unitsInput
                 }
-                saveNewMaterial(newData);
+                await saveNewMaterial(newData);
                 const div = document.createElement('div');
                 div.className = 'malzeme-kart';
                 div.textContent = materialName;
+                const newMaterialNameDb = turkishToAsciiLower(materialName);
                 div.addEventListener('click', function() {
-                    addService(materialName, "", unitsInput,"");
+                    addService(newMaterialNameDb, materialName, unitsInput,"");
                     openServiceModal();
                 });
                 grid.appendChild(div);
@@ -1253,6 +1254,37 @@
                     miktarInput.value = '';
                     toplamTutarInput.value = '';
                     serviceDiv.querySelector('#birim-select').selectedIndex = 0; // Birim seçimini sıfırla
+
+                    graphList.length = 0;
+                    list = await loadMaterials();
+                    grid.innerHTML = ""; // Temizle (gerekliyse)
+                    for (const material of list) {
+                        let name = material.nameText;
+                        if(material.nameText === ""){
+                            name = material.name;
+                        }
+                        const div = document.createElement('div');
+                        div.className = 'malzeme-kart';
+                        div.textContent = name;
+                        div.addEventListener('click', function() {
+                            addService(material.name, material.nameText, material.units,"",material.savedResults);
+                            openServiceModal();
+                        });
+                        grid.appendChild(div);
+                        let toplamDb = 0;
+                        if(material.savedResults.length > 0){
+                            material.savedResults.forEach(item => {  
+                                toplamDb += item.toplamTutar;
+                            });
+                        }
+                        const data = {
+                            name,
+                            toplamDb
+                        };
+                        graphList.push(data);
+                    }
+                    drawMaterialsPieChart(graphList);
+
                 } else {
                     showWarningMessage("Eksik Giriş Yaptınız! Lütfen kontrol edip tekrar giriniz.", "tamam", false);
                 }
@@ -1386,20 +1418,20 @@
                         legend: { display: false },
                         datalabels: {
                             color: '#333',
-                            font: { weight: 'bold', size: 13 },
-                            align: 'center',
+                            font: { weight: 'bold', size: 9 },
                             anchor: 'center',
+                            align: 'center',
                             rotation: function(context) {
+                                // HATA ENGELİ: arc, meta, açı kontrolü
                                 const meta = context.chart.getDatasetMeta(0);
                                 const index = context.dataIndex;
                                 const arc = meta.data[index];
-                                if (!arc) return 0;
-                                const start = arc.startAngle || 0;
-                                const end = arc.endAngle || 0;
-                                // Dilimin orta açısı (radyan cinsinden)
+                                if (!arc || arc.startAngle === undefined || arc.endAngle === undefined) return 0;
+                                const start = arc.startAngle;
+                                const end = arc.endAngle;
                                 const midAngle = (start + end) / 2;
-                                // Dairenin merkezine dik olacak şekilde döndür (metnin yönü merkeze baksın)
-                                return midAngle * 180 / Math.PI ;
+                                // Pie'ın merkezine dik, dikey (yani merkeze bakacak biçimde)
+                                return midAngle * 180 / Math.PI;
                             },
                             formatter: function(value, context) {
                                 return context.chart.data.labels[context.dataIndex];
@@ -1600,6 +1632,7 @@
         }
 
         async function saveMaterials(saves){
+            console.log("saves:",saves);
             showLoader();
             try {
                 const response = await fetch('/malzeme', {
