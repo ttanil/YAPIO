@@ -648,6 +648,10 @@ body {
               Kira Bedeli
           </div>
           <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
+              <span class="alt-baslik-ikon" id="kadastroTutar">📏</span>  
+              Kadastro
+          </div>
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
               <span class="alt-baslik-ikon" id="arsaDigerArsa">➕</span>  
               Arsa Diğer
           </div>
@@ -657,6 +661,10 @@ body {
       <!-- İşçilikler Sekmesi İçin -->
       <div class="surec-section mb-4" id="tab-iscilikler">
         <div class="er-kutular">
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">
+            <span data-kurum="İşçilik" class="alt-baslik-ikon" id="santiyeSefiIsciligi">👷</span>
+            Şantiye Şefi
+          </div>
           <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">
             <span data-kurum="İşçilik" class="alt-baslik-ikon" id="kalipIsciligi">🪜</span>
             Kalıp İşçiliği
@@ -759,10 +767,10 @@ body {
               <li data-kurum="Yapı Denetim" data-detay="Fenni Haritacı" id="fenniHaritaci">Fenni Haritacı</li>  
             </ul>  
           </div>
-          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false" id="kadastroTutar">  
+          <!--<div class="alt-baslik-kutu" tabindex="0" aria-expanded="false" id="kadastroTutar">  
             <span class="alt-baslik-ikon">📏</span>  
             Kadastro 
-          </div> 
+          </div> -->
           <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
             <span class="alt-baslik-ikon">🌎</span>  
             Zemin Etüdü
@@ -1030,14 +1038,6 @@ document.querySelectorAll('.alt-kutu-icerik li').forEach(function(item) {
   });
 });
 
-kadastroTutar.addEventListener('click', function() {
-  aktifEvrakKurum = "Kadastro";
-  aktifEvrakDetay = "";
-  document.getElementById('modalBaslikIkon').textContent = "📏";
-  document.getElementById('modalBaslikText').textContent = "Kadastro " + ' - ' + "Kadastro Ödemesi";
-  showOdemeEvrakFormIslem(false, true,null,"Kadastro",null,"kadastroTutar"); // (isRadyal=false, isEvrakIsleri=true)
-  bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
-});
 tapu.addEventListener('click', function() {
   aktifEvrakKurum = "Tapu";
   aktifEvrakDetay = "";
@@ -1103,6 +1103,13 @@ document.querySelectorAll('#tab-arsa .alt-baslik-kutu').forEach(function(header)
         document.getElementById('modalBaslikIkon').textContent = '💵';
         document.getElementById('modalBaslikText').textContent = "Kira Bedeli";
         showOdemeEvrakFormIslem(false, true,null,aktifEvrakKurum,null,ikonId);
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
+        break;
+      case "kadastroTutar":
+        aktifEvrakDetay = "Kadastro Ödemesi";
+        document.getElementById('modalBaslikIkon').textContent = '📏';
+        document.getElementById('modalBaslikText').textContent = "Kadastro Ödemesi";
+        showOdemeEvrakFormIslem(false, true,null,"Kadastro",null,"kadastroTutar");
         bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
         break;
       case "arsaDigerArsa":

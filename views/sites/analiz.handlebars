@@ -842,6 +842,7 @@
     let dekorAlcipanIsciligiToplam = 0;
     let perforjeIsciligiToplam = 0;
     let digerIsciligiToplam = 0;
+    let santiyeSefiIsciligiToplam = 0;
     let malzemelerToplam = 0;
 
     let genelToplam = 0;
@@ -859,7 +860,7 @@
         {{/if}};
 
         userProjectInfos = window.user.project || [];
-        //console.log("userProjectInfos:",userProjectInfos);
+        console.log("userProjectInfos:",userProjectInfos);
 
         userId = window.user.userId;
         projectName = window.user.project.projectName;
@@ -914,13 +915,19 @@
             kiraBedeliTutar += parseInt(element.toplamTutar);
           });
         }
+        const kadastroBedeli = userProjectInfos.kadastroTutar;
+        if(Array.isArray(kadastroBedeli) && kadastroBedeli.length > 0){
+          kadastroBedeli.forEach(element => {
+            kadastroToplam += parseInt(element.toplamTutar);
+          });
+        }
         const arsaDiger = userProjectInfos.arsaDigerArsa;
         if(Array.isArray(arsaDiger) && arsaDiger.length > 0){
           arsaDiger.forEach(element => {
             arsaDigerTutar += parseInt(element.toplamTutar);
           });
         }
-        arsaGiderleriToplam = arsaBedeliTutar + santiyeKurulumuTutar + yerdenCikartmakTutar + kiraBedeliTutar + arsaDigerTutar;
+        arsaGiderleriToplam = arsaBedeliTutar + santiyeKurulumuTutar + yerdenCikartmakTutar + kiraBedeliTutar + arsaDigerTutar + kadastroToplam;
 
 
         const aplikasyonBedeli = userProjectInfos.aplikasyon;
@@ -1030,12 +1037,6 @@
         }
         projelerToplam = mimariTutar+statikTutar+tesisatTutar+hesTutar+akustikTutar;
 
-        const kadastroBedeli = userProjectInfos.kadastroTutar;
-        if(Array.isArray(kadastroBedeli) && kadastroBedeli.length > 0){
-          kadastroBedeli.forEach(element => {
-            kadastroToplam += parseInt(element.toplamTutar);
-          });
-        }
 
         const tapuBedeli = userProjectInfos.tapuTutar;
         if(Array.isArray(tapuBedeli) && tapuBedeli.length > 0){
@@ -1080,9 +1081,16 @@
         }
 
         evrakToplam = belediyeGiderleriToplam + noterGiderleriToplam + yapiDenetimToplam + zeminEtuduToplam 
-                    + projelerToplam + kadastroToplam + tapuToplam + vergiToplam + sskToplam + avukatToplam 
+                    + projelerToplam + tapuToplam + vergiToplam + sskToplam + avukatToplam 
                     + emlakciToplam + reklamToplam;
 
+        
+        const santiyeSefiIsciligiBedeli = userProjectInfos.santiyeSefiIsciligi;
+        if(Array.isArray(santiyeSefiIsciligiBedeli) && santiyeSefiIsciligiBedeli.length > 0){
+          santiyeSefiIsciligiBedeli.forEach(element => {
+            santiyeSefiIsciligiToplam += parseInt(element.toplamTutar);
+          });
+        }
         
         const kalipIsciligiBedeli = userProjectInfos.kalipIsciligi;
         if(Array.isArray(kalipIsciligiBedeli) && kalipIsciligiBedeli.length > 0){
@@ -1192,7 +1200,7 @@
         isciliklerToplam = kalipIsciligiToplam + demirIsciligiToplam + duvarOrmeIsciligiToplam + sivaIsciligiToplam +sapIsciligiToplam
                         + catiIsciligiToplam + mantolamaIsciligiToplam + yalitimIsciligiToplam + suTesisatiIsciligiToplam 
                         + elektrikIsciligiToplam + dogalgazIsciligiToplam + asansorIsciligiToplam + dekorAlcipanIsciligiToplam
-                        + perforjeIsciligiToplam + digerIsciligiToplam;
+                        + perforjeIsciligiToplam + digerIsciligiToplam + santiyeSefiIsciligiToplam;
 
         const santiyeKurmaBedeli = userProjectInfos.santiyeKurma;
         if(Array.isArray(santiyeKurmaBedeli) && santiyeKurmaBedeli.length > 0){
@@ -1915,8 +1923,8 @@
             }
           },
           arsa: {
-            labels: ["Arsa Bedeli", "Yerden Çıkartmak", "Kira Bedeli", "Arsa Diğer"],
-            data: [arsaBedeliTutar, yerdenCikartmakTutar, kiraBedeliTutar, arsaDigerTutar],
+            labels: ["Arsa Bedeli", "Yerden Çıkartmak", "Kira Bedeli", "Kadastro", "Arsa Diğer"],
+            data: [arsaBedeliTutar, yerdenCikartmakTutar, kiraBedeliTutar, kadastroToplam, arsaDigerTutar],
             background: [
               'rgba(30, 64, 175, 0.8)', 
               'rgba(147, 197, 253, 0.8)',
@@ -1925,12 +1933,11 @@
             ]
           },
           evrak: {
-            labels: ["Belediye", "Noter", "Yapı Denetim", "Kadastro", "Zemin Etüdü", "Projeler", "Tapu", "Vergi", "SSK", "Avukat", "Emlakçı", "Reklam"],
+            labels: ["Belediye", "Noter", "Yapı Denetim", "Zemin Etüdü", "Projeler", "Tapu", "Vergi", "SSK", "Avukat", "Emlakçı", "Reklam"],
             data: [
               belediyeGiderleriToplam, 
               noterGiderleriToplam, 
-              yapiDenetimToplam, 
-              kadastroToplam, 
+              yapiDenetimToplam,
               zeminEtuduToplam, 
               projelerToplam,
               tapuToplam,
@@ -1951,7 +1958,6 @@
               'Belediye': 'belediye',
               'Noter': 'noter',
               'Yapı Denetim': 'yapidenetim',
-              'Kadastro' : 'kadastro',
               'Zemin Etüdü': 'zeminetudu',
               'Projeler': 'projeler',
               'Tapu': 'tapu',
@@ -2474,10 +2480,11 @@
             ]
         },
         iscilikler: {
-          labels: ["Kalıp İşçiliği", "Demir İşçiliği", "Duvar Örme İşçiliği", "Sıva İşçiliği", "Şap İşçiliği", "Çatı İşçiliği",
+          labels: ["Şantiye Şefi", "Kalıp İşçiliği", "Demir İşçiliği", "Duvar Örme İşçiliği", "Sıva İşçiliği", "Şap İşçiliği", "Çatı İşçiliği",
                     "Mantolama İşçiliği", "Yalıtım İşçiliği", "Su Tesisatı İşçiliği", "Elektrik İşçiliği", "Doğalgaz İşçiliği",
                     "asansör İşçiliği", "Dekor Alçıpan İşçiliği", "Perforje İşçiliği", "İşçilik Diğer"],
             data: [
+              santiyeSefiIsciligiToplam,
               kalipIsciligiToplam,
               demirIsciligiToplam,
               duvarOrmeIsciligiToplam,
