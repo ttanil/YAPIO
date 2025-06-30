@@ -468,6 +468,10 @@
     const limit2 = document.getElementById('limit2');
     const limit4 = document.getElementById('limit4');
 
+    const params = new URLSearchParams(window.location.search);
+    const from = params.get('from') || "";
+    console.log("from:",from);
+
     let userId = null;
     let projectNumber = null;
     let projectName = null;
@@ -475,9 +479,13 @@
 
     // DOM yüklendiğinde işlem başlat  
     document.addEventListener("DOMContentLoaded", () => {  
-      event.preventDefault();
 
-      showWarningMessage("Daha fazla proje oluşturmak için üyeliğinizi yenileyin", "tamam", false);
+      if(from === ""){
+        showWarningMessage("Daha fazla proje oluşturmak için üyeliğinizi yenileyin", "tamam", false);
+      } else{
+        showWarningMessage("Resim yüklemek için üyeliğinizi yenileyin", "tamam", false);
+      }
+
 
       window.user = {{#if user}}
           { "userId": "{{user.id}}", "projectNumber": "{{projectNumber}}", "userType": "{{userType}}", "project": {{{json project}}} }
@@ -488,10 +496,8 @@
 
       userId = window.user.userId;
       projectNumber = window.user.projectNumber;
-      projectName = window.user.project.projectName;
+      projectName = params.get('projectName') || (window.user.project && window.user.project.projectName);
       userType = window.user.userType;
-
-      userId = window.user.userId;
       
       if(userId){
           loginButton.style.display = "block";

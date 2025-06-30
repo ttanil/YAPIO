@@ -424,12 +424,17 @@ router.post('/', upload.single('file'), async (req, res) => {
 
         // 4. Fotoğraf var mı?
         if (!Array.isArray(room.photo) || room.photo.length === 0) {
-            return res.status(404).json({ success: false, message: "Fotoğraf bulunamadı." });
+            return res.status(404).json({ 
+                success: false, 
+                message: "Fotoğraf bulunamadı.",
+                userType:user.userType
+            });
         }
 
         // 5. Fotoğrafı döndür
         return res.status(200).json({
             success: true,
+            userType:user.userType,
             photo: room.photo   // Tek foto ise room.photo[0] da dönebilirsin
         });
     }

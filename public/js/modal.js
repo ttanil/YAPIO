@@ -13,6 +13,7 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
         let img = null;       // "daire_3d_3";
         let isSold = "false";
         let apartment = "";
+        let userType="premium";
         const katInfo = floorName.replace(/ Planı$/, "");
         if(buildingData){
             buildingData.forEach(element => {
@@ -70,7 +71,10 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
             floorName,
             rowNumber
         });
-        const photoUrl = data && data[0]?.path;
+        if(data){
+            userType = data.userType;
+        }
+        const photoUrl = data.photo && data.photo[0]?.path;
         if (photoUrl) {
             roomModalImage.innerHTML = `  
                 <span style="display: flex; align-items: center; justify-content: center;"> 
@@ -219,7 +223,12 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
         okButton.addEventListener("click", okButton.okHandler);
 
         addPhotoButton.addEventListener("click", () => {
-            addPhotoInput.click(); // gizli input'u tetikler
+            if(userType !== "free"){
+                addPhotoInput.click(); // gizli input'u tetikler
+            } else{
+                window.location.href = `/payment?projectName=${encodeURIComponent(projectName)}&from=${encodeURIComponent("draw")}`;
+            }
+            
         });
         addPhotoInput.addEventListener("change", async (event) => {
             const file = event.target.files[0];
@@ -421,11 +430,11 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
             });
 
             const data = await response.json();
+            console.log("dataDb:", data);
             hideLoader();
 
             if (!response.ok || !data.success) {
-                showWarningMessage(data.message || "Fotoğraf alınamadı.", "Tamam", false);
-                return null;
+                return data;
             }
 
             const photoUrl = data.photo[0]?.path;
@@ -433,7 +442,7 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
                 showWarningMessage("Fotoğraf kaydı boş.", "Tamam", false);
             }
 
-            return data.photo;
+            return data;
 
         } catch (err) {
             console.error("readPhoto API hatası:", err);
