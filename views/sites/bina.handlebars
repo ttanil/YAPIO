@@ -438,8 +438,8 @@
                             <td>1</td>  
                             <td>  
                                 <select class="form-select">  
+                                    <option>Bodrum Kat</option>
                                     <option>Zemin Kat</option>  
-                                    <option>Bodrum Kat</option>  
                                     <option>1. Kat</option>  
                                     <option>2. Kat</option>  
                                     <option>3. Kat</option>  
@@ -450,6 +450,7 @@
                             </td>
                             <td>  
                                 <select class="form-select">  
+                                    <option>Otopark</option>
                                     <option>Dükkan</option>  
                                     <option>Ofis</option>  
                                     <option>1+1</option>  
@@ -581,9 +582,9 @@
                 <tr>  
                     <td>${tableRows.children.length + 1}</td>  
                     <td>  
-                        <select class="form-select">  
-                            <option>Zemin Kat</option>  
+                        <select class="form-select">
                             <option>Bodrum Kat</option>
+                            <option>Zemin Kat</option>
                             <option>1. Kat</option>  
                             <option>2. Kat</option>  
                             <option>3. Kat</option>  
@@ -593,7 +594,8 @@
                         </select>  
                     </td>
                     <td>  
-                        <select class="form-select">  
+                        <select class="form-select">
+                            <option>Otopark</option> 
                             <option>Dükkan</option>  
                             <option>Ofis</option>  
                             <option>1+1</option>  
@@ -704,10 +706,13 @@
                     rowData["alanTipi"] = "Dükkan";
                 } else if(rowData["tipi"] === "Ofis"){
                     rowData["alanTipi"] = "Ofis";
+                } else if(rowData["tipi"] === "Otopark"){
+                    rowData["alanTipi"] = "Otopark";
                 } else {
                     rowData["alanTipi"] = rowData["tipi"];
                 }
                 
+                console.log("tableData:",tableData);
                 tableData.push(rowData);
             });
 
@@ -740,8 +745,8 @@
                     <td>1</td>  
                     <td>  
                         <select class="form-select">  
-                            <option>Zemin Kat</option>  
                             <option>Bodrum Kat</option>
+                            <option>Zemin Kat</option>
                             <option>1. Kat</option>  
                             <option>2. Kat</option>  
                             <option>3. Kat</option>  
@@ -752,6 +757,7 @@
                     </td>
                     <td>  
                         <select class="form-select">  
+                            <option>Otopark</option> 
                             <option>Dükkan</option>  
                             <option>Ofis</option>  
                             <option>1+1</option>  

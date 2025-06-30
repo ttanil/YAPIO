@@ -154,9 +154,9 @@ export function populateTable(tableData){
             <tr>  
                 <td>${index + 1}</td>  
                 <td>  
-                    <select class="form-select">  
+                    <select class="form-select">
+                        <option ${rowData.kat === "Bodrum Kat" ? "selected" : ""}>Bodrum Kat</option>
                         <option ${rowData.kat === "Zemin Kat" ? "selected" : ""}>Zemin Kat</option>  
-                        <option ${rowData.kat === "Bodrum Kat" ? "selected" : ""}>Bodrum Kat</option>  
                         <option ${rowData.kat === "1. Kat" ? "selected" : ""}>1. Kat</option>  
                         <option ${rowData.kat === "2. Kat" ? "selected" : ""}>2. Kat</option>  
                         <option ${rowData.kat === "3. Kat" ? "selected" : ""}>3. Kat</option>  
@@ -166,7 +166,8 @@ export function populateTable(tableData){
                     </select>  
                 </td>
                 <td>  
-                    <select class="form-select">  
+                    <select class="form-select">
+                        <option ${rowData.tipi === "Otopark" ? "selected" : ""}>Otopark</option>
                         <option ${rowData.tipi === "Dükkan" ? "selected" : ""}>Dükkan</option>  
                         <option ${rowData.tipi === "Ofis" ? "selected" : ""}>Ofis</option>  
                         <option ${rowData.tipi === "1+1" ? "selected" : ""}>1+1</option>  

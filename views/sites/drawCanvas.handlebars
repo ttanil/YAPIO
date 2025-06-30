@@ -782,7 +782,7 @@
                 <path d="M13.79 3.21A2.25 2.25 0 0 1 17 6l-9.04 9.04a1 1 0 0 1-.42.25l-3.79 1.14a.5.5 0 0 1-.62-.62l1.14-3.79a1 1 0 0 1 .25-.42L13.79 3.21zm1.42 1.42l-1.42-1.42M6 16h.01" stroke="#2d3748" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </span>
-        <div id="sefName">Mehmet YILMAZ</div>
+        <div id="sefName">Polat UYANIK</div>
     </div>
 
     <!-- Modal -->  
@@ -857,7 +857,7 @@
                 <path d="M13.79 3.21A2.25 2.25 0 0 1 17 6l-9.04 9.04a1 1 0 0 1-.42.25l-3.79 1.14a.5.5 0 0 1-.62-.62l1.14-3.79a1 1 0 0 1 .25-.42L13.79 3.21zm1.42 1.42l-1.42-1.42M6 16h.01" stroke="#2d3748" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </span>
-        <div id="sefName2">Mehmet YILMAZ</div>
+        <div id="sefName2">Polat UYANIK</div>
     </div>
 
     <!-- İsim Girişi Modalı -->
@@ -938,7 +938,7 @@
                 { "role": "{{role}}" }
             {{/if}};
 
-            console.log(window.user);
+            //console.log(window.user);
 
             userId = window.user.userId;
             const projectNameDb = window.user.project.projectName;
@@ -966,10 +966,19 @@
             // Çatı genişliğini en geniş kata ayarla  
             updateRoofWidth(roof, Math.max(200, maxWidth));
 
-            document.getElementById('mimarName').textContent = window.user.project.mimarName[0].name
-            document.getElementById('mimarName2').textContent = window.user.project.mimarName[0].name;
-            document.getElementById('sefName').textContent = window.user.project.sefName[0].name
-            document.getElementById('sefName2').textContent = window.user.project.sefName[0].name;
+            if(Array.isArray(window.user.project.mimarName) &&
+            window.user.project.mimarName.length > 0 &&
+            window.user.project.mimarName[0].name){
+                document.getElementById('mimarName').textContent = window.user.project.mimarName[0].name;
+                document.getElementById('mimarName2').textContent = window.user.project.mimarName[0].name;
+            }
+            
+            if(Array.isArray(window.user.project.sefName) &&
+            window.user.project.sefName.length > 0 &&
+            window.user.project.sefName[0].name){
+                document.getElementById('sefName').textContent = window.user.project.sefName[0].name;
+                document.getElementById('sefName2').textContent = window.user.project.sefName[0].name;
+            }
 
         });
 
@@ -1047,10 +1056,18 @@
                 windowDiv.style.position = "relative";  
                 windowDiv.style.display = "flex";  
                 windowDiv.style.justifyContent = "center";  
-                windowDiv.style.alignItems = "center";  
+                windowDiv.style.alignItems = "center";
 
                 const isSold = floorsData[floorNumber].rooms[i].isSold;  
-                const roomName = floorsData[floorNumber].rooms[i].roomName;  
+
+                const temporaryRowNumber = floorsData[floorNumber].rooms[i].rowNumber;
+                const isOtopark = building.some(element =>
+                    element.rowNumber === temporaryRowNumber && element.alanTipi === "Otopark"
+                );
+                let roomName = floorsData[floorNumber].rooms[i].roomName; 
+                if(isOtopark){
+                    roomName = "Otopark";
+                }
 
                 // Eğer önce yazı gözüksün, img alta gelsin istiyorsan zIndex değerleriyle oynayabilirsin.  
                 const textSpan = document.createElement("span");  
@@ -1110,6 +1127,9 @@
                 // Tıklama olayı ekle
                 windowDiv.addEventListener('click', (e) => {
                     e.stopPropagation();
+                    if (isOtopark) {
+                        return;
+                    }
                     const roomData = floorsData[floorNumber].rooms[i];
                     getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, sellButton, removeSellButton, 
                             ownerButton, floorsData[floorNumber].floorName, roomData.roomName, roomData.rowNumber, buttonGroup, roomInfoForm, okButton,
