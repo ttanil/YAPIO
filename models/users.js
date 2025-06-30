@@ -675,6 +675,13 @@ const savedMaterialKaydiSchema = new mongoose.Schema({
   savedResults: [savedMaterialRecordsKaydiSchema]
 },{ strict: false }, { _id: true });
 
+const mimarNameKaydiSchema = new mongoose.Schema({
+  name:     { type: String, required: true }
+}, { _id: true });
+const sefNameKaydiSchema = new mongoose.Schema({
+  name:     { type: String, required: true }
+}, { _id: true });
+
 
 const arsaBedeliSchema = new mongoose.Schema(defaultFields, { _id: false });
 const yerdenCikartmakSchema = new mongoose.Schema(defaultFields, { _id: false });
@@ -781,6 +788,9 @@ const userInputSchema = new mongoose.Schema({
   arsaBedeli: [arsaBedeliSchema],
 
   yerdenCikartmak: [yerdenCikartmakSchema],
+
+  mimarName:[mimarNameKaydiSchema],
+  sefName:[sefNameKaydiSchema],
   
   metreMaliyet: [metreMaliyetSchema],
   payment : [paymentSchema]

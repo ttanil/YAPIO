@@ -652,7 +652,7 @@
 
             .input-group {
                 margin-bottom: 5px;
-                gap: 0px;
+                gap: 5px;
             }
 
             select,
@@ -703,7 +703,7 @@
             #labelMiktar, #valueMiktar{
                 font-weight: 300;
                 margin-right: 5px; /* Etiket ile değer arasına boşluk bırak */
-                min-width: 50px; /* Sabit genişlik ayarla */
+                min-width: 42px; /* Sabit genişlik ayarla */
             }
             #labelMiktar,#labelBirimFiyat, #labelBirim{
                 display: none;
@@ -711,12 +711,12 @@
             #labelBirim, #valueBirim, #labelToplam{
                 font-weight: 300;
                 margin-right: 5px;
-                min-width: 35px;
+                min-width: 32px;
             }
             #labelBirimFiyat, #valueBirimFiyat{
                 font-weight: 300;
                 margin-right: 5px;
-                min-width: 55px;
+                min-width: 46px;
             }
 
             .separator {
@@ -1632,7 +1632,6 @@
         }
 
         async function saveMaterials(saves){
-            console.log("saves:",saves);
             showLoader();
             try {
                 const response = await fetch('/malzeme', {

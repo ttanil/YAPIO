@@ -120,20 +120,89 @@
         }
 
         /* Bina Konteyneri */  
-        #building-container {  
+        .bina-container-ortala {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* yukarıdan hizalı, orta olmasını istersen center da olur */
+            width: 100vw;
+            min-height: auto;
+        }
+
+        #building-container {
             width: 350px;
-            margin: 0 auto; 
             margin-top: 30px; 
             padding-bottom: 50px;
             padding-top: 30px;
             background-color: #b2c0f7;
-            position: relative;  
-            display: flex;  
-            flex-direction: column; /* Katları yukarıdan aşağı sıralar */  
-            border-radius: 10px; /* Köşelerin yuvarlatılması */  
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Hafif gölge efekti */
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
             z-index: 100;
-        }  
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .mimar-label{
+            position: fixed;     /* Hep ekranın sağında kalır */
+            top: 500px;          /* Yukarıdan ne kadar boşluk? (ayarlarsın) */
+            right: 105px;         /* Sağdan boşluk, dilediğin kadar */
+            width: 280px;         /* Kutu genişliği */
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            padding-left: 8px;
+            background: rgba(255,255,255,0.93);
+            box-shadow: -2px 0 8px 0 rgba(44,62,80,.07);
+            font-size: 1rem;
+            font-weight: bold;
+            color: #2d3748;
+            border-radius: 6px;
+            height: 40px;        /* Sabit yükseklik, ister otomatik ister artır */
+            z-index: 10;
+            user-select: none;
+        }
+        #mimarName, #sefName{
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #2d3748;
+            padding-left: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: start;
+        }
+        .mimar-icon {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .sef-label {
+            position: fixed;     /* Hep ekranın sağında kalır */
+            top: 555px;          /* Yukarıdan ne kadar boşluk? (ayarlarsın) */
+            right: 105px;         /* Sağdan boşluk, dilediğin kadar */
+            width: 280px;         /* Kutu genişliği */
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            padding-left: 8px;
+            background: rgba(255,255,255,0.93);
+            box-shadow: -2px 0 8px 0 rgba(44,62,80,.07);
+            font-size: 1rem;
+            font-weight: bold;
+            color: #2d3748;
+            border-radius: 6px;
+            height: 40px;        /* Sabit yükseklik, ister otomatik ister artır */
+            z-index: 10;
+            user-select: none;
+        }
+        .mimar-label2,
+            .sef-label2{
+                display: none !important;
+        }
         /* Çatı görünümü için üçgen */  
         .roof-svg{
             margin: auto;
@@ -264,7 +333,117 @@
             letter-spacing: 1px;
             box-shadow: 0 2px 5px 0 rgba(132, 117, 57, 0.1);
         }
+
+
+        /* İsim giriş modalı */
+        .name-edit-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.15);
+            z-index: 3001; /* Bootstrap modal 1055 üstüne gelsin istersen artır */
+            align-items: center;
+            justify-content: center;
+        }
+        .name-edit-modal-overlay.active {
+            display: flex;
+        }
+        .name-edit-modal-content {
+            background: #fff;
+            border-radius: 7px;
+            padding: 24px 28px 16px 28px;
+            min-width: 260px;
+            box-shadow: 0 8px 44px rgba(44,62,80,.18), 0 1.5px 4px rgba(44,62,80,.08);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .name-edit-modal-close {
+            position: absolute;
+            top: 7px;
+            right: 14px;
+            cursor: pointer;
+            font-size: 22px;
+            color: #2d3748;
+            opacity: 0.6;
+            transition: opacity .2s;
+        }
+        .name-edit-modal-close:hover {
+            opacity: 1;
+        }
+        #name-edit-modal-input {
+            margin-top: 16px;
+            margin-bottom: 17px;
+            font-size: 1rem;
+            border-radius: 5px;
+            width: 100%;
+        }
         
+        @media (max-width: 1200px) {
+            .mimar-label,
+                .sef-label {
+                    display: none !important;
+            }
+
+            .mimar-label2{
+                position: relative;
+                width: 280px;         /* Kutu genişliği */
+                display: flex !important;
+                align-items: center;
+                justify-content: start;
+                padding-left: 8px;
+                background: rgba(255,255,255,0.93);
+                box-shadow: -2px 0 8px 0 rgba(44,62,80,.07);
+                font-size: 1rem;
+                font-weight: bold;
+                color: #2d3748;
+                border-radius: 6px;
+                height: 32px;        /* Sabit yükseklik, ister otomatik ister artır */
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 15px;
+            }
+            .sef-label2{
+                position: relative;
+                width: 280px;         /* Kutu genişliği */
+                display: flex !important;
+                align-items: center;
+                justify-content: start;
+                padding-left: 8px;
+                background: rgba(255,255,255,0.93);
+                box-shadow: -2px 0 8px 0 rgba(44,62,80,.07);
+                font-size: 0.9rem;
+                font-weight: bold;
+                color: #2d3748;
+                border-radius: 6px;
+                height: 32px;        /* Sabit yükseklik, ister otomatik ister artır */
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 5px;
+            }
+            #mimarName2, #sefName2{
+                font-size: 0.9rem !important;
+                font-weight: bold;
+                color: #2d3748;
+                padding-left: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: start;
+            }
+            .mimar-icon2 {
+                position: absolute !important;
+                top: 8px;
+                right: 10px;
+                width: 20px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            }
+
+        }
 
         /* Responsive Tasarım */  
         @media (max-width: 768px) {
@@ -395,7 +574,12 @@
                 margin-top: 15px; 
                 padding-bottom: 20px;
                 padding-top: 10px;
-            }  
+            }
+            .mimar-label,
+                .sef-label {
+                    display: none !important;
+            }
+
             /* Çatı görünümü için üçgen */  
             .roof-svg{
                 margin-bottom: -20px;
@@ -579,7 +763,27 @@
     </div>
 
     <!-- Bina Alanı -->  
-    <div class="building-container-area" id="building-container"></div>
+    <div class="bina-container-ortala">
+        <div id="building-container"></div>
+    </div>
+    <div class="mimar-label">MİMAR
+        <span class="mimar-icon" id="mimarEnter">
+            <!-- Kalem ikonu SVG -->
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
+                <path d="M13.79 3.21A2.25 2.25 0 0 1 17 6l-9.04 9.04a1 1 0 0 1-.42.25l-3.79 1.14a.5.5 0 0 1-.62-.62l1.14-3.79a1 1 0 0 1 .25-.42L13.79 3.21zm1.42 1.42l-1.42-1.42M6 16h.01" stroke="#2d3748" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </span>
+        <div id="mimarName">Ahmet KUMRU</div>
+    </div>
+    <div class="sef-label">ŞANTİYE ŞEFİ
+        <span class="mimar-icon" id="sefEnter">
+            <!-- Kalem ikonu SVG -->
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
+                <path d="M13.79 3.21A2.25 2.25 0 0 1 17 6l-9.04 9.04a1 1 0 0 1-.42.25l-3.79 1.14a.5.5 0 0 1-.62-.62l1.14-3.79a1 1 0 0 1 .25-.42L13.79 3.21zm1.42 1.42l-1.42-1.42M6 16h.01" stroke="#2d3748" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </span>
+        <div id="sefName">Mehmet YILMAZ</div>
+    </div>
 
     <!-- Modal -->  
     <div class="modal fade" id="roomModal" tabindex="-1" aria-labelledby="roomModalTitle" aria-hidden="true">  
@@ -628,13 +832,42 @@
                     </form>  
                 </div>
             </div>  
-        </div>  
+        </div>
     </div>
 
     <!-- Toplam Brüt Metrekare Alanı -->
     <div class="total-area-container">
         <div class="total-area-label">Toplam İnşaat Alanı</div>
         <div class="total-area-value" id="totalBrutArea">0 m²</div>
+    </div>
+
+    <div class="mimar-label2">MİMAR
+        <span class="mimar-icon2" id="mimarEnter2">
+            <!-- Kalem ikonu SVG -->
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
+                <path d="M13.79 3.21A2.25 2.25 0 0 1 17 6l-9.04 9.04a1 1 0 0 1-.42.25l-3.79 1.14a.5.5 0 0 1-.62-.62l1.14-3.79a1 1 0 0 1 .25-.42L13.79 3.21zm1.42 1.42l-1.42-1.42M6 16h.01" stroke="#2d3748" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </span>
+        <div id="mimarName2">Ahmet KUMRU</div>
+    </div>
+    <div class="sef-label2 mb-4">ŞANTİYE ŞEFİ
+        <span class="mimar-icon2" id="sefEnter2">
+            <!-- Kalem ikonu SVG -->
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
+                <path d="M13.79 3.21A2.25 2.25 0 0 1 17 6l-9.04 9.04a1 1 0 0 1-.42.25l-3.79 1.14a.5.5 0 0 1-.62-.62l1.14-3.79a1 1 0 0 1 .25-.42L13.79 3.21zm1.42 1.42l-1.42-1.42M6 16h.01" stroke="#2d3748" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </span>
+        <div id="sefName2">Mehmet YILMAZ</div>
+    </div>
+
+    <!-- İsim Girişi Modalı -->
+    <div id="name-edit-modal-overlay" class="name-edit-modal-overlay">
+        <div class="name-edit-modal-content">
+            <span id="name-edit-modal-close" class="name-edit-modal-close">&times;</span>
+            <h3 id="name-edit-modal-title">İsmi Düzenle</h3>
+            <input id="name-edit-modal-input" type="text" class="form-control" />
+            <button id="name-edit-modal-save" class="btn btn-primary w-100 mt-3">Kaydet</button>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
@@ -672,7 +905,9 @@
         const roomInfoForm = document.getElementById("roomInfoForm");  
         const itemPrice = document.getElementById("itemPrice");  
         const buyerInfo = document.getElementById("buyerInfo");  
-        const okButton = document.getElementById("okButton");  
+        const okButton = document.getElementById("okButton");
+
+        const mimarEnter2 = document.getElementById("mimarEnter2");
 
         let SCALE = 0;
         let screenWidth = null;
@@ -697,11 +932,13 @@
         document.addEventListener("DOMContentLoaded", () => {  
             event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle  
 
-             window.user = {{#if user}}
+            window.user = {{#if user}}
                 { "email": "{{user.email}}", "role": "{{user.role}}", "userId": "{{user.id}}", "project": {{{json project}}} }
             {{else}}
                 { "role": "{{role}}" }
             {{/if}};
+
+            console.log(window.user);
 
             userId = window.user.userId;
             const projectNameDb = window.user.project.projectName;
@@ -727,7 +964,13 @@
             setBuildingFromDb();  
 
             // Çatı genişliğini en geniş kata ayarla  
-            updateRoofWidth(roof, Math.max(200, maxWidth));  
+            updateRoofWidth(roof, Math.max(200, maxWidth));
+
+            document.getElementById('mimarName').textContent = window.user.project.mimarName[0].name
+            document.getElementById('mimarName2').textContent = window.user.project.mimarName[0].name;
+            document.getElementById('sefName').textContent = window.user.project.sefName[0].name
+            document.getElementById('sefName2').textContent = window.user.project.sefName[0].name;
+
         });
 
         loginButton.addEventListener("click", () => {
@@ -1084,6 +1327,111 @@
         }
         window.addEventListener('DOMContentLoaded', syncTotalAreaWidth);
         window.addEventListener('resize', syncTotalAreaWidth);
+
+        let nameEditTarget = null;
+        function openNameEditModal(title, currentText, onSave) {
+            document.getElementById('name-edit-modal-title').textContent = title;
+            const input = document.getElementById('name-edit-modal-input');
+            input.value = currentText || '';
+            setTimeout(() => input.focus(), 100); // Modal açılır açılmaz input fokus
+            document.getElementById('name-edit-modal-overlay').classList.add('active');
+            nameEditTarget = onSave;
+        }
+        function closeNameEditModal() {
+            document.getElementById('name-edit-modal-overlay').classList.remove('active');
+            nameEditTarget = null;
+        }
+        async function saveNameEditModal() {
+            const title = document.getElementById('name-edit-modal-title').textContent;
+            const text = document.getElementById('name-edit-modal-input').value.trim();
+            if (nameEditTarget) {
+                nameEditTarget(text);
+                let areaDb = title === "Mimar İsmi" ? "mimarName" :
+                    title === "Şantiye Şefi İsmi" ? "sefName" :
+                    "mimarName";
+                const data = {
+                    text,
+                    areaDb
+                };
+                await saveName(data);
+                closeNameEditModal();
+            }
+        }
+
+        document.getElementById('mimarEnter').onclick = function() {
+            openNameEditModal("Mimar İsmi", document.getElementById('mimarName').textContent, function(val) {
+                document.getElementById('mimarName').textContent = val;
+            });
+        };
+        document.getElementById('sefEnter').onclick = function() {
+            openNameEditModal("Şantiye Şefi İsmi", document.getElementById('sefName').textContent, function(val) {
+                document.getElementById('sefName').textContent = val;
+            });
+        };
+        // MOBIL versiyonlar için eklemeler
+        document.getElementById('mimarEnter2').onclick = function() {
+            openNameEditModal("Mimar İsmi", document.getElementById('mimarName2').textContent, function(val) {
+                document.getElementById('mimarName2').textContent = val;
+            });
+        };
+        document.getElementById('sefEnter2').onclick = function() {
+            openNameEditModal("Şantiye Şefi İsmi", document.getElementById('sefName2').textContent, function(val) {
+                document.getElementById('sefName2').textContent = val;
+            });
+        };
+
+        document.getElementById('name-edit-modal-close').onclick = closeNameEditModal;
+        document.getElementById('name-edit-modal-save').onclick = saveNameEditModal;
+        document.getElementById('name-edit-modal-input').onkeydown = function(e){
+            if (e.key === "Enter") saveNameEditModal();
+            if (e.key === "Escape") closeNameEditModal();
+        };
+        // Overlay'e tıklayınca da kapansın
+        document.getElementById('name-edit-modal-overlay').onclick = function(e){
+            if(e.target === this) closeNameEditModal();
+        };
+
+        async function saveName(saves){
+            showLoader();
+            try {
+                const response = await fetch('/draw', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        process: "saveName",
+                        userId: userId, 
+                        projectName: projectName,
+                        saves
+                    })
+                });
+
+                const data = await response.json();
+                if(response.ok) {
+                    if(data.message === "Mimar adı güncellendi."){
+                        document.getElementById('mimarName').textContent = data.mimarName[0].name
+                        document.getElementById('mimarName2').textContent = data.mimarName[0].name;
+                    } else{
+                        document.getElementById('sefName').textContent = data.sefName[0].name
+                        document.getElementById('sefName2').textContent = data.sefName[0].name;
+                    }
+                    
+                } else {
+                    console.error('Beklenmeyen hata:', data.message || data);
+                }
+
+            } catch (error) {
+                console.error("Fetch hatası:", error);
+            } finally {
+                hideLoader();
+            }
+        }
+
+        function showLoader() {
+            document.getElementById('loader').style.display = 'flex';
+        }
+        function hideLoader() {
+            document.getElementById('loader').style.display = 'none';
+        }
 
       </script>
 

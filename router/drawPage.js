@@ -43,11 +43,9 @@ router.get('/', authenticateUser, async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    const { userId, projectName, isSoldSituation = null, dataOwner = null, soldOwner = null } = req.body;
-
-    //console.log("dataPost  ",dataPost); 
+    const { userId, projectName, isSoldSituation = null, dataOwner = null, soldOwner = null, process= null } = req.body;
     
-    if(projectName && !isSoldSituation && !dataOwner && !soldOwner){
+    if(projectName && !isSoldSituation && !dataOwner && !soldOwner && !process){
         try {
             const user = await Users.findById(userId);
             if (!user) {
@@ -91,7 +89,7 @@ router.post('/', async (req, res) => {
             console.error("Kayıt Hatası:", err);
             return res.status(500).json({ success: false, message: "Veri hatası" });
         }
-    } else if(projectName && isSoldSituation && !dataOwner && !soldOwner){
+    } else if(projectName && isSoldSituation && !dataOwner && !soldOwner && !process){
         const floorName = isSoldSituation.floorName;
         const rowNumber = isSoldSituation.rowNumber;
         const isSold = isSoldSituation.isSold;
@@ -120,7 +118,7 @@ router.post('/', async (req, res) => {
             console.error("Kayıt Hatası:", err);
             return res.status(500).json({ success: false, message: "Veri hatası" });
         }
-    } else if(projectName && dataOwner && !isSoldSituation && !soldOwner){
+    } else if(projectName && dataOwner && !isSoldSituation && !soldOwner && !process){
         const dataOwnerText = req.body.dataOwnerText;
         try {
             const user = await Users.findById(userId);
@@ -170,7 +168,7 @@ router.post('/', async (req, res) => {
             console.error("Kayıt Hatası:", err);
             return res.status(500).json({ success: false, message: "Veri hatası" });
         }
-    } else if(projectName && !dataOwner && !isSoldSituation && soldOwner){
+    } else if(projectName && !dataOwner && !isSoldSituation && soldOwner && !process){
         const soldOwnerText = req.body.soldOwnerText;
         try {
             const user = await Users.findById(userId);
@@ -221,6 +219,84 @@ router.post('/', async (req, res) => {
         } catch (err) {
             console.error("Kayıt Hatası:", err);
             return res.status(500).json({ success: false, message: "Veri hatası" });
+        }
+    } else if(projectName && !isSoldSituation && !dataOwner && !soldOwner && process === "saveName"){
+        const { saves } = req.body; // saves.areaDb ve saves.value gelmeli
+
+        if(saves.areaDb === "mimarName"){
+            try {
+                const user = await Users.findById(userId);
+                if (!user) {
+                    return res.status(401).json({ success: false, message: 'Geçersiz giriş!' });
+                }
+
+                // Doğru project
+                const project = user.userInputs.find(prj => prj.projectName === projectName);
+                if (!project) {
+                    return res.status(404).json({ success: false, message: "Proje bulunamadı." });
+                }
+
+                // Eğer mimarName array’i yoksa ekle
+                if (!Array.isArray(project.mimarName)) {
+                    project.mimarName = [];
+                }
+
+                // Eğer içinde kayıt varsa ilk elemanı güncelle; yoksa ekle
+                if (project.mimarName.length > 0) {
+                    project.mimarName[0].name = saves.text;
+                } else {
+                    project.mimarName.push({ name: saves.text });
+                }
+
+                await user.save();
+
+                return res.status(200).json({
+                    success: true,
+                    message: "Mimar adı güncellendi.",
+                    mimarName: project.mimarName
+                });
+
+            } catch (err) {
+                console.error("Kayıt Hatası:", err);
+                return res.status(500).json({ success: false, message: "Veri hatası" });
+            }
+        } else{
+            try {
+                const user = await Users.findById(userId);
+                if (!user) {
+                    return res.status(401).json({ success: false, message: 'Geçersiz giriş!' });
+                }
+
+                // Doğru project
+                const project = user.userInputs.find(prj => prj.projectName === projectName);
+                if (!project) {
+                    return res.status(404).json({ success: false, message: "Proje bulunamadı." });
+                }
+
+                // Eğer mimarName array’i yoksa ekle
+                if (!Array.isArray(project.mimarName)) {
+                    project.sefName = [];
+                }
+
+                // Eğer içinde kayıt varsa ilk elemanı güncelle; yoksa ekle
+                if (project.sefName.length > 0) {
+                    project.sefName[0].name = saves.text;
+                } else {
+                    project.sefName.push({ name: saves.text });
+                }
+
+                await user.save();
+
+                return res.status(200).json({
+                    success: true,
+                    message: "Şef adı güncellendi.",
+                    sefName: project.sefName
+                });
+
+            } catch (err) {
+                console.error("Kayıt Hatası:", err);
+                return res.status(500).json({ success: false, message: "Veri hatası" });
+            }
         }
     }
 });
