@@ -2,10 +2,39 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const path = require('path');
+const multer = require('multer');
+const { S3Client, PutObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const Users = require(path.join(__dirname, '..', 'models', 'users'));
 
 
 const authenticateUser = require('../middleware/authenticateUser');
+
+// Cloudflare R2 Ayarları (env olmadan, açık anahtarlarla)
+const CF_R2_ACCESS_KEY   = "26272cf5a77ffec381949db19c6a9964";
+const CF_R2_SECRET_KEY   = "211b08b35f224a33a7a1f011cd40f7719f675e6c39a138aedb2429bd299c993c";
+const CF_R2_ACCOUNT_ID   = "eb7b69f469c33ce6338e878ac08bcdd6";
+const CF_R2_ENDPOINT     = "https://eb7b69f469c33ce6338e878ac08bcdd6.r2.cloudflarestorage.com";
+const CF_R2_PUBLIC_URL   = "https://cdn.yapio.net";
+const CF_R2_BUCKET       = "yapio";
+
+// S3 Client'ı oluştur
+function getS3Client() {
+    return new S3Client({
+        region: "auto",
+        endpoint: CF_R2_ENDPOINT,
+        credentials: {
+            accessKeyId: CF_R2_ACCESS_KEY,
+            secretAccessKey: CF_R2_SECRET_KEY
+        }
+    });
+}
+
+const BUCKET_NAME = CF_R2_BUCKET;
+const PUBLIC_BASE_URL = CF_R2_PUBLIC_URL;
+const upload = multer({ 
+    storage: multer.memoryStorage(),
+    //limits: { fileSize: 20 * 1024 * 1024 } // 20mb
+});
 
 router.get('/', authenticateUser, async (req, res) => {
     const projectName = req.query.projectName;
@@ -42,7 +71,7 @@ router.get('/', authenticateUser, async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', upload.single('file'), async (req, res) => {
     const { userId, projectName, isSoldSituation = null, dataOwner = null, soldOwner = null, process= null } = req.body;
     
     if(projectName && !isSoldSituation && !dataOwner && !soldOwner && !process){
@@ -298,6 +327,117 @@ router.post('/', async (req, res) => {
                 return res.status(500).json({ success: false, message: "Veri hatası" });
             }
         }
+    } else if (projectName && userId && process === "savePhoto") {
+        const { floorName, rowNumber } = req.body;
+        const file = req.file;
+        if (!file) return res.status(400).json({ error: 'Dosya yok.' });
+
+        // 1. Kullanıcı ve projeyi bul (her defasında güncel haliyle)
+        const user = await Users.findById(userId);
+        if (!user)
+            return res.status(401).json({ success: false, message: "Kullanıcı bulunamadı." });
+
+        const userInputIndex = user.userInputs.findIndex(p => p.projectName === projectName);
+        if (userInputIndex === -1)
+            return res.status(404).json({ success: false, message: "Proje bulunamadı." });
+
+        const floors = user.userInputs[userInputIndex].floorsData;
+        const floorIndex = floors.findIndex(f => f.floorName === floorName);
+        if (floorIndex === -1)
+            return res.status(404).json({ success: false, message: "Kat bulunamadı." });
+
+        const rooms = floors[floorIndex].rooms;
+        const roomIndex = rooms.findIndex(r => r.rowNumber === rowNumber);
+        if (roomIndex === -1)
+            return res.status(404).json({ success: false, message: "Oda bulunamadı." });
+
+        // 2. S3 client’ı başlat
+        const s3 = getS3Client();
+
+        // 3. Eski fotoğrafları Cloudflare'dan sil
+        // Sadece photo path'i olanları siliyoruz
+        const oldPhotos = Array.isArray(rooms[roomIndex].photo) ? rooms[roomIndex].photo : [];
+        for (const oldPhoto of oldPhotos) {
+            if (oldPhoto.path) {
+                try {
+                    await s3.send(new DeleteObjectCommand({
+                        Bucket: BUCKET_NAME,
+                        Key: getKeyFromUrl(oldPhoto.path)
+                    }));
+                } catch (e) {
+                    console.error("Cloudflare'dan foto silinemedi:", e);
+                }
+            }
+        }
+
+        // 4. Yeni dosyayı Cloud’a yükle
+        const ext = path.extname(file.originalname);
+        const r2Filename = `evraklar/${userId}_${Date.now()}${ext}`;
+        await s3.send(new PutObjectCommand({
+            Bucket: BUCKET_NAME,
+            Key: r2Filename,
+            Body: file.buffer,
+            ContentType: file.mimetype
+        }));
+
+        // 5. Yeni fotoğraf URL'si
+        const fileUrl = `${PUBLIC_BASE_URL}/${r2Filename}`;
+
+        // 6. Doğrudan MongoDB update ile ilgili alanı değiştir
+        const photoUpdatePath = `userInputs.${userInputIndex}.floorsData.${floorIndex}.rooms.${roomIndex}.photo`;
+
+        await Users.updateOne(
+            { _id: userId },
+            { $set: { [photoUpdatePath]: [{ path: fileUrl }] } }
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: "Fotoğraf güncellendi.",
+            photo: [{ path: fileUrl }]
+        });
+    } else if (projectName && userId && process === "readPhoto") {
+        const { floorName, rowNumber } = req.body;
+
+        // 1. Kullanıcı ve proje kontrolü
+        const user = await Users.findById(userId);
+        if (!user) {
+            return res.status(401).json({ success: false, message: "Kullanıcı bulunamadı." });
+        }
+
+        const userInput = user.userInputs.find(p => p.projectName === projectName);
+        if (!userInput) {
+            return res.status(404).json({ success: false, message: "Proje bulunamadı." });
+        }
+
+        // 2. Kat kontrolü
+        const floor = userInput.floorsData.find(f => f.floorName === floorName);
+        if (!floor) {
+            return res.status(404).json({ success: false, message: "Kat bulunamadı." });
+        }
+
+        // 3. Oda bul
+        const room = floor.rooms.find(r => r.rowNumber === rowNumber);
+        if (!room) {
+            return res.status(404).json({ success: false, message: "Oda bulunamadı." });
+        }
+
+        // 4. Fotoğraf var mı?
+        if (!Array.isArray(room.photo) || room.photo.length === 0) {
+            return res.status(404).json({ success: false, message: "Fotoğraf bulunamadı." });
+        }
+
+        // 5. Fotoğrafı döndür
+        return res.status(200).json({
+            success: true,
+            photo: room.photo   // Tek foto ise room.photo[0] da dönebilirsin
+        });
+    }
+
+    // Yardımcı fonksiyon
+    function getKeyFromUrl(url) {
+        // http://cdn.site/evraklar/userid_123.png => evraklar/userid_123.png
+        return url.split('/').slice(-2).join('/');
     }
 });
 

@@ -2,11 +2,17 @@ const mongoose = require('mongoose');
 
 // Kullanıcı şeması tanımlama  
 
+
+const resimKaydiSchema = new mongoose.Schema({
+  path:       { type: String, required: true },   // PDF yolu (sunucuda ya da bulutta)
+  uploadedAt: { type: Date, default: Date.now }
+}, { _id: true }); 
 // Room şeması
 const roomSchema = new mongoose.Schema({
     roomName: { type: String, required: false },
     isSold: { type: String, required: true },
-    rowNumber: { type: String, required: true }
+    rowNumber: { type: String, required: true },
+    photo: { type: [resimKaydiSchema], required: false }
 }, { _id: false });
 
 // Floor şeması

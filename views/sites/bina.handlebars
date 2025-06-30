@@ -712,7 +712,7 @@
                     rowData["alanTipi"] = rowData["tipi"];
                 }
                 
-                console.log("tableData:",tableData);
+                //console.log("tableData:",tableData);
                 tableData.push(rowData);
             });
 
@@ -814,7 +814,7 @@
                 { "role": "{{role}}" }
             {{/if}};
       
-            //console.log("userId ",window.user.project);
+            //console.log("userId ",window.user);
             userId = window.user.userId;
             if(window.user.project){
                 const projectNameDb = window.user.project.projectName;
@@ -1076,7 +1076,6 @@
                         selectedDoorUser = "right";
                         window.selectedDoor = "right";
                     });
-
                 }
 
                 buildingContainer.appendChild(floor);
@@ -1136,7 +1135,7 @@
                 }
                 nextBtn.disabled = false;
                 nextBtn.style.opacity = "1";
-                console.log("selectedWallUser ",selectedWallUser);
+                //console.log("selectedWallUser ",selectedWallUser);
             }
 
             wallLeft.addEventListener("click", () => {

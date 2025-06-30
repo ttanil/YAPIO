@@ -2,8 +2,9 @@ import { showWarningMessage } from './showMessage.js';
 
 export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, sellButton, removeSellButton, 
                         ownerButton, floorName, clickedRoom, rowNumber, buttonGroup, roomInfoForm, okButton,
-                        buyerInfo, itemPrice, fromControl, userId, projectName, buildingData, floorsDataDb) {  
-    return new Promise((resolve, reject) => {
+                        buyerInfo, itemPrice, fromControl, userId, projectName, buildingData, floorsDataDb, 
+                        addPhotoButton, addPhotoInput, savePhotoButton) {  
+    return new Promise(async (resolve, reject) => {
 
         let kat = null;
         let alan = null;
@@ -63,23 +64,46 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
             removeSellButton.style.opacity = '0.3';
         }
 
-        if(model === "1+1"){
-            img = "daire3d_1";
-        } else if(model === "2+1" || model === "2+0"){
-            img = "daire_3d_2";
-        } else if(model === "3+1"){
-            img = "daire_3d_3";
-        } else if(model === "3+1 dublex" || model === "4+1 dublex" || model === "5+1 dublex"){
-            img = "dublex";
-        } else if(model === "4+1"){
-            img = "daire3d_4";
-        } else if(tip === "Dükkan"){
-            img = "store_1";
-        } else if(tip === "Depo"){
-            img = "depo";
-        } else if(tip === "Ofis"){
-            img = "ofis";
-        } 
+        const data = await readPhoto({
+            userId,
+            projectName,
+            floorName,
+            rowNumber
+        });
+        const photoUrl = data && data[0]?.path;
+        if (photoUrl) {
+            roomModalImage.innerHTML = `  
+                <span style="display: flex; align-items: center; justify-content: center;"> 
+                    <img src="${photoUrl}" alt="" style="width:300px; height:250px; ">
+                </span>  
+            `;
+        } else{
+            if(model === "1+1"){
+                img = "daire3d_1";
+            } else if(model === "2+1" || model === "2+0"){
+                img = "daire_3d_2";
+            } else if(model === "3+1"){
+                img = "daire_3d_3";
+            } else if(model === "3+1 dublex" || model === "4+1 dublex" || model === "5+1 dublex"){
+                img = "dublex";
+            } else if(model === "4+1"){
+                img = "daire3d_4";
+            } else if(tip === "Dükkan"){
+                img = "store_1";
+            } else if(tip === "Depo"){
+                img = "depo";
+            } else if(tip === "Ofis"){
+                img = "ofis";
+            } 
+            roomModalImage.innerHTML = `  
+                <span style="display: flex; align-items: center; justify-content: center;"> 
+                    <img src="/img/${img}.png" alt="" style="width:300px; height:250px; ">
+                </span>  
+            `;
+
+        }
+
+        
         
         modalTitle.textContent = kat + ", " + clickedRoom;
         modalSubtitle.innerHTML = `  
@@ -87,11 +111,6 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
                 align-items: center;
                 justify-content: center;"> 
                 ${apartment}
-            </span>  
-        `;
-        roomModalImage.innerHTML = `  
-            <span style="display: flex; align-items: center; justify-content: center;"> 
-                <img src="/img/${img}.png" alt="" style="width:300px; height:250px; ">
             </span>  
         `;
         if(tip === "Daire"){
@@ -199,6 +218,75 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
         };
         okButton.addEventListener("click", okButton.okHandler);
 
+        addPhotoButton.addEventListener("click", () => {
+            addPhotoInput.click(); // gizli input'u tetikler
+        });
+        addPhotoInput.addEventListener("change", async (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // 1. MIME tipi ve uzantı kontrolü
+            const validTypes = ['image/jpeg', 'image/png'];
+            const extension = file.name.split('.').pop().toLowerCase();
+            if (!validTypes.includes(file.type) || !["jpg", "jpeg", "png"].includes(extension)) {
+                showWarningMessage("Sadece JPG ve PNG formatında fotoğraf yükleyebilirsiniz.", "tamam", false);
+                addPhotoInput.value = ""; // Seçimi sıfırla
+                return;
+            }
+
+            // 2. Dosya boyutu kontrolü
+            const maxSize = 5 * 1024 * 1024;
+            if (file.size > maxSize) {
+                showWarningMessage("Dosya boyutu 5 MB'dan büyük olamaz.", "tamam", false);
+                addPhotoInput.value = "";
+                return;
+            }
+
+            // 3. Temel zararlı/bozuk dosya önlemi: Dosya gerçekten görüntü olarak açılabiliyor mu?
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                // Ekstra güvenlik için içeriğe header bazlı minimum bir kontrol ekleyelim
+                // (Bu tarama saldırgan dosyaları %100 tespit etmez; temel bir önlemdir)
+                let safe = true;
+                if (
+                // PNG dosya sihirli baytı: 89 50 4E 47
+                extension === "png" && !e.target.result.startsWith("data:image/png")
+                ) safe = false;
+                if (
+                (extension === "jpg" || extension === "jpeg") &&
+                !e.target.result.startsWith("data:image/jpeg")
+                ) safe = false;
+
+                if (!safe) {
+                    showWarningMessage("Seçtiğiniz dosya bozuk veya desteklenmeyen bir resim.", "tamam", false);
+                    addPhotoInput.value = "";
+                    return;
+                }
+
+                // Buraya kadar gelen dosya, temel kontrollerden geçti: Önizleme
+                roomModalImage.innerHTML = `
+                    <span style="display: flex; align-items: center; justify-content: center;">
+                        <img src="${e.target.result}" alt="Oda Fotoğrafı" style="width:300px; height:250px;">
+                    </span>
+                `;
+            };
+            reader.readAsDataURL(file);
+
+            savePhotoButton.style.display = "flex";
+            // Buton click sürekli aynı event eklenmesin
+            savePhotoButton.replaceWith(savePhotoButton.cloneNode(true));
+            // Yeniden seçiyoruz çünkü yukarıdaki ile eski eventler silinir
+            const newSavePhotoButton = document.getElementById("savePhotoButton");
+            newSavePhotoButton.style.display = "flex";
+
+            newSavePhotoButton.addEventListener("click", async () => {
+                newSavePhotoButton.style.display = "none";
+                await savePhoto({ userId, projectName, file, rowNumber });
+            });
+
+            // NOT: Gerçek zararlı yazılım analizi sadece sunucu tarafında, gelişmiş antivirüs vb. taraması ile mümkündür!
+        });
+
         // Bootstrap modal'ı aç  
         roomModal.show();
         addModalInputFormatterForItemPrice();
@@ -260,7 +348,7 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
-                body: JSON.stringify(payload),
+                body: JSON.stringify(payload)
             });
 
             result = await response.json();
@@ -276,6 +364,81 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
             showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
             console.log('Hata:', error);
             return false;
+        }
+    }
+
+    async function savePhoto(data) {
+        const { userId, projectName, file, rowNumber } = data;
+        const formData = new FormData();
+        formData.append("userId", userId);
+        formData.append("projectName", projectName);
+        formData.append("rowNumber", rowNumber);
+        formData.append("floorName", floorName);
+        formData.append("process", "savePhoto");
+        formData.append("file", file); // File objesini doğrudan ekliyoruz
+
+        showLoader();
+        try {
+            const response = await fetch('/draw', {
+                method: 'POST',
+                credentials: 'include',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                showWarningMessage(result.message || "İşlem başarısız.", "tamam", true);
+                return false;
+            } else {
+                // Başarılı ise gerekirse işlem
+                //result.path varsa, görseli güncelleyebilirsin
+            }
+        } catch (error) {
+            showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
+            console.log('Hata:', error);
+            return false;
+        }
+        hideLoader();
+    }
+
+
+    async function readPhoto({ userId, projectName, floorName, rowNumber }) {
+        showLoader();
+        try {
+            const response = await fetch('/draw', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId,
+                    projectName,
+                    floorName,
+                    rowNumber,
+                    process: "readPhoto",
+                }),
+            });
+
+            const data = await response.json();
+            hideLoader();
+
+            if (!response.ok || !data.success) {
+                showWarningMessage(data.message || "Fotoğraf alınamadı.", "Tamam", false);
+                return null;
+            }
+
+            const photoUrl = data.photo[0]?.path;
+            if (!photoUrl) {
+                showWarningMessage("Fotoğraf kaydı boş.", "Tamam", false);
+            }
+
+            return data.photo;
+
+        } catch (err) {
+            console.error("readPhoto API hatası:", err);
+            showWarningMessage("Beklenmeyen bir hata oluştu.", "Tamam", false);
+            return null;
         }
     }
 

@@ -800,6 +800,17 @@
                 <div id="roomModalImage"> 
                     <!-- Dairenin resmi için -->  
                 </div>
+                <!-- Resim Ekle Butonu -->
+                <div class="d-flex justify-content-center mb-3 mt-2">
+                    <button id="addPhotoButton" class="btn btn-outline-primary me-1" type="button">
+                        <i class="bi bi-image mt-2" style="font-size:1rem;"></i> Resim Ekle
+                    </button>
+                    <button id="savePhotoButton" class="btn btn-outline-success me-1" type="button" style="display:none;">
+                        <i class="bi bi-image mt-2" style="font-size:1rem;"></i> Kaydet
+                    </button>
+                    <input type="file" id="addPhotoInput" accept="image/*" style="display:none;">
+                </div>
+
                 <p class="d-flex justify-content-center mt-3" style="font-size:1.2rem;" id="roomModalDesc">Seçilen oda adı buraya gelecek.</p>
 
                 <div class="modal-body">
@@ -889,6 +900,9 @@
         const modalSubtitle = document.getElementById("roomModalSubtitle");  
         const roomModalImage = document.getElementById("roomModalImage");  
         const modalDesc = document.getElementById("roomModalDesc");
+        const addPhotoButton = document.getElementById("addPhotoButton");
+        const addPhotoInput = document.getElementById("addPhotoInput");
+        const savePhotoButton = document.getElementById("savePhotoButton");
         const buildingContainerArea = document.querySelector(".building-container-area");
         const buttonHome = document.getElementById("buttonHome");
         const roof = document.createElement("div"); 
@@ -1132,8 +1146,9 @@
                     }
                     const roomData = floorsData[floorNumber].rooms[i];
                     getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, sellButton, removeSellButton, 
-                            ownerButton, floorsData[floorNumber].floorName, roomData.roomName, roomData.rowNumber, buttonGroup, roomInfoForm, okButton,
-                            buyerInfo, itemPrice, fromControl, userId, projectName, building, floorsData)
+                            ownerButton, floorsData[floorNumber].floorName, roomData.roomName, roomData.rowNumber, 
+                            buttonGroup, roomInfoForm, okButton, buyerInfo, itemPrice, fromControl, userId, projectName, 
+                            building, floorsData, addPhotoButton, addPhotoInput, savePhotoButton)
                         .then((updatedFloorData) => {
                             setBuildingFromDb();
                             if (fromControl) {  
