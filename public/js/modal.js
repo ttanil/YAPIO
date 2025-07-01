@@ -430,21 +430,26 @@ export function getModal(modalTitle, modalSubtitle, roomModalImage, modalDesc, s
             });
 
             const data = await response.json();
-            console.log("dataDb:", data);
             hideLoader();
+            //console.log("dataDb:", data);
 
-            if (!response.ok || !data.success) {
-                return data;
+            // Eğer HTTP hata ise (örneğin 404 kullanıcı/proje/kat/oda hatası)  
+            if (!response.ok) {
+                showWarningMessage(data.message || 'Sunucu hatası.', "Tamam", false);
+                return null;
             }
 
-            const photoUrl = data.photo[0]?.path;
-            if (!photoUrl) {
-                showWarningMessage("Fotoğraf kaydı boş.", "Tamam", false);
+            // Eğer success false ise (örneğin oda bulundu ama fotoğraf yoksa)  
+            if (!data.success) {
+                showWarningMessage(data.message || 'Fotoğraf kaydı yok.', "Tamam", false);
+                return data; // Geri kalan kodda kullanmak istersen
             }
 
+            // Fotoğraf varsa girer:  
             return data;
 
         } catch (err) {
+            hideLoader();
             console.error("readPhoto API hatası:", err);
             showWarningMessage("Beklenmeyen bir hata oluştu.", "Tamam", false);
             return null;

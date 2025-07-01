@@ -918,6 +918,7 @@
                 const projectNameDb = window.user.project.projectName;
                 projectName = projectNameDb;
                 const tableDataDb = window.user.project.building;
+                floorsDataFromDb = window.user.project.floorsData;
                 if(tableDataDb && tableDataDb.length > 0){
                     const rowNumber = tableDataDb.length;
                     rowCounter = rowNumber+1;
@@ -1371,6 +1372,20 @@
 
             const selectedWall = wallManager ? wallManager.getSelectedWallUser() : null;
             //console.log("selectedWall", selectedWall);
+
+            for (const dbFloor of floorsDataFromDb) {
+                const currentFloor = floorsData.find(f => f.floorName === dbFloor.floorName);
+                if (!currentFloor || !Array.isArray(currentFloor.rooms) || !Array.isArray(dbFloor.rooms)) continue;
+
+                for (const dbRoom of dbFloor.rooms) {
+                    const currentRoom = currentFloor.rooms.find(r => r.rowNumber === dbRoom.rowNumber);
+                    if (!currentRoom) continue;
+
+                    if (dbRoom.isSold !== "false") {
+                        currentRoom.isSold = dbRoom.isSold;
+                    }
+                }
+            }
             const dataToDb = {
                 userId: userId,           // kullanıcı id'si
                 projectName: projectName, // proje adı
@@ -1378,6 +1393,8 @@
                 selectedDoor: selectedDoorUser,
                 selectedWall : selectedWall
             };
+            //console.log("dataToDb:",dataToDb.floorsData);
+            //console.log("floorsDataFromDb",floorsDataFromDb);
 
             try {  
                 // Kullanıcı giriş bilgilerini backend'e gönder  
@@ -1403,6 +1420,7 @@
                 showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
                 console.log('Hata:', error);
             }
+
             window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
         });  
 
