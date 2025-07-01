@@ -688,6 +688,10 @@ const sefNameKaydiSchema = new mongoose.Schema({
   name:     { type: String, required: true }
 }, { _id: true });
 
+const colorKaydiSchema = new mongoose.Schema({
+  color:     { type: String, required: true }
+}, { _id: true });
+
 
 const arsaBedeliSchema = new mongoose.Schema(defaultFields, { _id: false });
 const yerdenCikartmakSchema = new mongoose.Schema(defaultFields, { _id: false });
@@ -797,6 +801,8 @@ const userInputSchema = new mongoose.Schema({
 
   mimarName:[mimarNameKaydiSchema],
   sefName:[sefNameKaydiSchema],
+
+  colorSelected:[colorKaydiSchema],
   
   metreMaliyet: [metreMaliyetSchema],
   payment : [paymentSchema]

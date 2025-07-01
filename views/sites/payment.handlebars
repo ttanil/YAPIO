@@ -470,7 +470,7 @@
 
     const params = new URLSearchParams(window.location.search);
     const from = params.get('from') || "";
-    console.log("from:",from);
+    //console.log("from:",from);
 
     let userId = null;
     let projectNumber = null;
@@ -492,7 +492,7 @@
       {{else}}
           { "role": "{{role}}" }
       {{/if}};
-      console.log(window.user);
+      //console.log(window.user);
 
       userId = window.user.userId;
       projectNumber = window.user.projectNumber;

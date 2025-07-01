@@ -18,7 +18,7 @@
             background-size: cover; /* Resmi tam ekran boyutlandır */  
             background-repeat: no-repeat; /* Resmin tekrar etmesini engeller */  
             background-position: center; /* Resmi ortalar */  
-            height: 100vh; /* Sayfa yüksekliğini tam ekran yapar */  
+            height: auto;
         }
 
         table thead th {
@@ -112,7 +112,15 @@
             border: 1px solid #ddd; /* İnce bir dış kenarlık */  
             overflow: hidden; /* İç taşmayı gizler */  
         } 
-        .container-bina, .container-room {  
+        .container-bina{  
+            width: 33.333%; /* Genişliği ekranın 3'te 1'i kadar yapar */  
+            margin: 50px auto 0 auto; /* Üstten 50px boşluk, yatayda ortala */
+            background-color: #ffffff; /* Beyaz arka plan */  
+            border-radius: 12px; /* Hafif köşe yuvarlatma */  
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Gölge ekler (Derinlik hissi) */  
+            padding: 25px; /* Kenar ile içerik arasına boşluk bırakır */  
+        }
+        .container-room {  
             width: 33.333%; /* Genişliği ekranın 3'te 1'i kadar yapar */  
             margin: 50px auto 0 auto; /* Üstten 50px boşluk, yatayda ortala */
             background-color: #ffffff; /* Beyaz arka plan */  
@@ -251,6 +259,39 @@
             letter-spacing: 1px;
             box-shadow: 0 2px 5px 0 rgba(132, 117, 57, 0.1);
         }
+
+
+        .custom-palette-btn {
+            background: linear-gradient(90deg, #90A6F9 0%, #6FE4AD 100%);
+            color: #fff;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            padding: 0.65rem 1.5rem;
+            border: none;
+            border-radius: 2rem;
+            box-shadow: 0 4px 20px rgba(112, 125, 237, 0.09);
+            transition: background 0.3s, box-shadow 0.2s, transform 0.12s;
+            display: inline-flex;
+            align-items: center;
+            font-size: 1.08rem;
+        }
+
+        .custom-palette-btn:focus,
+        .custom-palette-btn:hover {
+            background: linear-gradient(90deg, #6FE4AD 0%, #FFD966 100%);
+            color: #39506A;
+            box-shadow: 0 8px 28px rgba(80,160,180,0.20);
+            outline: none;
+            transform: translateY(-2px) scale(1.04);
+        }
+        .color-option.selected {
+            outline: 3px solid #39506A;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 3px #dcecff;
+        }
+
+
+        
 
         /* Mobil cihazlar için duyarlılık (%75 genişlik) */  
         @media (max-width: 768px) {
@@ -406,6 +447,11 @@
         </div>  
     </nav>
 
+    <div id="loader" style="display:none;">
+        <div class="spinner"></div>
+        <span>Yükleniyor...</span>
+    </div>
+
     <div class="container-project-name">  
         <form id="projectName">  
             <h2 class="projectInput">Proje Adını Giriniz</h2>  
@@ -418,7 +464,7 @@
         </form>  
     </div>
 
-    <div class="container-table my-5 d-none">  
+    <div class="container-table my-5 d-none mb-4">  
         <h2 class="text-center mb-4">Ruhsat Harcına Esas Alanlar</h2>  
         <form id="netSquare">  
             <div class="table-responsive">  
@@ -484,9 +530,21 @@
         </form>  
     </div>
 
+    <div class="d-flex justify-content-center my-3 d-none" id="colorPaletteButton">
+        <button type="button" class="custom-palette-btn mb-3" data-bs-toggle="modal" data-bs-target="#colorPaletteModal">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" class="me-2 align-middle" style="vertical-align:middle;">
+            <circle cx="12" cy="12" r="10" stroke="#ADC3F4" stroke-width="2" fill="#F5F6FA"/>
+            <circle cx="8.5" cy="10" r="1.5" fill="#FF90B6"/>
+            <circle cx="15.2" cy="9.7" r="1.5" fill="#FFD966"/>
+            <circle cx="10.5" cy="15.2" r="1.5" fill="#6FE4AD"/>
+            <circle cx="15.8" cy="14.2" r="1.2" fill="#90A6F9"/>
+        </svg>
+        Renk Paleti
+        </button>
+    </div>
 
     <!-- Bina Planı: Tuğlalı Çatı ile! -->  
-    <div class="container-bina py-5 d-none">  
+    <div class="container-bina py-5 d-none mb-4">  
         <h1 class="text-center mb-4">Bina Planı Tasarımı</h1>  
 
         <!-- Kat Sayısı Formu -->  
@@ -502,11 +560,48 @@
             <button id="reset-btn" class="btn btn-danger mt-4 d-none">Sıfırla</button>  
             <button id="next-btn" class="btn btn-success mt-4 d-none">Sonraki</button>  
         </div>  
-    </div>  
+    </div>
 
+    <!-- Bootstrap Modal -->
+    <div class="modal fade" id="colorPaletteModal" tabindex="-1" aria-labelledby="colorPaletteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4">
+            <div class="modal-header border-0 pb-1">
+                <h5 class="modal-title w-100 text-center" id="colorPaletteModalLabel" style="font-size: 1.05rem; color: #39506A;">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" class="me-2 align-middle">
+                    <circle cx="12" cy="12" r="10" stroke="#ADC3F4" stroke-width="2" fill="#F5F6FA"/>
+                    <circle cx="8.5" cy="10" r="1.5" fill="#FF90B6"/>
+                    <circle cx="15.2" cy="9.7" r="1.5" fill="#FFD966"/>
+                    <circle cx="10.5" cy="15.2" r="1.5" fill="#6FE4AD"/>
+                    <circle cx="15.8" cy="14.2" r="1.2" fill="#90A6F9"/>
+                </svg>
+                Projenizin Gösteriminde Kullanılacak Ana Rengi Seçiniz
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body pt-2 pb-4 d-flex justify-content-center">
+                <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap p-3 shadow rounded-4" style="background:#f6f6f7; border: 1.5px solid #e0e0e0;">
+                <span class="color-option" data-color="#FFF7ED" title="Pastel Pembe"
+                    style="background:#FFF7ED; width:38px; height:38px; border-radius:50%; display:inline-block; border:2px solid #888ca6; box-shadow:0 1px 10px rgba(80,80,80,0.06),inset 0 0 8px #fff6; cursor:pointer;">
+                </span>
+                <span class="color-option" data-color="#b2c0f7" title="Pastel Mavi"
+                    style="background:#b2c0f7; width:38px; height:38px; border-radius:50%; display:inline-block; border:2px solid #888ca6; box-shadow:0 1px 10px rgba(80,80,80,0.06),inset 0 0 8px #fff6; cursor:pointer;">
+                </span>
+                <span class="color-option" data-color="#A0EAC9" title="Pastel Yeşil"
+                    style="background:#A0EAC9; width:38px; height:38px; border-radius:50%; display:inline-block; border:2px solid #888ca6; box-shadow:0 1px 10px rgba(80,80,80,0.06),inset 0 0 8px #fff6; cursor:pointer;">
+                </span>
+                <span class="color-option" data-color="#FFBCA7" title="Pastel Sarı"
+                    style="background:#FFBCA7; width:38px; height:38px; border-radius:50%; display:inline-block; border:2px solid #888ca6; box-shadow:0 1px 10px rgba(80,80,80,0.06),inset 0 0 8px #fff6; cursor:pointer;">
+                </span>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Kapat</button>
+            </div>
+            </div>
+        </div>
+    </div>
 
-
-    </div> 
 
     <script type="module">
         import { showWarningMessage } from '/js/showMessage.js';
@@ -526,6 +621,9 @@
         const resetBtn = document.getElementById("reset-btn");  
         const nextBtn = document.getElementById("next-btn");  
         const buildingContainer = document.getElementById("building-container");
+
+        const colorPalette = document.querySelector(".color-palette-wrapper");
+        const colorPaletteButton = document.getElementById("colorPaletteButton");
 
         let selectedDoorUser = null;
         let selectedWallUser = "none";
@@ -992,7 +1090,50 @@
                     floor.style.position = "relative";
 
                     wallManager = addWallsToFloor(floor, nextBtn, girisYazisi, buildingHeight);
-                    const { wallLeft, wallRight, showWallsAfterDoorSelection } = wallManager;
+                    const { wallLeft, wallRight, showWallsAfterDoorSelection, wallSelectionPromise } = wallManager;
+
+                    wallSelectionPromise.then(selectedWall => {
+                        const modalEl = document.getElementById('colorPaletteModal');
+                        const myModal = new bootstrap.Modal(modalEl);
+                        const colorOptions = modalEl.querySelectorAll('.color-option');
+                        myModal.show();
+
+                        let selectedColor = null;
+
+                        // Her renk kutusuna tıklanınca 'selected' class'ı ekle ve seçimi kaydet
+                        colorOptions.forEach(option => {
+                            option.addEventListener('click', async function() {
+                                colorOptions.forEach(opt => opt.classList.remove('selected'));
+                                option.classList.add('selected');
+                                selectedColor = option.dataset.color;
+                                containerBina.style.backgroundColor = selectedColor;
+                                const dataColor = {
+                                    color: selectedColor
+                                };
+                                await saveColor(dataColor);
+                            });
+                        });
+
+                        // Modal açıldığında seçimi sıfırla ve görsel seçiliyi kaldır
+                        modalEl.addEventListener('show.bs.modal', function() {
+                            colorOptions.forEach(opt => opt.classList.remove('selected'));
+                            selectedColor = null;
+                        });
+
+                        const colorPaletteButton = document.getElementById('colorPaletteButton');
+                        if (colorPaletteButton) {
+                            colorPaletteButton.classList.add('d-none');
+                        }
+
+                        const onModalClosed = () => {
+                            if (colorPaletteButton) {
+                                colorPaletteButton.classList.remove('d-none');
+                            }
+                            modalEl.removeEventListener('hidden.bs.modal', onModalClosed);
+                        };
+
+                        modalEl.addEventListener('hidden.bs.modal', onModalClosed);
+                    });
 
                     // Kapıları ekle
                     const doorLeft = document.createElement("img");
@@ -1045,6 +1186,7 @@
                         girisYazisi.innerHTML = "Yol olmayan tarafları seçiniz <br> boş bırakmak için sonraki butonuyla devam ediniz.";
                         selectedDoorUser = "left";
                         window.selectedDoor = "left";
+
                     });
 
                     doorRight.addEventListener("click", () => {
@@ -1118,10 +1260,17 @@
             floor.appendChild(wallLeft);
             floor.appendChild(wallRight);
 
+            // Olay dinleyicileri
+            let resolveWallSelection;
+            const wallSelectionPromise = new Promise(resolve => {
+                resolveWallSelection = resolve;
+            });
+
             let isLeftSelected = false;
             let isRightSelected = false;
 
             let selectedWallUser = null; // Durumu dışarıdan sorgulayabilirim
+            let selectedColor = null;
 
             function updateSelectedWalls() {
                 if (isLeftSelected && isRightSelected) {
@@ -1142,12 +1291,14 @@
                 isLeftSelected = !isLeftSelected;
                 wallLeft.classList.toggle("selected", isLeftSelected);
                 updateSelectedWalls();
+                resolveWallSelection('left');
             });
 
             wallRight.addEventListener("click", () => {
                 isRightSelected = !isRightSelected;
                 wallRight.classList.toggle("selected", isRightSelected);
                 updateSelectedWalls();
+                resolveWallSelection('right');
             });
 
             function showBothWalls() {
@@ -1173,7 +1324,8 @@
                 /** Aktüel seçili durumu string olarak verir: null, "left", "right", "both" */
                 getSelectedWallUser: function() {
                     return selectedWallUser;
-                }
+                },
+                wallSelectionPromise
             };
         }
 
@@ -1251,7 +1403,7 @@
                 showWarningMessage("Bağlantı hatası, lütfen daha sonra tekrar deneyin!", "tamam", true);
                 console.log('Hata:', error);
             }
-            window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
+            //window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
         });  
 
         function setFloorsData(data) {
@@ -1325,6 +1477,39 @@
                 input.removeEventListener('input', updateTotalBrutArea); // Tekrarlı eklenmesin
                 input.addEventListener('input', updateTotalBrutArea);
             });
+        }
+
+        async function saveColor(dataColor){
+            showLoader();
+            try {
+                const response = await fetch('/bina', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        process: "saveColor",
+                        userId, 
+                        projectName,
+                        color : dataColor.color
+                    })
+                });
+
+                const data = await response.json();
+                if(!response.ok) {
+                    console.error('Beklenmeyen hata:', data.message || data);
+                }
+
+            } catch (error) {
+                console.error("Fetch hatası:", error);
+            } finally {
+                hideLoader();
+            }
+        }
+
+        function showLoader() {
+            document.getElementById('loader').style.display = 'flex';
+        }
+        function hideLoader() {
+            document.getElementById('loader').style.display = 'none';
         }
     
     </script>  

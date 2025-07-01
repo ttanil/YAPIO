@@ -766,7 +766,7 @@
           if (result.premiumExpiryMessage) {
             showWarningMessage(result.premiumExpiryMessage, "tamam", false);
           }
-          console.log("result:",result);
+          //console.log("result:",result);
           projectNumber = result.projects.length;
           userType = result.userType;
           if (Array.isArray(result.projects)) {
@@ -849,8 +849,7 @@
           (userType === "premium2" && projectNumber >= 2) || 
           (userType === "premium4" && projectNumber >= 4))
         {
-          console.log("tt");
-        makeBtn.onclick = () => window.location.href = `/payment?projectName=${encodeURIComponent(projectNameFirst)}`;
+/        makeBtn.onclick = () => window.location.href = `/payment?projectName=${encodeURIComponent(projectNameFirst)}`;
       } else{
         makeBtn.onclick = () => window.location.href = "/bina";
       }

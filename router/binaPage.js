@@ -44,11 +44,11 @@ router.get('/', authenticateUser, async (req, res) => {
 
 
 router.post('/', async (req, res) => { 
-    const { userId, projectName, building = null, floorsData = null } = req.body;
+    const { userId, projectName, building = null, floorsData = null, process = null } = req.body;
 
     //console.log("building ",req.body);
     
-    if(projectName && !building && !floorsData){
+    if(projectName && !building && !floorsData && !process){
         try {
             const user = await Users.findById(userId);
             if (!user) {
@@ -77,7 +77,7 @@ router.post('/', async (req, res) => {
             console.error("Kayıt Hatası:", err);
             return res.status(500).json({ success: false, message: "Kayıt hatası: " });
         }
-    } else if(projectName && building && !floorsData){
+    } else if(projectName && building && !floorsData &&!process){
         try {
             const user = await Users.findById(userId);
             if (!user) {
@@ -107,7 +107,7 @@ router.post('/', async (req, res) => {
             console.error("Kayıt Hatası:", err);
             return res.status(500).json({ success: false, message: "Kayıt hatası: " });
         }
-    } else if(projectName && !building && floorsData){
+    } else if(projectName && !building && floorsData &&!process){
         const selectedDoor = req.body;
         const selectedWall = req.body;
         try {
@@ -150,6 +150,44 @@ router.post('/', async (req, res) => {
         } catch (err) {
             console.error("Kayıt Hatası:", err);
             return res.status(500).json({ success: false, message: "Kayıt hatası: " });
+        }
+    } else if(projectName && !building && !floorsData && process === "saveColor"){
+        const data  = req.body;
+        try {
+            const user = await Users.findById(userId);
+            if (!user) {
+                return res.status(401).json({ success: false, message: 'Geçersiz giriş!' });
+            }
+
+            // Doğru project
+            const project = user.userInputs.find(prj => prj.projectName === projectName);
+            if (!project) {
+                return res.status(404).json({ success: false, message: "Proje bulunamadı." });
+            }
+
+            // Eğer colorSelected array’i yoksa ekle
+            if (!Array.isArray(project.colorSelected)) {
+                project.colorSelected = [];
+            }
+
+            // Eğer içinde kayıt varsa ilk elemanı güncelle; yoksa ekle
+            if (project.colorSelected.length > 0) {
+                project.colorSelected[0].color = data.color;
+            } else {
+                project.colorSelected.push({ color: data.color });
+            }
+
+            await user.save();
+
+            return res.status(200).json({
+                success: true,
+                message: "Renk seçimi güncellendi.",
+                colorSelected: project.colorSelected
+            });
+
+        } catch (err) {
+            console.error("Kayıt Hatası:", err);
+            return res.status(500).json({ success: false, message: "Veri hatası" });
         }
     }
 });

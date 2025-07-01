@@ -952,7 +952,7 @@
                 { "role": "{{role}}" }
             {{/if}};
 
-            console.log(window.user);
+            //console.log(window.user);
 
             userId = window.user.userId;
             const projectNameDb = window.user.project.projectName;
@@ -993,6 +993,14 @@
                 document.getElementById('sefName').textContent = window.user.project.sefName[0].name;
                 document.getElementById('sefName2').textContent = window.user.project.sefName[0].name;
             }
+
+            //Renk seçimi
+            if(Array.isArray(window.user.project.colorSelected) &&
+            window.user.project.colorSelected.length > 0 &&
+            window.user.project.colorSelected[0].color){
+                buildingContainer.style.backgroundColor = window.user.project.colorSelected[0].color;
+            }
+            
 
         });
 
