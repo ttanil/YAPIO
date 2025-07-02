@@ -128,7 +128,7 @@ router.post('/', upload.single('file'), async (req, res) => {
                 "temizlik", "malzeme_temini", "serme", "sikistirma", "nemlendirme", "seviye_kontrol",
                 "atik_tasima", "drenaj", "pisSu", "temizSu", "isitma", "bahceDuvari", "bitkilendirme",
                 "Arsa", "YapiRuhsati", "Noter", "Belediye", "Yapı Denetim", "Kadastro", "Zemin Etüdü",
-                "Projeler", "Tapu", "Vergi", "SSK", "Diğer", "İşçilik"
+                "Projeler", "Haritacı","İş Güvenliği", "Şantiye Elektrik","Tapu", "Vergi", "SSK", "Diğer", "İşçilik"
             ];
 
             if(!engelliIdler.includes(kalemKayit.kalemId)) {
@@ -633,6 +633,168 @@ router.post('/', upload.single('file'), async (req, res) => {
             return res.json({ success: true, yerSahibiIleAnlasma: yerSahibiIleAnlasmaList });
         } catch (err) {
             return res.status(500).json({ error: err.message || "Ana para okuma sırasında hata oluştu." });
+        }
+    } else if(process === "saveAnaParaKentsel"){
+        try {
+            const { userId, projectName, tip, tutar } = req.body;
+
+            if (!userId || !projectName || !tip || !tutar)
+            return res.status(400).json({ error: 'Eksik parametre.' });
+
+            const user = await Users.findById(userId);
+            if (!user) return res.status(404).json({ error: 'Kullanıcı bulunamadı.' });
+
+            const userInput = user.userInputs.find(p => p.projectName === projectName);
+            if (!userInput) return res.status(404).json({ error: 'Proje bulunamadı.' });
+
+            // ANA KISIM: Yeni anaPara kaydını push et
+            userInput.anaParaKentsel.push({
+                tip,
+                tutar // bu Number olmalı, gerekirse Number(tutar) yap
+            });
+
+            // Tüm kullanıcıyı kaydet
+            await user.save();
+
+            return res.json({ success: true });
+        } catch (err) {
+            return res.status(500).json({ error: err.message || 'DB Ana para ekleme sırasında hata oluştu.' });
+        }
+
+    } else if (process === "readAnaParaKentsel") {
+        try {
+            const { userId, projectName } = req.body;
+            if (!userId || !projectName) {
+                return res.status(400).json({ error: "Kullanıcı veya proje eksik." });
+            }
+
+            const user = await Users.findById(userId);
+            if (!user) return res.status(404).json({ error: "Kullanıcı bulunamadı." });
+
+            const userInput = user.userInputs.find(p => p.projectName === projectName);
+            if (!userInput) return res.status(404).json({ error: "Proje bulunamadı." });
+
+            // Sadece tip ve tutar alanlarını eşle
+            const anaParaKentselList = (userInput.anaParaKentsel || []).map(entry => ({
+                tip: entry.tip,
+                tutar: entry.tutar
+            }));
+
+            return res.json({ success: true, anaParaKentsel: anaParaKentselList });
+        } catch (err) {
+            return res.status(500).json({ error: err.message || "Ana para okuma sırasında hata oluştu." });
+        }
+    } else if(process === "deleteAnaParaKentsel"){
+        try {
+            const { userId, projectName } = req.body;
+            if (!userId || !projectName) {
+            return res.status(400).json({ error: 'Eksik parametre!' });
+            }
+
+            const user = await Users.findById(userId);
+            if (!user) return res.status(404).json({ error: 'Kullanıcı bulunamadı!' });
+
+            const userInput = user.userInputs.find(p => p.projectName === projectName);
+            if (!userInput) return res.status(404).json({ error: 'Proje bulunamadı!' });
+
+            // Ana kaydı ve tüm altParaları sil
+            userInput.anaParaKentsel = [];         // anaPara bir dizi ise, tamamen boşalt
+            userInput.altParaKensel = [];         // altPara dizisini tamamen sıfırla
+
+            await user.save();
+
+            return res.json({ success: true });
+        } catch (err) {
+            return res.status(500).json({ error: err.message || 'Ana kayıtları silerken hata oluştu.' });
+        }
+    } else if(process === "saveAltParaKentsel"){
+        try {
+            const { userId, projectName, tip, tutar, tarih, aciklama } = req.body;
+            if (!userId || !projectName || !tip || !tutar || !tarih || !aciklama)
+            return res.status(400).json({ error: 'Eksik parametre.' });
+
+            const user = await Users.findById(userId);
+            if (!user) return res.status(404).json({ error: 'Kullanıcı bulunamadı.' });
+
+            const userInput = user.userInputs.find(p => p.projectName === projectName);
+            if (!userInput) return res.status(404).json({ error: 'Proje bulunamadı.' });
+
+            // Alt para ekle
+            userInput.altParaKentsel.push({ tip, tutar, tarih, aciklama });
+
+            // Son eklenen obje
+            const yeniAltParaKentsel = userInput.altParaKentsel[userInput.altParaKentsel.length - 1];
+
+            await user.save();
+
+            // DİKKAT: _id artık Mongo tarafından atanmış!
+            return res.json({
+                success: true,
+                altParaKentsel: {
+                    tip: yeniAltParaKentsel.tip,
+                    tutar: yeniAltParaKentsel.tutar,
+                    tarih: yeniAltParaKentsel.tarih,
+                    aciklama: yeniAltParaKentsel.aciklama,
+                    _id: yeniAltParaKentsel._id    // <-- KRİTİK!
+                }
+            });
+        } catch (err) {
+            return res.status(500).json({ error: err.message || 'DB Alt para ekleme sırasında hata oluştu.' });
+        }
+    } else if(process === "readAltParaKentsel"){
+        try {
+            const { userId, projectName } = req.body;
+            if (!userId || !projectName) {
+                return res.status(400).json({ error: "Kullanıcı veya proje eksik." });
+            }
+
+            const user = await Users.findById(userId);
+            if (!user) return res.status(404).json({ error: "Kullanıcı bulunamadı." });
+
+            const userInput = user.userInputs.find(p => p.projectName === projectName);
+            if (!userInput) return res.status(404).json({ error: "Proje bulunamadı." });
+
+            // Sadece tip ve tutar alanlarını eşle
+            const altParaKentselList = (userInput.altParaKentsel || []).map(entry => ({
+                tip: entry.tip,
+                tutar: entry.tutar,
+                tarih:entry.tarih,
+                aciklama:entry.aciklama,
+                _id: entry._id
+            }));
+
+            return res.json({ success: true, altParaKentsel: altParaKentselList });
+        } catch (err) {
+            return res.status(500).json({ error: err.message || "Ana para okuma sırasında hata oluştu." });
+        }
+    } else if (process === "deleteAltParaKentsel") {
+        try {
+            const { userId, projectName, altParaId } = req.body;
+            if (!userId || !projectName || !altParaId) {
+            return res.status(400).json({ error: "Eksik bilgi." });
+            }
+
+            const user = await Users.findById(userId);
+            if (!user) return res.status(404).json({ error: "Kullanıcı bulunamadı." });
+
+            const userInput = user.userInputs.find(p => p.projectName === projectName);
+            if (!userInput) return res.status(404).json({ error: "Proje bulunamadı." });
+
+            // ID eşleşmesiyle altPara silme
+            const eskiUzunluk = (userInput.altParaKentsel || []).length;
+            userInput.altParaKentsel = (userInput.altParaKentsel || []).filter(
+            altparaKentsel => !(altparaKentsel._id && altparaKentsel._id.toString() === altParaId)
+            );
+            const yeniUzunluk = (userInput.altParaKentsel || []).length;
+
+            if (eskiUzunluk === yeniUzunluk) {
+            return res.status(404).json({ error: "Kayıt bulunamadı veya zaten silinmiş." });
+            }
+
+            await user.save();
+            return res.json({ success: true });
+        } catch (err) {
+            return res.status(500).json({ error: err.message || "Silme sırasında hata oluştu." });
         }
     }
 });

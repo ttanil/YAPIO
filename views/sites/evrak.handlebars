@@ -633,7 +633,7 @@ body {
         <div class="er-kutular"> 
           <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
               <span class="alt-baslik-ikon" id="arsaBedeliArsa">💰</span>  
-              Arsa Bedeli
+              Arsa Alımı
           </div>
           <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
               <span class="alt-baslik-ikon" id="yerSahibiİleAnlasmaArsa">🤝</span>  
@@ -741,9 +741,17 @@ body {
               <li data-kurum="Belediye" data-detay="İmar Durumu" id="imarDurumuKaydi">İmar Durumu</li>  
               <li data-kurum="Belediye" data-detay="Kanal Kotu" id="kanalKotu">Kanal Kotu</li>  
               <li data-kurum="Belediye" data-detay="Ruhsat harcı" id="ruhsatHarci">Ruhsat Harcı</li>  
-              <li data-kurum="Belediye" data-detay="Zemin etüdü harcı" id="zeminEtuduHarci">Zemin Etüdü Harcı</li>  
+              <li data-kurum="Belediye" data-detay="Zemin etüdü harcı" id="zeminEtuduHarci">Zemin Etüdü Harcı</li>
+              <li data-kurum="Belediye" data-detay="İskan harcı" id="iskanHarci">İskan Harcı</li>
+              <li data-kurum="Belediye" data-detay="Kanalizasyon ve Atık Su" id="kanalizasyonVeAtikSu">Kanalizasyon ve Atık Su</li>
+              <li data-kurum="Belediye" data-detay="Şantiye Abonman Su Bağlama" id="santiyeAbonmanSuBaglama">Şantiye Abonman Su Bağlama</li>
+              <li data-kurum="Belediye" data-detay="Su Tüketimi" id="suTukutemi">Su Tüketimi</li>
+              <li data-kurum="Belediye" data-detay="Kontroller ve İzinler" id="kontrollerVeİzinler">Kontroller ve İzinler</li>
+              <li data-kurum="Belediye" data-detay="Otopark" id="otoparkBelediye">Otopark</li>
+              <li data-kurum="Belediye" data-detay="Diğer" id="digerBelediye">Diğer</li>
             </ul>  
-          </div>  
+          </div> 
+
           <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
             <span class="alt-baslik-ikon">🖋️</span>  
             Noter  
@@ -754,7 +762,8 @@ body {
               <li data-kurum="Noter" data-detay="Müteahhitlik Sözleşmesi" id="muteahhitlikSozlesmesi">Müteahhitlik Sözleşmesi</li>  
               <li data-kurum="Noter" data-detay="Vekalet Sözleşmesi" id="vekaletSozlesmesi">Vekalet Sözleşmesi</li>  
             </ul>  
-          </div>  
+          </div>
+
           <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
             <span class="alt-baslik-ikon">🏗️</span>  
             Yapı Denetim
@@ -764,7 +773,10 @@ body {
             <ul>  
               <li data-kurum="Yapı Denetim" data-detay="Yapı denetim harcı" id="yapiDenetimHarci">Yapı Denetim Harcı</li>  
               <li data-kurum="Yapı Denetim" data-detay="Fenni Jeoloji" id="fenniJeoloji">Fenni Jeoloji</li>  
-              <li data-kurum="Yapı Denetim" data-detay="Fenni Haritacı" id="fenniHaritaci">Fenni Haritacı</li>  
+              <li data-kurum="Yapı Denetim" data-detay="Fenni Haritacı" id="fenniHaritaci">Fenni Haritacı</li>
+              <li data-kurum="Yapı Denetim" data-detay="Çip Alımı" id="cipAlimi">Çip Alımı</li>
+              <li data-kurum="Yapı Denetim" data-detay="Beton Analizi" id="betonAnalizi">Beton Analizi</li>
+              <li data-kurum="Yapı Denetim" data-detay="Diğer" id="digerYapiDenetim">Diğer</li>
             </ul>  
           </div>
           <!--<div class="alt-baslik-kutu" tabindex="0" aria-expanded="false" id="kadastroTutar">  
@@ -780,8 +792,10 @@ body {
             <ul>  
               <li data-kurum="Zemin Etüdü" data-detay="Zemin Etüdü Raporu" id="zeminEtuduRaporu">Zemin Etüdü Raporu</li>  
               <li data-kurum="Zemin Etüdü" data-detay="Zemin İyileştirme" id="zeminIyilestirme">Zemin İyileştirme</li>  
+              <li data-kurum="Zemin Etüdü" data-detay="Diğer" id="digerZeminEtudu">Diğer</li>  
             </ul>  
-          </div>  
+          </div>
+
           <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
             <span class="alt-baslik-ikon">📁</span>  
             Projeler
@@ -789,41 +803,87 @@ body {
           </div>  
           <div class="alt-kutu-icerik">  
             <ul>  
-              <li data-kurum="Projeler" data-detay="Mimari Proje" id="mimariProje">Mimari</li>  
-              <li data-kurum="Projeler" data-detay="Statik Proje" id="statikProje">Statik</li>  
-              <!--<li data-kurum="Projeler" data-detay="Elektrik">Elektrik</li>  -->
-              <li data-kurum="Projeler" data-detay="Tesisat Projesi" id="tesisatProje">Tesisat</li>  
-              <li data-kurum="Projeler" data-detay="HES Projesi" id="hesProje">HES</li>  
-              <li data-kurum="Projeler" data-detay="Akustik Proje" id="akustikProje">Akustik</li>  
-              <!--<li data-kurum="Projeler" data-detay="Asansör">Asansör</li>  -->
+              <li data-kurum="Projeler" data-detay="Mimari Proje" id="mimariProje">Mimari Proje</li>  
+              <li data-kurum="Projeler" data-detay="Statik Proje" id="statikProje">Statik Proje</li>
+              <li data-kurum="Projeler" data-detay="Elektrik Projesi" id="elektrikProje">Elektrik Projesi</li>
+              <li data-kurum="Projeler" data-detay="Tesisat Projesi" id="tesisatProje">Tesisat Projesi</li>
+              
+              <li data-kurum="Projeler" data-detay="HUS" id="hesProje">HUS</li>  
+              <li data-kurum="Projeler" data-detay="Akustik Proje" id="akustikProje">Akustik</li>
+              <li data-kurum="Projeler" data-detay="Asansör Projesi" id="asansorProjesi">Asansör Projesi</li>
+              <li data-kurum="Projeler" data-detay="Diğer" id="digerProjeler">Diğer</li> 
             </ul>  
           </div>
-          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false" id="tapu">  
-            <span class="alt-baslik-ikon">📜</span>  
-            Tapu 
+
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false" id="haritaci">  
+            <span class="alt-baslik-ikon">📍</span>  
+            Haritacı 
           </div>
-          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false" id="vergiler">  
-            <span class="alt-baslik-ikon">🧾</span>  
-            Vergiler 
+
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
+            <span class="alt-baslik-ikon">⚡</span>  
+            Şantiye Elektrik
+            <span class="alt-kutu-arrow">&#9654;</span>  
           </div>
+          <div class="alt-kutu-icerik">  
+            <ul>  
+              <li data-kurum="Şantiye Elektrik" data-detay="Şantiye Elektrik Bağlama" id="santiyeElektrikBaglama">Şantiye Elektrik Bağlama</li>  
+              <li data-kurum="Şantiye Elektrik" data-detay="Şantiye Elektrik Tüketim" id="santiyeElektrikTuketim">Şantiye Elektrik Tüketim</li>
+              <li data-kurum="Şantiye Elektrik" data-detay="Diğer" id="santiyeElektrikDiger">Diğer</li> 
+            </ul>  
+          </div>
+
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false" id="isGuvenligi">  
+            <span class="alt-baslik-ikon">🛡️</span>  
+            İş Güvenliği 
+          </div>
+
           <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false" id="ssk">  
             <span class="alt-baslik-ikon">🩺</span>  
             SSK 
           </div>
+
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false" id="kentselDonusum">  
+            <span class="alt-baslik-ikon">🏘️</span>  
+            Kentsel Dönüşüm 
+          </div>
+
           <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false">  
-            <span class="alt-baslik-ikon">🗃️</span>  
-            Diğer
+            <span class="alt-baslik-ikon">📜</span>  
+            Tapu Müdürlüğü
             <span class="alt-kutu-arrow">&#9654;</span>  
-          </div>  
+          </div>
           <div class="alt-kutu-icerik">  
             <ul>  
-              <li data-kurum="Diğer" data-detay="Avukat" id="avukat">Avukat</li>  
-              <li data-kurum="Diğer" data-detay="Emlakci" id="emlakci">Emlakçı</li>
-              <li data-kurum="Diğer" data-detay="Reklam ve Tanıtım" id="reklam">Reklam ve Tanıtım</li>
+              <li data-kurum="Tapu Müdürlüğü" data-detay="Alım-Satım Ücreti" id="tapuAlimSatim">Alım-Satım Ücreti</li>  
+              <li data-kurum="Tapu Müdürlüğü" data-detay="Kat İrtifa Kurma" id="tapuKatİrtifa">Kat İrtifa Kurma</li>
             </ul>  
           </div>
-        </div>  
-      </div>
+
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false" id="emlakci">  
+            <span class="alt-baslik-ikon">👔</span>  
+            Emlakçı 
+          </div>
+
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false" id="reklam">  
+            <span class="alt-baslik-ikon">📺</span>  
+            Reklam ve Tanıtım 
+          </div>
+
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false" id="avukat">  
+            <span class="alt-baslik-ikon">⚖️</span>  
+            Avukat
+          </div>
+
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false" id="vergiler">  
+            <span class="alt-baslik-ikon">🧾</span>  
+            Vergiler 
+          </div>
+
+          <div class="alt-baslik-kutu" tabindex="0" aria-expanded="false" id="ozelHizmetler">  
+            <span class="alt-baslik-ikon">🌟</span>  
+            Özel Hizmetler 
+          </div>
 
       <div class="surec-section" id="tab-ruhsat">  
         <button class="evrak-ekle-btn" id="btnYapiRuhsati">Evrak Ekle</button>  
@@ -902,10 +962,15 @@ body {
     const kabaUretim = document.getElementById('kabaUretim');
     const inceUretim = document.getElementById('inceUretim');
     const kadastroTutar = document.getElementById('kadastroTutar');
-    const tapu = document.getElementById('tapu');
+    const haritaci = document.getElementById('haritaci');
     const vergiler = document.getElementById('vergiler');
     const ssk = document.getElementById('ssk');
     const btnYapiRuhsati = document.getElementById('btnYapiRuhsati');
+    const isGuvenligi = document.getElementById('isGuvenligi');
+    const emlakci = document.getElementById('emlakci');
+    const reklam = document.getElementById('reklam');
+    const avukat = document.getElementById('avukat');
+    const ozelHizmetler = document.getElementById('ozelHizmetler');
 
     let userId = null;
     let projectName = null;
@@ -1037,13 +1102,60 @@ document.querySelectorAll('.alt-kutu-icerik li').forEach(function(item) {
     bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
   });
 });
-
-tapu.addEventListener('click', function() {
-  aktifEvrakKurum = "Tapu";
+ozelHizmetler.addEventListener('click', function() {
+  aktifEvrakKurum = "Özel Hizmetler";
   aktifEvrakDetay = "";
-  document.getElementById('modalBaslikIkon').textContent = "📜";
-  document.getElementById('modalBaslikText').textContent = "Tapu " + ' - ' + "Tapu Ödemeleri";
-  showOdemeEvrakFormIslem(false, true,null,"Tapu",null,"tapuTutar"); // (isRadyal=false, isEvrakIsleri=true)
+  document.getElementById('modalBaslikIkon').textContent = "🌟";
+  document.getElementById('modalBaslikText').textContent = "Özel Hizmetler " + ' - ' + " Ödemeler";
+  showOdemeEvrakFormIslem(false, true,null,"Özel Hizmetler",null,"ozelHizmetler"); // (isRadyal=false, isEvrakIsleri=true)
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
+});
+avukat.addEventListener('click', function() {
+  aktifEvrakKurum = "Avukat";
+  aktifEvrakDetay = "";
+  document.getElementById('modalBaslikIkon').textContent = "⚖️";
+  document.getElementById('modalBaslikText').textContent = "Avukat " + ' - ' + " Ödemeler";
+  showOdemeEvrakFormIslem(false, true,null,"Avukat",null,"avukat"); // (isRadyal=false, isEvrakIsleri=true)
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
+});
+reklam.addEventListener('click', function() {
+  aktifEvrakKurum = "Reklam ve Tanıtım";
+  aktifEvrakDetay = "";
+  document.getElementById('modalBaslikIkon').textContent = "📺";
+  document.getElementById('modalBaslikText').textContent = "Reklam ve Tanıtım " + ' - ' + " Ödemeler";
+  showOdemeEvrakFormIslem(false, true,null,"Reklam ve Tanıtım",null,"reklam"); // (isRadyal=false, isEvrakIsleri=true)
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
+});
+emlakci.addEventListener('click', function() {
+  aktifEvrakKurum = "Emlakçı";
+  aktifEvrakDetay = "";
+  document.getElementById('modalBaslikIkon').textContent = "👔";
+  document.getElementById('modalBaslikText').textContent = "Emlakçı " + ' - ' + " Ödemeler";
+  showOdemeEvrakFormIslem(false, true,null,"Emlakçı",null,"emlakci"); // (isRadyal=false, isEvrakIsleri=true)
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
+});
+kentselDonusum.addEventListener('click', function() {
+  aktifEvrakKurum = "Kentsel Dönüşüm";
+  aktifEvrakDetay = "";
+  document.getElementById('modalBaslikIkon').textContent = "🏘️";
+  document.getElementById('modalBaslikText').textContent = "Kentsel Dönüşüm " + ' - ' + " Ödemeler";
+  showKenselDonusumModal(false, true,null,aktifEvrakKurum,null,"kentselDonusum");
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
+});
+isGuvenligi.addEventListener('click', function() {
+  aktifEvrakKurum = "İş Güvenliği";
+  aktifEvrakDetay = "";
+  document.getElementById('modalBaslikIkon').textContent = "🛡️";
+  document.getElementById('modalBaslikText').textContent = "İş Güvenliği " + ' - ' + " Ödemeler";
+  showOdemeEvrakFormIslem(false, true,null,"İş Güvenliği",null,"isGuvenligi"); // (isRadyal=false, isEvrakIsleri=true)
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
+});
+haritaci.addEventListener('click', function() {
+  aktifEvrakKurum = "Haritacı";
+  aktifEvrakDetay = "";
+  document.getElementById('modalBaslikIkon').textContent = "📍";
+  document.getElementById('modalBaslikText').textContent = "Haritacı " + ' - ' + "Haritacı Ödemeleri";
+  showOdemeEvrakFormIslem(false, true,null,"Haritacı",null,"haritaciTutar"); // (isRadyal=false, isEvrakIsleri=true)
   bootstrap.Modal.getOrCreateInstance(document.getElementById('modalUretim')).show();
 });
 vergiler.addEventListener('click', function() {
@@ -1130,6 +1242,7 @@ document.querySelectorAll('#tab-arsa .alt-baslik-kutu').forEach(function(header)
     }
   });
 });
+
 function ikonBul(kurum) {
   switch (kurum) {
     case 'Belediye': return '🏛️';
@@ -1138,6 +1251,17 @@ function ikonBul(kurum) {
     case 'Kadastro' : return '📏';
     case 'Zemin Etüdü': return '🌎';
     case 'Projeler': return '📁';
+    case 'Haritacı':return '📍';
+    case 'Şantiye Elektrik':return '⚡';
+    case 'Tapu Müdürlüğü':return '📜';
+    case 'İş Güvenliği' : return '🛡️';
+    case 'SSK': return '';
+    case 'Kentsel Dönüşüm': return '🏘️';
+    case 'Emlakçı' : return '👔';
+    case 'Reklam ve Tanıtım': return '📺';
+    case 'Avukat' :return '⚖️';
+    case 'Vergiler':return '🧾';
+    case 'Özel Hizmetler' : return '🌟';
     case 'Diğer': return '🗃️';
     default: return '';
   }
@@ -2398,10 +2522,10 @@ function showOdemeEvrakForm(isRadyal = false, isEvrakIsleri = false, geriHandler
                   </select>
                 </div>
                 <div class="col-md-2">
-                  <input type="number" class="form-control" id="odemeMiktar" placeholder="Miktar" min="1" step="any" required>
+                  <input type="text" class="form-control" id="odemeMiktar" placeholder="Miktar" min="1" step="any" required>
                 </div>
                 <div class="col-md-2">
-                  <input type="number" class="form-control" id="odemeBirimFiyat" placeholder="Birim Fiyat (TL)" min="0" step="any" required>
+                  <input type="text" class="form-control" id="odemeBirimFiyat" placeholder="Birim Fiyat (TL)" min="0" step="any" required>
                 </div>
                 <div class="col-md-2">
                   <input type="date" class="form-control" id="odemeTarih" required>
@@ -2481,6 +2605,16 @@ function showOdemeEvrakForm(isRadyal = false, isEvrakIsleri = false, geriHandler
   tabloGuncelleDinamik(altKalemId, kalemIdInput);
   evrakGuncelleDinamik(kalemIdInput,altKalemId);
 
+  ['odemeMiktar','odemeBirimFiyat'].forEach(id => {
+    const input = document.getElementById(id);
+    if (!input) return;
+    input.addEventListener("input", function(e) {
+      this.value = formatNumberWithDots(this.value);
+      this.selectionStart = this.selectionEnd = this.value.length;
+      updateToplamTutar();
+    });
+  });
+
   ['odemeMiktar','odemeBirimFiyat'].forEach(id=>
     document.getElementById(id).addEventListener('input', updateToplamTutar)
   );
@@ -2525,7 +2659,7 @@ function showOdemeEvrakFormIslem(isRadyal = false, isEvrakIsleri = false, geriHa
                   <input type="text" class="form-control" id="odemeAciklama" placeholder="Açıklama" maxlength="100" required>
                 </div>
                 <div class="col-md-3">
-                  <input type="number" class="form-control" id="odemeBirimFiyat" placeholder="Tutar (TL)" min="0" step="any" required>
+                  <input type="text" class="form-control" id="odemeBirimFiyat" placeholder="Tutar (TL)" min="0" step="any" required>
                 </div>
                 <div class="col-md-3">
                   <input type="date" class="form-control" id="odemeTarih" required>
@@ -2583,6 +2717,8 @@ function showOdemeEvrakFormIslem(isRadyal = false, isEvrakIsleri = false, geriHa
       </div>
     </div>
   `;
+
+  
   // GÜNÜN TARİHİNİ OTO DOLDUR
   const now = new Date();
   const yyyy = now.getFullYear();
@@ -2602,19 +2738,27 @@ function showOdemeEvrakFormIslem(isRadyal = false, isEvrakIsleri = false, geriHa
   tabloGuncelleDinamikIslem(altKalemId, kalemIdInput);
   evrakGuncelleDinamik(kalemIdInput,altKalemId);
 
+  const tutarInput = document.getElementById('odemeBirimFiyat');
+  tutarInput.addEventListener("input", function(e) {
+    this.value = formatNumberWithDots(this.value);
+    this.selectionStart = this.selectionEnd = this.value.length;
+    updateToplamTutarIslem();
+  });
+
   updateToplamTutarIslem();
   document.getElementById('odemeBirimFiyat').addEventListener("input", updateToplamTutarIslem);
 }
 
 // Otomatik Toplam Hesaplama
 function updateToplamTutar() {
-  const miktar = parseFloat(document.getElementById('odemeMiktar').value) || 0;
-  const birimFiyat = parseFloat(document.getElementById('odemeBirimFiyat').value) || 0;
+  const miktar = toNumberFromInput(document.getElementById('odemeMiktar').value);
+  const birimFiyat = toNumberFromInput(document.getElementById('odemeBirimFiyat').value);
+  const toplam = miktar * birimFiyat;
   document.getElementById('odemeToplamTutar').innerText =
-    `Toplam: ${(miktar * birimFiyat).toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2})} TL`;
+    `Toplam: ${toplam.toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2})} TL`;
 }
 function updateToplamTutarIslem() {
-  const birimFiyat = parseFloat(document.getElementById('odemeBirimFiyat').value) || 0;
+  const birimFiyat = toNumberFromInput(document.getElementById('odemeBirimFiyat').value);
   document.getElementById('odemeToplamTutar').innerText =
     birimFiyat > 0
       ? `Toplam: ${birimFiyat.toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2})} TL`
@@ -2633,10 +2777,10 @@ function odemeFormSubmit(e){
   // Eğer formda bu inputlar varsa, onlardan değer al
   if(document.getElementById('odemeBirim') && document.getElementById('odemeMiktar')){
     birim = document.getElementById('odemeBirim').value;
-    miktar = parseFloat(document.getElementById('odemeMiktar').value);
+    miktar = toNumberFromInput(document.getElementById('odemeMiktar').value);
     toplam_func = true;
   }
-  const birimFiyat = parseFloat(document.getElementById('odemeBirimFiyat').value);
+  const birimFiyat = toNumberFromInput(document.getElementById('odemeBirimFiyat').value);
   const toplamTutar = (!isNaN(miktar) && !isNaN(birimFiyat)) ? miktar * birimFiyat : 0;
   let kalemKayit = null;
 
@@ -2645,6 +2789,10 @@ function odemeFormSubmit(e){
     aktifKalemId === "Yapı Denetim" || 
     aktifKalemId === "Zemin Etüdü" || 
     aktifKalemId === "Projeler" ||
+    aktifKalemId === "Haritacı" ||
+    aktifKalemId === "İş Güvenliği" ||
+    aktifKalemId === "Şantiye Elektrik" ||
+
     aktifKalemId === "Arsa" ||
     aktifKalemId === "Kadastro" ||
     aktifKalemId === "Diğer"
@@ -2659,6 +2807,7 @@ function odemeFormSubmit(e){
 
     if(aciklama && toplamTutar > 0 && tarih && aktifKalemId) {
       showLoader();
+      console.log("kalemKayit:",kalemKayit);
       fetch('/evrak', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
@@ -3152,7 +3301,7 @@ async function showYerSahibiAnlasmaModal(
         <b class="text-primary"><i class="fa-solid fa-paperclip"></i> Evrak Yükle</b>  
       </div>  
       <div class="card-body pt-3 pb-2">  
-        <form id="evrakFormDinamik" data-alanadi="yerSahibiAnlasma" data-kalemid="">  
+        <form id="evrakFormDinamik" data-alanadi="yerSahibiAnlasma" data-kalemid="Yer Sahibi İle Anlaşma">  
           <div class="input-group mb-2">  
             <input type="file" class="form-control" id="evrakDosya" name="file" required>  
           </div>  
@@ -3171,6 +3320,59 @@ async function showYerSahibiAnlasmaModal(
       </div>  
     </div>  
   `;
+
+  evrakGuncelleDinamik("yerSahibiAnlasma", "Yer Sahibi İle Anlaşma");
+
+  const evrakForm = document.getElementById('evrakFormDinamik');
+  if (evrakForm) {
+    const thisProjectName = projectName;
+    const thisUserId = userId;
+
+    evrakForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const form = e.target;
+      const alanAdi = form.dataset.alanadi;
+      const kalemSatirId = form.dataset.kalemid;
+      const dosyaInput = document.getElementById('evrakDosya');
+      const aciklamaInput = document.getElementById('evrakAciklama');
+      const dosya = dosyaInput.files[0];
+      if (!dosya) return;
+
+      const aciklama = aciklamaInput.value.trim();
+
+      let pdfFile;
+      try {
+        pdfFile = await fileToPdfBlob(dosya);
+      } catch(e) {
+        dosyaInput.value = "";
+        aciklamaInput.value = "";
+        showWarningMessage("Dosya PDF veya resim değil!", "tamam", false);
+        return;
+      }
+
+      showLoader();
+
+      const formData = new FormData();
+      formData.append('file', pdfFile);
+      formData.append('aciklama', aciklama);
+      formData.append('process', "saveEvrak");
+      formData.append('projectName', thisProjectName);
+      formData.append('userId', thisUserId);
+      formData.append('alanAdi', alanAdi);
+      if (kalemSatirId) formData.append('kalemId', kalemSatirId);
+
+      await fetch('/evrak', { method: 'POST', body: formData });
+
+      evrakGuncelleDinamik(alanAdi, kalemSatirId);
+
+      dosyaInput.value = "";
+      aciklamaInput.value = "";
+      hideLoader();
+
+      if (this && typeof this.reset === 'function') this.reset();
+    });
+  }
 
   document.getElementById('daireSecBtn').onclick = function() {
     window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`;
@@ -3363,7 +3565,7 @@ async function showYerSahibiAnlasmaModal(
           </select>
         </div>
         <div class="col-12 col-md-5">
-          <input type="number" id="anaParaTutari" class="form-control" min="0" placeholder="Ana Tutar">
+          <input type="text" id="anaParaTutari" class="form-control" min="0" placeholder="Ana Tutar">
         </div>
         <div class="col-12 col-md-2">
           <button type="button" id="anaParaEkleBtn" class="btn btn-success w-100" disabled>Ekle</button>
@@ -3375,15 +3577,25 @@ async function showYerSahibiAnlasmaModal(
     const ekleBtn = document.getElementById("anaParaEkleBtn");
     const tutarInput = document.getElementById("anaParaTutari");
 
-    // Tutar değiştiğinde butonu aktifleştir/deaktive et
+    // Format fonksiyonu: girilen değeri 3 lü gruplarla nokta ile ayır
+    function formatNumberWithDots(value) {
+      const num = value.replace(/[^\d]/g, ''); // Sadece rakamları al
+      if (!num) return '';
+      return num.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
     tutarInput.addEventListener('input', function () {
-      const value = this.value.trim();
-      ekleBtn.disabled = !(value && !isNaN(value) && Number(value) > 0);
+      const raw = this.value.replace(/\./g, '');
+      this.value = formatNumberWithDots(raw);
+      ekleBtn.disabled = !(raw && !isNaN(raw) && Number(raw) > 0);
+      // İmleci sona al:
+      this.selectionStart = this.selectionEnd = this.value.length;
     });
 
     ekleBtn.onclick = async function () {
       const tip = document.getElementById("anaParaTipi").value;
-      const tutar = tutarInput.value.trim();
+      // Noktaları kaldırarak sayıya çevir!
+      const tutar = tutarInput.value.replace(/\./g, '').trim();
       if (!tutar || isNaN(tutar) || Number(tutar) <= 0) return;
       const data = {
         tip,
@@ -3396,14 +3608,12 @@ async function showYerSahibiAnlasmaModal(
       anaTip = tip;
       updateParaOzet();
 
-      // sadece bilgi mesajı değişiyor, detay panel DOM'da KALDIĞI için panel kaybolmaz!
       document.getElementById("anaParaSatiri").innerHTML = `
         <div class="alert alert-info mb-2">Ana kayıt eklendi: ${tip === "alinacak" ? "Alınacak" : "Verilecek"} Para, ${Number(tutar).toLocaleString()} TL</div>
       `;
       detayKayitPaneli();
     };
   }
-
   function detayKayitPaneli() {
     const detayDiv = document.getElementById("detayKayitPanel");
     if (!detayDiv) return;
@@ -3413,7 +3623,7 @@ async function showYerSahibiAnlasmaModal(
           <input type="text" id="paraAciklama" class="form-control" maxlength="100" placeholder="Açıklama (opsiyonel)">
         </div>
         <div class="col-12 col-md-3">
-          <input type="number" id="paraDetayTutar" class="form-control" min="0" placeholder="Tutar">
+          <input type="text" id="paraDetayTutar" class="form-control" placeholder="Tutar">
         </div>
         <div class="col-12 col-md-3">
           <input type="date" id="paraTarih" class="form-control" value="${new Date().toISOString().split('T')[0]}">
@@ -3424,9 +3634,24 @@ async function showYerSahibiAnlasmaModal(
       </div>
     `;
 
+    // Binlik noktalama fonksiyonu
+    function formatNumberWithDots(value) {
+      const num = value.replace(/[^\d]/g, '');
+      if (!num) return '';
+      return num.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    // Tutar inputuna dinamik noktalamayı uygula
+    const tutarInput = document.getElementById("paraDetayTutar");
+    tutarInput.addEventListener('input', function () {
+      const raw = this.value.replace(/\./g, '');
+      this.value = formatNumberWithDots(raw);
+      this.selectionStart = this.selectionEnd = this.value.length; // imleci sona al
+    });
+
     document.getElementById("ekBilgiKaydetBtn").onclick = async function () {
       const aciklama = document.getElementById("paraAciklama").value.trim();
-      const tutar = document.getElementById("paraDetayTutar").value.trim();
+      const tutar = tutarInput.value.replace(/\./g, '').trim(); // Noktaları kaldır, ham sayı al
       const tarih = document.getElementById("paraTarih").value;
       if (!tutar || isNaN(tutar) || Number(tutar) <= 0) {
         showWarningMessage("Tutar giriniz.", "tamam", false);
@@ -3455,7 +3680,7 @@ async function showYerSahibiAnlasmaModal(
         });
         updateParaOzet();
         document.getElementById("paraAciklama").value = "";
-        document.getElementById("paraDetayTutar").value = "";
+        tutarInput.value = "";
         document.getElementById("paraTarih").value = new Date().toISOString().split('T')[0];
       } else {
         showWarningMessage("Kayıt eklenemedi, tekrar deneyin!", "tamam", false);
@@ -3463,6 +3688,7 @@ async function showYerSahibiAnlasmaModal(
     };
   }
 }
+
 
 async function saveAnaPara(data){
   showLoader();
@@ -3579,9 +3805,531 @@ async function readYerSahibi(){
     }
 }
 
+
+async function showKenselDonusumModal(
+  isRadyal = false, isEvrakIsleri = false, geriHandler = null, altKalemId = null, kayitDizisi = null, kalemIdInput
+) {
+  let alanAciklamasi = '';
+  aktifKalemId = altKalemId;
+  kalemId = kalemIdInput;
+  if (isEvrakIsleri) {
+    alanAciklamasi = `<div class="alert alert-info py-2 mb-2"> <b>${aktifEvrakKurum} - ${aktifEvrakDetay}</b> işlemi için ödeme ve evrak ekleyin.</div>`;
+  }
+  kayitDizisi = kayitDizisi || "";
+  let secilenKalem = null;
+  if (Array.isArray(kayitDizisi)) {
+    secilenKalem = kayitDizisi.find(x => x.id === altKalemId);
+  }
+  const birimListesi =
+    secilenKalem && secilenKalem.birimler ? secilenKalem.birimler : ["adet"];
+
+  document.getElementById('modalContentGenel').innerHTML = `  
+    <h5>Kentsel Dönüşüm Anlaşmaları</h5>  
+    <div style="color: #6c757d; font-size: 0.98em; margin-bottom:18px;">  
+      Kentsel Dönüşüm kapsamında para alma/verme üzerine anlaşılmışsa ilgili yerlere giriniz.  
+    </div>  
+    <div id="paraOzetAlani" class="alert alert-secondary py-2 mb-3" style="display:none;">  
+      <b>Girilen Bilgiler:</b>  
+      <ul class="list-unstyled mb-0" id="listeOzet"></ul>  
+      <div class="d-flex justify-content-between align-items-center gap-2 mt-2 flex-wrap">  
+        <div>  
+          <span id="toplamTutarAlani" class="fw-bold text-primary" style="display:none;">Toplam: 0 TL</span>  
+          <span id="kalanTutarAlani" class="fw-bold text-success" style="display:none; margin-left:12px;">Kalan: 0 TL</span>  
+        </div>  
+        <button type="button" id="tumKayitlariSilBtn" class="btn btn-outline-danger btn-sm" style="display:none;">Tüm Kayıtları Sil</button>  
+      </div>  
+    </div>  
+    <div id="paraAlanContainer"></div>    
+
+    <hr class="my-3" style="border-color: #cbd5e1; border-width: 4.5px 0 0 0; opacity:.88;" />  
+    <div class="card shadow-sm mb-0 w-100 mt-4 mb-3">  
+      <div class="card-header bg-light">  
+        <b class="text-primary"><i class="fa-solid fa-paperclip"></i> Evrak Yükle</b>  
+      </div>  
+      <div class="card-body pt-3 pb-2">  
+        <form id="evrakFormDinamik" data-alanadi="kentselDonusum" data-kalemid="Kentsel Dönüşüm">  
+          <div class="input-group mb-2">  
+            <input type="file" class="form-control" id="evrakDosya" name="file" required>  
+          </div>  
+          <div class="mb-2">  
+            <input type="text" class="form-control" id="evrakAciklama" maxlength="100" placeholder="Açıklama (opsiyonel)">  
+          </div>  
+          <div class="d-flex justify-content-end">  
+            <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-upload"></i> Yükle</button>  
+          </div>  
+        </form>  
+        <hr>  
+        <div>  
+          <h6 class="mb-1 text-secondary">Yüklenen Evraklar:</h6>  
+          <ul class="list-group file-list" id="evrakListesi" style="font-size:0.97rem;"></ul>  
+        </div>  
+      </div>  
+    </div>  
+  `;
+
+  evrakGuncelleDinamik("kentselDonusum", "Kentsel Dönüşüm");
+
+  const evrakForm = document.getElementById('evrakFormDinamik');
+  if (evrakForm) {
+    const thisProjectName = projectName;
+    const thisUserId = userId;
+
+    evrakForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const form = e.target;
+      const alanAdi = form.dataset.alanadi;
+      const kalemSatirId = form.dataset.kalemid;
+      const dosyaInput = document.getElementById('evrakDosya');
+      const aciklamaInput = document.getElementById('evrakAciklama');
+      const dosya = dosyaInput.files[0];
+      if (!dosya) return;
+
+      const aciklama = aciklamaInput.value.trim();
+
+      let pdfFile;
+      try {
+        pdfFile = await fileToPdfBlob(dosya);
+      } catch(e) {
+        dosyaInput.value = "";
+        aciklamaInput.value = "";
+        showWarningMessage("Dosya PDF veya resim değil!", "tamam", false);
+        return;
+      }
+
+      showLoader();
+
+      const formData = new FormData();
+      formData.append('file', pdfFile);
+      formData.append('aciklama', aciklama);
+      formData.append('process', "saveEvrak");
+      formData.append('projectName', thisProjectName);
+      formData.append('userId', thisUserId);
+      formData.append('alanAdi', alanAdi);
+      if (kalemSatirId) formData.append('kalemId', kalemSatirId);
+
+      await fetch('/evrak', { method: 'POST', body: formData });
+
+      evrakGuncelleDinamik(alanAdi, kalemSatirId);
+
+      dosyaInput.value = "";
+      aciklamaInput.value = "";
+      hideLoader();
+
+      if (this && typeof this.reset === 'function') this.reset();
+    });
+  }
+
+  let paraListesi = [];
+  let anaTip = null;
+
+  const anaParaKentselCevap = await readAnaParaKentsel();
+  if (
+    anaParaKentselCevap && anaParaKentselCevap.success &&
+    Array.isArray(anaParaKentselCevap.anaParaKentsel) &&
+    anaParaKentselCevap.anaParaKentsel.length > 0
+  ) {
+    // Eğer para al kaydı varsa
+    const anaKayit = {
+      type: anaParaKentselCevap.anaParaKentsel[0].tip,
+      tutar: Number(anaParaKentselCevap.anaParaKentsel[0].tutar),
+      ana: true
+    };
+    paraListesi.push(anaKayit);
+    anaTip = anaKayit.type;
+
+    // Eğer para ver kaydı varsa
+    const altParaKentselCevap = await readAltParaKentsel();
+    if (
+      altParaKentselCevap && altParaKentselCevap.success &&
+      Array.isArray(altParaKentselCevap.altParaKentsel) &&
+      altParaKentselCevap.altParaKentsel.length > 0
+    ) {
+      altParaKentselCevap.altParaKentsel.forEach(rec => {
+        paraListesi.push({
+          type: rec.tip,
+          tutar: Number(rec.tutar),
+          aciklama: rec.aciklama,
+          tarih: rec.tarih,
+          ana: false,
+          _id: rec._id  // id eksik olmasın!
+        });
+      });
+    }
+
+    updateParaOzetKentsel();
+    // önce paraAlanContainer'ı detay paneli için hazırla
+    document.getElementById("paraAlanContainer").innerHTML = `<div id="detayKayitPanel"></div>`;
+    detayKayitPaneliKentsel();
+    return;
+  }
+  
+
+  // Ana para kaydı yoksa önce giriş panelini ve detay paneli alanını göster
+  anaKayitPaneliKentsel();
+
+  // ----------------- ALT FONKSİYONLAR -----------------
+
+  function updateParaOzetKentsel() {
+    const ozet = document.getElementById("paraOzetAlani");
+    const liste = document.getElementById("listeOzet");
+    const tumSilBtn = document.getElementById("tumKayitlariSilBtn");
+    const toplamTutarAlani = document.getElementById("toplamTutarAlani");
+    const kalanTutarAlani = document.getElementById("kalanTutarAlani");
+
+    if (!paraListesi.length) {
+      ozet.style.display = "none";
+      if (tumSilBtn) tumSilBtn.style.display = "none";
+      if (toplamTutarAlani) toplamTutarAlani.style.display = "none";
+      if (kalanTutarAlani) kalanTutarAlani.style.display = "none";
+      return;
+    }
+    ozet.style.display = "";
+    liste.innerHTML = "";
+
+    const toplam = paraListesi
+      .filter(p => p.ana === false)
+      .reduce((sum, p) => sum + (Number(p.tutar) || 0), 0);
+
+    const anaKayit = paraListesi.find(p => p.ana === true);
+    const anaTipLocal = anaKayit ? anaKayit.type : null;
+    const anaTutarLocal = anaKayit ? Number(anaKayit.tutar) : null;
+
+    paraListesi.forEach((p, idx) => {
+      const aciklamaStr = p.aciklama ? `, Açıklama: ${p.aciklama}` : '';
+      const tarihStr = p.tarih ? `, Tarih: ${p.tarih}` : '';
+      let satir = '';
+
+      if (p.ana) {
+        satir = `<b>${p.type === "alinacak" ? "Alınacak" : "Verilecek"} Para (ana): ${Number(p.tutar).toLocaleString()} TL</b>`;
+        const li = document.createElement("li");
+        li.innerHTML = satir;
+        liste.appendChild(li);
+      } else if (p._id) {
+        // Responsive list item: mobilde alt alta, masaüstünde yan yana
+        const detayEtiket = p.type === "alinacak" ? "Alınan" : "Verilen";
+        satir = `${detayEtiket} Para: ${Number(p.tutar).toLocaleString()} TL${aciklamaStr}${tarihStr}`;
+        const li = document.createElement("li");
+        li.className = "row g-2 align-items-center mb-2";
+
+        li.innerHTML = `
+          <div class="col-12 col-md-8">
+            <span>${satir}</span>
+          </div>
+          <div class="col-12 col-md-4 text-md-end mt-2 mt-md-0">
+            <button type="button" class="btn btn-danger btn-sm buton-sil-altpara px-3"
+              title="Sil" data-satir-index="${idx}" data-altpara-id="${p._id}">
+              <i class="fa fa-trash"></i> Sil
+            </button>
+          </div>
+        `;
+        liste.appendChild(li);
+      }
+    });
+
+    // Sil butonlarına event atamaları
+    liste.querySelectorAll('button[data-satir-index]').forEach(b => {
+      b.onclick = async function () {
+        const index = parseInt(this.getAttribute('data-satir-index'));
+        const altParaId = this.getAttribute('data-altpara-id');
+        const userConfirm = await showWarningMessage("Kayıt silinsin mi?", "evet", false);
+        if (!userConfirm) return;
+        if (!isNaN(index)) {
+          // Sadece DB'den gelmiş bir alt para ise silmeye çalış!
+          if (altParaId) {
+            if (userConfirm) {
+              showLoader();
+              const response = await fetch('/evrak', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                  process: "deleteAltParaKentsel",
+                  userId,
+                  projectName,
+                  altParaId
+                })
+              });
+              const resData = await response.json();
+              if (resData.success) {
+                // Frontend'den de kaldır
+                paraListesi.splice(index, 1);
+                updateParaOzetKentsel();
+                hideLoader();
+              } else {
+                showWarningMessage("Silme işlemi başarısız!", "tamam", false);
+              }
+            }
+          } else {
+            // Henüz DB'ye gitmemiş, frontend'de eklenen silinirse:
+            paraListesi.splice(index, 1);
+            updateParaOzetKentsel();
+          }
+        }
+      };
+    });
+
+    if (tumSilBtn) {
+      tumSilBtn.style.display = paraListesi.length > 0 ? "" : "none";
+      tumSilBtn.onclick = async function () {
+        const userConfirm = await showWarningMessage("Kayıt silinsin mi?", "evet", false);
+        if (!userConfirm) return;
+        if (userConfirm) {
+          await deleteAnaParaKentsel();
+          paraListesi = [];
+          anaTip = null;
+          updateParaOzetKentsel();
+          anaKayitPaneliKentsel();
+        }
+      };
+    }
+    if (toplamTutarAlani) {
+      toplamTutarAlani.textContent = `Toplam: ${toplam.toLocaleString()} TL`;
+      toplamTutarAlani.style.display = "";
+    }
+    if (kalanTutarAlani) {
+      if (anaTutarLocal !== null && anaTipLocal) {
+        const kalan = anaTutarLocal - toplam;
+        kalanTutarAlani.textContent = `Kalan: ${kalan.toLocaleString()} TL`;
+        kalanTutarAlani.style.display = "";
+      } else {
+        kalanTutarAlani.style.display = "none";
+      }
+    }
+  }
+
+  function anaKayitPaneliKentsel() {
+  document.getElementById("paraAlanContainer").innerHTML = `
+    <div id="anaParaSatiri" class="row align-items-end mb-3 gy-2">
+      <div class="col-12 col-md-5">
+        <select id="anaParaTipi" class="form-select">
+          <option value="alinacak">Alınacak Para</option>
+          <option value="verilecek">Verilecek Para</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-5">
+        <input type="text" id="anaParaTutari" class="form-control" placeholder="Ana Tutar">
+      </div>
+      <div class="col-12 col-md-2">
+        <button type="button" id="anaParaEkleBtn" class="btn btn-success w-100" disabled>Ekle</button>
+      </div>
+    </div>
+    <div id="detayKayitPanel"></div>
+  `;
+
+  const ekleBtn = document.getElementById("anaParaEkleBtn");
+  const tutarInput = document.getElementById("anaParaTutari");
+
+  // 3'lü gruplara nokta koyan fonksiyon
+  function formatNumberWithDots(value) {
+    const num = value.replace(/[^\d]/g, ''); // Sadece rakamları al
+    if (!num) return '';
+    return num.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  tutarInput.addEventListener('input', function () {
+    const raw = this.value.replace(/\./g, ''); // Noktaları kaldır, sadece rakamlar kalsın
+    this.value = formatNumberWithDots(raw);    // Formatlı olarak geri yaz
+    ekleBtn.disabled = !(raw && !isNaN(raw) && Number(raw) > 0);
+    // İmleci sona al:
+    this.selectionStart = this.selectionEnd = this.value.length;
+  });
+
+  ekleBtn.onclick = async function () {
+    const tip = document.getElementById("anaParaTipi").value;
+    // Noktaları kaldırarak sayıya çevir!
+    const tutar = tutarInput.value.replace(/\./g, '').trim();
+    if (!tutar || isNaN(tutar) || Number(tutar) <= 0) return;
+    const data = {
+      tip,
+      tutar: Number(tutar)
+    };
+
+    await saveAnaParaKentsel(data);
+
+    paraListesi.push({ type: tip, tutar: Number(tutar), ana: true });
+    anaTip = tip;
+    updateParaOzetKentsel();
+
+    document.getElementById("anaParaSatiri").innerHTML = `
+      <div class="alert alert-info mb-2">Ana kayıt eklendi: ${tip === "alinacak" ? "Alınacak" : "Verilecek"} Para, ${Number(tutar).toLocaleString()} TL</div>
+    `;
+    detayKayitPaneliKentsel();
+  };
+}
+
+  function detayKayitPaneliKentsel() {
+    const detayDiv = document.getElementById("detayKayitPanel");
+    if (!detayDiv) return;
+    detayDiv.innerHTML = `
+      <div class="row align-items-end mb-3 gy-2" id="ekSatir">
+        <div class="col-12 col-md-4">
+          <input type="text" id="paraAciklama" class="form-control" maxlength="100" placeholder="Açıklama (opsiyonel)">
+        </div>
+        <div class="col-12 col-md-3">
+          <input type="text" id="paraDetayTutar" class="form-control" placeholder="Tutar">
+        </div>
+        <div class="col-12 col-md-3">
+          <input type="date" id="paraTarih" class="form-control" value="${new Date().toISOString().split('T')[0]}">
+        </div>
+        <div class="col-12 col-md-2">
+          <button type="button" id="ekBilgiKaydetBtn" class="btn btn-primary w-100">Kaydet</button>
+        </div>
+      </div>
+    `;
+
+    const tutarInput = document.getElementById("paraDetayTutar");
+    // Noktalama fonksiyonu (binlik ayırıcı)
+    function formatNumberWithDots(value) {
+      const num = value.replace(/[^\d]/g, ''); // Sadece rakamlar
+      if (!num) return '';
+      return num.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+    tutarInput.addEventListener("input", function () {
+      const raw = this.value.replace(/\./g, '');
+      this.value = formatNumberWithDots(raw);
+      this.selectionStart = this.selectionEnd = this.value.length; // imleci sona al
+    });
+
+    document.getElementById("ekBilgiKaydetBtn").onclick = async function () {
+      const aciklama = document.getElementById("paraAciklama").value.trim();
+      // Noktaları kaldır, sayı olarak oku:
+      const tutar = tutarInput.value.replace(/\./g, '').trim();
+      const tarih = document.getElementById("paraTarih").value;
+      if (!tutar || isNaN(tutar) || Number(tutar) <= 0) {
+        showWarningMessage("Tutar giriniz.", "tamam", false);
+        return;
+      }
+      if (!aciklama) {
+        showWarningMessage("Açıklama giriniz.", "tamam", false);
+        return;
+      }
+      const data = {
+        tip: anaTip,
+        tutar: Number(tutar),
+        aciklama: aciklama,
+        tarih: tarih
+      };
+
+      const saveRes = await saveAltParaKentsel(data);
+      if (saveRes && saveRes.success && saveRes.altParaKentsel && saveRes.altParaKentsel._id) {
+        paraListesi.push({
+          type: saveRes.altParaKentsel.tip,
+          tutar: Number(saveRes.altParaKentsel.tutar),
+          aciklama: saveRes.altParaKentsel.aciklama,
+          tarih: saveRes.altParaKentsel.tarih,
+          ana: false,
+          _id: saveRes.altParaKentsel._id
+        });
+        updateParaOzetKentsel();
+        document.getElementById("paraAciklama").value = "";
+        tutarInput.value = "";
+        document.getElementById("paraTarih").value = new Date().toISOString().split('T')[0];
+      } else {
+        showWarningMessage("Kayıt eklenemedi, tekrar deneyin!", "tamam", false);
+      }
+    };
+  }
+}
+
+async function saveAnaParaKentsel(data){
+  showLoader();
+  fetch('/evrak', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        process: "saveAnaParaKentsel",
+        userId,
+        projectName,
+        tip: data.tip,
+        tutar: data.tutar
+      })
+    })
+    .then(r => r.json())
+    .finally(() => {
+      hideLoader();
+  });
+}
+async function readAnaParaKentsel(){
+  showLoader();
+    try {
+      const response = await fetch('/evrak', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          process: "readAnaParaKentsel",
+          userId,
+          projectName
+        })
+      });
+      const data = await response.json();
+      return data;
+    } finally {
+      hideLoader();
+    }
+}
+async function readAltParaKentsel(){
+  showLoader();
+    try {
+      const response = await fetch('/evrak', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          process: "readAltParaKentsel",
+          userId,
+          projectName
+        })
+      });
+      const data = await response.json();
+      return data; // backend'den gelen obje: {success: true, anaPara: [...]}
+    } finally {
+      hideLoader();
+    }
+}
+async function deleteAnaParaKentsel(){
+  showLoader();
+  try {
+    const response = await fetch('/evrak', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        process: "deleteAnaParaKentsel",
+        userId,
+        projectName
+      })
+    });
+    const resData = await response.json();
+    return resData;
+  } finally {
+    hideLoader();
+  }
+}
+async function saveAltParaKentsel(data) {
+  showLoader();
+  try {
+    const response = await fetch('/evrak', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        process: "saveAltParaKentsel",
+        userId,
+        projectName,
+        tip: data.tip,
+        tutar: data.tutar,
+        tarih: data.tarih,
+        aciklama: data.aciklama
+      })
+    });
+    const resData = await response.json();
+    return resData;
+  } finally {
+    hideLoader();
+  }
+}
+
 window.silEvrakSunucu = silEvrakSunucu;
 window.evrakGuncelleDinamik = evrakGuncelleDinamik;
 window.showEvrakModal = showEvrakModal;
+window.showKenselDonusumModal = showKenselDonusumModal;
 
 
 
@@ -3611,6 +4359,30 @@ window.showEvrakModal = showEvrakModal;
     }
     function hideLoader() {
         document.getElementById('loader').style.display = 'none';
+    }
+
+    function formatNumberWithDots(value) {
+      value = value.trim();
+
+      let [tamKisim, ondalikKisim] = value.split(',');
+      tamKisim = tamKisim ? tamKisim.replace(/[^\d]/g, '') : '';
+
+      if (tamKisim.length > 0) {
+        tamKisim = tamKisim.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      }
+      if (typeof ondalikKisim !== 'undefined') {
+        ondalikKisim = ondalikKisim.replace(/[^\d]/g, '');
+        return tamKisim + ',' + ondalikKisim;
+      } else {
+        return tamKisim;
+      }
+    }
+    function toNumberFromInput(str) {
+      // Binlik noktalarını kaldır
+      let s = str.replace(/\./g, '');
+      // Ondalık virgülü noktaya çevir
+      s = s.replace(/,/g, '.');
+      return Number(s) || 0;
     }
 
 </script>

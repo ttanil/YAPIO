@@ -820,6 +820,8 @@
     let perforjeTutar = 0;
     let digerPeyzajTutar = 0;
     let kadastroToplam = 0;
+    let tapuAlimSatimTutar = 0;
+    let tapuKatİrtifaTutar = 0;
     let tapuToplam = 0;
     let vergiToplam = 0;
     let sskToplam = 0;
@@ -844,6 +846,39 @@
     let digerIsciligiToplam = 0;
     let santiyeSefiIsciligiToplam = 0;
     let malzemelerToplam = 0;
+
+    let iskanHarciTutar = 0;
+    let kanalizasyonVeAtikSuTutar = 0;
+    let santiyeAbonmanSuBaglamaTutar = 0;
+    let suTukutemiTutar = 0;
+    let kontrollerVeİzinlerTutar = 0;
+    let otoparkBelediyeTutar = 0;
+    let digerBelediyeTutar = 0;
+
+    let cipAlimiTutar = 0;
+    let betonAnaliziTutar = 0;
+    let digerYapiDenetimTutar = 0;
+
+    let digerZeminEtuduTutar = 0;
+
+    let elektrikProjeTutar= 0;
+    let asansorProjesiTutar = 0;
+    let digerProjelerTutar = 0;
+
+    let haritaciToplam = 0;
+
+    let santiyeElektrikToplam = 0;
+    let santiyeElektrikBaglamaTutar = 0;
+    let santiyeElektrikTuketimTutar = 0;
+    let santiyeElektrikDigerTutar = 0;
+
+    let isGuvenligiTutar = 0;
+
+    let kentselDonusumAlinacakTutar = 0;
+    let kentselDonusumVerilecekTutar = 0;
+    let kentselToplam = 0;
+
+    let ozelHizmetlerTutar = 0;
 
     let genelToplam = 0;
     let mKareMaliyet = 0;
@@ -953,7 +988,52 @@
             zeminEtuduHarciTutar += parseInt(element.toplamTutar);
           });
         }
-        belediyeGiderleriToplam = aplikasyonTutar+imarDurumuTutar+kanalKotuTutar+ruhsatHarciTutar+zeminEtuduHarciTutar;
+        const iskanHarciBedeli = userProjectInfos.iskanHarci;
+        if(Array.isArray(iskanHarciBedeli) && iskanHarciBedeli.length > 0){
+          iskanHarciBedeli.forEach(element => {
+            iskanHarciTutar += parseInt(element.toplamTutar);
+          });
+        }
+        const kanalizasyonVeAtikSuBedeli = userProjectInfos.kanalizasyonVeAtikSu;
+        if(Array.isArray(kanalizasyonVeAtikSuBedeli) && kanalizasyonVeAtikSuBedeli.length > 0){
+          kanalizasyonVeAtikSuBedeli.forEach(element => {
+            kanalizasyonVeAtikSuTutar += parseInt(element.toplamTutar);
+          });
+        }
+        const santiyeAbonmanSuBaglamaBedeli = userProjectInfos.santiyeAbonmanSuBaglama;
+        if(Array.isArray(santiyeAbonmanSuBaglamaBedeli) && santiyeAbonmanSuBaglamaBedeli.length > 0){
+          santiyeAbonmanSuBaglamaBedeli.forEach(element => {
+            santiyeAbonmanSuBaglamaTutar += parseInt(element.toplamTutar);
+          });
+        }
+        const suTukutemiBedeli = userProjectInfos.suTukutemi;
+        if(Array.isArray(suTukutemiBedeli) && suTukutemiBedeli.length > 0){
+          suTukutemiBedeli.forEach(element => {
+            suTukutemiTutar += parseInt(element.toplamTutar);
+          });
+        }
+        const kontrollerVeİzinlerBedeli = userProjectInfos.kontrollerVeİzinler;
+        if(Array.isArray(kontrollerVeİzinlerBedeli) && kontrollerVeİzinlerBedeli.length > 0){
+          kontrollerVeİzinlerBedeli.forEach(element => {
+            kontrollerVeİzinlerTutar += parseInt(element.toplamTutar);
+          });
+        }
+        const otoparkBelediyeBedeli = userProjectInfos.otoparkBelediye;
+        if(Array.isArray(otoparkBelediyeBedeli) && otoparkBelediyeBedeli.length > 0){
+          otoparkBelediyeBedeli.forEach(element => {
+            otoparkBelediyeTutar += parseInt(element.toplamTutar);
+          });
+        }
+        const digerBelediyeBedeli = userProjectInfos.digerBelediye;
+        if(Array.isArray(digerBelediyeBedeli) && digerBelediyeBedeli.length > 0){
+          digerBelediyeBedeli.forEach(element => {
+            digerBelediyeTutar += parseInt(element.toplamTutar);
+          });
+        }
+
+        belediyeGiderleriToplam = aplikasyonTutar+imarDurumuTutar+kanalKotuTutar+ruhsatHarciTutar+zeminEtuduHarciTutar
+                                +iskanHarciTutar + kanalizasyonVeAtikSuTutar+santiyeAbonmanSuBaglamaTutar+suTukutemiTutar
+                                +kontrollerVeİzinlerTutar+otoparkBelediyeTutar+digerBelediyeTutar;
         
         const muteahhitlikSozlesmesiBedeli = userProjectInfos.muteahhitlikSozlesmesi;
         if(Array.isArray(muteahhitlikSozlesmesiBedeli) && muteahhitlikSozlesmesiBedeli.length > 0){
@@ -988,7 +1068,25 @@
             fenniHaritaciTutar += parseInt(element.toplamTutar);
           });
         }
-        yapiDenetimToplam = yapiDenetimHarciTutar+fenniJeolojiTutar+fenniHaritaciTutar;
+        const cipAlimiTutarBedeli = userProjectInfos.cipAlimi;
+        if(Array.isArray(cipAlimiTutarBedeli) && cipAlimiTutarBedeli.length > 0){
+          cipAlimiTutarBedeli.forEach(element => {
+            cipAlimiTutar += parseInt(element.toplamTutar);
+          });
+        }
+        const betonAnaliziBedeli = userProjectInfos.betonAnalizi;
+        if(Array.isArray(betonAnaliziBedeli) && betonAnaliziBedeli.length > 0){
+          betonAnaliziBedeli.forEach(element => {
+            betonAnaliziTutar += parseInt(element.toplamTutar);
+          });
+        }
+        const digerYapiDenetimBedeli = userProjectInfos.digerYapiDenetim;
+        if(Array.isArray(digerYapiDenetimBedeli) && digerYapiDenetimBedeli.length > 0){
+          digerYapiDenetimBedeli.forEach(element => {
+            digerYapiDenetimTutar += parseInt(element.toplamTutar);
+          });
+        }
+        yapiDenetimToplam = yapiDenetimHarciTutar+fenniJeolojiTutar+fenniHaritaciTutar+cipAlimiTutar+betonAnaliziTutar+digerYapiDenetimTutar;
 
         const zeminEtuduRaporuBedeli = userProjectInfos.zeminEtuduRaporu;
         if(Array.isArray(zeminEtuduRaporuBedeli) && zeminEtuduRaporuBedeli.length > 0){
@@ -1002,7 +1100,13 @@
             zeminIyilestirmeTutar += parseInt(element.toplamTutar);
           });
         }
-        zeminEtuduToplam = zeminEtuduRaporuTutar+zeminIyilestirmeTutar;
+        const digerZeminEtuduBedeli = userProjectInfos.digerZeminEtudu;
+        if(Array.isArray(digerZeminEtuduBedeli) && digerZeminEtuduBedeli.length > 0){
+          digerZeminEtuduBedeli.forEach(element => {
+            digerZeminEtuduTutar += parseInt(element.toplamTutar);
+          });
+        }
+        zeminEtuduToplam = zeminEtuduRaporuTutar+zeminIyilestirmeTutar+digerZeminEtuduTutar;
 
         const mimariBedeli = userProjectInfos.mimariProje;
         if(Array.isArray(mimariBedeli) && mimariBedeli.length > 0){
@@ -1034,15 +1138,43 @@
             hesTutar += parseInt(element.toplamTutar);
           });
         }
-        projelerToplam = mimariTutar+statikTutar+tesisatTutar+hesTutar+akustikTutar;
-
-
-        const tapuBedeli = userProjectInfos.tapuTutar;
-        if(Array.isArray(tapuBedeli) && tapuBedeli.length > 0){
-          tapuBedeli.forEach(element => {
-            tapuToplam += parseInt(element.toplamTutar);
+        const elektrikProjeBedeli = userProjectInfos.elektrikProje;
+        if(Array.isArray(elektrikProjeBedeli) && elektrikProjeBedeli.length > 0){
+          elektrikProjeBedeli.forEach(element => {
+            elektrikProjeTutar += parseInt(element.toplamTutar);
           });
         }
+        const asansorProjesiBedeli = userProjectInfos.asansorProjesi;
+        if(Array.isArray(asansorProjesiBedeli) && asansorProjesiBedeli.length > 0){
+          asansorProjesiBedeli.forEach(element => {
+            asansorProjesiTutar += parseInt(element.toplamTutar);
+          });
+        }
+        const digerProjelerTutarBedeli = userProjectInfos.digerProjeler;
+        if(Array.isArray(digerProjelerTutarBedeli) && digerProjelerTutarBedeli.length > 0){
+          digerProjelerTutarBedeli.forEach(element => {
+            digerProjelerTutar += parseInt(element.toplamTutar);
+          });
+        }
+
+        projelerToplam = mimariTutar+statikTutar+tesisatTutar+hesTutar+akustikTutar
+                        +elektrikProjeTutar+asansorProjesiTutar+digerProjelerTutar;
+
+
+        const tapuAlimSatimBedeli = userProjectInfos.tapuAlimSatim;
+        if(Array.isArray(tapuAlimSatimBedeli) && tapuAlimSatimBedeli.length > 0){
+          tapuAlimSatimBedeli.forEach(element => {
+            tapuAlimSatimTutar += parseInt(element.toplamTutar);
+          });
+        }
+        const tapuKatİrtifaBedeli = userProjectInfos.tapuKatİrtifa;
+        if(Array.isArray(tapuKatİrtifaBedeli) && tapuKatİrtifaBedeli.length > 0){
+          tapuKatİrtifaBedeli.forEach(element => {
+            tapuKatİrtifaTutar += parseInt(element.toplamTutar);
+          });
+        }
+
+        tapuToplam = tapuAlimSatimTutar + tapuKatİrtifaTutar;
 
         const vergiBedeli = userProjectInfos.vergiTutar;
         if(Array.isArray(vergiBedeli) && vergiBedeli.length > 0){
@@ -1057,6 +1189,18 @@
             sskToplam += parseInt(element.toplamTutar);
           });
         }
+
+        const anaParaKentselBedeli = userProjectInfos.anaParaKentsel;
+        if(Array.isArray(anaParaKentselBedeli) && anaParaKentselBedeli.length > 0){
+          anaParaKentselBedeli.forEach(element => {
+            if(element.tip === "alinacak"){
+              kentselDonusumAlinacakTutar += parseInt(element.tutar);
+            } else if(element.tip === "verilecek"){
+              kentselDonusumVerilecekTutar += parseInt(element.tutar);
+            }
+          });
+        }
+        kentselToplam = kentselDonusumAlinacakTutar + kentselDonusumVerilecekTutar;
 
         const avukatBedeli = userProjectInfos.avukat;
         if(Array.isArray(avukatBedeli) && avukatBedeli.length > 0){
@@ -1078,10 +1222,54 @@
             reklamToplam += parseInt(element.toplamTutar);
           });
         }
+        const haritaciBedeli = userProjectInfos.haritaci;
+        if(Array.isArray(haritaciBedeli) && haritaciBedeli.length > 0){
+          haritaciBedeli.forEach(element => {
+            haritaciToplam += parseInt(element.toplamTutar);
+          });
+        }
 
-        evrakToplam = belediyeGiderleriToplam + noterGiderleriToplam + yapiDenetimToplam + zeminEtuduToplam 
+        const ozelHizmetlerBedeli = userProjectInfos.ozelHizmetler;
+        if(Array.isArray(ozelHizmetlerBedeli) && ozelHizmetlerBedeli.length > 0){
+          ozelHizmetlerBedeli.forEach(element => {
+            ozelHizmetlerTutar += parseInt(element.toplamTutar);
+          });
+        }
+
+        const santiyeElektrikBaglamaBedeli = userProjectInfos.santiyeElektrikBaglama;
+        if(Array.isArray(santiyeElektrikBaglamaBedeli) && santiyeElektrikBaglamaBedeli.length > 0){
+          santiyeElektrikBaglamaBedeli.forEach(element => {
+            santiyeElektrikBaglamaTutar += parseInt(element.toplamTutar);
+          });
+        }
+        const santiyeElektrikTuketimBedeli = userProjectInfos.santiyeElektrikTuketim;
+        if(Array.isArray(santiyeElektrikTuketimBedeli) && santiyeElektrikTuketimBedeli.length > 0){
+          santiyeElektrikTuketimBedeli.forEach(element => {
+            santiyeElektrikTuketimTutar += parseInt(element.toplamTutar);
+          });
+        }
+        const santiyeElektrikDigerBedeli = userProjectInfos.santiyeElektrikDiger;
+        if(Array.isArray(santiyeElektrikDigerBedeli) && santiyeElektrikDigerBedeli.length > 0){
+          santiyeElektrikDigerBedeli.forEach(element => {
+            santiyeElektrikDigerTutar += parseInt(element.toplamTutar);
+          });
+        }
+      santiyeElektrikToplam = santiyeElektrikBaglamaTutar + santiyeElektrikTuketimTutar + santiyeElektrikDigerTutar;
+
+
+
+      const isGuvenligiDigerBedeli = userProjectInfos.isGuvenligi;
+        if(Array.isArray(isGuvenligiDigerBedeli) && isGuvenligiDigerBedeli.length > 0){
+          isGuvenligiDigerBedeli.forEach(element => {
+            isGuvenligiTutar += parseInt(element.toplamTutar);
+          });
+        }
+
+
+      evrakToplam = belediyeGiderleriToplam + noterGiderleriToplam + yapiDenetimToplam + zeminEtuduToplam 
                     + projelerToplam + tapuToplam + vergiToplam + sskToplam + avukatToplam 
-                    + emlakciToplam + reklamToplam;
+                    + emlakciToplam + reklamToplam
+                    + haritaciToplam+santiyeElektrikToplam+isGuvenligiTutar+kentselDonusumAlinacakTutar+kentselDonusumVerilecekTutar;
 
         
         const santiyeSefiIsciligiBedeli = userProjectInfos.santiyeSefiIsciligi;
@@ -1868,7 +2056,7 @@
         if(materialsList.length > 0){
           materialsList.forEach(item => {
             materialNamesList.push(item.materialDisplayName);
-            materialTutarList.push(item.toplamTutar*1000);
+            materialTutarList.push(item.toplamTutar);
           });
         }
 
@@ -1932,19 +2120,25 @@
             ]
           },
           evrak: {
-            labels: ["Belediye", "Noter", "Yapı Denetim", "Zemin Etüdü", "Projeler", "Tapu", "Vergi", "SSK", "Avukat", "Emlakçı", "Reklam"],
+            labels: ["Belediye", "Noter", "Yapı Denetim", "Zemin Etüdü", "Projeler", "Haritacı", "Şantiye Elektrik", "Tapu", 
+                      "İş Güvenliği", "SSK", "Kentsel Dönüşüm", "Avukat", "Emlakçı", "Reklam", "Vergi","Özel Hizmetler"],
             data: [
               belediyeGiderleriToplam, 
               noterGiderleriToplam, 
               yapiDenetimToplam,
               zeminEtuduToplam, 
               projelerToplam,
+              haritaciToplam,
+              santiyeElektrikToplam,
               tapuToplam,
-              vergiToplam,
+              isGuvenligiTutar,
               sskToplam,
+              kentselToplam,
               avukatToplam,
               emlakciToplam,
-              reklamToplam
+              reklamToplam,
+              vergiToplam,
+              ozelHizmetlerTutar
             ],
             background: [
               'rgba(11, 129, 90, 0.8)',
@@ -1959,17 +2153,37 @@
               'Yapı Denetim': 'yapidenetim',
               'Zemin Etüdü': 'zeminetudu',
               'Projeler': 'projeler',
+              'Haritacı':'haritaci',
+              'Şantiye Elektrik':'santiyeElektrik',
               'Tapu': 'tapu',
+              'İş Güvenliği':'isGuvenligi',
               'Vergi': 'vergi',
               'SSK': 'ssk',
+              'Kentsel Dönüşüm':'kentselDonusum',
               'Avukat': 'avukat',
               'Emlakçı': 'emlakci',
               'Reklam': 'reklam'
             }
           },
           belediye: {
-            labels: ["Aplikasyon", "İmar Durumu", "Kanal Kotu", "Ruhsat Harcı", "Zemin Etüdü Harcı"],
-            data: [aplikasyonTutar, imarDurumuTutar, kanalKotuTutar, ruhsatHarciTutar, zeminEtuduHarciTutar],
+            labels: ["Aplikasyon", "İmar Durumu", "Kanal Kotu", "Ruhsat Harcı", "Zemin Etüdü Harcı","İskan harcı",
+                    "Kanalizasyon ve Atık Su","Şantiye Abonman Su Bağlama","Su Tüketimi","Kontroller ve İzinler",
+                    "Otopark","Diğer"
+            ],
+            data: [
+              aplikasyonTutar, 
+              imarDurumuTutar, 
+              kanalKotuTutar, 
+              ruhsatHarciTutar, 
+              zeminEtuduHarciTutar,
+              iskanHarciTutar,
+              kanalizasyonVeAtikSuTutar,
+              santiyeAbonmanSuBaglamaTutar,
+              suTukutemiTutar,
+              kontrollerVeİzinlerTutar,
+              otoparkBelediyeTutar,
+              digerBelediyeTutar
+            ],
             background: [
               'rgba(59, 130, 246, 0.7)',
               'rgba(30, 64, 175, 0.7)',
@@ -1987,8 +2201,8 @@
             ]
           },
           yapidenetim: {
-            labels: ["Yapı Denetim Harcı", "Fenni Jeoloji", "Fenni Haritacı"],
-            data: [yapiDenetimHarciTutar, fenniJeolojiTutar, fenniHaritaciTutar],
+            labels: ["Yapı Denetim Harcı", "Fenni Jeoloji", "Fenni Haritacı","Çip Alımı","Beton Analizi","Diğer"],
+            data: [yapiDenetimHarciTutar, fenniJeolojiTutar, fenniHaritaciTutar,cipAlimiTutar,betonAnaliziTutar,digerYapiDenetimTutar],
             background: [
               'rgba(249, 115, 22, 0.8)',
               'rgba(253, 186, 116, 0.8)',
@@ -1996,22 +2210,40 @@
             ]
           },
           zeminetudu: {
-            labels: ["Zemin Etüdü Raporu", "Zemin İyileştirme"],
-            data: [zeminEtuduRaporuTutar, zeminIyilestirmeTutar],
+            labels: ["Zemin Etüdü Raporu", "Zemin İyileştirme","Diğer"],
+            data: [zeminEtuduRaporuTutar, zeminIyilestirmeTutar,digerZeminEtuduTutar],
             background: [
               'rgba(34,197,94,0.8)', 
               'rgba(132,204,22,0.8)'
             ]
           },
           projeler: {
-            labels: ["Mimari", "Statik", "Tesisat", "HES", "Akustik"],
-            data: [mimariTutar, statikTutar, tesisatTutar, hesTutar, akustikTutar],
+            labels: ["Mimari", "Statik", "Elektrik", "Tesisat", "HUS", "Akustik", "Asansör", "Diğer"],
+            data: [mimariTutar, statikTutar,elektrikProjeTutar, tesisatTutar, hesTutar, akustikTutar,
+                asansorProjesiTutar,digerProjelerTutar
+            ],
             background: [
               'rgba(30,64,175,0.6)',
               'rgba(59,130,246,0.6)',
               'rgba(16,185,129,0.6)',
               'rgba(250,220,20,0.6)',
               'rgba(239,68,68,0.6)'
+            ]
+          },
+          santiyeElektrik:{
+            labels: ["Elektrik Baglama", "Elektrik Tüketim","Diğer"],
+            data: [santiyeElektrikBaglamaTutar, santiyeElektrikTuketimTutar,santiyeElektrikDigerTutar],
+            background: [
+              'rgba(34,197,94,0.8)', 
+              'rgba(132,204,22,0.8)'
+            ]
+          },
+          tapu:{
+            labels: ["Tapu Alım-Satım", "Kat İrtifa Kurma"],
+            data: [tapuAlimSatimTutar, tapuKatİrtifaTutar],
+            background: [
+              'rgba(34,197,94,0.8)', 
+              'rgba(132,204,22,0.8)'
             ]
           },
           // ================= KABA ve ALT KALEMLERİ =================
@@ -2539,28 +2771,36 @@
 
           document.getElementById("myInfoModalLabel").textContent =
             parentLabel ? parentLabel + " Alt Kalemleri" : "Harcamalar";
-            const dynamicHeight = Math.max(mapping.labels.length * 5, 320);
 
-            // 1. Etkileşimli label listesi:
-            let clickableListHTML = '<ul class="list-group mt-3">';
-            mapping.labels.forEach((lbl, i) => {
-              // Eğer bu label'ın children'ı varsa ve mapping.children'da key olarak var ise...
-              const isChild = mapping.children && mapping.children[lbl] && detailMappings[mapping.children[lbl]];
-              clickableListHTML += `<li class="list-group-item list-group-item-action" style="cursor:pointer" data-label="${lbl}" data-index="${i}">
-                <span class="${isChild ? 'fw-bold text-primary' : 'text-primary'}">${lbl}</span>
-                <span class="float-end">${mapping.data[i].toLocaleString()} TL</span>
-              </li>`;
-            });
-            clickableListHTML += '</ul>';
+          // Bar ve yükseklik ayarı:
+          const perBarHeight = 56;
+          const dynamicHeight = Math.max(Math.min(mapping.labels.length * perBarHeight, 400), 160);
 
-            document.getElementById("modal-body-content").innerHTML = `
-              ${parentLabel && parentValue !== undefined ? `<b>${parentLabel} tutarı:</b> ${parentValue.toLocaleString()} TL<br>` : ""}
-              <canvas id="detailChart" width="380" height="${dynamicHeight}"></canvas>
-              <div id="subCalemInfo" style="padding-top:12px;"></div>
-              <div id="clickableLabelList">${clickableListHTML}</div>
-            `;
+          function calcBarThickness(labelCount) {
+            if (labelCount <= 2) return 48;
+            if (labelCount <= 5) return 32;
+            if (labelCount <= 10) return 24;
+            return 14;
+          }
 
-          // Listeye tıklama:
+          // Etkileşimli label listesi:
+          let clickableListHTML = '<ul class="list-group mt-3">';
+          mapping.labels.forEach((lbl, i) => {
+            const isChild = mapping.children && mapping.children[lbl] && detailMappings[mapping.children[lbl]];
+            clickableListHTML += `<li class="list-group-item list-group-item-action" style="cursor:pointer" data-label="${lbl}" data-index="${i}">
+              <span class="${isChild ? 'fw-bold text-primary' : 'text-primary'}">${lbl}</span>
+              <span class="float-end">${mapping.data[i].toLocaleString()} TL</span>
+            </li>`;
+          });
+          clickableListHTML += '</ul>';
+
+          document.getElementById("modal-body-content").innerHTML = `
+            ${parentLabel && parentValue !== undefined ? `<b>${parentLabel} tutarı:</b> ${parentValue.toLocaleString()} TL<br>` : ""}
+            <canvas id="detailChart" width="380" height="${dynamicHeight}"></canvas>
+            <div id="subCalemInfo" style="padding-top:12px;"></div>
+            <div id="clickableLabelList">${clickableListHTML}</div>
+          `;
+
           setTimeout(() => {
             document.querySelectorAll('#clickableLabelList li').forEach(li => {
               li.addEventListener('click', function() {
@@ -2579,6 +2819,8 @@
           function drawDetailChart() {
             if (detailChart) detailChart.destroy();
             const ctx = document.getElementById('detailChart').getContext('2d');
+            const barThickness = calcBarThickness(mapping.labels.length);
+
             detailChart = new Chart(ctx, {
               type: 'bar',
               data: {
@@ -2593,7 +2835,7 @@
                 indexAxis: 'y',
                 elements: {
                   bar: {
-                    barThickness: 2
+                    barThickness: barThickness
                   }
                 },
                 plugins: { legend: { display: false }, title: { display: false }},
@@ -2622,7 +2864,7 @@
               }
             });
           }
-          modalEl.addEventListener('shown.bs.modal', drawDetailChart, { once: true }); 
+          modalEl.addEventListener('shown.bs.modal', drawDetailChart, { once: true });
           const myModal = new bootstrap.Modal(modalEl);
           myModal.show();
         }
