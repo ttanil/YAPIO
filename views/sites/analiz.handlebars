@@ -1222,7 +1222,7 @@
             reklamToplam += parseInt(element.toplamTutar);
           });
         }
-        const haritaciBedeli = userProjectInfos.haritaci;
+        const haritaciBedeli = userProjectInfos.haritaciTutar;
         if(Array.isArray(haritaciBedeli) && haritaciBedeli.length > 0){
           haritaciBedeli.forEach(element => {
             haritaciToplam += parseInt(element.toplamTutar);
@@ -2713,7 +2713,7 @@
         iscilikler: {
           labels: ["Şantiye Şefi", "Kalıp İşçiliği", "Demir İşçiliği", "Duvar Örme İşçiliği", "Sıva İşçiliği", "Şap İşçiliği", "Çatı İşçiliği",
                     "Mantolama İşçiliği", "Yalıtım İşçiliği", "Su Tesisatı İşçiliği", "Elektrik İşçiliği", "Doğalgaz İşçiliği",
-                    "asansör İşçiliği", "Dekor Alçıpan İşçiliği", "Perforje İşçiliği", "İşçilik Diğer"],
+                    "Asansör İşçiliği", "Dekor Alçıpan İşçiliği", "Perforje İşçiliği", "İşçilik Diğer"],
             data: [
               santiyeSefiIsciligiToplam,
               kalipIsciligiToplam,

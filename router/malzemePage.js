@@ -259,7 +259,9 @@ router.post('/', async (req, res) => {
                 "duvarOrmeIsciligi", "sivaIsciligi", "sapIsciligi",
                 "catiIsciligi", "mantolamaIsciligi", "yalitimIsciligi",
                 "suTesisatiIsciligi", "elektrikIsciligi", "dogalgazIsciligi",
-                "asansorIsciligi", "dekorAlcipanIsciligi", "perforjeIsciligi"
+                "asansorIsciligi", "dekorAlcipanIsciligi", "perforjeIsciligi",
+                "avukat","haritaciTutar","asansorProjesi","digerProjeler","santiyeElektrikTuketim",
+                "santiyeElektrikDiger","emlakci"
             ];
 
             // 4. Arrayleri gezerek evrakId ile eşleşenleri silme işlemini gerçekleştir

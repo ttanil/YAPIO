@@ -459,6 +459,64 @@
             height: 50px;
         }
 
+
+    .pastel-search-box-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 36px 0 32px 0;
+      }
+
+      .pastel-search-box {
+        display: flex;
+        align-items: center;
+        background: #FFFACD;
+        border: 2px solid #b2f2bb;
+        border-radius: 14px;
+        box-shadow: 0 6px 32px 0 rgba(130, 200, 131, 0.09);
+        padding: 7px 18px 7px 14px;
+        transition: border 0.22s, box-shadow 0.23s;
+        min-width: 330px;
+        max-width: 520px;
+        width: 100%;
+        gap: 10px;
+      }
+
+      .pastel-search-box:focus-within {
+        border-color: #7bc273;
+        box-shadow: 0 2px 18px 0 rgba(123, 194, 115, 0.13);
+      }
+
+      .search-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #7bc273;
+        margin-right: 4px;
+      }
+
+      .search-input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        outline: none;
+        font-size: 1.16rem;
+        color: #847539;
+        font-family: 'Varela Round', Arial, sans-serif;
+        letter-spacing: 1px;
+        padding: 8px 4px;
+      }
+
+      .search-input::placeholder {
+        color: #b6a672;
+        opacity: 1;
+        font-size: 1.05rem;
+      }
+
+      .custom-modal-search {
+        margin-top: 8.5rem !important;   /* mt-4 gibi */
+      }
+
         
 
 
@@ -805,6 +863,57 @@
                 margin:0 auto 12px auto;
             }
 
+
+            .pastel-search-box-wrapper {
+                margin: 20px 0 14px 0;
+            }
+
+            .pastel-search-box {
+                display: flex;
+                padding: 4px 10px 4px 8px;
+                gap: 10px;
+                width:80% !important;
+            }
+
+            .pastel-search-box:focus-within {
+                border-color: #7bc273;
+                box-shadow: 0 2px 18px 0 rgba(123, 194, 115, 0.13);
+                width:80%;
+            }
+
+            .search-icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #7bc273;
+                margin-right: 4px;
+            }
+
+            .search-input {
+                flex: 1;
+                border: none;
+                background: transparent;
+                outline: none;
+                font-size: 0.75rem;
+                color: #847539;
+                font-family: 'Varela Round', Arial, sans-serif;
+                letter-spacing: 1px;
+                padding: 8px 4px;
+                min-width: 0 !important;
+                width: 80% !important;
+                max-width: 80% !important;
+            }
+
+            .search-input::placeholder {
+                color: #b6a672;
+                opacity: 1;
+                font-size: 0.75rem;
+                width: 100%;
+            }
+            .custom-modal-search {
+                margin-top: 6.5rem !important;   /* mt-4 gibi */
+            }
+
          }
 
     </style>  
@@ -904,6 +1013,20 @@
         <canvas id="materials-pie-chart" style="width:100%;"></canvas>
     </div>
 
+    <!-- Search Alanı -->
+    <div class="pastel-search-box-wrapper">
+        <form class="pastel-search-box" autocomplete="off">
+        <span class="search-icon">
+            <svg width="22" height="22" viewBox="0 0 22 22" style="vertical-align:middle;" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="10" cy="10" r="7" stroke="#7bc273" stroke-width="2"/>
+            <line x1="16.2929" y1="16.5" x2="21" y2="21" stroke="#7bc273" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </span>
+        <input type="text" class="search-input" id="searchInput" placeholder="Aramak istediğiniz kelimeyi yazın..." />
+        <!--<button type="submit" class="search-btn" id="searchBtn">ARA</button>-->
+        </form>
+    </div> 
+
     <div class="container-materials-list">
         <h1>Malzeme Listesi</h1>
         <div class="materials-grid" id="materials-grid"></div>
@@ -961,6 +1084,21 @@
         </div>
     </div>
 
+    <!-- Sonuçlar Modalı -->
+    <div class="modal fade custom-modal-search" id="searchResultModal" tabindex="-1" aria-labelledby="searchResultModalLabel" data-bs-focus="false">
+        <div class="modal-dialog custom-modal-search">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="searchResultModalLabel">Arama Sonuçları</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body" id="searchResultModalBody">
+            <!-- Sonuçlar burada gösterilecek -->
+            </div>
+        </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
@@ -977,6 +1115,10 @@
         const servicesContainer = document.getElementById('services-container');  
         const saveMaterialButton = document.getElementById('saveMaterialButton'); 
         const addServiceButton = document.getElementById('add-service-button');
+
+        const searchInput = document.getElementById("searchInput");
+        const searchBtn = document.getElementById("searchBtn");
+        const searchForm = document.querySelector('.pastel-search-box');
 
         const grid = document.getElementById('materials-grid');
 
@@ -1116,9 +1258,118 @@
 
             drawMaterialsPieChart(graphList);
             
-            //console.log(graphList);
-
         });
+
+        searchInput.addEventListener("input", function(event) {
+            const query = searchInput.value.trim();
+
+            // Her tuşta arama ve sonucu modalda göster
+            const matches = query ? searchButtonInfos(query) : [];
+            showSearchResults(matches);
+
+            // Eğer arama kutusu boşsa ve modal açıksa kapat
+            if (!query) {
+                const searchModalEl = document.getElementById('searchResultModal');
+                const searchModal = bootstrap.Modal.getInstance(searchModalEl);
+                if (searchModal) searchModal.hide();
+            }
+        });
+
+        // Anahtar/kelimeden sonuçları döndür 
+        function searchButtonInfos(query) {
+            const graphDict = Object.fromEntries(
+                graphList.map(item => [item.name, { toplamDb: item.toplamDb }])
+            );
+
+            query = query.trim().toLowerCase();
+            if (!query) return [];
+            const results = [];
+            for (const [key, info] of Object.entries(graphDict)) {
+                const group = info.group || "";
+                if (
+                    key.toLowerCase().includes(query) ||
+                    group.toLowerCase().includes(query)
+                ) {
+                    results.push({ key, group, ...info });
+                }
+            }
+            return results;
+        }
+
+        // Sonuçları modalda göster (her çağrıda modalı açmaya zorlar)
+        function showSearchResults(results) {
+            const modalTitle = document.getElementById('searchResultModalLabel');
+            const modalBody = document.getElementById('searchResultModalBody');
+            modalTitle.textContent = "Arama Sonuçları";
+
+            if (results.length === 0) {
+                modalBody.innerHTML = "<div class='alert alert-info'>Hiçbir sonuç bulunamadı.</div>";
+            } else {
+                modalBody.innerHTML = results.map(item => `
+                    <div class="card bg-light mb-3 p-2 border-0 shadow-sm search-result-clickable" data-key="${item.key}" style="cursor:pointer;">
+                        <div class="d-flex align-items-center">
+                            <span class="fw-bold">${item.key}</span>
+                            <span class="badge bg-success ms-2">${item.group ?? ""}</span>
+                        </div>
+                        ${item.title ? `<div>${item.title}</div>` : ""}
+                        ${item.desc ? `<div class="text-muted small">${item.desc}</div>` : ""}
+                    </div>
+                `).join("");
+            }
+
+            const searchModalEl = document.getElementById('searchResultModal');
+            let searchModal = bootstrap.Modal.getInstance(searchModalEl);
+            if (!searchModal) {
+                searchModal = new bootstrap.Modal(searchModalEl, { backdrop: 'static', keyboard: false });
+            }
+
+            // Fokus verdiğimiz listener'ı önce kaldıralım (her açışta birikmesin)
+            searchModalEl.removeEventListener('shown.bs.modal', modalFocusHandler);
+
+            // Modal açıldığında input'u focus'la ve imleci sonda yapacak handler'ı tekrar ekle
+            searchModalEl.addEventListener('shown.bs.modal', modalFocusHandler);
+            searchModal.show();
+        }
+        // Focus işini yapan fonksiyon
+        function modalFocusHandler() {
+            searchInput.focus();
+            // İmleci inputun sonuna getir (tüm cihazlarda düzgün çalışır)
+            const valLen = searchInput.value.length;
+            searchInput.setSelectionRange(valLen, valLen);
+        }
+        document.getElementById('searchResultModalBody').onclick = async function (e) {
+            let card = e.target;
+            while (card && !card.classList.contains('search-result-clickable')) {
+                if(card === this) return;
+                card = card.parentElement;
+            }
+            if (!card) return;
+
+            const key = card.getAttribute('data-key');
+            // Malzemeyi graphList'te bul
+            const material = predefinedServices.find(m => m.name === key);
+
+            // Eğer malzeme bulunduysa service modalını aç
+            if (material) {
+                addService(
+                    material.name,          // name
+                    material.nameText || "",// nameText
+                    material.units || [],   // units
+                    "",                     // displayStatus (varsa ekleyebilirsin, yoksa boş bırak)
+                    material.savedResults || []
+                );
+                openServiceModal();
+
+                // Arama modalını kapat
+                const searchModalEl = document.getElementById('searchResultModal');
+                const searchModal = bootstrap.Modal.getInstance(searchModalEl);
+                if (searchModal) searchModal.hide();
+                searchInput.value = "";
+            } else {
+                // Malzeme bulunamazsa isteğe göre uyarı verebilirsin
+                showWarningMessage("Seçtiğiniz malzeme bulunamadı.", "Tamam", false);
+            }
+        };
 
 
         // Modal açılacak buton
@@ -1591,6 +1842,34 @@
 
 
         async function readMaterials() {
+            const keys = [
+                "Müteahhitlik Sözleşmesi",
+                "Vekalet Sözleşmesi",
+                "Çip Alımı",
+                "Beton Analizi",
+                "Zemin Etüdü Raporu",
+                "Zemin İyileştirme",
+                "Mimari Proje",
+                "Statik Proje",
+                "Elektrik Projesi",
+                "Tesisat Projesi",
+                "HUS",
+                "Akustik",
+                "Diğer",
+                "Asansör Projesi",
+                "Özel Hizmetler",
+                "Vergiler",
+                "Avukat",
+                "Reklam ve Tanıtım",
+                "Emlakçı",
+                "Haritacı",
+                "Şantiye Elektrik",
+                "İş Güvenliği",
+                "SSK",
+                "Kentsel Dönüşüm",
+                "Tapu Müdürlüğü",
+                "asansorKurulumu"
+                ];
             showLoader();
             try {
                 const response = await fetch('/malzeme', {
@@ -1610,6 +1889,8 @@
 
                     result.materials.forEach(material => {
                         const materialKey = material.name;
+                        //console.log(materialKey)
+                        if (keys.includes(materialKey)) return;
                         const materialDisplayName = materialNames[materialKey] || materialKey; // Malzeme adını kontrol et ve ata
                         const savedAreas= material.savedResults || [];
                         // Diziye malzeme nesnelerini ekle
