@@ -17,14 +17,16 @@
       height: 100%;  
       overflow: hidden;  
     }  
-    video {  
-      position: absolute;  
-      top: 0;  
-      left: 0;  
-      width: 100%;  
-      height: 100%;  
-      object-fit: cover; /* Videonun ekranı doldurmasını sağlar */  
-      z-index: -1; /* Videoyu içeriklerin arkasına gönder */  
+    #backgroundVideo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100vw;
+      min-height: 100vh;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1; /* Arka planda kalsın */
+      overflow: hidden;
     }
     .custom-btn {  
       background-color: #847539;
@@ -61,6 +63,32 @@
       font-size: 20px;
       color: #ffffff;  
     }
+
+/*
+    #sloganCenter {
+      background: rgba(165, 173, 190, 0.6);
+      border-radius: 14px;
+      box-shadow: 0 8px 32px 0 rgba(75, 76, 95, 0.2);
+      margin: 10px auto 0 auto;
+      width: 60%;
+      height: 10%;
+      backdrop-filter: blur(7px);
+      display: flex;
+      justify-content: center;
+      align-items: center !important;
+    }
+    .content h1#text11 {
+      font-size: 2.05rem;
+      color: #fff;
+      font-weight: 800;
+      text-shadow: 0 2px 24px rgba(15, 10, 72, 0.4);
+      letter-spacing: 1px;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    }
+    .content p#text12 {
+      display: none;
+    }
+    */   
 
     .user-area {
       cursor: pointer;
@@ -206,7 +234,35 @@
         padding: 1rem;
         max-width: 100%;
       }
-
+/*
+      #sloganCenter {
+        border-radius: 10px;
+        margin: 20% auto 0 auto;
+        width: 80%;
+        height: auto;
+        backdrop-filter: blur(7px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center !important;
+      }
+      .content h1#text11 {
+        display:block;
+        font-size: 1,1rem;
+        color: #fff;
+        font-weight: 600;
+        text-shadow: 0 2px 24px rgba(15, 10, 72, 0.4);
+        letter-spacing: 1px;
+        font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+        margin-bottom: 0.5rem;
+      }
+      .content p#text12 {
+        display:block;
+        color: #fff;
+        font-size: 0.95rem;
+        margin: 0;
+      }
+*/
     }  
     /* Daha büyük ekranlarda header boyutu büyür */  
     @media (min-width: 1200px) {  
@@ -214,21 +270,15 @@
         height: 14vh;  
       }  
     }  
-    .content {  
-      z-index: 1; /* Videonun üstünde görüntülenir */  
-      color: white;  
-      text-align: center;  
-      font-family: Arial, sans-serif;  
-      padding: 20px;  
-    }  
+    
   </style>  
 </head>  
 <body>  
-  <!-- Video Arka Plan -->  
-  <video id="backgroundVideo" muted autoplay loop playsinline>
-    <source src="img/edit2_1.mp4" type="video/mp4">  
-    Tarayıcınız video etiketini desteklemiyor.  
-  </video>  
+  <div id="backgroundVideo">
+    <noscript>
+      Tarayıcınız animasyonu görüntüleyemiyor.
+    </noscript>
+  </div> 
 
   <!-- Responsive Header -->  
   <nav class="header d-flex justify-content-between align-items-center px-3">
@@ -245,12 +295,19 @@
     <div class="username ms-1" id="userAreaName">Kullanıcı Adı</div>
   </div>
   
-
+  <!-- <div class="content slogan-center mt-4" id="sloganCenter">
+    <div>
+      <h1 class="slogan" id="text11">Her Detayı Hesaplıyoruz!</h1>
+    </div>
+    <div>
+      <p id="text12"> Projeleriniz her zaman sizinle, elinizin altında</p>
+    </div>
+  </div> -->
   <!-- İçerik -->  
   <div class="container h-100 d-flex justify-content-center align-items-center">
     <div class="content text-center">  
-      <h1 id="text1">Her Detayı Hesaplıyoruz!</h1>  
-      <p id="text2">Tüm projeleriniz her zaman yanınızda, elinizin altında</p>
+      <h1 id="text1"></h1>  
+      <p id="text2"></p>
 
       <div class="project-list w-75" id="projectList">
         <a id="make-button" class="btn make-btn">Proje Oluştur</a>
@@ -296,7 +353,8 @@
   </div>
 
   <!-- Bootstrap JavaScript -->  
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.4/lottie.min.js"></script>
 
   <script type="module">
     import { saveData, readData, deleteData } from '/js/localDb.js';
@@ -353,6 +411,18 @@
           { "role": "{{role}}" }
       {{/if}};
 
+      const animationContainer = document.getElementById('backgroundVideo');
+      const animation = bodymovin.loadAnimation({
+        container: animationContainer,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'img/YAPIO.json'
+      });
+      animation.addEventListener('data_failed', function() {
+        animationContainer.innerHTML = '<p>Tarayıcınız animasyonu desteklemiyor.</p>';
+      });
+
       userId = window.user.userId;
 
       if(window.user.role === "misafir"){
@@ -360,6 +430,7 @@
         showBackgroundVideo();
         setScreen();
         userArea.classList.add("d-none");
+        makeButton.style.visibility = "hidden";
       }else if(window.user.role === "user"){
         hideBackgroundVideo();
         await setUserScreen(window.user.userId);
@@ -692,19 +763,24 @@
     });
 
     function hideBackgroundVideo() {
-      const videoElem = document.getElementById('backgroundVideo');
-      if (videoElem) {
-          videoElem.style.display = "none";
-          videoElem.pause();
+      const animationContainer = document.getElementById('backgroundVideo');
+      if (animationContainer) {
+          animationContainer.style.display = "none";
       }
     }
 
     function showBackgroundVideo() {
-      const videoElem = document.getElementById('backgroundVideo');
-      if (videoElem) {
-          videoElem.style.display = "block";
-          videoElem.play(); // Yeniden başlatmak için
-      }
+      const animationContainer = document.getElementById('backgroundVideo');
+      const animation = bodymovin.loadAnimation({
+        container: animationContainer,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'img/YAPIO.json'
+      });
+      animation.addEventListener('data_failed', function() {
+        animationContainer.innerHTML = '<p>Tarayıcınız animasyonu desteklemiyor.</p>';
+      });
     }
     function positionProjectList(n) {
       const list = document.getElementById('projectList');
