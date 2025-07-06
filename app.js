@@ -37,12 +37,21 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());                   // Sadece JSON istekler için (dosya upload hariç!)
 app.use(express.urlencoded({ extended: true }));  // Standart form istekler için (dosya upload hariç!)
 app.use(cookieParser());
+app.set('trust proxy', 1);
 app.use(expressSession({
     secret: SECRET_VALUE,
     resave: false,
     saveUninitialized: false,
-    cookie: { path: '/', httpOnly: true, secure: 'auto', maxAge: time }
+    cookie: {
+        path: '/',
+        httpOnly: true,
+        secure: true,
+        maxAge: time,
+        sameSite: 'lax'
+        // domain: '.yapio.net' // (isteğe bağlı, sorun olursa kaldırıp dene)
+    }
 }));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // CORS
