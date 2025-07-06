@@ -599,6 +599,10 @@ body {
     </nav> 
 
     <div class="custom-short-menu" id="regulation-button-area">
+        <a class="menu-btn" id="approved-button" href="#">
+            <img src="img/approved.png" alt="">
+            <span>Ruhsat-<br>İskan</span>
+        </a>
         <a class="menu-btn" id="graphs-button" href="#">
             <img src="img/growth_1.png" alt="">
             <span>Analizler</span>
@@ -623,7 +627,7 @@ body {
         <div class="flow-steps-container">
           <button class="flow-step-btn active mb-2" data-tab="arsa">Arsa</button>
           <button class="flow-step-btn mb-2" data-tab="evrak">Evrak İşleri</button>
-          <button class="flow-step-btn mb-2" data-tab="ruhsat">Yapı Ruhsatı</button>
+          <!--<button class="flow-step-btn mb-2" data-tab="ruhsat">Yapı Ruhsatı</button>-->
           <button class="flow-step-btn mb-2" data-tab="uretim">Üretim</button>
           <button class="flow-step-btn mb-2" data-tab="iscilikler">İşçilikler</button>
         </div>
@@ -949,7 +953,7 @@ body {
     import { showWarningMessage } from '/js/showMessage.js';
 
     const projectNameString = document.getElementById("projectName");
-    //const quatationButton = document.getElementById("quatation-button"); 
+    const approvedButton = document.getElementById("approved-button");
     const graphsButton = document.getElementById("graphs-button");
     const soldButton = document.getElementById("sold-button");
     const material = document.getElementById("material-button");
@@ -4354,6 +4358,9 @@ window.showKenselDonusumModal = showKenselDonusumModal;
     });
     loginButton.addEventListener("click", () => {
         window.location.href = "/";
+    });
+    approvedButton.addEventListener("click", () => {
+        window.location.href = `/approved?projectName=${encodeURIComponent(projectName)}`;
     });
 
     function showLoader() {

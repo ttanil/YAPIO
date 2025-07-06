@@ -471,12 +471,10 @@
   </nav> 
 
   <div class="custom-short-menu" id="regulation-button-area">
-    <!--
-      <a class="menu-btn" id="quatation-button" href="#">
-          <img src="img/pay1_1.png" alt="">
-          <span>Giderler</span>
-      </a>
-      -->
+    <a class="menu-btn" id="approved-button" href="#">
+        <img src="img/approved.png" alt="">
+        <span>Ruhsat-<br>İskan</span>
+    </a>
       <a class="menu-btn" id="document-button" href="#">
           <img src="/img/building-plan.png" alt="">
           <span>Yapı Süreci</span>
@@ -641,7 +639,7 @@
     const paymentButton = document.querySelector(".payment-button");
     const paymentModalBody = document.getElementById('paymentModalBody');
     const loginButton = document.getElementById("loginButton");
-    //const quatationButton = document.getElementById("quatation-button");
+    const approvedButton = document.getElementById("approved-button");
     const documentButton = document.getElementById("document-button");
 
     let userId = null;
@@ -657,7 +655,6 @@
 
     // DOM yüklendiğinde işlem başlat  
     document.addEventListener("DOMContentLoaded", async () => {  
-      event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
 
       window.user = {{#if user}}
             { "email": "{{user.email}}", "role": "{{user.role}}", "userId": "{{user.id}}", "project": {{{json project}}} }
@@ -761,11 +758,9 @@
     loginButton.addEventListener("click", () => {
         window.location.href = "/";
     });
-    /*
-    quatationButton.addEventListener("click", () => {
-        window.location.href = `/quatation?projectName=${encodeURIComponent(projectName)}`;
+    approvedButton.addEventListener("click", () => {
+        window.location.href = `/approved?projectName=${encodeURIComponent(projectName)}`;
     });
-    */
     graphsButton.addEventListener("click", () => {
       window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`;
     });

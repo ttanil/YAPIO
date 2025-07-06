@@ -842,6 +842,10 @@ const ozelHizmetlerKaydiSchema = new mongoose.Schema({
   aciklama:    { type: String }
 }, { _id: true });
 
+const checkBoxKaydiSchema = new mongoose.Schema({
+  checkBoxId:  { type: String, required: true }
+}, { _id: true });
+
 // --- Ana userInputSchema --- 
 const userInputSchema = new mongoose.Schema({
   projectName: { type: String, required: true },
@@ -983,6 +987,7 @@ const userInputSchema = new mongoose.Schema({
   sefName:[sefNameKaydiSchema],
 
   colorSelected:[colorKaydiSchema],
+  checkBox:[checkBoxKaydiSchema],
   
   metreMaliyet: [metreMaliyetSchema],
   payment : [paymentSchema]

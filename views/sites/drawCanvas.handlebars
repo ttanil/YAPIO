@@ -739,6 +739,10 @@
             <span>Giderler</span>
         </a>
         -->
+        <a class="menu-btn" id="approved-button" href="#">
+            <img src="img/approved.png" alt="">
+            <span>Ruhsat-<br>İskan</span>
+        </a>
         <a class="menu-btn" id="document-button" href="#">
           <img src="/img/building-plan.png" alt="">
           <span>Yapı Süreci</span>
@@ -909,7 +913,8 @@
         const loginButton = document.getElementById("loginButton");
         const soldButton = document.getElementById("sold-button");
         const material = document.getElementById("material-button");
-        const documentButton = document.getElementById("document-button"); 
+        const documentButton = document.getElementById("document-button");
+        const approvedButton = document.getElementById("approved-button");
         const totalBrutArea = document.getElementById("totalBrutArea");
 
         const buttonGroup = document.getElementById("buttonGroup");  
@@ -944,7 +949,6 @@
 
         // DOM yüklendiğinde işlem başlat  
         document.addEventListener("DOMContentLoaded", () => {  
-            event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle  
 
             window.user = {{#if user}}
                 { "email": "{{user.email}}", "role": "{{user.role}}", "userId": "{{user.id}}", "project": {{{json project}}} }
@@ -1357,6 +1361,9 @@
         });
         documentButton.addEventListener("click", () => {
             window.location.href = `/evrak?projectName=${encodeURIComponent(projectName)}`;
+        });
+        approvedButton.addEventListener("click", () => {
+            window.location.href = `/approved?projectName=${encodeURIComponent(projectName)}`;
         });
 
         function syncTotalAreaWidth() {

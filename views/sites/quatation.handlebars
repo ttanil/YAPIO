@@ -606,6 +606,10 @@
   </nav> 
 
   <div class="custom-short-menu" id="regulation-button-area">
+      <a class="menu-btn" id="approved-button" href="#">
+        <img src="img/approved.png" alt="">
+        <span>Ruhsat-<br>İskan</span>
+      </a>
       <a class="menu-btn" id="document-button" href="#">
           <img src="/img/building-plan.png" alt="">
           <span>Yapı Süreci</span>
@@ -1077,6 +1081,7 @@
     const searchBtn = document.getElementById("searchBtn");
     const searchForm = document.querySelector('.pastel-search-box');
     const documentButton = document.getElementById("document-button");
+    const approvedButton = document.getElementById("approved-button");
     
     // Tabs geçişleri  
     const tab1Btn = document.getElementById('tab1Btn');  
@@ -1389,6 +1394,9 @@
     });
     documentButton.addEventListener("click", () => {
         window.location.href = `/evrak?projectName=${encodeURIComponent(projectName)}`;
+    });
+    approvedButton.addEventListener("click", () => {
+        window.location.href = `/approved?projectName=${encodeURIComponent(projectName)}`;
     });
 
 

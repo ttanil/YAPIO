@@ -68,6 +68,7 @@ const soldPage = require(path.join(__dirname, 'router', 'soldPage.js'));
 const paymentPage = require(path.join(__dirname, 'router', 'paymentPage.js'));
 const evrakPage = require(path.join(__dirname, 'router', 'evrakPage.js')); // BU ROUTER'DA multer ile dosya yükleniyor
 const malzemePage = require(path.join(__dirname, 'router', 'malzemePage.js'));
+const approvedPage = require(path.join(__dirname, 'router', 'approvedPage.js'));
 
 app.use('/', indexPage);
 app.use('/login', loginPage);
@@ -81,6 +82,8 @@ app.use('/sold', soldPage);
 app.use('/payment', paymentPage);
 app.use('/evrak', evrakPage); // → Yalnızca MULTER var, başka upload middleware yok!
 app.use('/malzeme', malzemePage);
+app.use('/approved', approvedPage);
+
 
 // Sunucuyu başlat
 app.listen(5000, () => {

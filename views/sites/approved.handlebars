@@ -1,0 +1,1600 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Ruhsat-İskan</title>
+
+    <link rel="icon" type="image/png" href="img/icon.png" sizes="32x32">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <!-- Apple cihazlar için (PNG ve önerilen boyut 180x180) -->
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+
+    <!-- Bootstrap CSS -->  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>  
+        /* Genel Stiller */  
+        body {
+            min-height: 100dvh;
+            margin: 0;
+            background: linear-gradient(to bottom, #fff, #dbeafe 75%);
+        }
+        .city-silhouette {
+            position: fixed;   /* absolute değil, fixed! */
+            left: 0; right: 0; bottom: 0;
+            width: 100vw;
+            height: 24vh;
+            min-height: 100px;
+            max-height: 220px;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        .main-content {
+            position: relative;
+            z-index: 2;
+        }
+        .frost {
+            backdrop-filter: blur(8px) brightness(0.96);
+        }
+
+        .custom-short-menu {
+            display: flex;
+            gap: 22px;
+            justify-content: center;   /* Ortala */
+            align-items: flex-start;
+            width: 100%;
+            margin-top: 18px;
+            margin-bottom: 10px;
+        }
+
+        .menu-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 70px;
+            text-decoration: none;
+            background: none;
+            border: none;
+            outline: none;
+            transition: color 0.18s, background 0.18s;
+        }
+
+        .menu-btn img {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 4px;
+        }
+
+        .menu-btn span {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .menu-btn:hover span,
+        .menu-btn:focus span {
+            color: #1d67c4;
+            font-weight: 500;
+        }
+
+        #buttonHome {
+            margin-right: 18px; /* Sağdan istediğin kadar boşluk (arttırabilirsin) */
+        }
+
+    
+      
+        .container-fluid {  
+            display: flex;  
+            flex: 0 0 100%;  
+            flex-wrap: nowrap;  
+            align-items: center;  
+        }  
+        #projectName {  
+            flex: 0 0 90%;  
+            white-space: nowrap;  
+            overflow: hidden;  
+            text-overflow: ellipsis;  
+            font-family: Arial, sans-serif;  
+            font-size: 36px;
+        }  
+        .img-fluid {  
+            flex: 0 0 auto;  
+            height: 30px;  
+            width: 30px;  
+            margin-right: 10px;  
+        }
+        .custom-btn {  
+            background-color: #847539;
+            color: white; /* Yazı rengi */  
+            border: none; /* Kenarlığın kaldırılması */  
+            border-radius: 10px; /* Kenarlıkları yuvarlaklaştırma */  
+            padding: 10px 20px; /* İç boşluklar */  
+            font-family: "Varela Round";  
+            font-size: 16px; /* Yazı boyutu */  
+            font-weight: bold; /* Kalın yazı */  
+            letter-spacing: 2px;
+            cursor: pointer; /* Fare imlecini işaretçi yapma */  
+            transition: background-color 0.3s ease; /* Hover geçiş efekti */
+            margin-right: 40px;
+        }
+
+        
+        
+        .surec-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.1rem;
+            font-weight: bold;
+            text-align: center;
+            color: #67552A;
+            margin: 32px 0 36px 0;
+        }
+        .flow-steps-container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        .flow-step-btn {
+            font-family: inherit;
+            background: #fff;
+            color: #333;
+            border: 2px solid #e2e8f0;
+            border-radius: 2.4em;
+            font-weight: 500;
+            font-size: 1.18em;
+            padding: 0.88em 2.3em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px 0 #e5ecf7;
+            transition: color 0.14s, background 0.16s, border-color 0.16s;
+            outline: none;
+            position: relative;
+            min-width: 260px;
+        }
+        .flow-step-btn.active, .flow-step-btn:focus {
+            background: linear-gradient(90deg, #2563eb 0%, #60a5fa 70%);
+            color: #fff;
+            border-color: #468ef9;
+            box-shadow: 0 4px 16px 0 #cbd9fd;
+            z-index: 1;
+        }
+
+
+        .ruhsat-baslik {
+            margin-top: 18px;
+            font-size: 1.07em;
+            color: #184d84;
+        }
+        .ruhsat-sublist {
+            margin-bottom: 6px;
+            margin-left: 18px;
+            color: #1f2847;
+            font-size: 0.99em;
+        }
+        .alt-baslik-kutu {
+            background: linear-gradient(90deg, #f7ecd2 0%, #e3e7fa 100%);
+            border-radius: 1.4rem;
+            box-shadow: 0 4px 14px 0 rgba(160,160,160,0.07);
+            padding: 1.0rem 1.25rem 1.08rem 1.31rem;
+            border: none;
+            display: flex;
+            width: 60%;
+            cursor: pointer;
+            position: relative;
+            font-family: 'Oswald', Arial, sans-serif;
+            font-size: 1.07rem;
+            font-weight: 700;
+            color: #2c2c21;
+            transition: background .18s, box-shadow .18s, color .17s;
+            text-align: left;
+            margin: 0.3rem 0 0 0;
+            align-items: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .alt-baslik-kutu:hover,
+        .alt-baslik-kutu:focus {
+            background: linear-gradient(90deg, #f2e5be 0%, #cbd8f3 100%);
+            color: #2857ad;
+            box-shadow: 0 8px 22px 0 rgba(120,140,190,0.12);
+            outline: none;
+        }
+        .alt-kutu-arrow {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%) rotate(0deg);
+            transition: transform .25s cubic-bezier(.43,1.16,.45,1.13);
+            font-size: 1.08em;
+            pointer-events: none;
+            color: #caad2e;
+        }
+        .alt-baslik-kutu[aria-expanded="true"] .alt-kutu-arrow {
+            transform: translateY(-50%) rotate(90deg);
+            color: #4a75e0;
+        }
+        .alt-kutu-icerik {
+            background: #f7ecd2;
+            border-radius: 0 0 1rem 1rem;
+            margin-top: 10px;
+            box-shadow: 0 2px 8px 0 rgba(180,180,180,0.08);
+            padding: 0.7rem 1.7rem 1.08rem 1.7rem;
+            animation: fadein .4s;
+            width: 60%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .alt-kutu-icerik ul { margin-bottom: 0; }
+        .alt-kutu-icerik li {
+            font-family: "Varela Round", Arial, sans-serif;
+            font-size: 1rem;
+            color: #312e21;
+            margin-bottom: 0.43rem;
+        }
+        @keyframes fadein {
+            from { opacity: 0; transform: scaleY(.97);}
+            to   { opacity: 1; transform: scaleY(1);}
+        }
+
+        .mini-checkbox {
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            margin-left: 15px;
+            margin-right: 0;
+            border-radius: 6px;
+            border: 2px solid #d8e3fc;
+            background: #f5f7fa;
+            vertical-align: middle;
+            transition: all .16s cubic-bezier(.47,.13,.41,.92);
+            cursor: pointer;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .mini-checkbox.selected {
+            background: linear-gradient(90deg, #2563eb 0%, #60a5fa 70%);
+            border-color: #3887f6;
+        }
+        .mini-checkbox:after {
+            content:'';
+            display:block;
+            position:absolute;
+            left:6px; top:4px;
+            width:6px; height:10px;
+            border:none;
+            border-right:3px solid #fff;
+            border-bottom:3px solid #fff;
+            transform: scale(0) rotate(18deg);
+            transition: transform .20s cubic-bezier(.47,.13,.41,.92);
+        }
+        .mini-checkbox.selected:after {
+            transform: scale(1) rotate(18deg);
+        }
+        li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .textList {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            min-width: 0;
+        }
+        .text-content {
+            flex: 0 1 90%;
+            margin-right: 8px;
+            min-width: 0;             /* Uzun metinde taşma yaşanmasın */
+            white-space: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .mini-checkbox {
+            flex: 0 1 10%;
+            min-width: 22px;          /* Kutu küçülmez */
+            max-width: 22px;          /* Aşırı büyümez */
+            height: 22px;
+        }
+
+
+        /* MODAL GENELİ */
+        #evrakModal .modal-content {
+            border-radius: 16px;
+            box-shadow: 0 6px 32px 0 rgba(30, 40, 90, 0.13), 0 1.5px 2px 0 rgba(160, 170, 210, 0.125);
+            border: 1.5px solid #ecf1fa; /* Hafif çerçeve */
+            background: linear-gradient(134deg, #f9fafb 77%, #e9edfa 100%);
+            transition: box-shadow .25s;
+        }
+
+        #evrakModal .modal-header {
+            border-bottom: 1px solid #e9e9ee;
+            background: linear-gradient(90deg, #466fba 60%, #7595ce);
+            border-radius: 16px 16px 0 0;
+            color: #fff;
+            box-shadow: 0 1px 6px 0 rgba(60,80,130,0.03);
+        }
+
+        #evrakModal .modal-title {
+            font-size: 1.15em;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        #evrakModal .modal-body {
+            padding: 1.8rem 1.6rem 1.4rem 1.6rem;
+            background: transparent;
+            font-size: 1rem;
+            color: #22304f;
+            border-radius: 0 0 16px 16px;
+            min-height: 500px;
+        }
+
+        /* Modal içindeki başlıklar ve metin */
+        #evrakModal .modal-body h5,
+        #evrakModal .modal-body h6 {
+            margin-top: 0.5em;
+            margin-bottom: .3em;
+            font-weight: 600;
+            color: #3a4b6e;
+            letter-spacing: 0.01em;
+        }
+
+        #evrakModal .modal-body p {
+            line-height: 1.5;
+            margin-bottom: 1em;
+        }
+
+        /* Modal Kapat Butonunu daha görünür yap */
+        #evrakModal .btn-close {
+            filter: invert(1) grayscale(.5) brightness(1.4);
+            opacity: 0.7;
+            transition: opacity .18s;
+        }
+        #evrakModal .btn-close:hover { opacity: 1; }
+
+
+
+
+        @media (max-width: 568px) {
+            .city-silhouette {
+                position: fixed;
+                left: 0; right: 0; bottom: 0;
+                width: 100vw;
+                height: 14vh;
+                min-height: 70px;
+                max-height: 150px;
+            }
+            .container-navbar {  
+                flex-wrap: wrap;  
+                justify-content: flex-end;  
+            }  
+            #projectName {
+                flex: 0 0 70%;  
+                overflow: hidden;  
+                text-overflow: ellipsis;  
+                white-space: nowrap;  
+                text-align: left;  
+                font-size: 17px !important;  
+                max-width: 65%;     /* Taşmayı önler */  
+                min-width: 0;       /* flex shrink için gerekli */  
+                margin-right: 0;    /* İstenirse gap için elle ekleyin */
+            }  
+            #buttonHome {
+                flex: 0 0 30px;     /* Eğer 30px'lik bir kutu ise tam sabitlenir */  
+                padding: 0;         /* Ekstra boşlukları engeller */  
+                margin-left: 0;     /* İstenirse 5px gibi küçük bir boşluk eklenebilir */  
+                display: flex;  
+                align-items: center;
+            }
+            .img-fluid {  
+                height: 28px;  
+                width: 28px;  
+                margin-right: 0;    /* Sağdan boşluğu kaldırır */  
+                margin-left: 0;     /* Soldan boşluğu kaldırır */
+            }  
+            .custom-btn {  
+                font-size: 12px; /* Yazı boyutu */
+                padding: 5px 10px;      /* Yan boşlukları biraz artırdım */
+                border-radius: 6px;      /* Köşeler hafif yuvarlatıldı */
+                color: #fff;
+                border: none;
+                margin-right: 12px;
+                display: inline-block; 
+                font-weight: 500;     
+            }
+            .navbar-toggler {  
+               /* background-color: rgb(89, 125, 234);  */
+                background-color: #c2c5c9;  
+                flex: 0 0 auto;  
+                margin-left: auto;  
+                justify-content: flex-end;
+            }
+            .container-fluid {  
+                flex-wrap: wrap;  
+            } 
+            .dropdown-item{
+                display: flex;
+                margin-left: auto;  
+                
+            }
+            .mobile-navbar-menu {  
+                justify-content: flex-end !important;  
+                text-align: right !important;  
+                margin-top: 10px;
+                margin-bottom: 5px;
+            }  
+            .mobile-navbar-menu .nav-item, .mobile-navbar-menu .dropdown-item-mobile {
+                display: flex;
+                align-items: center;
+                justify-content: space-between !important;  
+                text-align: right !important;
+                font-size: 1.1rem;
+                font-style: bold !important;
+                height: 22px;
+                margin-top: 2px;
+                justify-self: end;
+            }
+            .dropdown-item-mobile {
+                width: 34%;
+                font-family: Arial, sans-serif !important; 
+                color: rgb(94, 93, 93) !important;      /* Varsayılan metin rengini kullan */  
+                text-decoration: none !important; /* Altı çizgiyi kaldır */  
+                font-weight: 400 !important;
+            }
+
+
+            .custom-short-menu {
+                display: flex;
+                gap: 12px;
+                justify-content: center;
+                align-items: flex-start;
+                width: 90% !important;
+                margin-top: 12px;
+                margin-left: auto;
+                margin-right: auto; /* Ortalamak için */
+            }
+            .menu-btn {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                flex: 1 1 0;    /* EŞİT yayılır, min 0 olur, büyüyebilir */
+                text-decoration: none;
+                background: none;
+                border: none;
+                outline: none;
+                transition: color 0.18s, background 0.18s;
+                min-width: 0;   /* Sıkışmaya izin verir */
+            }
+            .menu-btn img {
+                width: 25px;
+                height: 25px;
+                margin-bottom: 4px;
+            }
+            .menu-btn span {
+                font-size: 0.8rem;
+                white-space: nowrap; /* Çok taşmasını önlemek için */
+                text-align: center;
+            }
+
+
+            .menu-btn { flex: 1 1 0; min-width: 0; }
+            .menu-btn img { width: 25px; height: 25px; margin-bottom: 4px;}
+            .menu-btn span { font-size: 0.8rem; white-space: nowrap; text-align: center;}
+            .flow-steps-container { flex-direction: column; gap: .1em; justify-content: center;}
+            .flow-step-btn { 
+                width: 30%; 
+                justify-content: center;
+                font-size: 1em;                 /* Metin biraz küçültüldü */
+                padding: 0.4em 0.9em;          /* Yastıklar azaltıldı */
+                border-radius: 1.4em;           /* Köşeler biraz daraldı */
+                box-sizing: border-box;         /* Padding genişliğe dahil edilir */
+                margin: 7px 0;
+            }
+            .surec-title { font-size: 1.5em; margin-bottom: 10px; }
+
+            .ruhsat-baslik {
+                margin-top: 10px;
+                font-size: 0.9em;
+                color: #184d84;
+            }
+            .ruhsat-sublist {
+                margin-bottom: 6px;
+                margin-left: 10px;
+                color: #1f2847;
+                font-size: 0.8em;
+            }
+            .alt-baslik-kutu {
+                background: linear-gradient(90deg, #f7ecd2 0%, #e3e7fa 100%);
+                border-radius: 1rem;
+                box-shadow: 0 4px 10px 0 rgba(160,160,160,0.07);
+                padding: 1.0rem 1.25rem 1.08rem 1.31rem;
+                width: 90%;
+                font-size: 0.8rem;
+                font-weight: 700;
+                margin: 0.3rem 0 0 0;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .alt-kutu-arrow {
+                position: absolute;
+                right: 18px;
+                top: 50%;
+                transform: translateY(-50%) rotate(0deg);
+                transition: transform .25s cubic-bezier(.43,1.16,.45,1.13);
+                font-size: 1.08em;
+                pointer-events: none;
+                color: #caad2e;
+            }
+            .alt-kutu-icerik {
+                background: #f7ecd2;
+                border-radius: 0 0 1rem 1rem;
+                margin-top: 10px;
+                box-shadow: 0 2px 8px 0 rgba(180,180,180,0.08);
+                padding: 0.7rem 2.7rem 1.08rem 0.7rem;
+                animation: fadein .4s;
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .alt-kutu-icerik ul { margin-bottom: 0; }
+            .alt-kutu-icerik li {
+                font-size: 0.75rem;
+                margin-bottom: 0.43rem;
+            }
+
+            #evrakModal .modal-dialog {
+                max-width: 97vw !important;
+                margin: 0.8rem auto;
+            }
+            #evrakModal .modal-content {
+                border-radius: 11px;
+                padding: 0;
+            }
+            #evrakModal .modal-header,
+            #evrakModal .modal-body {
+                padding-left: 0.7em;
+                padding-right: 0.7em;
+                min-height: 60%;
+            }
+            
+
+        }
+
+
+</style>  
+</head>  
+<body class="relative min-h-screen w-full bg-gradient-to-b from-white to-blue-100 flex flex-col items-center justify-start">
+  <!-- Alt Şehir Silüeti SVG -->
+  <svg class="city-silhouette" viewBox="0 0 400 96" fill="none" preserveAspectRatio="none" width="100%" height="100%">
+    <g>
+        <!-- Sol bloklar -->
+        <rect x="0" y="60" width="14" height="36" rx="2" fill="#6366f1" opacity="0.13"/>
+        <rect x="16" y="40" width="22" height="56" rx="4" fill="#60a5fa" opacity="0.18"/>
+        <!-- Çatılı bina -->
+        <rect x="41" y="72" width="12" height="24" rx="2" fill="#818cf8" opacity="0.16"/>
+        <polygon points="41,72 47,62 53,72" fill="#818cf8" opacity="0.28"/>
+        <rect x="56" y="60" width="16" height="36" rx="3" fill="#38bdf8" opacity="0.14"/>
+        <!-- Pencereli uzun blok -->
+        <rect x="75" y="36" width="12" height="60" rx="2" fill="#60a5fa" opacity="0.15"/>
+        <rect x="81" y="44" width="2" height="8" rx="1" fill="#fff" opacity="0.22"/>
+        <rect x="81" y="60" width="2" height="8" rx="1" fill="#fff" opacity="0.15"/>
+        <!-- Mini blok -->
+        <rect x="90" y="80" width="7" height="16" rx="1.5" fill="#818cf8" opacity="0.19"/>
+        
+        <!-- Orta bloklar -->
+        <rect x="100" y="66" width="18" height="30" rx="2" fill="#6366f1" opacity="0.09"/>
+        <rect x="121" y="46" width="28" height="50" rx="3" fill="#818cf8" opacity="0.09"/>
+        <rect x="152" y="78" width="12" height="18" rx="2" fill="#60a5fa" opacity="0.16"/>
+        <!-- Yan yana iki blok farklı yükseklikte -->
+        <rect x="170" y="69" width="16" height="27" rx="2" fill="#818cf8" opacity="0.12"/>
+        <rect x="188" y="79" width="10" height="17" rx="2" fill="#6366f1" opacity="0.12"/>
+        <!-- Asimetrik büyük blok -->
+        <rect x="201" y="29" width="29" height="67" rx="4" fill="#60a5fa" opacity="0.14"/>
+        <!-- Farklı ton kısa blok -->
+        <rect x="233" y="74" width="12" height="22" rx="2" fill="#38bdf8" opacity="0.13"/>
+        <!-- İnce yüksek blok -->
+        <rect x="248" y="25" width="9" height="71" rx="2" fill="#818cf8" opacity="0.17"/>
+        <!-- Diğer bloklar (düz, alçak/kalın) -->
+        <rect x="260" y="79" width="23" height="17" rx="3" fill="#6366f1" opacity="0.1"/>
+        <rect x="287" y="67" width="16" height="29" rx="2" fill="#60a5fa" opacity="0.11"/>
+        <!-- Minik bloklar ve farklı renk -->
+        <rect x="306" y="82" width="6" height="14" rx="1" fill="#818cf8" opacity="0.17"/>
+        <rect x="316" y="68" width="10" height="28" rx="2" fill="#38bdf8" opacity="0.14"/>
+        <!-- Geniş kısa bina -->
+        <rect x="330" y="80" width="26" height="16" rx="2" fill="#6366f1" opacity="0.09"/>
+        <!-- Sağda küçük çatılı blok -->
+        <rect x="360" y="70" width="13" height="26" rx="2" fill="#60a5fa" opacity="0.12"/>
+        <polygon points="360,70 366.5,61 373,70" fill="#60a5fa" opacity="0.22"/>
+        <!-- Sağda yüksek son blok -->
+        <rect x="378" y="24" width="18" height="72" rx="2.5" fill="#6366f1" opacity="0.11"/>
+        <!-- En sağ mini pencere detayı -->
+        <rect x="384" y="32" width="2.5" height="8" rx="1" fill="#fff" opacity="0.20"/>
+        </g>
+    </svg>
+
+    <!-- Responsive Header -->  
+    <nav class="header d-flex justify-content-between align-items-center px-3">
+        <span class="d-flex align-items-center gap-2">
+            <img src="img/icon.png" alt="Logo" width="32" height="32">
+            Yapıo
+        </span>
+        <button class="btn custom-btn" id="loginButton" style="display: none;">PROJELER</button>  
+    </nav>
+
+    <!-- Navbar -->  
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm mt-4 container-navbar">  
+        <div class="container-fluid">  
+            <!-- Proje Adı -->  
+            <h4 class="navbar-brand" id="projectName">Proje Adı</h4>  
+            <!-- Ana Sayfa Butonu -->  
+            <button class="btn d-flex navbar-home-button" id="buttonHome">  
+                <img src="img/home1_1.png" alt="Katlar Görseli" class="img-fluid rounded">  
+            </button>
+        </div>  
+    </nav> 
+
+    <div class="custom-short-menu" id="regulation-button-area">
+        <a class="menu-btn" id="document-button" href="#">
+          <img src="/img/building-plan.png" alt="">
+          <span>Yapı Süreci</span>
+        </a>
+        <a class="menu-btn" id="graphs-button" href="#">
+            <img src="img/growth_1.png" alt="">
+            <span>Analizler</span>
+        </a>
+        <a class="menu-btn" id="sold-button" href="#">
+            <img src="/img/property.png" alt="">
+            <span>Satış</span>
+        </a>
+        <a class="menu-btn" id="material-button" href="#">
+            <img src="/img/list.png" alt="">
+            <span>Malzeme <br>Yönetimi</span>
+        </a>
+    </div>
+
+    <div id="loader" style="display:none;">
+        <div class="spinner"></div>
+        <span>Yükleniyor...</span>
+    </div>
+
+    <div class="container-yapi-iskan pt-3 pb-4">  
+        <div class="surec-title">Yapı Ruhsatı ve İskan Belgeleri</div>  
+            <div class="flow-steps-container mt-4">
+                <button class="flow-step-btn active mb-2" data-tab="yapi" id="btn-yapi">Yapı Ruhsatı Belgeleri</button>
+                <button class="flow-step-btn mb-2" data-tab="iskan" id="btn-iskan">İskan Belgeleri</button>
+            </div>
+        </div>
+
+        <div id="yapi-sections" style="display:none; margin-top:18px; margin-bottom:30px;">
+            <button class="alt-baslik-kutu mt-3" aria-expanded="false" data-target="gerekli">
+            Gerekli Belgeler
+            <span class="alt-kutu-arrow">&#9654;</span>
+            </button>
+            <div class="alt-kutu-icerik" id="panel-gerekli" style="display:none;">
+                <ul>
+                    <li class="textList">
+                        <span class="text-content"
+                            id="dilekceYapi"
+                            data-file-name="Ön İzin Dilekçesi"
+                            data-file-url="https://pub-12f70a7bb4ea46e9b01afa008a5228d1.r2.dev/evraklar/%C3%96n%20%C4%B0zin%20Dilek%C3%A7esi.docx">
+                        Önizin Dilekçesi
+                        </span>
+                        <span class="mini-checkbox" id="dilekceYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="tapuYapi">Tapu</span>
+                        <span class="mini-checkbox" id="tapuYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="imarDurumuYapi">İmar Durumu</span>
+                        <span class="mini-checkbox" id="imarDurumuYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="aplikasyonKrokisiYapi">Aplikasyon Krokisi</span>
+                        <span class="mini-checkbox" id="aplikasyonKrokisiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="kotKesitYapi">İnşaat İstikamet Kot Kesit</span>
+                        <span class="mini-checkbox" id="kotKesitYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="emlakDegeriYapi">Emlak Değeri</span>
+                        <span class="mini-checkbox" id="emlakDegeriYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="numaratajYapi">Numarataj</span>
+                        <span class="mini-checkbox" id="numaratajYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="muteahhitSozlesmesiYapi">Müteahit Sözleşmesi</span>
+                        <span class="mini-checkbox" id="muteahhitSozlesmesiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="kimlikFotokopiYapi">Mal Sahibinin Kimlik Fotokopisi, Varsa Vekâletnamesi</span>
+                        <span class="mini-checkbox" id="kimlikFotokopiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="SKBaglantisiYapi">Su ve Kanalizasyon İşletmesinden Alınacak SK Bağlantısı Durum Belgesi</span>
+                        <span class="mini-checkbox" id="SKBaglantisiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" 
+                            id="santiyeSefiSozlesmesiYapi"
+                            data-file-name="Şantiye Şefi Sözleşmesi Örneği"
+                            data-file-url="https://cdn.yapio.net/evraklar/santiye-sefligi-hizmet-sozlesmesi.pdf">
+                            Şantiye Şefi Sözleşmesi
+                        </span>
+                        <span class="mini-checkbox" id="santiyeSefiSozlesmesiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="parselaAitSantiyeSefiBelgesiYapi">Parsela Ait Şantiye Şefi Belgesi</span>
+                        <span class="mini-checkbox" id="parselaAitSantiyeSefiBelgesiYapiBox" tabindex="0"></span>
+                    </li>
+                </ul>
+                </div>
+
+                <button class="alt-baslik-kutu mt-3" aria-expanded="false" data-target="müteahhit">
+                Müteahhit İle İlgili Evraklar
+                <span class="alt-kutu-arrow">&#9654;</span>
+                </button>
+                <div class="alt-kutu-icerik" id="panel-müteahhit" style="display:none;">
+                <ul>
+                    <li class="textList">
+                        <span class="text-content" id="vergiLevhasiYapi">Vergi Levhası</span>
+                        <span class="mini-checkbox" id="vergiLevhasiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="ticaretOdaYapi">Ticaret Oda Kayıt Belgesi</span>
+                        <span class="mini-checkbox" id="ticaretOdaYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="yambisYapi">YAMBİS Yetki Belge No</span>
+                        <span class="mini-checkbox" id="yambisYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="imzasirkusuYapi">İmza Sirküsü</span>
+                        <span class="mini-checkbox" id="imzasirkusuYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="nufusKayitOrnegiYapi">Nüfus Kayıt Örneği</span>
+                        <span class="mini-checkbox" id="nufusKayitOrnegiYapiBox" tabindex="0"></span>
+                    </li>
+                </ul>
+                </div>
+
+                <button class="alt-baslik-kutu mt-3" aria-expanded="false" data-target="taahut">
+                Taahütnameler
+                <span class="alt-kutu-arrow">&#9654;</span>
+                </button>
+                <div class="alt-kutu-icerik" id="panel-taahut" style="display:none;">
+                <ul>
+                    <li class="textList">
+                        <span class="text-content" 
+                            id="mimarTaahutnamesiYapi"
+                            data-file-name="Mimarlık Taahütnamesi"
+                            data-file-url="https://cdn.yapio.net/evraklar/mimarlik-taahhutnamesi.pdf">
+                            Mimarlık Taahütnamesi
+                        </span>
+                        <span class="mini-checkbox" id="mimarTaahutnamesiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="insaatMuhendisiTaahutnamesiYapi">İnşaat Mühendisi Taahütnamesi</span>
+                        <span class="mini-checkbox" id="insaatMuhendisiTaahutnamesiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="makineMuhendisiTaahutnamesiYapi">Makine Mühendisi Taahütnamesi</span>
+                        <span class="mini-checkbox" id="makineMuhendisiTaahutnamesiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="elektrikTaahutnamesiYapi">Elektrik Taahütnamesi</span>
+                        <span class="mini-checkbox" id="elektrikTaahutnamesiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="asansorProjesiTaahutnamesiYapi">Asansör Projesi Taahütnamesi</span>
+                        <span class="mini-checkbox" id="asansorProjesiTaahutnamesiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="asansorElektrikTaahutnamesiYapi">Asansör Elektrik Taahütnamesi</span>
+                        <span class="mini-checkbox" id="asansorElektrikTaahutnamesiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="asansorMakineTaahutnamesiYapi">Asansör Makine Taahütnamesi</span>
+                        <span class="mini-checkbox" id="asansorMakineTaahutnamesiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="jeolojiTaahutnamesiYapi">Zemin Etüdü - Jeoloji Taahütnamesi</span>
+                        <span class="mini-checkbox" id="jeolojiTaahutnamesiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="jeofizikTaahutnamesiYapi">Zemin Etüdü - Jeofizik Taahütnamesi</span>
+                        <span class="mini-checkbox" id="jeofizikTaahutnamesiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="insaatTaahutnamesiYapi">Zemin Etüdü - İnşaat Taahütnamesi</span>
+                        <span class="mini-checkbox" id="insaatTaahutnamesiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="akustikProjeTaahutnamesiYapi">Akustik Proje Taahütnamesi</span>
+                        <span class="mini-checkbox" id="akustikProjeTaahutnamesiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" 
+                            id="santiyeSefiTaahutnamesiYapi"
+                            data-file-name="Şantiye Şefi Taahütnamesi Örneği"
+                            data-file-url="https://cdn.yapio.net/evraklar/santiye-sefligi-taahhutnamesi.pdf">
+                            Şantiye Şefi Taahütnamesi
+                        </span>
+                        <span class="mini-checkbox" id="santiyeSefiTaahutnamesiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="muteahhitTaahutnamesiYapi">Müteahhit Taahütnamesi</span>
+                        <span class="mini-checkbox" id="muteahhitTaahutnamesiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="haritaMuhendisiTaahutnamesiYapi">Harita Mühendisi Taahütnamesi</span>
+                        <span class="mini-checkbox" id="haritaMuhendisiTaahutnamesiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="fenniMesulTaahutnamesiYapi">Fenni Mesul Harita Mühendisi Taahütnamesi</span>
+                        <span class="mini-checkbox" id="fenniMesulTaahutnamesiYapiBox" tabindex="0"></span>
+                    </li>
+                    <li class="textList">
+                        <span class="text-content" id="platformTaahutnamesiYapi">Platform Yapılacak Taahütnamesi (Engelliye Satışta)</span>
+                        <span class="mini-checkbox" id="platformTaahutnamesiYapiBox" tabindex="0"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="alt-kutu-icerik mb-5" id="panel-iskan" style="display:none;">
+            <ul>
+                <li class="textList">
+                    <span class="text-content"
+                          id="dilekceIskan"
+                          data-file-name="Yapı Kullanma İzin Dilekçesi"
+                          data-file-url="https://cdn.yapio.net/evraklar/YAPI_KULLANMA_%C4%B0ZN%C4%B0_D%C4%B0LEK%C3%87E.docx">
+                          Dilekçe
+                    </span>
+                    <span class="mini-checkbox" id="dilekceIskanbox" tabindex="0"></span>
+                </li>
+                <li class="textList">
+                    <span class="text-content" id="vekaletSirketEvrakIskan">Vekaletname veya Şirket Evrakları</span>
+                    <span class="mini-checkbox" id="vekaletSirketEvrakIskanBox" tabindex="0"></span>
+                </li>
+                <li class="textList">
+                    <span class="text-content" id="katIrtifakliIskan">Kat İrtifaklı Tapu Kayıt Örnekleri</span>
+                    <span class="mini-checkbox" id="katIrtifakliIskanBox" tabindex="0"></span>
+                </li>
+                <li class="textList">
+                    <span class="text-content"
+                        id="telekomAnkastraIskan"
+                        data-file-name="Telekom Ankastre Rapor Örneği"
+                        data-file-url="https://cdn.yapio.net/evraklar/turk-telekom-ankastre.jpg">
+                        Telekom Ankastre Raporu
+                    </span>
+                    <span class="mini-checkbox" id="telekomAnkastraIskanBox" tabindex="0"></span>
+                </li>
+                <li class="textList">
+                    <span class="text-content" 
+                        id="yapiAplikasyonIskan"
+                        data-file-name="Yapı Aplikasyon Krokisi Örneği"
+                        data-file-url="https://cdn.yapio.net/evraklar/Yapi-Aplikasyon-Krokisi_Iskan.jpg">
+                        Yapı Aplikasyon Krokisi
+                    </span>
+                    <span class="mini-checkbox" id="yapiAplikasyonIskanBox" tabindex="0"></span>
+                </li>
+                <li class="textList">
+                    <span class="text-content" 
+                        id="enerjiKimlikBelgesiIskan"
+                        data-file-name="Enerji Kimlik Belgesi Örneği"
+                        data-file-url="https://cdn.yapio.net/evraklar/enerji-kimlik-belgesi.png">
+                        Enerji Kimlik Belgesi
+                    </span>
+                    <span class="mini-checkbox" id="enerjiKimlikBelgesiIskanBox" tabindex="0"></span>
+                </li>
+                <li class="textList">
+                    <span class="text-content" 
+                        id="elektrikIcTesisleriBelgesiIskan"
+                        data-file-name="Elektrik İç Tesisleri Denetim ve Muayene Uygunluk Belgesi Örneği"
+                        data-file-url="https://cdn.yapio.net/evraklar/Elektrik-Muayene-Raporu.jpg">
+                        Elektrik İç Tesisleri Denetim ve Muayene Uygunluk Belgesi
+                    </span>
+                    <span class="mini-checkbox" id="elektrikIcTesisleriBelgesiIskanBox"tabindex="0"></span>
+                </li>
+                <li class="textList">
+                    <span class="text-content" id="binayaAitCepheIskan">Binaya Ait Cephe Fotoğrafları</span>
+                    <span class="mini-checkbox" id="binayaAitCepheIskanBox" tabindex="0"></span>
+                </li>
+                <li class="textList">
+                    <span class="text-content" 
+                        id="asansorTescilIskan"
+                        data-file-name="Asansör Tescil Belgesi Örneği"
+                        data-file-url="https://cdn.yapio.net/evraklar/asans%C3%B6r%20tescil%20belgesi.pdf">
+                        Asansör Tescil Belgesi
+                    </span>
+                    <span class="mini-checkbox" id="asansorTescilIskanBox" tabindex="0"></span>
+                </li>
+                <li class="textList">
+                    <span class="text-content" id="sigortaIlisikKesmeIskan">Sigorta İlişik Kesme Yazısı Sonrası Cins Tahsis Harcı</span>
+                    <span class="mini-checkbox" id="sigortaIlisikKesmeIskanBox" tabindex="0"></span>
+                </li>
+                <li class="textList">
+                    <span class="text-content" id="vergiDairesiIlisikKesmeIskan">Vergi Dairesi İlişik Kesme Belgesi</span>
+                    <span class="mini-checkbox" id="vergiDairesiIlisikKesmeIskanBox" tabindex="0"></span>
+                </li>
+                <li class="textList">
+                    <span class="text-content" id="iskanHarciIskan">İskan Harcı ve Diğer Ücretler</span>
+                    <span class="mini-checkbox" id="iskanHarciIskanBox" tabindex="0"></span>
+                </li>
+                <li class="textList">
+                    <span class="text-content" 
+                        id="kanalBaglantisiRaporuIskan"
+                        data-file-name="Kanal Bağlantı Dilekçesi Örneği"
+                        data-file-url="https://cdn.yapio.net/evraklar/kanal%20baglant%C4%B1%20dilek%C3%A7esi.pdf">
+                        Su ve Kanal İşletmesinden Kanal Bağlantısı Yapıldı/Yapılmadı Raporu
+                    </span>
+                    <span class="mini-checkbox" id="kanalBaglantisiRaporuIskanBox" tabindex="0"></span>
+                </li>
+                <li class="textList">
+                    <span class="text-content" 
+                        id="iskanTeknikRaporuIskan"
+                        data-file-name="İş Bitirme Tutanağı Örneği"
+                        data-file-url="https://cdn.yapio.net/evraklar/%C4%B0%C5%9F%20Bitirme%20Formu.pdf">
+                        İskan Teknik Raporu ve İş Bitirme Tutanağı
+                    </span>
+                    <span class="mini-checkbox" id="iskanTeknikRaporuIskanBox" tabindex="0"></span>
+                </li>
+                <li class="textList">
+                    <span class="text-content" id="teknikUygunlukRaporuIskan">Teknik Uygunluk Raporu</span>
+                    <span class="mini-checkbox" id="teknikUygunlukRaporuIskanBox"tabindex="0"></span>
+                </li>
+                <li class="textList">
+                    <span class="text-content" id="siginakRaporuIskan">Sığınak Raporu (Varsa)</span>
+                    <span class="mini-checkbox" id="siginakRaporuIskanBox" tabindex="0"></span>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Dinamik Modal -->
+    <div class="modal fade" id="modalUretim" tabindex="-1" aria-labelledby="modalUretimLabel" aria-hidden="true">  
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">  
+            <div class="modal-content" style="border-radius:19px;">  
+            <div class="modal-header bg-primary text-white">  
+                <h5 class="modal-title" id="modalUretimLabel">  
+                <span id="modalBaslikIkon"></span>  
+                <span id="modalBaslikText"></span>  
+                </h5>  
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>  
+            </div>  
+            <div class="modal-body pb-1">  
+                <div id="modalContentGenel"></div>  
+            </div>  
+            </div>  
+        </div>  
+    </div>
+
+    <div class="modal fade" id="evrakModal" tabindex="-1" aria-labelledby="evrakModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="evrakModalLabel">Evrak Görüntüle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body" id="evrakModalBody" style="min-height:350px;">
+                <!-- İçerik buraya yüklenecek -->
+            </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <script type="module">
+        import { showWarningMessage } from '/js/showMessage.js';
+        
+        const graphsButton = document.getElementById("graphs-button");   
+        const projectNameString = document.getElementById("projectName");  
+        const modalTitle = document.getElementById("roomModalTitle");  
+        const buttonHome = document.getElementById("buttonHome");  
+        const loginButton = document.getElementById("loginButton");  
+        const soldButton = document.getElementById("sold-button");  
+        const material = document.getElementById("material-button");  
+        const documentButton = document.getElementById("document-button");   
+
+        const btnYapi = document.getElementById("btn-yapi");  
+        const btnIskan = document.getElementById("btn-iskan");  
+        const yapiSections = document.getElementById('yapi-sections');  
+        const panelIskan = document.getElementById('panel-iskan');  
+
+        let userId = null;  
+        let projectName = null;  
+        let currentAlanAdi = null;  
+
+        document.addEventListener("DOMContentLoaded", async () => {  
+
+            window.user = {{#if user}}  
+                { "email": "{{user.email}}", "role": "{{user.role}}", "userId": "{{user.id}}", "project": {{{json project}}} }  
+            {{else}}  
+                { "role": "{{role}}" }  
+            {{/if}};  
+
+            userId = window.user.userId;  
+            projectName = window.user.project?.projectName;  
+            if(projectName){  
+                const projectNameText = projectName.toUpperCase();  
+                projectNameString.textContent = projectNameText;  
+            }  
+            if(userId){  
+                loginButton.style.display = "block";  
+            } else{  
+                loginButton.style.display = "none";  
+            }  
+
+            // Navigation button listeners (sende zaten vardı)  
+            loginButton.addEventListener("click", () => { window.location.href = "/"; });  
+            buttonHome.addEventListener("click", () => { window.location.href = `/draw?projectName=${encodeURIComponent(projectName)}`; });  
+            graphsButton.addEventListener("click", () => { window.location.href = `/analiz?projectName=${encodeURIComponent(projectName)}`; });  
+            soldButton.addEventListener("click", () => { window.location.href = `/sold?projectName=${encodeURIComponent(projectName)}`; });  
+            material.addEventListener("click", () => { window.location.href = `/malzeme?projectName=${encodeURIComponent(projectName)}`; });  
+            documentButton.addEventListener("click", () => { window.location.href = `/evrak?projectName=${encodeURIComponent(projectName)}`; });   
+
+            // Delegasyon: evrak modalı içindeki dinamik kayıtlar tek listener ile yönetiliyor!  
+            document.body.addEventListener('click', async function(e) {  
+                // Evrak modal açıldıysa  
+                if (document.getElementById('evrakModal').classList.contains('show')) {  
+                    // Tıklanan: GÖSTER/indir  
+                    const adElement = e.target.closest('.text-evrak-ad');  
+                    if(adElement) {  
+                        const filePath = adElement.dataset.path;  
+                        const fileName = adElement.dataset.filename;  
+                        if (filePath) {  
+                            document.getElementById('modalDokumanPreview').innerHTML = `  
+                                <div class="d-flex justify-content-end mb-2">  
+                                    <a href="${filePath}" target="_blank" class="btn btn-outline-secondary btn-sm">  
+                                        <i class="fa fa-cloud-arrow-down"></i> İndir  
+                                    </a>  
+                                </div>  
+                                <div class="ratio ratio-16x9">  
+                                    <iframe src="https://docs.google.com/gview?url=${encodeURIComponent(filePath)}&embedded=true"  
+                                            frameborder="0" allowfullscreen style="width:100%;height:100%;"></iframe>  
+                                </div>  
+                            `;  
+                        }  
+                        return;  
+                    }  
+                    // Tıklanan: SİL  
+                    const silBtn = e.target.closest('.sil-btn');
+                    if (silBtn) {
+                        const mongoId = silBtn.dataset.id;  // Buradaki değer Mongo’dan gelen orijinal _id olacak
+                        if (!mongoId) return;
+                        const confirmDelete = await showWarningMessage("Kayıt silinsin mi?", "evet", false);
+                        if (!confirmDelete) return;
+                        try {
+                            await deleteEvrak({
+                                evrakId: mongoId,
+                                userId,
+                                projectName,
+                                alanAdi: currentAlanAdi,
+                                kalemId: "Ruhsat-İskan" // veya ilgili kalemId
+                            });
+                            await renderModalEvrakList(userId, projectName, currentAlanAdi);
+                        } catch (err) {
+                            showWarningMessage("Silme başarısız: " + (err.message || err), "tamam", false);
+                        }
+                        return;
+                    }
+                }  
+            });  
+
+            // Alt başlıklar Yapı ve İskan paneli 
+            btnYapi.addEventListener("click", function() {  
+                if (yapiSections.style.display === "block") {  
+                    yapiSections.style.display = "none";  
+                    this.classList.remove("active");  
+                    document.querySelectorAll('.alt-baslik-kutu').forEach(b=>{  
+                        b.setAttribute('aria-expanded', 'false');  
+                    });  
+                    document.querySelectorAll('.alt-kutu-icerik').forEach(p=>p.style.display='none');  
+                    // Kapandıysa, kaydı sil
+                    localStorage.removeItem('lastOpenedMainSection');
+                } else {  
+                    yapiSections.style.display = "block";  
+                    this.classList.add("active");  
+                    if(panelIskan) panelIskan.style.display = "none";  
+                    btnIskan.classList.remove("active");
+                    // Açıldıysa, kaydı güncelle
+                    localStorage.setItem('lastOpenedMainSection', 'yapi');
+                }  
+            });  
+
+            btnIskan.addEventListener("click", function() {  
+                if (panelIskan.style.display === "block") {  
+                    panelIskan.style.display = "none";  
+                    this.classList.remove("active");  
+                    // Kapandıysa, kaydı sil
+                    localStorage.removeItem('lastOpenedMainSection');
+                } else {  
+                    panelIskan.style.display = "block";  
+                    this.classList.add("active");  
+                    yapiSections.style.display = "none";  
+                    btnYapi.classList.remove("active");  
+                    document.querySelectorAll('.alt-baslik-kutu').forEach(b=>{  
+                        b.setAttribute('aria-expanded', 'false');  
+                    });  
+                    document.querySelectorAll('.alt-kutu-icerik').forEach(p=>{  
+                        if(p.id !== 'panel-iskan') p.style.display='none';  
+                    });  
+                    localStorage.setItem('lastOpenedMainSection', 'iskan');
+                }  
+            });
+            const last = localStorage.getItem('lastOpenedMainSection');
+            if(last === 'yapi') {
+                btnYapi.click();
+            }
+            if(last === 'iskan') {
+                btnIskan.click();
+            }
+
+
+            document.querySelectorAll('.alt-baslik-kutu').forEach(function(btn) {  
+                btn.addEventListener('click', function(event) {  
+                    event.stopPropagation();  
+                    const isOpen = this.getAttribute('aria-expanded') === 'true';  
+                    document.querySelectorAll('.alt-baslik-kutu').forEach(b=>{  
+                        b.setAttribute('aria-expanded', 'false');  
+                    });  
+                    document.querySelectorAll('.alt-kutu-icerik').forEach(p=>{  
+                        if(p.id !== 'panel-iskan') p.style.display='none';  
+                    });  
+                    if(!isOpen) {  
+                        this.setAttribute('aria-expanded', 'true');  
+                        var panel = document.getElementById("panel-" + this.dataset.target);  
+                        if(panel) panel.style.display = 'block';  
+                    }  
+                });  
+            });  
+
+            // Checkbox'lar
+            await readCheckBox();
+            document.querySelectorAll('.mini-checkbox').forEach(function(box){
+                const toggleCheckBox = async function(e) {
+                    e.stopPropagation();
+                    const fileId = box.id;
+                    const isSelected = box.classList.contains('selected');
+                    if (isSelected) {
+                        await deleteCheckBox(fileId);
+                        box.classList.remove('selected');
+                    } else {
+                        await saveCheckBox(fileId);
+                        box.classList.add('selected');
+                    }
+                };
+
+                box.addEventListener('click', toggleCheckBox);
+
+                box.addEventListener('keydown', async function(e){
+                    if(e.key === 'Enter' || e.key === ' '){
+                        e.preventDefault();
+                        await toggleCheckBox(e);
+                    }
+                });
+            });
+
+            // .text-content elemana bind et       
+            document.querySelectorAll('.text-content').forEach(function(el) {  
+                el.addEventListener('click', handleDocumentClick);  
+            });  
+
+        });  
+
+        function handleDocumentClick(e) {  
+            const el = this;  
+            const fileName = el.dataset.fileName || el.textContent.trim();  
+            const fileUrl = el.dataset.fileUrl;  
+            const fileId = el.id || el.textContent.trim();  
+            const modalLabel = document.getElementById('evrakModalLabel');  
+            const modalBody = document.getElementById('evrakModalBody');  
+            currentAlanAdi = fileId;  
+
+            modalLabel.textContent = fileName;  
+
+            // Ön izleme  
+            let previewHtml = "";  
+            if (fileUrl) {  
+                previewHtml = `  
+                    <div class="d-flex flex-column align-items-center my-4">  
+                        <div class="mb-3" style="font-size:1.1em;">  
+                            <b>${fileName}</b> örneği  
+                        </div>  
+                        <button id="evrakModalGosterBtn" class="btn btn-primary d-flex align-items-center">  
+                            <i class="bi bi-eye me-2"></i> Göster  
+                        </button>  
+                    </div>  
+                `;  
+            } else {  
+                previewHtml = `  
+                    <div class="alert alert-warning mb-2">  
+                        Bu belgeye ait örnek dosya bulunmamaktadır.  
+                    </div>  
+                `;  
+            }  
+
+            modalBody.innerHTML = `  
+                <div id="modalDokumanPreview">  
+                    ${previewHtml}  
+                </div>  
+                ${getEvrakUploadSection()}  
+            `;  
+
+            if (fileUrl) {  
+                setTimeout(() => {  
+                    document.getElementById('evrakModalGosterBtn')?.addEventListener('click', function () {  
+                        const fileExt = fileUrl.split('.').pop().toLowerCase();
+                        let contentHtml = `
+                            <div class="d-flex justify-content-end mb-2">
+                                <button id="tamEkranBtn" class="btn btn-outline-secondary btn-sm" title="Tam Ekran Aç">
+                                    <i class="bi bi-arrows-fullscreen"></i> Tam Ekran
+                                </button>
+                            </div>
+                        `;
+                        if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileExt)) {
+                            contentHtml += `
+                                <div class="ratio ratio-16x9">
+                                    <img src="${fileUrl}" alt="Görsel Önizleme" style="width:100%;height:100%;object-fit:contain;border-radius:6px;box-shadow:0 2px 8px #0001" />
+                                </div>
+                            `;
+                        } else if (['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(fileExt)) {
+                            contentHtml += `
+                                <div class="ratio ratio-16x9">
+                                    <iframe src="https://docs.google.com/gview?url=${encodeURIComponent(fileUrl)}&embedded=true"
+                                            frameborder="0" allowfullscreen style="width:100%;height:100%;">
+                                    </iframe>
+                                </div>
+                            `;
+                        } else {
+                            contentHtml += `
+                                <div class="alert alert-info mt-2">
+                                    Bu dosya tipinin önizlemesi desteklenmiyor.
+                                </div>
+                            `;
+                        }
+                        document.getElementById("modalDokumanPreview").innerHTML = contentHtml;
+
+                        // TAM EKRAN düğmesi için:
+                        setTimeout(() => {
+                            document.getElementById('tamEkranBtn')?.addEventListener('click', function (e) {
+                                e.preventDefault();
+                                if (['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(fileExt)) {
+                                    // Office dosyalarını live.com ile aç!
+                                    const officeUrl = "https://view.officeapps.live.com/op/view.aspx?src=" + encodeURIComponent(fileUrl);
+                                    window.open(officeUrl, '_blank');
+                                } else {
+                                    // Görsel/PDF ise doğrudan aç
+                                    window.open(fileUrl, '_blank');
+                                }
+                            });
+                        }, 50);
+
+                    });  
+                }, 10);  
+            }  
+
+            document.getElementById("evrakFormModal").onsubmit = async function (ev) {  
+                ev.preventDefault();  
+                const fileInput = document.getElementById("evrakDosyaModal");  
+                const aciklamaInput = document.getElementById("evrakAciklamaModal");  
+                const file = fileInput.files[0];  
+                if (!file) return;  
+
+                const allowedMimeTypes = ["application/pdf", "image/jpeg", "image/png"];  
+                if (!allowedMimeTypes.includes(file.type)) {  
+                    showWarningMessage("Sadece PDF veya JPEG/PNG formatında dosya yüklenebilir!", "tamam", false);  
+                    fileInput.value = "";  
+                    return;  
+                }  
+
+                let pdfBlob, upFileName = file.name;  
+                if (file.type === "application/pdf") {  
+                    pdfBlob = file;  
+                } else {  
+                    pdfBlob = await imageToPdf(file);  
+                    upFileName = file.name.replace(/\.[^.]+$/, '') + ".pdf";  
+                }  
+
+                const fileData = {  
+                    file: pdfBlob,  
+                    fileName: upFileName,  
+                    aciklama: aciklamaInput.value || "",  
+                    alanAdi: fileId  
+                };  
+
+                try {  
+                    await saveEvrak(fileData);  
+                    fileInput.value = "";  
+                    aciklamaInput.value = "";  
+                    await renderModalEvrakList(userId, projectName, fileId);  
+                } catch (err) {  
+                    // Hata mesajı zaten saveEvrak içinde ekrana basılıyor.  
+                }  
+            };  
+
+            renderModalEvrakList(userId, projectName, fileId);  
+
+            const modal = new bootstrap.Modal(document.getElementById('evrakModal'));  
+            modal.show();  
+        }  
+
+        // Backend'deki kaydı silen fonksiyon (örnek endpoint, uyarlayabilirsin)  
+        async function deleteEvrak({ evrakId, userId, projectName, alanAdi, kalemId }) {
+            try {
+                showLoader();
+                const response = await fetch('/approved', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        process: "deleteEvrak",   // mutlaka process parametresi!
+                        evrakId,
+                        userId,
+                        projectName,
+                        alanAdi,
+                        kalemId                   // opsiyonelse yine de gönder!
+                    }),
+                });
+                hideLoader();
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error);
+                return result;
+            } catch (err) {
+                hideLoader();
+                throw err;
+            }
+        }
+
+        async function renderModalEvrakList(userId, projectName, alanAdi) {  
+            const listDb = await readEvrak({ userId, projectName, alanAdi });  
+            const list = document.getElementById('evrakListesiModal');  
+            list.innerHTML = "";  
+
+            if (!listDb || listDb.length === 0) {  
+                list.innerHTML = `<li class="list-group-item text-muted small">Henüz evrak yüklenmedi.</li>`;  
+                return;  
+            }  
+            listDb.forEach(file => {  
+                const li = document.createElement("li");  
+                li.className = "list-group-item d-flex flex-wrap align-items-center justify-content-between";  
+                li.innerHTML = `  
+                    <div style="cursor:pointer" class="text-primary text-evrak-ad"  
+                        data-id="${file._id}" data-path="${file.path}" data-filename="${file.fileName}">  
+                        <i class="fa-regular fa-file-word me-2"></i>${file.fileName}  
+                        ${file.aciklama ? `<span class="badge bg-secondary ms-2">${file.aciklama}</span>` : ""}  
+                    </div>  
+                    <button class="btn btn-sm btn-outline-danger ms-2 sil-btn" title="Kaldır" data-id="${file._id}">  
+                        <i class="fa fa-trash"></i>  
+                    </button>  
+                `;  
+                list.appendChild(li);  
+            });  
+        }  
+
+        async function saveEvrak(fileData) {  
+            const { file, fileName, aciklama, alanAdi } = fileData;  
+            if (!file || !fileName || !alanAdi) {  
+                throw new Error("Eksik veya hatalı veri!");  
+            }  
+            let pdfFile = file instanceof File ? file : new File([file], fileName, { type: "application/pdf" });  
+
+            const formData = new FormData();  
+            formData.append('file', pdfFile, fileName);  
+            formData.append('aciklama', aciklama || "");  
+            formData.append('process', "saveEvrak");  
+            formData.append('projectName', projectName);  
+            formData.append('userId', userId);  
+            formData.append('alanAdi', alanAdi);
+            formData.append('kalemId', "Ruhsat-İskan");
+
+            try {  
+                showLoader();  
+                const resp = await fetch('/approved', {  
+                    method: 'POST',  
+                    body: formData  
+                });  
+                hideLoader();  
+                const result = await resp.json();  
+                if (!resp.ok || !result.success) {  
+                    throw new Error(result.error || 'Evrak kaydedilemedi!');  
+                }  
+                return result;  
+            } catch (err) {  
+                hideLoader();  
+                if (typeof showWarningMessage === "function") {  
+                    showWarningMessage("Evrak kaydedilemedi: " + err.message, "tamam", false);  
+                } else {
+                    showWarningMessage("Evrak kaydedilemedi: ", "tamam", false); 
+                    //alert("Evrak kaydedilemedi: " + err.message);  
+                }  
+                throw err;  
+            }  
+        }  
+
+        async function readEvrak({ userId, projectName, alanAdi }) {  
+            const formData = new FormData();  
+            formData.append('process', 'readEvrak');  
+            formData.append('userId', userId);  
+            formData.append('projectName', projectName);  
+            formData.append('alanAdi', alanAdi);
+            formData.append('kalemId', "Ruhsat-İskan");
+
+            try {  
+                showLoader();  
+                const resp = await fetch('/approved', {  
+                    method: 'POST',  
+                    body: formData,  
+                });  
+                if (!resp.ok) return [];  
+                const json = await resp.json();  
+                if (!json || !Array.isArray(json)) return [];  
+                return json;  
+            } catch (err) {  
+                console.error('readEvrak error:', err);  
+                return [];  
+            } finally {  
+                hideLoader();  
+            }  
+        }  
+
+        function showLoader()   { document.getElementById('loader').style.display = 'flex'; }  
+        function hideLoader()   { document.getElementById('loader').style.display = 'none'; }  
+
+        // PDF dönüştürücü fonksiyonun değiştirilmedi  
+        async function imageToPdf(imageFile) {  
+            return new Promise((resolve, reject) => {  
+                const reader = new FileReader();  
+                reader.onload = function (e) {  
+                    const img = new Image();  
+                    img.onload = function () {  
+                        const pdfWidth = 595.28;  
+                        const scale = pdfWidth / img.width;  
+                        const pdfHeight = img.height * scale;  
+                        const canvas = document.createElement("canvas");  
+                        canvas.width = pdfWidth;  
+                        canvas.height = pdfHeight;  
+                        const ctx = canvas.getContext("2d");  
+                        ctx.drawImage(img, 0, 0, pdfWidth, pdfHeight);  
+                        const imgData = canvas.toDataURL("image/jpeg", 1.0);  
+                        const { jsPDF } = window.jspdf;  
+                        const pdf = new jsPDF({ unit: 'pt', format: [pdfWidth, pdfHeight] });  
+                        pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);  
+                        const pdfBlob = pdf.output('blob');  
+                        resolve(pdfBlob);  
+                    };  
+                    img.onerror = reject;  
+                    img.src = e.target.result;  
+                };  
+                reader.onerror = reject;  
+                reader.readAsDataURL(imageFile);  
+            });  
+        }  
+
+        // Yükleme alanı HTML kodun aynı kalabilir:  
+        function getEvrakUploadSection() {  
+            return `  
+            <div class="col-lg-12 col-12 d-flex flex-column align-items-center mx-auto mt-4">  
+                <div class="card shadow-sm mb-3 w-100">  
+                    <div class="card-header bg-light">  
+                        <b class="text-primary"><i class="fa-solid fa-paperclip"></i> Evrak Yükle</b>  
+                    </div>  
+                    <div class="card-body pt-3 pb-2">  
+                        <form id="evrakFormModal" autocomplete="off">  
+                            <div class="input-group mb-2">  
+                                <input type="file" class="form-control" id="evrakDosyaModal" name="file" required>  
+                            </div>  
+                            <div class="mb-2">  
+                                <input type="text" class="form-control" id="evrakAciklamaModal" maxlength="100" placeholder="Açıklama (opsiyonel)">  
+                            </div>  
+                            <div class="d-flex justify-content-end">  
+                                <button type="submit" class="btn btn-primary btn-sm">  
+                                    <i class="fa-solid fa-upload"></i> Yükle  
+                                </button>  
+                            </div>  
+                        </form>  
+                        <hr>  
+                        <div>  
+                            <h6 class="mb-1 text-secondary">Yüklenen Evraklar:</h6>  
+                            <ul class="list-group file-list" id="evrakListesiModal" style="font-size:0.97rem;"></ul>  
+                        </div>  
+                    </div>  
+                </div>  
+            </div>  
+            `;  
+        }  
+
+        async function saveCheckBox(boxDb){
+            showLoader();
+            fetch('/approved', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    process: "saveCheckBox",
+                    userId,
+                    projectName,
+                    boxDb
+                })
+            })
+            .then(r => r.json())
+            .finally(() => {
+                hideLoader();
+            });
+        }
+
+        async function deleteCheckBox(boxDb){
+            showLoader();
+            fetch('/approved', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    process: "deleteCheckBox",
+                    userId,
+                    projectName,
+                    boxDb
+                })
+            })
+            .then(r => r.json())
+            .finally(() => {
+                hideLoader();
+            });
+        } 
+
+        async function readCheckBox(){
+            showLoader();
+            try {
+                const response = await fetch('/approved', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        process: "readCheckBox",
+                        userId,
+                        projectName
+                    })
+                });
+                const data = await response.json();
+
+                if (data.error) {
+                    showWarningMessage("Hata", "tamam", false);
+                    return;
+                }
+
+
+                //Checkboxları DOM'da işaretleme
+                if (Array.isArray(data.checkBox)) {
+                    data.checkBox.forEach(item => {
+                        const el = document.getElementById(item.checkBoxId);
+                        if (el) el.classList.add('selected');
+                    });
+                }
+
+            } catch (err) {
+                alert('Bir hata oluştu: ' + err.message);
+            } finally {
+                hideLoader();
+            }
+        }
+
+      </script>
+
+</body>  
+</html>
