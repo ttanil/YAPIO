@@ -2888,6 +2888,12 @@
             indexAxis: 'x', // Dikey bar
             plugins: { legend: { display: false } },
             scales: {
+              x: {
+                ticks: {
+                  minRotation: 90,
+                  maxRotation: 90
+                }
+              },
               y: {
                 beginAtZero: true,
                 ticks: {
