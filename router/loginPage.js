@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
         if (req.cookies.token) {
             res.clearCookie('token', {
                 httpOnly: true,
-                secure: false,
+                secure: true,
                 sameSite: 'lax',
             });
         }
@@ -68,10 +68,17 @@ router.post('/', async (req, res) => {
             userInfos : user.userInputs
         };
 */
+        let redirect = false;
+        if(user.name === "selman bekar"){ 
+        //if(user.name === "Tahsin Tanıl Uçar"){
+            redirect = true;
+        }
+
         return res.json({
             message: 'Giriş başarılı!',
             role: user.role,
             userId: user._id,
+            redirect : redirect,
             token
         });
 

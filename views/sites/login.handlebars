@@ -183,11 +183,13 @@
                         body: JSON.stringify({ email, password })
                     });
 
-                    if (response.ok) {
-                        const data = await response.json();
-                        console.log("Hoşgeldiniz! Rolünüz: " + data.role);
+                    const data = await response.json();
+                    if (!data.redirect) {
+                        console.log("Hoşgeldiniz! Rolünüz: " , data);
                         window.location.href = "/";
-                    } else {
+                    } else if(data.redirect){
+                        window.location.href = "/hata";
+                    }else {
                         showWarningMessage("Geçersiz kullanıcı adı veya şifre.", "tamam", true);
                     }
                 } catch (error) {
