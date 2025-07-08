@@ -103,8 +103,10 @@ router.get('/', authenticateUser, async (req, res) => {
 
 // 1) Ödeme başlatıcı  
 router.post('/', authenticateUser, async (req, res) => {  
-    const { projectNumber, userType, projectLimit, cardNumber = '', instalment } = req.body || {};  
+    const { projectNumber, userType, projectLimit, cardNumber = '', instalment, price } = req.body || {};  
     const userId = res.locals.user._id || res.locals.user.id;  
+
+    console.log("price:",price);
 
     if (!userId || !projectNumber || !userType || !projectLimit)  
         return res.status(400).json({ success: false, message: "Eksik bilgi." });  
@@ -119,10 +121,10 @@ router.post('/', authenticateUser, async (req, res) => {
     try {  
         let amount;  
         if (projectLimit === 2 || projectLimit === "2") {  
-            amount = "2400.00";
+            amount = price;
             //amount = "1.00";
         } else if (projectLimit === 4 || projectLimit === "4") {  
-            amount = "3800.00";  
+            amount = price;  
         } else {  
             amount = String(Number(req.body.amount || '91.96').toFixed(2));  
         }  

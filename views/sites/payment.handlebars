@@ -312,7 +312,7 @@
                 <!-- Fiyat kutusu -->
                 <div class="mt-3">
                     <label class="form-label" for="feeInput">Fiyat</label>
-                    <input type="text" id="feeInput" class="form-control" value="3800 ₺" readonly>
+                    <input type="text" id="feeInput" class="form-control" value="3800 ₺">
                 </div>
             </div>
             <!--
@@ -518,55 +518,111 @@
   });
 
 
-    // ilk açılışta doğru fiyatı göster
-    function setInitialFee() {
-      feeInput.value = limit4.checked ? "3800 ₺" : "2400 ₺";
+  let manualFeeMode = false;
+
+// Proje limitlerine göre fiyat alanını başlat ve gerekli ayarları yap
+function setInitialFee() {
+    if (limit2.checked) {
+        feeInput.value = "2400 ₺";
+        feeInput.readOnly = true;    // Manuel girişi kapat
+        manualFeeMode = false;       // Her zaman otomatik
+    } else if (limit4.checked) {
+        feeInput.value = "3800 ₺";
+        feeInput.readOnly = false;   // Manuel girişi aç
     }
-    setInitialFee();
-    // Proje limitleri değiştikçe fiyatı güncelle
-    limit2.addEventListener('change', function() {
-      if (this.checked) feeInput.value = "2400 ₺";
-    });
-    limit4.addEventListener('change', function() {
-      if (this.checked) feeInput.value = "3800 ₺";
-    });
+}
+setInitialFee();
 
-    document.getElementById('paymentForm').addEventListener('input', function() {
-        const kvkkOk = kvkkCheck.checked;
-        const mesafeOk = mesafeCheck.checked;
-        payBtn.disabled = !(kvkkOk && mesafeOk);
-    });
+// Proje limitleri değiştiğinde ayarları güncelle
+limit2.addEventListener('change', function() {
+    if (this.checked) setInitialFee();
+});
+limit4.addEventListener('change', function() {
+    if (this.checked) setInitialFee();
+});
 
-    document.getElementById('paymentForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const projectLimit = limit4.checked ? 4 : 2;
-        // Backend’e fetch ile gönder, gelen ödeme linkine yönlendir:
-        const data = {
-            userId,
-            projectNumber,
-            userType,
-            projectLimit
-        };
-        try {
-          const response = await fetch('/payment', {
-              method: 'POST',
-              headers: {'Content-Type': 'application/json'},
-              body: JSON.stringify(data)
-          });
-          const resJson = await response.json();
+// Sadece limit4 seçiliyken manuel giriş mümkündür
+feeInput.addEventListener('focus', function() {
+    if (limit4.checked) {
+        manualFeeMode = true;
+    }
+});
 
-          if (resJson && resJson.paymentFormHtml) {
-              const win = window.open("", "_blank");
-              win.document.write(resJson.paymentFormHtml);
-              win.document.close();
-          } else if(resJson && resJson.message) {
-              // Hata mesajı göster
-              showWarningMessage(resJson.message, "tamam", false);
-          }
-      } catch (err){
-          showWarningMessage("Sunucuya bağlanılamadı: " + err, "tamam", false);
-      }
-    });
+// Kullanıcı kutuya elle yazarsa manuel moddayız (sadece limit4 için)
+feeInput.addEventListener('input', function() {
+    if (limit4.checked) manualFeeMode = true;
+});
+
+// Kullanıcı kutudan ayrılırsa (blur), eğer limit4 seçili ve manuel moddaysa, tutarı kontrol et
+feeInput.addEventListener('blur', function() {
+    if (limit4.checked && manualFeeMode) {
+        // Sadece rakamları çek
+        const valueStr = feeInput.value.trim().replace(/[^\d.,]/g, '').replace(',', '.');
+        let numericValue = parseFloat(valueStr);
+        if (isNaN(numericValue) || numericValue < 3800) {
+            feeInput.value = "3800 ₺";
+        } else {
+            feeInput.value = numericValue + " ₺";
+        }
+    }
+});
+
+// Sözleşme onaylarını dinle
+document.getElementById('paymentForm').addEventListener('input', function() {
+    const kvkkOk = kvkkCheck.checked;
+    const mesafeOk = mesafeCheck.checked;
+    payBtn.disabled = !(kvkkOk && mesafeOk);
+});
+
+document.getElementById('paymentForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const projectLimit = limit4.checked ? 4 : 2;
+    let priceNumber;
+
+    if (limit2.checked) {
+        priceNumber = 2400;
+        feeInput.value = "2400 ₺";
+    } else {
+        // Kullanıcının kutuya yazdığı değeri temizle ve ondalık hale getir
+        let inputStr = feeInput.value.trim().replace(/[^\d.,]/g, '').replace(',', '.');
+        let value = parseFloat(inputStr);
+        if (isNaN(value) || value < 3800) {
+            value = 3800;
+            feeInput.value = "3800 ₺";
+        }
+        priceNumber = value;
+    }
+
+    // Burada artık "2400.00" formatı kesinleşir:
+    const price = priceNumber.toFixed(2);
+
+    const data = {
+        userId,
+        projectNumber,
+        userType,
+        projectLimit,
+        price   // ARANAN: "2400.00" veya "4100.00", herhangi bir currency yok
+    };
+
+    try {
+        const response = await fetch('/payment', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        const resJson = await response.json();
+
+        if (resJson && resJson.paymentFormHtml) {
+            const win = window.open("", "_blank");
+            win.document.write(resJson.paymentFormHtml);
+            win.document.close();
+        } else if(resJson && resJson.message) {
+            showWarningMessage(resJson.message, "tamam", false);
+        }
+    } catch (err){
+        showWarningMessage("Sunucuya bağlanılamadı: " + err, "tamam", false);
+    }
+});
     
   </script>
 </body>
